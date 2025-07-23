@@ -1,0 +1,32 @@
+{
+  "name": "immo24-studioassistent",
+  "version": "0.1.0-beta",
+  "main": "main.js",
+  "description": "Electron-Shell für Node-RED Studioassistent",
+  "author": "Philipp Menzel",
+  "license": "ISC",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "de.immo24.studioassistent",
+    "productName": "immo24 Studioassistent",
+    "files": [
+      "main.js",
+      "assets/**",
+      "bin/**",
+      "package.json",
+      "node-red-portable/**"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "icon": "assets/icon",
+    "asar": false
+  },
+  "devDependencies": {
+    "electron": "^28.2.5",
+    "electron-builder": "^26.0.12"
+  }
+}

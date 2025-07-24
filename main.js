@@ -51,15 +51,28 @@ function waitForPort(port, host = 'localhost', path_ = '/', timeout = 15000) {
 function startNodeRED() {
   const nodeRedDir = path.join(__dirname, 'node-red-portable')
   const redJs = path.join(nodeRedDir, 'node_modules', 'node-red', 'red.js')
-  const isWin = process.platform === 'win32'
-  const nodeBinary = isWin
-    ? path.join(__dirname, 'bin', 'node.exe')
-    : path.join(__dirname, 'bin', 'node')
+  let nodeBinary;
 
-  console.log("Starte Node-RED!")
-  console.log("Node-Binary:", nodeBinary)
-  console.log("redJs:", redJs)
-  console.log("nodeRedDir:", nodeRedDir)
+  if (process.platform === 'win32') {
+    nodeBinary = path.join(__dirname, 'bin', 'node.exe');
+  } else if (process.platform === 'darwin') {
+    // Universal-App: Wähle Binary nach Architektur
+    if (process.arch === 'arm64') {
+      nodeBinary = path.join(__dirname, 'bin', 'node-arm64');
+    } else {
+      nodeBinary = path.join(__dirname, 'bin', 'node-x64');
+    }
+    // Oder, wenn du ein echtes Universal-Binary in bin/node hast:
+    // nodeBinary = path.join(__dirname, 'bin', 'node');
+  } else {
+    // Linux etc. (optional)
+    nodeBinary = path.join(__dirname, 'bin', 'node');
+  }
+
+  console.log("Starte Node-RED!");
+  console.log("Node-Binary:", nodeBinary);
+  console.log("redJs:", redJs);
+  console.log("nodeRedDir:", nodeRedDir);
 //  console.log("CWD:", nodeRedDir);
 //  console.log("ENV:", {
 //    ...process.env,

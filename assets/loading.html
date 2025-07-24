@@ -4,14 +4,86 @@
   <meta charset="UTF-8">
   <title>Bitte warten…</title>
   <style>
-    body { display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;}
-    .msg { font-size:1.4em; color:#444;}
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: sans-serif;
+      background: #f7f8fa;
+    }
+    .plane-wrapper {
+      width: 170px;
+      height: 70px;
+      margin-bottom: 2em;
+      position: relative;
+      overflow: visible;
+    }
+    .plane-anim {
+      width: 80px;
+      height: auto;
+      position: absolute;
+      top: 15px;
+      left: -70px;
+      animation: fliegen 2.5s cubic-bezier(.7,.2,.2,1.2) infinite;
+      /* Schatten für netten Effekt: */
+      filter: drop-shadow(0 2px 8px rgba(34,34,34,0.13));
+    }
+    @keyframes fliegen {
+      0% {
+        left: -70px;
+        top: 18px;
+        transform: rotate(-12deg) scale(1);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      45% {
+        top: 2px;
+        transform: rotate(4deg) scale(1.08);
+      }
+      80% {
+        top: 26px;
+        left: 135px;
+        transform: rotate(18deg) scale(1.12);
+        opacity: 1;
+      }
+      100% {
+        left: 170px;
+        top: 34px;
+        opacity: 0;
+      }
+    }
+    .msg {
+      font-size: 1.4em;
+      color: #444;
+      letter-spacing: 0.01em;
+    }
+    .dot {
+      opacity: 0.2;
+      transition: opacity 0.2s;
+    }
+    .dot.active {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
-  <div class="msg">Das Schnellboot macht sich bereit…</div>
+  <div class="plane-wrapper">
+    <img class="plane-anim" src="flieger.png" alt="Papierflieger">
+  </div>
+  <div class="msg">
+    Das Schnellboot macht sich bereit<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+  </div>
   <script>
-    // Das Preload-Script übernimmt später
+    const dots = document.querySelectorAll('.dot');
+    let step = 0;
+    setInterval(() => {
+      dots.forEach((d,i)=>d.classList.toggle('active', i <= step));
+      step = (step+1) % dots.length;
+    }, 400);
   </script>
 </body>
 </html>

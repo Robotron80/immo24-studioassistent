@@ -37,33 +37,42 @@
             "color": "#a4a4a4"
         },
         "nodes": [
-            "63f5b463c89c3169",
             "910c53735d84f790",
             "0cc42adec31147b4",
             "1390220b613fe431",
             "2fd0269e7a3327db",
-            "46b6eeab442c1d66",
-            "6c2a4aeaf0c3a74d",
-            "3a221d432cfa6e26",
-            "6aa1830edc542c65",
             "cada920e0c496a2a",
-            "b49ecebf74226b1b",
             "eb267ef800bfbb25",
-            "292a91e702d4b8f2",
-            "9faf9391590124e0",
-            "d0a06d0cfd864180",
-            "3f77b019c8edb6bf",
-            "264bc4c695f8dccc",
-            "12439cf3be2c7508",
-            "07562e46a647ed75",
-            "f28ee83432a5c3b6",
-            "0d7bcb2c46606757",
-            "e3a6280e0cd022c3"
+            "7ca845263df10a31",
+            "f8bbdd4a4830ea45",
+            "51bdc3a15b772ace",
+            "4bc886955c7f8b21",
+            "4d906e2f6038d015",
+            "7ae52513361ef5e1",
+            "511602a42b015aca",
+            "6a317b07fabc7061",
+            "2a662fab555d6f4f",
+            "db9b106015aaeca1",
+            "46e0cb69535901c8",
+            "edae72a537679007",
+            "210d631ebc82ecb4",
+            "428bed19fe6a1ebf",
+            "d79c25967e9dce9b",
+            "09979d6368f7e926",
+            "a99fc3e1fe669e9b",
+            "abd9f0565d3eebd3",
+            "1b10bdb535af0bbc",
+            "2ca85b2f7c28a9e0",
+            "67a6bc92fa9fe33c",
+            "bc737156d3e170ca",
+            "6653c8caed92f20c",
+            "e255f5433d4297ff",
+            "b3f55f2d76a1e5ba"
         ],
-        "x": 184,
+        "x": 174,
         "y": 119,
-        "w": 1652,
-        "h": 382
+        "w": 1662,
+        "h": 902
     },
     {
         "id": "0e1923748c0d505b",
@@ -96,7 +105,7 @@
         ],
         "x": 354,
         "y": 979,
-        "w": 1978,
+        "w": 1998,
         "h": 662
     },
     {
@@ -172,9 +181,9 @@
             "4b0349befccb3ec9"
         ],
         "x": 118,
-        "y": 93,
+        "y": 73,
         "w": 2554,
-        "h": 995.5
+        "h": 1015.5
     },
     {
         "id": "90a1257292e52c0c",
@@ -421,12 +430,14 @@
             "f31c04d58dac383f",
             "5e2fd2d2411c3bed",
             "20b5c1a5c4dbe03d",
-            "8764a0809a22eac6"
+            "8764a0809a22eac6",
+            "9d4559557bd0d310",
+            "d3e099edf050f646"
         ],
         "x": 414,
-        "y": 1159,
-        "w": 1892,
-        "h": 342
+        "y": 1119,
+        "w": 1912,
+        "h": 382
     },
     {
         "id": "e05512e54561bc65",
@@ -555,12 +566,13 @@
             "d4a860faf530cfaf",
             "e456d033730a3863",
             "d827e2987029dd1c",
-            "2f60e367b0acae57"
+            "2f60e367b0acae57",
+            "0381824ca670a193"
         ],
         "x": 1294,
-        "y": 119,
+        "y": 99,
         "w": 1352,
-        "h": 142
+        "h": 162
     },
     {
         "id": "0d1faa7a2ad224be",
@@ -763,8 +775,8 @@
         ],
         "order": 3,
         "className": "",
-        "visible": "true",
-        "disabled": "false"
+        "visible": true,
+        "disabled": false
     },
     {
         "id": "91ae8c83e547fbd7",
@@ -4366,7 +4378,9 @@
         "wires": [
             [
                 "4befd131b88b6f45",
-                "8764a0809a22eac6"
+                "8764a0809a22eac6",
+                "9d4559557bd0d310",
+                "d3e099edf050f646"
             ]
         ]
     },
@@ -4385,7 +4399,7 @@
         "fullpath": "directory",
         "fullpathType": "msg",
         "x": 2150,
-        "y": 1260,
+        "y": 1240,
         "wires": [
             []
         ]
@@ -4498,6 +4512,46 @@
             [
                 "ae748b2fe00cc633"
             ]
+        ]
+    },
+    {
+        "id": "9d4559557bd0d310",
+        "type": "fs-ops-mkdir",
+        "z": "dc0d981398a42d88",
+        "g": "a101d0e8677d1f77",
+        "name": "trackpresets-Verzeichnis anlegen",
+        "path": "directory",
+        "pathType": "msg",
+        "dirname": "trackpresets",
+        "dirnameType": "str",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 2160,
+        "y": 1200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d3e099edf050f646",
+        "type": "fs-ops-mkdir",
+        "z": "dc0d981398a42d88",
+        "g": "a101d0e8677d1f77",
+        "name": "fadepresets-Verzeichnis anlegen",
+        "path": "directory",
+        "pathType": "msg",
+        "dirname": "fadepresets",
+        "dirnameType": "str",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 2150,
+        "y": 1160,
+        "wires": [
+            []
         ]
     },
     {
@@ -7799,26 +7853,15 @@
         "wires": []
     },
     {
-        "id": "63f5b463c89c3169",
-        "type": "fs-ops-mkdir",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "Zielordner anlegen",
-        "path": "",
-        "pathType": "str",
-        "dirname": "recallItems.dest",
-        "dirnameType": "msg",
-        "recursive": true,
-        "mode": "755",
-        "fullpath": "directory",
-        "fullpathType": "msg",
-        "x": 990,
-        "y": 180,
-        "wires": [
-            [
-                "3f77b019c8edb6bf"
-            ]
-        ]
+        "id": "0381824ca670a193",
+        "type": "comment",
+        "z": "b1c585f0d25b86fd",
+        "g": "4b0349befccb3ec9",
+        "name": "DEFEKT",
+        "info": "",
+        "x": 2280,
+        "y": 140,
+        "wires": []
     },
     {
         "id": "910c53735d84f790",
@@ -7844,8 +7887,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 510,
-        "y": 280,
+        "x": 500,
+        "y": 340,
         "wires": [
             []
         ]
@@ -7862,8 +7905,8 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 280,
-        "y": 280,
+        "x": 290,
+        "y": 340,
         "wires": [
             [
                 "0cc42adec31147b4"
@@ -7889,78 +7932,6 @@
         "wires": []
     },
     {
-        "id": "46b6eeab442c1d66",
-        "type": "debug",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "debug 1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 730,
-        "y": 420,
-        "wires": []
-    },
-    {
-        "id": "6c2a4aeaf0c3a74d",
-        "type": "debug",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "debug 2",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 950,
-        "y": 420,
-        "wires": []
-    },
-    {
-        "id": "3a221d432cfa6e26",
-        "type": "debug",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "debug 3",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1150,
-        "y": 420,
-        "wires": []
-    },
-    {
-        "id": "6aa1830edc542c65",
-        "type": "debug",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "debug 4",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1150,
-        "y": 460,
-        "wires": []
-    },
-    {
         "id": "cada920e0c496a2a",
         "type": "debug",
         "z": "24039523dcf573b0",
@@ -7974,26 +7945,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1350,
-        "y": 420,
-        "wires": []
-    },
-    {
-        "id": "b49ecebf74226b1b",
-        "type": "debug",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "debug 6",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1550,
-        "y": 460,
+        "x": 1460,
+        "y": 980,
         "wires": []
     },
     {
@@ -8015,175 +7968,523 @@
         "wires": []
     },
     {
-        "id": "292a91e702d4b8f2",
-        "type": "ui-form",
+        "id": "7ca845263df10a31",
+        "type": "ui-switch",
         "z": "24039523dcf573b0",
         "g": "f10408fa2622e18b",
-        "name": "Settings-Form",
+        "name": "Templates",
+        "label": "Templates",
         "group": "2ffd9e5a045727c6",
-        "label": "",
         "order": 1,
-        "width": "0",
-        "height": "0",
-        "options": [
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "decouple": false,
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "className": "",
+        "layout": "row-left-swapped",
+        "clickableArea": "label",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "x": 270,
+        "y": 420,
+        "wires": [
+            [
+                "7ae52513361ef5e1"
+            ]
+        ]
+    },
+    {
+        "id": "f8bbdd4a4830ea45",
+        "type": "ui-switch",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "Track Presets",
+        "label": "Track Presets",
+        "group": "2ffd9e5a045727c6",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "decouple": false,
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "className": "",
+        "layout": "row-left-swapped",
+        "clickableArea": "label",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "x": 280,
+        "y": 460,
+        "wires": [
+            [
+                "511602a42b015aca"
+            ]
+        ]
+    },
+    {
+        "id": "51bdc3a15b772ace",
+        "type": "ui-switch",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "Fade Presets",
+        "label": "Fade Presets",
+        "group": "2ffd9e5a045727c6",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "decouple": false,
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "className": "",
+        "layout": "row-left-swapped",
+        "clickableArea": "label",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "x": 270,
+        "y": 500,
+        "wires": [
+            [
+                "6a317b07fabc7061"
+            ]
+        ]
+    },
+    {
+        "id": "4bc886955c7f8b21",
+        "type": "ui-button",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "group": "2ffd9e5a045727c6",
+        "name": "Recall",
+        "label": "Recall",
+        "order": 5,
+        "width": "1",
+        "height": "1",
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "recall",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 250,
+        "y": 640,
+        "wires": [
+            [
+                "edae72a537679007"
+            ]
+        ]
+    },
+    {
+        "id": "4d906e2f6038d015",
+        "type": "ui-button",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "group": "2ffd9e5a045727c6",
+        "name": "Store",
+        "label": "Store",
+        "order": 6,
+        "width": "1",
+        "height": "1",
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "iconPosition": "left",
+        "payload": "store",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 250,
+        "y": 700,
+        "wires": [
+            [
+                "edae72a537679007"
+            ]
+        ]
+    },
+    {
+        "id": "7ae52513361ef5e1",
+        "type": "change",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "",
+        "rules": [
             {
-                "label": "Templates kopieren",
-                "key": "templates",
-                "type": "checkbox",
-                "required": false
-            },
-            {
-                "label": "Track Presets kopieren",
-                "key": "trackpresets",
-                "type": "checkbox",
-                "required": false
+                "t": "set",
+                "p": "templates",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
             }
         ],
-        "formValue": {
-            "templates": false,
-            "trackpresets": false
-        },
-        "payload": "",
-        "submit": "Recall",
-        "cancel": "Store",
-        "resetOnSubmit": false,
-        "topic": "",
-        "topicType": "str",
-        "passthru": false,
-        "x": 290,
-        "y": 200,
-        "wires": [
-            [
-                "9faf9391590124e0"
-            ]
-        ]
-    },
-    {
-        "id": "9faf9391590124e0",
-        "type": "function",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "Recall Items erzeugen",
-        "func": "// Hole User- und Pfadinfos\nlet activeUser = global.get('activeUser');\nlet PathPTUser = global.get('PathPTUser'); // z.B. /Users/NAME/Documents/Pro Tools\nlet PathMitarbeiter = flow.get('PathMitarbeiter');\n\nlet recallItems = [];\nif (msg.payload.templates) {\n    recallItems.push({\n        src: `${PathMitarbeiter}/${activeUser}/templates`,\n        dest: `${PathPTUser}/Session Templates/${activeUser}`\n    });\n}\nif (msg.payload.trackpresets) {\n    recallItems.push({\n        src: `${PathMitarbeiter}/${activeUser}/Track Presets`,\n        dest: `${PathPTUser}/Track Presets/${activeUser}`\n    });\n}\nmsg.recallItems = recallItems;\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "x": 550,
-        "y": 200,
-        "wires": [
-            [
-                "d0a06d0cfd864180"
-            ]
-        ]
-    },
-    {
-        "id": "d0a06d0cfd864180",
-        "type": "split",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "Split recallItems",
-        "splt": "\\n",
-        "spltType": "str",
-        "arraySplt": 1,
-        "arraySpltType": "len",
-        "stream": false,
-        "addname": "",
-        "property": "recallItems",
-        "x": 780,
-        "y": 200,
-        "wires": [
-            [
-                "63f5b463c89c3169"
-            ]
-        ]
-    },
-    {
-        "id": "3f77b019c8edb6bf",
-        "type": "fs-ops-dir",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "Quellordner auslesen",
-        "path": "recallItems.src",
-        "pathType": "msg",
-        "filter": "*",
-        "filterType": "str",
-        "dir": "files",
-        "dirType": "msg",
-        "x": 1010,
-        "y": 220,
-        "wires": [
-            [
-                "264bc4c695f8dccc"
-            ]
-        ]
-    },
-    {
-        "id": "264bc4c695f8dccc",
-        "type": "function",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "Jobs-Objekte erstellen",
-        "func": "// msg.files: Array mit Dateinamen\n// msg.recallItems.src / dest\nlet jobs = (msg.files || []).map(file => ({\n    src: `${msg.recallItems.src}/${file}`,\n    dest: msg.recallItems.dest,\n    filename: file\n}));\nmsg.payload = jobs;\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "x": 1260,
-        "y": 220,
-        "wires": [
-            [
-                "12439cf3be2c7508"
-            ]
-        ]
-    },
-    {
-        "id": "12439cf3be2c7508",
-        "type": "split",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "Aufträge splitten",
-        "splt": "\\n",
-        "spltType": "str",
-        "arraySplt": 1,
-        "arraySpltType": "len",
-        "stream": false,
-        "addname": "",
-        "property": "payload",
-        "x": 1490,
-        "y": 220,
-        "wires": [
-            [
-                "07562e46a647ed75"
-            ]
-        ]
-    },
-    {
-        "id": "07562e46a647ed75",
-        "type": "fs-ops-copy",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "Kopiere Datei",
-        "sourcePath": "",
-        "sourcePathType": "str",
-        "sourceFilename": "payload.src",
-        "sourceFilenameType": "msg",
-        "destPath": "payload.dest",
-        "destPathType": "msg",
-        "destFilename": "payload.filename",
-        "destFilenameType": "msg",
-        "link": false,
-        "overwrite": true,
-        "x": 1670,
-        "y": 220,
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 520,
+        "y": 420,
         "wires": [
             []
         ]
     },
     {
-        "id": "f28ee83432a5c3b6",
+        "id": "511602a42b015aca",
+        "type": "change",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "trackpresets",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 530,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6a317b07fabc7061",
+        "type": "change",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "fadepresets",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 520,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2a662fab555d6f4f",
+        "type": "fs-extra-copy",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "Copy Templates",
+        "source": "templateSrc",
+        "sourceType": "msg",
+        "target": "templateDest",
+        "targetType": "msg",
+        "x": 960,
+        "y": 640,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "db9b106015aaeca1",
+        "type": "fs-extra-copy",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "Copy Track Presets",
+        "source": "trackpresetSrc",
+        "sourceType": "msg",
+        "target": "trackpresetDest",
+        "targetType": "msg",
+        "x": 970,
+        "y": 680,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "46e0cb69535901c8",
+        "type": "fs-extra-copy",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "Copy Fade Presets",
+        "source": "fadepresetSrc",
+        "sourceType": "msg",
+        "target": "fadepresetDest",
+        "targetType": "msg",
+        "x": 970,
+        "y": 720,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "edae72a537679007",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "Variablen / Auswahl",
+        "func": "let PathMitarbeiter = global.get('PathMitarbeiter') || '';\nlet PathPTUser = global.get('PathPTUser') || '';\nlet activeUser = global.get('activeUser');\n\nlet templates = flow.get('templates');\nlet trackpresets = flow.get('trackpresets');\nlet fadepresets = flow.get('fadepresets');\nlet pluginsettings = flow.get('pluginsettings');\n\n// Default: keine Nachricht weitergeben\nlet msgTemplates = null;\nlet msgTrackpresets = null;\nlet msgFadepresets = null;\nlet msgPluginsettings = null;\n\nif (templates === true) {\n    msgTemplates = {\n        ...msg,\n        PathMitarbeiter: PathMitarbeiter,\n        PathPTUser: PathPTUser,\n        activeUser: activeUser\n    };\n}\nif (trackpresets === true) {\n    msgTrackpresets = {\n        ...msg,\n        PathMitarbeiter: PathMitarbeiter,\n        PathPTUser: PathPTUser,\n        activeUser: activeUser\n    };\n}\nif (fadepresets === true) {\n    msgFadepresets = {\n        ...msg,\n        PathMitarbeiter: PathMitarbeiter,\n        PathPTUser: PathPTUser,\n        activeUser: activeUser\n    };\n}\n\nif (pluginsettings === true) {\n    msgPluginsettings = {\n        ...msg,\n        PathMitarbeiter: PathMitarbeiter,\n        PluginPath: PathPTUser + '/Plug-In Settings',\n        activeUser: activeUser\n    };\n}\n\n\nreturn [msgTemplates, msgTrackpresets, msgFadepresets, msgPluginsettings];",
+        "outputs": 4,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 680,
+        "wires": [
+            [
+                "210d631ebc82ecb4"
+            ],
+            [
+                "428bed19fe6a1ebf"
+            ],
+            [
+                "d79c25967e9dce9b"
+            ],
+            [
+                "09979d6368f7e926",
+                "1b10bdb535af0bbc"
+            ]
+        ],
+        "outputLabels": [
+            "Templates",
+            "Track Presets",
+            "Fade Presets",
+            "Plugin Settings"
+        ]
+    },
+    {
+        "id": "210d631ebc82ecb4",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "Template Funktion",
+        "func": "let PathMitarbeiter = msg.PathMitarbeiter;\nlet PathPTUser = msg.PathPTUser;\nlet activeUser = msg.activeUser;\n\n// Ohne passenden payload keine Aktion\nif (msg.payload === \"recall\") {\n    msg.templateSrc = `${PathMitarbeiter}/${activeUser}/immo24/templates`;\n    msg.templateDest = `${PathPTUser}/Session Templates/${activeUser}`;\n    msg.action = \"recall\";\n    return msg;\n} else if (msg.payload === \"store\") {\n    msg.templateSrc = `${PathPTUser}/Session Templates/${activeUser}`;\n    msg.templateDest = `${PathMitarbeiter}/${activeUser}/immo24/templates`;\n    msg.action = \"store\";\n    return msg;\n}\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 640,
+        "wires": [
+            [
+                "2a662fab555d6f4f"
+            ]
+        ]
+    },
+    {
+        "id": "428bed19fe6a1ebf",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "Track Presets Funktion",
+        "func": "let PathMitarbeiter = msg.PathMitarbeiter;\nlet PathPTUser = msg.PathPTUser;\nlet activeUser = msg.activeUser;\n\n// Ohne passenden payload keine Aktion\nif (msg.payload === \"recall\") {\n    msg.trackpresetSrc = `${PathMitarbeiter}/${activeUser}/immo24/trackpresets`;\n    msg.trackpresetDest = `${PathPTUser}/Track Presets/${activeUser}`;\n    msg.action = \"recall\";\n    return msg;\n} else if (msg.payload === \"store\") {\n    msg.trackpresetSrc = `${PathPTUser}/Track Presets/${activeUser}`;\n    msg.trackpresetDest = `${PathMitarbeiter}/${activeUser}/immo24/trackpresets`;\n    msg.action = \"store\";\n    return msg;\n}\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 680,
+        "wires": [
+            [
+                "db9b106015aaeca1"
+            ]
+        ]
+    },
+    {
+        "id": "d79c25967e9dce9b",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "Fade Presets Funktion",
+        "func": "let PathMitarbeiter = msg.PathMitarbeiter;\nlet PathPTUser = msg.PathPTUser;\nlet activeUser = msg.activeUser;\n\n// Ohne passenden payload keine Aktion\nif (msg.payload === \"recall\") {\n    msg.fadepresetSrc = `${PathMitarbeiter}/${activeUser}/immo24/fadepresets`;\n    msg.fadepresetDest = `${PathPTUser}/Fade Presets/${activeUser}`;\n    msg.action = \"recall\";\n    return msg;\n} else if (msg.payload === \"store\") {\n    msg.fadepresetSrc = `${PathPTUser}/Fade Presets/${activeUser}`;\n    msg.fadepresetDest = `${PathMitarbeiter}/${activeUser}/immo24/fadepresets`;\n    msg.action = \"store\";\n    return msg;\n}\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 720,
+        "wires": [
+            [
+                "46e0cb69535901c8"
+            ]
+        ]
+    },
+    {
+        "id": "09979d6368f7e926",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "d": true,
+        "g": "f10408fa2622e18b",
+        "name": "Plug-In Settings Funktion",
+        "func": "const fs = require('fs').promises;\nconst path = require('path');\n\n// Setze dein Plugin-Settings-Source Directory:\nconst pluginSrc = msg.pluginPath; // z.B. /Users/foo/Library/Pro Tools/Plugin Settings\n\nasync function findUserFolders(rootDir) {\n    let pluginDirs = await fs.readdir(rootDir, { withFileTypes: true });\n    let userFolders = [];\n    for (let entry of pluginDirs) {\n        if (entry.isDirectory()) {\n            let pluginFolder = path.join(rootDir, entry.name);\n            let userFolder = path.join(pluginFolder, \"peter\");\n            try {\n                let stat = await fs.stat(userFolder);\n                if (stat.isDirectory()) {\n                    userFolders.push({\n                        plugin: entry.name,\n                        userFolder: userFolder\n                    });\n                }\n            } catch (e) {\n                // Kein user-Unterordner, skippen\n            }\n        }\n    }\n    return userFolders;\n}\n\n(async () => {\n    msg.userFolders = await findUserFolders(pluginSrc);\n    // userFolders ist jetzt ein Array von Objekten: [{plugin: 'Compressor', userFolder: '/…/Compressor/user'}, ...]\n    return msg;\n})();",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 710,
+        "y": 780,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a99fc3e1fe669e9b",
+        "type": "ui-switch",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "Plug-In Settings",
+        "label": "Plug-In Settings",
+        "group": "2ffd9e5a045727c6",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "decouple": false,
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "className": "",
+        "layout": "row-left-swapped",
+        "clickableArea": "label",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "x": 280,
+        "y": 540,
+        "wires": [
+            [
+                "abd9f0565d3eebd3"
+            ]
+        ]
+    },
+    {
+        "id": "abd9f0565d3eebd3",
+        "type": "change",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "pluginsettings",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 530,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1b10bdb535af0bbc",
+        "type": "fs-ops-dir",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "Plugin Pfad durchsuchen",
+        "path": "PluginPath",
+        "pathType": "msg",
+        "filter": "*",
+        "filterType": "str",
+        "dir": "files",
+        "dirType": "msg",
+        "x": 710,
+        "y": 840,
+        "wires": [
+            [
+                "2ca85b2f7c28a9e0"
+            ]
+        ]
+    },
+    {
+        "id": "2ca85b2f7c28a9e0",
         "type": "split",
         "z": "24039523dcf573b0",
         "g": "f10408fa2622e18b",
-        "name": "Jede Datei einzeln",
+        "name": "Split Plugin-Ordner",
         "splt": "\\n",
         "spltType": "str",
         "arraySplt": 1,
@@ -8191,44 +8492,127 @@
         "stream": false,
         "addname": "",
         "property": "files",
-        "x": 780,
-        "y": 300,
+        "x": 950,
+        "y": 840,
         "wires": [
             [
-                "0d7bcb2c46606757"
+                "67a6bc92fa9fe33c"
             ]
         ]
     },
     {
-        "id": "0d7bcb2c46606757",
-        "type": "function",
+        "id": "67a6bc92fa9fe33c",
+        "type": "change",
         "z": "24039523dcf573b0",
         "g": "f10408fa2622e18b",
-        "name": "Dateipfad setzen",
-        "func": "msg.filepath = `${msg.recallItems.src}/${msg.payload}`;\nmsg.filename = msg.payload;\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 1000,
-        "y": 300,
+        "name": "Pfad zum user-Ordner bauen",
+        "rules": [
+            {
+                "t": "set",
+                "p": "pluginName",
+                "pt": "msg",
+                "to": "files",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "userDir",
+                "pt": "msg",
+                "to": "PluginPath & \"/\" & files & \"/\" & activeUser",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1200,
+        "y": 840,
         "wires": [
-            []
+            [
+                "bc737156d3e170ca"
+            ]
         ]
     },
     {
-        "id": "e3a6280e0cd022c3",
+        "id": "bc737156d3e170ca",
+        "type": "fs-ops-stats",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "",
+        "path": "",
+        "pathType": "str",
+        "filename": "userDir",
+        "filenameType": "msg",
+        "stats": "stats",
+        "sizeType": "msg",
+        "x": 920,
+        "y": 900,
+        "wires": [
+            [
+                "e255f5433d4297ff"
+            ]
+        ]
+    },
+    {
+        "id": "6653c8caed92f20c",
+        "type": "debug",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "Gefundener user-Ordner",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1230,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "e255f5433d4297ff",
         "type": "function",
         "z": "24039523dcf573b0",
         "g": "f10408fa2622e18b",
-        "name": "Nur echte Dateien weiterleiten",
-        "func": "if (msg.stat && msg.stat.isFile) {\n    // Ziel und Quelle für Kopierjob setzen\n    msg.payload = {\n        src: msg.filepath,\n        dest: msg.recallItems.dest,\n        filename: msg.filename\n    };\n    return msg;\n}\n// Wenn kein File, verwerfen\nreturn null;",
+        "name": "Ist ein Verzeichnis?",
+        "func": "// Prüfen ob Stat-Wert ein Verzeichnis ist\nif (msg.stats && typeof msg.stats.mode === \"number\") {\n    if ((msg.stats.mode & 57344) === 16384) {\n        // Ist ein Verzeichnis\n        return msg;\n    }\n}\n// Kein Verzeichnis: Nachricht verwerfen\nreturn null;",
         "outputs": 1,
+        "timeout": 0,
         "noerr": 0,
-        "x": 1580,
-        "y": 300,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1090,
+        "y": 900,
         "wires": [
-            []
+            [
+                "b3f55f2d76a1e5ba"
+            ]
+        ]
+    },
+    {
+        "id": "b3f55f2d76a1e5ba",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "function 1",
+        "func": "function pfadJoin() {\n    // Join beliebig viele Argumente zu einem Pfad, ohne doppelte /\n    return Array.from(arguments).map(s => (s + '').replace(/(^\\/+|\\/+$)/g, '')).filter(Boolean).join('/');\n}\nmsg.pluginsettingDest = '/' + pfadJoin(msg.PathMitarbeiter, msg.activeUser, 'immo24', 'pluginsettings', msg.pluginName, msg.activeUser);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1280,
+        "y": 900,
+        "wires": [
+            [
+                "6653c8caed92f20c"
+            ]
         ]
     }
 ]

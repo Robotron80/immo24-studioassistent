@@ -70,12 +70,24 @@
             "d53ba9235ee090fd",
             "0a490146a7033fad",
             "bfe2df3766e4f51c",
-            "3932d45de846bec7"
+            "3932d45de846bec7",
+            "0b584b15bbdbd2cd",
+            "2ed03f5bcc2c0594",
+            "1e4f421fda84a49c",
+            "5dfbd7873bf9b8f8",
+            "1bce45a28e5be938",
+            "50cd2dbcf91a3df4",
+            "c887e15d61d101e5",
+            "24973306c9218086",
+            "2aff8a3d3fd8f8f0",
+            "bb5b70ec65704ecc",
+            "a8fe68d6dfe78d47",
+            "9a599d140a8efe20"
         ],
         "x": 174,
         "y": 119,
-        "w": 1392,
-        "h": 902
+        "w": 1712,
+        "h": 1042
     },
     {
         "id": "0e1923748c0d505b",
@@ -7930,8 +7942,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1460,
-        "y": 980,
+        "x": 1520,
+        "y": 740,
         "wires": []
     },
     {
@@ -8233,6 +8245,7 @@
         "id": "46e0cb69535901c8",
         "type": "fs-extra-copy",
         "z": "24039523dcf573b0",
+        "d": true,
         "g": "f10408fa2622e18b",
         "name": "Copy Fade Presets",
         "source": "fadepresetSrc",
@@ -8240,7 +8253,7 @@
         "target": "fadepresetDest",
         "targetType": "msg",
         "x": 970,
-        "y": 720,
+        "y": 900,
         "wires": [
             []
         ]
@@ -8251,8 +8264,8 @@
         "z": "24039523dcf573b0",
         "g": "f10408fa2622e18b",
         "name": "Variablen / Auswahl",
-        "func": "let PathMitarbeiter = global.get('PathMitarbeiter') || '';\nlet PathPTUser = global.get('PathPTUser') || '';\nlet activeUser = global.get('activeUser');\n\nlet templates = flow.get('templates');\nlet trackpresets = flow.get('trackpresets');\nlet fadepresets = flow.get('fadepresets');\nlet pluginsettings = flow.get('pluginsettings');\nlet clipeffectspresets = flow.get('clipeffectpresets');\nlet pluginmaps = flow.get('pluginmaps');\nlet trackdatatorecallpresets = flow.get('trackdatatorecallpresets');\nlet memorylocationpresets = flow.get('memorylocationpresets');\nlet keyboardshortcuts = flow.get('keyboardshortcuts');\n\n\n\n\n// Default: keine Nachricht weitergeben\nlet msgTemplates = null;\nlet msgTrackpresets = null;\nlet msgFadepresets = null;\nlet msgPluginsettings = null;\nlet msgClipeffectpresets = null;\nlet msgPluginmaps = null;\nlet msgTrackdatatorecallpresets = null;\nlet msgMemorylocationpresets = null;\nlet msgKeyboardshortcuts = null;\n\n\nif (templates === true) {\n    msgTemplates = {\n        ...msg,\n        PathMitarbeiter: PathMitarbeiter,\n        PathPTUser: PathPTUser,\n        activeUser: activeUser\n    };\n}\nif (trackpresets === true) {\n    msgTrackpresets = {\n        ...msg,\n        PathMitarbeiter: PathMitarbeiter,\n        PathPTUser: PathPTUser,\n        activeUser: activeUser\n    };\n}\nif (fadepresets === true) {\n    msgFadepresets = {\n        ...msg,\n        PathMitarbeiter: PathMitarbeiter,\n        PathPTUser: PathPTUser,\n        activeUser: activeUser\n    };\n}\n\nif (pluginsettings === true) {\n    msgPluginsettings = {\n        ...msg,\n        PathMitarbeiter: PathMitarbeiter,\n        PluginPath: PathPTUser + '/Plug-In Settings',\n        activeUser: activeUser\n    };\n}\n\n\nreturn [msgTemplates, msgTrackpresets, msgFadepresets, msgPluginsettings, msgClipeffectpresets, msgPluginmaps, msgTrackdatatorecallpresets, msgMemorylocationpresets, msgKeyboardshortcuts];",
-        "outputs": 4,
+        "func": "let PathMitarbeiter = global.get('PathMitarbeiter') || '';\nlet PathPTUser = global.get('PathPTUser') || '';\nlet activeUser = global.get('activeUser');\n\nlet templates = flow.get('templates');\nlet trackpresets = flow.get('trackpresets');\nlet fadepresets = flow.get('fadepresets');\nlet pluginsettings = flow.get('pluginsettings');\nlet clipeffectspresets = flow.get('clipeffectspresets');\nlet pluginmaps = flow.get('pluginmaps');\nlet trackdatatorecallpresets = flow.get('trackdatatorecallpresets');\nlet memorylocationpresets = flow.get('memorylocationpresets');\nlet keyboardshortcuts = flow.get('keyboardshortcuts');\n\n\n\n\n// Default: keine Nachricht weitergeben\nlet msgTemplates = null;\nlet msgTrackpresets = null;\nlet msgFadepresets = null;\nlet msgPluginsettings = null;\nlet msgClipeffectspresets = null;\nlet msgPluginmaps = null;\nlet msgTrackdatatorecallpresets = null;\nlet msgMemorylocationpresets = null;\nlet msgKeyboardshortcuts = null;\n\n\nif (templates === true) {\n    msgTemplates = {\n        ...msg,\n        PathMitarbeiter: PathMitarbeiter,\n        PathPTUser: PathPTUser,\n        activeUser: activeUser\n    };\n}\nif (trackpresets === true) {\n    msgTrackpresets = {\n        ...msg,\n        PathMitarbeiter: PathMitarbeiter,\n        PathPTUser: PathPTUser,\n        activeUser: activeUser\n    };\n}\nif (fadepresets === true) {\n    msgFadepresets = {\n        ...msg,\n        PathMitarbeiter: PathMitarbeiter,\n        PathPTUser: PathPTUser,\n        activeUser: activeUser\n    };\n}\n\nif (pluginsettings === true) {\n    msgPluginsettings = {\n        ...msg,\n        PathMitarbeiter: PathMitarbeiter,\n        PluginPath: PathPTUser + '/Plug-In Settings',\n        activeUser: activeUser\n    };\n}\n\nif (clipeffectspresets === true) {\n    msgClipeffectspresets = {\n        ...msg,\n        PathMitarbeiter: PathMitarbeiter,\n        PathPTUser: PathPTUser,\n        activeUser: activeUser\n    };\n}\n\n\nreturn [msgTemplates, msgTrackpresets, msgFadepresets, msgPluginsettings, msgClipeffectspresets, msgPluginmaps, msgTrackdatatorecallpresets, msgMemorylocationpresets, msgKeyboardshortcuts];",
+        "outputs": 9,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -8273,13 +8286,25 @@
             [
                 "09979d6368f7e926",
                 "1b10bdb535af0bbc"
-            ]
+            ],
+            [
+                "2ed03f5bcc2c0594"
+            ],
+            [],
+            [],
+            [],
+            []
         ],
         "outputLabels": [
             "Templates",
             "Track Presets",
             "Fade Presets",
-            "Plugin Settings"
+            "Plugin Settings",
+            "Clip Effects Presets",
+            "Plug-In Maps",
+            "Track Data to Recall Presets",
+            "Memory Location Presets",
+            "Keyboard Shortcuts"
         ]
     },
     {
@@ -8328,6 +8353,7 @@
         "id": "d79c25967e9dce9b",
         "type": "function",
         "z": "24039523dcf573b0",
+        "d": true,
         "g": "f10408fa2622e18b",
         "name": "Fade Presets Funktion",
         "func": "let PathMitarbeiter = msg.PathMitarbeiter;\nlet PathPTUser = msg.PathPTUser;\nlet activeUser = msg.activeUser;\n\n// Ohne passenden payload keine Aktion\nif (msg.payload === \"recall\") {\n    msg.fadepresetSrc = `${PathMitarbeiter}/${activeUser}/immo24/fadepresets`;\n    msg.fadepresetDest = `${PathPTUser}/Fade Presets/${activeUser}`;\n    msg.action = \"recall\";\n    return msg;\n} else if (msg.payload === \"store\") {\n    msg.fadepresetSrc = `${PathPTUser}/Fade Presets/${activeUser}`;\n    msg.fadepresetDest = `${PathMitarbeiter}/${activeUser}/immo24/fadepresets`;\n    msg.action = \"store\";\n    return msg;\n}\nreturn null;",
@@ -8338,7 +8364,7 @@
         "finalize": "",
         "libs": [],
         "x": 700,
-        "y": 720,
+        "y": 900,
         "wires": [
             [
                 "46e0cb69535901c8"
@@ -8360,7 +8386,7 @@
         "finalize": "",
         "libs": [],
         "x": 710,
-        "y": 780,
+        "y": 940,
         "wires": [
             []
         ]
@@ -8439,7 +8465,7 @@
         "dir": "files",
         "dirType": "msg",
         "x": 710,
-        "y": 840,
+        "y": 980,
         "wires": [
             [
                 "2ca85b2f7c28a9e0"
@@ -8460,7 +8486,7 @@
         "addname": "",
         "property": "files",
         "x": 950,
-        "y": 840,
+        "y": 980,
         "wires": [
             [
                 "67a6bc92fa9fe33c"
@@ -8495,7 +8521,7 @@
         "to": "",
         "reg": false,
         "x": 1200,
-        "y": 840,
+        "y": 980,
         "wires": [
             [
                 "bc737156d3e170ca"
@@ -8515,7 +8541,7 @@
         "stats": "stats",
         "sizeType": "msg",
         "x": 920,
-        "y": 900,
+        "y": 1040,
         "wires": [
             [
                 "e255f5433d4297ff"
@@ -8537,7 +8563,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1230,
-        "y": 980,
+        "y": 1120,
         "wires": []
     },
     {
@@ -8554,7 +8580,7 @@
         "finalize": "",
         "libs": [],
         "x": 1090,
-        "y": 900,
+        "y": 1040,
         "wires": [
             [
                 "b3f55f2d76a1e5ba"
@@ -8575,7 +8601,7 @@
         "finalize": "",
         "libs": [],
         "x": 1280,
-        "y": 900,
+        "y": 1040,
         "wires": [
             [
                 "6653c8caed92f20c"
@@ -8612,7 +8638,9 @@
         "x": 770,
         "y": 400,
         "wires": [
-            []
+            [
+                "1bce45a28e5be938"
+            ]
         ]
     },
     {
@@ -8645,7 +8673,9 @@
         "x": 760,
         "y": 440,
         "wires": [
-            []
+            [
+                "50cd2dbcf91a3df4"
+            ]
         ]
     },
     {
@@ -8678,7 +8708,9 @@
         "x": 800,
         "y": 480,
         "wires": [
-            []
+            [
+                "c887e15d61d101e5"
+            ]
         ]
     },
     {
@@ -8711,7 +8743,9 @@
         "x": 790,
         "y": 520,
         "wires": [
-            []
+            [
+                "24973306c9218086"
+            ]
         ]
     },
     {
@@ -8744,7 +8778,292 @@
         "x": 780,
         "y": 560,
         "wires": [
+            [
+                "2aff8a3d3fd8f8f0"
+            ]
+        ]
+    },
+    {
+        "id": "0b584b15bbdbd2cd",
+        "type": "comment",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "Verhalten der Presets",
+        "info": "Fade Presets:\nNur Root-Folder!\nEs gibt Fadein, FadeOut, Crossfade, Batchfade. Dort liegen auch die QuickPresets drin, die überschrieben werden müssen.\n\nTrack Data:\nOrdnerstruktur wie bei Track Presets\nQuick Presets im Root\n\nMemory Location\nsiehe Track Data\n\nKeyboard\nsiehe Track Data\n\n\n\n",
+        "x": 1160,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "2ed03f5bcc2c0594",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "Clip Effects Preset Funktion",
+        "func": "let PathMitarbeiter = msg.PathMitarbeiter;\nlet PathPTUser = msg.PathPTUser;\nlet activeUser = msg.activeUser;\nlet quickPresetJobs = [];\nlet rootDir = `${PathPTUser}/Clip Effects Presets`;\nlet archiveDir = `${PathMitarbeiter}/${activeUser}/immo24/clipeffectspresets/Quick Presets`;\n\n// Ohne passenden payload keine Aktion\nif (msg.payload === \"recall\") {\n    msg.clipeffectSrc = `${PathMitarbeiter}/${activeUser}/immo24/clipeffectspresets`;\n    msg.clipeffectDest = `${PathPTUser}/Clip Effects Presets/${activeUser}`;\n    msg.action = \"recall\";\n\n    // Quick Presets NUR überschreiben, wenn Haken aktiv (recall)\n    let overwrite = flow.get('quickclipeffects');\n    if (overwrite) {\n        for (let i = 1; i <= 5; i++) {\n            quickPresetJobs.push({\n                src: `${archiveDir}/Quick Preset ${i}.tfx`,\n                destname: `Quick Preset ${i}.tfx`,\n                destpath: `${rootDir}`\n            });\n        }\n    }\n    msg.quickPresets = quickPresetJobs;\n    return msg;\n\n} else if (msg.payload === \"store\") {\n    msg.clipeffectSrc = `${PathPTUser}/Clip Effects Presets/${activeUser}`;\n    msg.clipeffectDest = `${PathMitarbeiter}/${activeUser}/immo24/clipeffectspresets`;\n    msg.action = \"store\";\n\n    // Quick Presets NUR überschreiben, wenn Haken aktiv (store)\n    let overwrite = flow.get('quickclipeffects');\n    if (overwrite) {\n        for (let i = 1; i <= 5; i++) {\n            quickPresetJobs.push({\n                src: `${rootDir}/Quick Preset ${i}.tfx`,\n                destname: `Quick Preset ${i}.tfx`,\n                destpath: `${archiveDir}`\n            });\n        }\n    }\n    msg.quickPresets = quickPresetJobs;\n    return msg;\n}\n\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 720,
+        "y": 720,
+        "wires": [
+            [
+                "1e4f421fda84a49c",
+                "9a599d140a8efe20"
+            ]
+        ]
+    },
+    {
+        "id": "1e4f421fda84a49c",
+        "type": "fs-extra-copy",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "Copy Clip Effects Presets",
+        "source": "clipeffectSrc",
+        "sourceType": "msg",
+        "target": "clipeffectDest",
+        "targetType": "msg",
+        "x": 990,
+        "y": 720,
+        "wires": [
             []
+        ]
+    },
+    {
+        "id": "5dfbd7873bf9b8f8",
+        "type": "ui-switch",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "Clip Effects Quick Presets",
+        "label": "CE Quick Presets überschreiben",
+        "group": "2ffd9e5a045727c6",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "decouple": false,
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "className": "",
+        "layout": "row-left-swapped",
+        "clickableArea": "label",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "x": 1470,
+        "y": 400,
+        "wires": [
+            [
+                "bb5b70ec65704ecc"
+            ]
+        ]
+    },
+    {
+        "id": "1bce45a28e5be938",
+        "type": "change",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "clipeffectspresets",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1100,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "50cd2dbcf91a3df4",
+        "type": "change",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "pluginmaps",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1080,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c887e15d61d101e5",
+        "type": "change",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "trackdatatorecallpresets",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1120,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "24973306c9218086",
+        "type": "change",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "memorylocationpresets",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1120,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2aff8a3d3fd8f8f0",
+        "type": "change",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "keyboardshortcuts",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1110,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bb5b70ec65704ecc",
+        "type": "change",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "quickclipeffects",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1740,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a8fe68d6dfe78d47",
+        "type": "fs-ops-copy",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "Quick Presets kopieren",
+        "sourcePath": "",
+        "sourcePathType": "str",
+        "sourceFilename": "quickPresets.src",
+        "sourceFilenameType": "msg",
+        "destPath": "quickPresets.destpath",
+        "destPathType": "msg",
+        "destFilename": "quickPresets.destname",
+        "destFilenameType": "msg",
+        "link": false,
+        "overwrite": true,
+        "x": 1110,
+        "y": 760,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9a599d140a8efe20",
+        "type": "split",
+        "z": "24039523dcf573b0",
+        "g": "f10408fa2622e18b",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "quickPresets",
+        "x": 930,
+        "y": 760,
+        "wires": [
+            [
+                "a8fe68d6dfe78d47"
+            ]
         ]
     }
 ]

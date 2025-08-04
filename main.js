@@ -141,6 +141,8 @@ function createWindow() {
   });
   // Lade erst mal eine Lade-HTML (local)
   mainWindow.loadFile(path.join(__dirname, 'assets', 'main.html'));
+  mainWindow.webContents.openDevTools({ mode: 'detach' });
+
 }
 
 function waitForDashboard(callback) {
@@ -203,7 +205,7 @@ function createPreferencesWindow() {
 
 
 
-const isMac = process.platform === 'darwin'
+/* const isMac = process.platform === 'darwin'
 const template = [
   ...(isMac ? [{
     label: app.name,
@@ -235,7 +237,7 @@ const template = [
 const menu = Menu.buildFromTemplate(template)
 Menu.setApplicationMenu(menu)
 
-
+*/ 
 // …in app.whenReady():
 app.whenReady().then(() => {
   ensureUserJsonFiles();

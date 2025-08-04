@@ -73,3 +73,41 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+.v-tab:focus,
+.v-tab:focus-visible,
+.v-tab:focus-within {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+html, body {
+  overflow: hidden !important;
+
+}
+
+/* Aktiver Tab: Pill-Look */
+.v-tab.v-tab--selected {
+  background: #fff !important;
+  color: #23272e !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 16px 0 rgba(34, 34, 34, 0.504);
+  transition: background 0.2s, color 0.2s;
+}
+
+/* Optionale Feinheiten: inaktive Tabs transparenter, etwas mehr Abstand */
+.v-tab {
+  background: transparent;
+  color: #23272e;
+  margin: 0 2px;
+  min-width: 110px;
+  padding: 0 20px;
+  font-size: 1.09em;
+  border-radius: 24px;
+}
+
+/* Optional: Tab-Bar selbst etwas absetzen */
+.v-tabs {
+  background: #f7f8fa !important;
+  padding: 4px 0;
+}

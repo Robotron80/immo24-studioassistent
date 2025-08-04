@@ -1,98 +1,70 @@
 <template>
-  <div class="topbar">
-    <span class="app-title">immo24 Studioassistent</span>
-    <span class="status">
+  <v-app>
+    <v-app-bar
+      app
+      color="#f7f8fa"
+      flat
+      elevation="3"
+      style="padding-left:30px; padding-right:30px;"
+    >
+      <span class="app-title" style="color: #23272e;">immo24 Studioassistent</span>
+      <v-spacer />
       <template v-if="activeUser">
-        Angemeldet als: <b>{{ activeUser }}</b>
-        <button @click="logout" class="logout-btn">Abmelden</button>
+        <v-tabs 
+          v-model="tab" 
+          class="pill-tabs" 
+          style="margin-bottom: 8px;"
+        >
+          <v-tab value="projektanlage">Projektanlage</v-tab>
+          <v-tab value="protools">Pro Tools</v-tab>
+        </v-tabs>
+        <v-spacer />
+
+        <span style="color:#23272e;">Angemeldet als: <b>{{ activeUser }}</b></span>
+        <v-btn color="#eaeaea" class="ml-4" style="color:#23272e;" @click="logout">Abmelden</v-btn>
       </template>
       <template v-else>
-        Nicht angemeldet
+        <span style="color:#23272e;">Nicht angemeldet</span>
+
+        
+
       </template>
-    </span>
-  </div>
+    </v-app-bar>
+
+  </v-app>
 </template>
 
+
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, watch, onMounted } from 'vue'
+
 const activeUser = ref(null)
+const tab = ref('projektanlage')
+
 let ws = null
 
 function connectWS() {
   ws = new WebSocket("ws://localhost:1880/ws/activeUser")
-
-  ws.onopen = () => {
-    console.log("WebSocket verbunden!")
-  }
+  ws.onopen = () => { }
   ws.onmessage = event => {
     const data = JSON.parse(event.data)
     activeUser.value = data.activeUser
   }
   ws.onclose = () => {
-    // Reconnect nach kurzem Timeout
     setTimeout(connectWS, 1500)
   }
 }
 
-onMounted(() => {
-  connectWS()
+onMounted(connectWS)
+
+watch(tab, (newTab, oldTab) => {
+  window.parent.postMessage({ type: 'switch-tab', tab: newTab }, '*')
 })
 
 async function logout() {
   await fetch('http://localhost:1880/logout', { method: 'POST' })
   activeUser.value = null
+  // Dashboard-iframe leeren
+  window.parent.postMessage({ type: 'logout' }, '*')
 }
 </script>
-
-<style>
-body {
-  margin: 0;
-  width: 100vw;
-  height: 60px;
-  background: transparent;
-  overflow: hidden;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-}
-
-/* Das hier ist die einzige "Leiste"! */
-.topbar {
-  width: 100vw;
-  height: 60px;
-  background: #23272e;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-  padding: 0 30px;
-  box-sizing: border-box;
-  user-select: none;
-  -webkit-app-region: drag; /* Fensterziehbar in Electron */
-}
-.app-title {
-  font-size: 1.22em;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  padding-top: 1px;
-}
-.status {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
-.logout-btn {
-  background: #ee4444;
-  border: none;
-  color: #fff;
-  font-size: 1em;
-  padding: 8px 18px;
-  border-radius: 6px;
-  cursor: pointer;
-  -webkit-app-region: no-drag;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.10);
-  transition: background 0.15s;
-}
-.logout-btn:hover {
-  background: #c52e2e;
-}
-</style>

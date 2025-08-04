@@ -119,16 +119,32 @@
   </div>
 
   <script>
-    // Topbar wie gehabt:
+    // --- Topbar-iframe
     const topbar = document.createElement('iframe');
     topbar.src = "../vue-ui/dist/index.html";
     topbar.height = "60";
-    topbar.style.width = "100%";
+    topbar.style.width = "100vw";
+    topbar.style.height = "60px";
     topbar.style.border = "none";
     topbar.style.overflow = "hidden";
+    topbar.style.display = "block";
+    topbar.style.position = "absolute";
+    topbar.style.left = "0";
+    topbar.style.top = "0";
     document.getElementById('topbar').appendChild(topbar);
 
-    // --- Animation der Punkte ---
+    // --- Dashboard-iframe (zunächst ohne src!)
+    const dash = document.createElement('iframe');
+    dash.style.height = "calc(100vh - 60px)";
+    dash.style.width = "100vw";
+    dash.style.border = "none";
+    dash.style.display = "block";
+    dash.style.position = "absolute";
+    dash.style.top = "60px";
+    dash.style.left = "0";
+    document.getElementById('dashboard').appendChild(dash);
+
+    // --- Animierte Punkte
     const dots = document.querySelectorAll('.dot');
     let step = 0;
     setInterval(() => {
@@ -136,21 +152,15 @@
       step = (step + 1) % dots.length;
     }, 400);
 
-    // Funktion, die prüft, ob Dashboard da ist:
+    // --- Loader erst entfernen, wenn Dashboard wirklich erreichbar!
     function tryLoadDashboard(maxTries = 80, delay = 250) {
       let tries = 0;
       function check() {
         fetch("http://127.0.0.1:1880/dashboard", { method: "HEAD" })
           .then(() => {
-            // Dashboard ist erreichbar!
+            // Jetzt das Dashboard laden:
+            dash.src = "http://127.0.0.1:1880/dashboard/anmelden";
             document.getElementById('loading-overlay').remove();
-            const dash = document.createElement('iframe');
-            dash.src = "http://127.0.0.1:1880/dashboard";
-            dash.style.height = "100%";
-            dash.style.width = "100%";
-            dash.allow = "clipboard-write; clipboard-read";
-            dash.style.border = "none";
-            document.getElementById('dashboard').appendChild(dash);
           })
           .catch(() => {
             tries++;
@@ -161,6 +171,20 @@
       check();
     }
     tryLoadDashboard();
+
+    // --- Empfange Tab-Wechsel von der Topbar
+    window.addEventListener('message', function(event) {
+      if (event.data && event.data.type === 'switch-tab') {
+        if (event.data.tab === 'projektanlage') {
+          dash.src = "http://127.0.0.1:1880/dashboard/projektanlage";
+        } else if (event.data.tab === 'protools') {
+          dash.src = "http://127.0.0.1:1880/dashboard/protools";
+        }
+      }
+      if (event.data && event.data.type === 'logout') {
+        dash.src = "about:blank";
+      }
+    });
   </script>
 </body>
 </html>

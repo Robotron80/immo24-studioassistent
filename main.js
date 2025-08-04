@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, Menu } = require('electron')
 const path = require('path')
 const { spawn } = require('child_process')
 const http = require('http')
@@ -6,6 +6,8 @@ const fs = require('fs')
 
 let nodeRedProcess
 let mainWindow
+let prefWin = null;
+
 
 function ensureUserJsonFiles() {
 	const basePath = app.getPath('userData') // Plattformübergreifender User-Ordner
@@ -130,41 +132,18 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 900,
+    useContentSize: true,
     icon: path.join(__dirname, 'assets', 'icon.png'),
     webPreferences: {
-      nodeIntegration: true, // Für preload.js!
-      contextIsolation: false
+      nodeIntegration: false,
+      contextIsolation: true
     }
   });
   // Lade erst mal eine Lade-HTML (local)
-  mainWindow.loadFile(path.join(__dirname, 'assets', 'loading.html'));
+  mainWindow.loadFile(path.join(__dirname, 'assets', 'main.html'));
 }
 
-//function createWindow() {
-//  mainWindow = new BrowserWindow({
-//    width: 1200,
-//    height: 900,
-//    icon: path.join(__dirname, 'assets', 'icon.png'),
-//    webPreferences: {
-//      nodeIntegration: false,
-//      contextIsolation: true,
-//    }
-//  })
-//  mainWindow.loadURL('http://localhost:1880/dashboard')
-//}
-
-//app.whenReady().then(() => {
-//  ensureUserJsonFiles()
-//  startNodeRED()
-//  waitForPort(1880)
-//    .then(createWindow)
-//    .catch(err => {
-//      console.error('Node-RED-Port ist nicht erreichbar:', err)
-//      app.quit()
-//    })
-//})
-
-function waitForDashboard() {
+function waitForDashboard(callback) {
   const url = 'http://127.0.0.1:1880/dashboard';
   const maxTries = 80; // 20 Sekunden (bei 250ms)
   let tries = 0;
@@ -172,21 +151,90 @@ function waitForDashboard() {
   function check() {
     const http = require('http');
     const req = http.request({host: "127.0.0.1", port: 1880, path: "/dashboard", method: 'HEAD'}, res => {
-	  console.log('Dashboard ist jetzt erreichbar!');
-      mainWindow.loadURL(url); // Dashboard ist erreichbar!
+      console.log('Dashboard ist jetzt erreichbar!');
+      if (callback) callback(); // Jetzt kannst du im Renderer das Dashboard-iframe laden
     });
     req.on('error', () => {
       tries++;
       if (tries < maxTries) setTimeout(check, 250);
       else {
         // Nach 20s Fehlermeldung anzeigen
-        mainWindow.webContents.executeJavaScript('document.body.innerHTML="<div style=\'color:red;font-size:1.2em;\'>Dashboard nicht erreichbar!</div>"');
+        // Optional: Sende Info an Renderer, damit ein Fehler angezeigt werden kann
       }
     });
     req.end();
   }
   check();
 }
+
+
+
+function createPreferencesWindow() {
+  if (prefWin && !prefWin.isDestroyed()) {
+    prefWin.focus();
+    return;
+  }
+  prefWin = new BrowserWindow({ 
+    width: 600,
+    height: 500,
+    resizable: false,
+    title: 'Konfiguration',
+    modal: false, // blockiert ggf. MainWindow
+    parent: mainWindow,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+    }
+
+   });
+
+
+
+  prefWin.setMenu(null);
+  
+  prefWin.loadURL('http://localhost:1880/dashboard/konfiguration');
+  prefWin.on('closed', () => { prefWin = null; });
+
+    // HIER: DevTools automatisch öffnen!
+    // prefWin.webContents.openDevTools({ mode: 'detach' });
+
+
+}
+
+
+
+const isMac = process.platform === 'darwin'
+const template = [
+  ...(isMac ? [{
+    label: app.name,
+    submenu: [
+      { role: 'about' },
+      { type: 'separator' },
+      {
+        label: 'Konfiguration',
+        accelerator: 'CommandOrControl+,',
+        click: createPreferencesWindow
+      },
+      { type: 'separator' },
+      { role: 'quit' }
+    ]
+  }] : [{
+    label: 'Datei',
+    submenu: [
+      {
+        label: 'Konfiguration',
+        accelerator: 'CommandOrControl+,',
+        click: createPreferencesWindow
+      },
+      { type: 'separator' },
+      { role: 'quit' }
+    ]
+  }])
+]
+
+const menu = Menu.buildFromTemplate(template)
+Menu.setApplicationMenu(menu)
+
 
 // …in app.whenReady():
 app.whenReady().then(() => {

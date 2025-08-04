@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>immo24 Studioassistent</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      background: #222;
+      overflow: hidden;
+    }
+    #topbar {
+      height: 60px;
+      width: 100vw;
+      overflow: hidden;
+      background: #23272e;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    #dashboard {
+      width: 100vw;
+      height: calc(100vh - 60px);
+      overflow: hidden;
+    }
+    iframe {
+      width: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* --- Loader styles --- */
+    #loading-overlay {
+      position: fixed;
+      z-index: 9999;
+      top: 0; left: 0; right: 0; bottom: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #f7f8fa;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .plane-wrapper {
+      width: 340px;
+      height: 90px;
+      margin-bottom: 2em;
+      position: relative;
+      overflow: visible;
+      text-align: center;
+    }
+    .plane-anim {
+      width: 80px;
+      height: auto;
+      position: absolute;
+      left: 0;
+      top: 0;
+      animation: flugkurve 3s linear infinite;
+      filter: drop-shadow(0 2px 8px rgba(34,34,34,0.13));
+    }
+    @keyframes flugkurve {
+      0% {
+        opacity: 0;
+        transform: translate(-100px, 18px) rotate(20deg) scale(1);
+      }
+      8% {
+        opacity: 1;
+      }
+      30% {
+        transform: translate(-20px, 10px) rotate(20deg) scale(1.04);
+        opacity: 1;
+      }
+      60% {
+        transform: translate(80px, 18px) rotate(35deg) scale(1.09);
+        opacity: 1;
+      }
+      80% {
+        transform: translate(180px, 38px) rotate(70deg) scale(1.12);
+        opacity: 1;
+      }
+      92% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translate(230px, 70px) rotate(90deg) scale(1.13);
+      }
+    }
+    .msg {
+      font-size: 1.4em;
+      color: #444;
+      letter-spacing: 0.01em;
+      text-align: center;
+    }
+    .dot {
+      opacity: 0.2;
+      transition: opacity 0.2s;
+    }
+    .dot.active {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="topbar"></div>
+  <div id="dashboard"></div>
+
+  <!-- Loading Overlay -->
+  <div id="loading-overlay">
+    <div class="plane-wrapper">
+      <img class="plane-anim" src="flieger.png" alt="Papierflieger">
+    </div>
+    <div class="msg">
+      Das Schnellboot macht sich bereit
+      <span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+    </div>
+  </div>
+
+  <script>
+    // Topbar wie gehabt:
+    const topbar = document.createElement('iframe');
+    topbar.src = "../vue-ui/dist/index.html";
+    topbar.height = "60";
+    topbar.style.width = "100%";
+    topbar.style.border = "none";
+    topbar.style.overflow = "hidden";
+    document.getElementById('topbar').appendChild(topbar);
+
+    // --- Animation der Punkte ---
+    const dots = document.querySelectorAll('.dot');
+    let step = 0;
+    setInterval(() => {
+      dots.forEach((d, i) => d.classList.toggle('active', i <= step));
+      step = (step + 1) % dots.length;
+    }, 400);
+
+    // Funktion, die prüft, ob Dashboard da ist:
+    function tryLoadDashboard(maxTries = 80, delay = 250) {
+      let tries = 0;
+      function check() {
+        fetch("http://127.0.0.1:1880/dashboard", { method: "HEAD" })
+          .then(() => {
+            // Dashboard ist erreichbar!
+            document.getElementById('loading-overlay').remove();
+            const dash = document.createElement('iframe');
+            dash.src = "http://127.0.0.1:1880/dashboard";
+            dash.style.height = "100%";
+            dash.style.width = "100%";
+            dash.allow = "clipboard-write; clipboard-read";
+            dash.style.border = "none";
+            document.getElementById('dashboard').appendChild(dash);
+          })
+          .catch(() => {
+            tries++;
+            if (tries < maxTries) setTimeout(check, delay);
+            else document.getElementById('loading-overlay').querySelector('.msg').innerText = "Dashboard konnte nicht geladen werden!";
+          });
+      }
+      check();
+    }
+    tryLoadDashboard();
+  </script>
+</body>
+</html>

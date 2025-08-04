@@ -120,7 +120,7 @@
         ],
         "x": 354,
         "y": 979,
-        "w": 1998,
+        "w": 2012,
         "h": 662
     },
     {
@@ -1041,6 +1041,12 @@
         "width": 1,
         "height": 1,
         "className": ""
+    },
+    {
+        "id": "7058d859c30f2997",
+        "type": "websocket-listener",
+        "path": "/ws/activeUser",
+        "wholemsg": "false"
     },
     {
         "id": "3862b933a243ba55",
@@ -2605,7 +2611,7 @@
         "z": "dc0d981398a42d88",
         "g": "0e1923748c0d505b",
         "name": "Text angemeldeter User",
-        "func": "msg.payload = global.get(\"activeUser\") || \"\";\nreturn msg;\n",
+        "func": "//msg.payload = global.get(\"activeUser\") || \"\";\n//return msg;\n\n\nmsg.payload = { activeUser: global.get(\"activeUser\") };\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2616,7 +2622,8 @@
         "y": 1020,
         "wires": [
             [
-                "a56e7a1f4e0144f2"
+                "a56e7a1f4e0144f2",
+                "194d99600dc9f4e6"
             ]
         ]
     },
@@ -2698,7 +2705,8 @@
         "y": 1600,
         "wires": [
             [
-                "b912b7f2e8b5d87b"
+                "b912b7f2e8b5d87b",
+                "3e3926b522449b96"
             ]
         ]
     },
@@ -4138,7 +4146,7 @@
         "resendOnRefresh": true,
         "templateScope": "local",
         "className": "",
-        "x": 2160,
+        "x": 2240,
         "y": 1020,
         "wires": [
             []
@@ -4283,7 +4291,8 @@
         "y": 2720,
         "wires": [
             [
-                "0bc5460d1e11cf09"
+                "0bc5460d1e11cf09",
+                "884c64afe7d27cf9"
             ]
         ]
     },
@@ -4492,12 +4501,13 @@
         "id": "0bc5460d1e11cf09",
         "type": "link out",
         "z": "dc0d981398a42d88",
+        "d": true,
         "name": "Logout",
         "mode": "link",
         "links": [
             "e017b3a006d31550"
         ],
-        "x": 625,
+        "x": 665,
         "y": 2720,
         "wires": []
     },
@@ -4568,6 +4578,115 @@
         "wires": [
             []
         ]
+    },
+    {
+        "id": "2613f69ed7d2daf9",
+        "type": "http in",
+        "z": "dc0d981398a42d88",
+        "name": "",
+        "url": "logout",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 210,
+        "y": 1500,
+        "wires": [
+            [
+                "3f759076853c1377"
+            ]
+        ]
+    },
+    {
+        "id": "194d99600dc9f4e6",
+        "type": "websocket out",
+        "z": "dc0d981398a42d88",
+        "name": "",
+        "server": "7058d859c30f2997",
+        "client": "",
+        "x": 2530,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "cec015c32bf20cfd",
+        "type": "http in",
+        "z": "dc0d981398a42d88",
+        "name": "",
+        "url": "konfiguration",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 230,
+        "y": 1640,
+        "wires": [
+            [
+                "43f8678fc93a7979"
+            ]
+        ]
+    },
+    {
+        "id": "aeadd963dbb52430",
+        "type": "ui-template",
+        "z": "dc0d981398a42d88",
+        "group": "6add80470fad5859",
+        "page": "",
+        "ui": "",
+        "name": "",
+        "order": 0,
+        "width": "0",
+        "height": "0",
+        "head": "",
+        "format": "<script>\n  $scope.$watch('msg', function(msg) {\n  if(msg && msg.topic === 'close_window') {\n    window.close();\n  }\n});\n</script>",
+        "storeOutMessages": true,
+        "passthru": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 900,
+        "y": 2800,
+        "wires": [
+            [
+                "bf6dd013f8b9c554"
+            ]
+        ]
+    },
+    {
+        "id": "884c64afe7d27cf9",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "function 2",
+        "func": "msg.topic = \"close_window\";\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 680,
+        "y": 2800,
+        "wires": [
+            [
+                "bf6dd013f8b9c554",
+                "aeadd963dbb52430"
+            ]
+        ]
+    },
+    {
+        "id": "bf6dd013f8b9c554",
+        "type": "debug",
+        "z": "dc0d981398a42d88",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 980,
+        "y": 2920,
+        "wires": []
     },
     {
         "id": "886fa3dff40f66c4",

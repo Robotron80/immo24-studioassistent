@@ -785,5 +785,24 @@
                 "file": "/Users/philippmenzel/Desktop/immo24-studioassistent/immo24-studioassistent/node-red-portable/node_modules/node-red-contrib-os/os/os.js"
             }
         }
+    },
+    "node-red-contrib-fs-extra": {
+        "name": "node-red-contrib-fs-extra",
+        "version": "1.0.1",
+        "local": true,
+        "user": true,
+        "nodes": {
+            "fs-exta-copy": {
+                "name": "fs-exta-copy",
+                "types": [
+                    "fs-extra-copy"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "node-red-contrib-fs-extra",
+                "file": "/Users/philippmenzel/Desktop/immo24-studioassistent/immo24-studioassistent/node-red-portable/node_modules/node-red-contrib-fs-extra/node.js"
+            }
+        }
     }
 }

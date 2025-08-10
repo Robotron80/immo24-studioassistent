@@ -4584,11 +4584,11 @@
         "type": "http in",
         "z": "dc0d981398a42d88",
         "name": "",
-        "url": "logout",
+        "url": "api/logout",
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
-        "x": 210,
+        "x": 220,
         "y": 1500,
         "wires": [
             [
@@ -4612,11 +4612,11 @@
         "type": "http in",
         "z": "dc0d981398a42d88",
         "name": "",
-        "url": "konfiguration",
+        "url": "api/konfiguration",
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
-        "x": 230,
+        "x": 240,
         "y": 1640,
         "wires": [
             [

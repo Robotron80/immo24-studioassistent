@@ -4,6 +4,9 @@ const { spawn } = require('child_process')
 const http = require('http')
 const fs = require('fs')
 
+
+
+
 let nodeRedProcess
 let mainWindow
 let prefWin = null;
@@ -136,12 +139,20 @@ function createWindow() {
     icon: path.join(__dirname, 'assets', 'icon.png'),
     webPreferences: {
       nodeIntegration: false,
-      contextIsolation: true
+      contextIsolation: true,
+      webviewTag: true
     }
   });
-  // Lade erst mal eine Lade-HTML (local)
-  mainWindow.loadFile(path.join(__dirname, 'assets', 'main.html'));
-  mainWindow.webContents.openDevTools({ mode: 'detach' });
+  const isDev = !app.isPackaged || process.env.NODE_ENV === 'development' || process.env.ELECTRON_START_URL
+
+  if (isDev) {
+    // Vite dev server
+    mainWindow.loadURL(process.env.ELECTRON_START_URL || 'http://localhost:3000')
+    mainWindow.webContents.openDevTools({ mode: 'detach' })
+  } else {
+    // gebaute UI ausliefern
+    mainWindow.loadFile(path.join(__dirname, 'immo24-ui', 'dist', 'index.html'))
+  }
 
 }
 
@@ -177,9 +188,9 @@ function createPreferencesWindow() {
     return;
   }
   prefWin = new BrowserWindow({ 
-    width: 600,
+    width: 800,
     height: 500,
-    resizable: false,
+    resizable: true,
     title: 'Konfiguration',
     modal: false, // blockiert ggf. MainWindow
     parent: mainWindow,
@@ -205,7 +216,7 @@ function createPreferencesWindow() {
 
 
 
-/* const isMac = process.platform === 'darwin'
+/*const isMac = process.platform === 'darwin'
 const template = [
   ...(isMac ? [{
     label: app.name,
@@ -217,6 +228,10 @@ const template = [
         accelerator: 'CommandOrControl+,',
         click: createPreferencesWindow
       },
+      { type: 'separator' },
+      { role: 'hide' },
+      { role: 'hideOthers' },
+      { role: 'unhide' },
       { type: 'separator' },
       { role: 'quit' }
     ]
@@ -236,8 +251,8 @@ const template = [
 
 const menu = Menu.buildFromTemplate(template)
 Menu.setApplicationMenu(menu)
+*/
 
-*/ 
 // …in app.whenReady():
 app.whenReady().then(() => {
   ensureUserJsonFiles();

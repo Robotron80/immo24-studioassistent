@@ -24,6 +24,13 @@
         "env": []
     },
     {
+        "id": "b0c1d2e3f4a5b6c7",
+        "type": "tab",
+        "label": "PB Snapshot API",
+        "disabled": false,
+        "info": ""
+    },
+    {
         "id": "f10408fa2622e18b",
         "type": "group",
         "z": "24039523dcf573b0",
@@ -289,17 +296,84 @@
             "a762fc9288921434",
             "4a19a26eb247bcfb",
             "125ab90468385839",
-            "3db5bdd353e02f42",
             "5d8cb4ae2aa3f2ec",
             "373f7b1408a8d8ef",
             "0972a4a5dd6d6322",
             "2377aa45b2403535",
-            "95e85c4c1456807d"
+            "95e85c4c1456807d",
+            "2305fc706cda51ac",
+            "c02215de6b80ad47",
+            "58ddc703a5fc46b3",
+            "d0f086bb05d1dbca",
+            "c44b831c7f71f3f0",
+            "229093bfc29724c5",
+            "f445c6f1b8754602",
+            "57d258a6ea6ffd92",
+            "9c53f64fe3de877c",
+            "efee96497b779fbf",
+            "f819f6286d8877ac",
+            "faef63861048a934",
+            "4e153b8c3c397e84",
+            "d408f2bf260c2d70",
+            "8a0a359434b8320d",
+            "6d70868f6fb23c66",
+            "12e3163221d910ad",
+            "24a8b953ca577f10",
+            "db9878092f0ecaf5",
+            "fd1db7356666748a",
+            "6fe2baae39839f1a",
+            "fb507dc5d4767c29",
+            "72ecfc50ae08ef2f",
+            "841470fce5aa44c3",
+            "d024dbe76a3f0926",
+            "48b16f710a226513",
+            "c4605a91d07eacc9",
+            "96085ec8b042313e",
+            "9fe26839a1e98ab7",
+            "c3c1ad3d3e10693a",
+            "44446a7c726fc41a",
+            "3390d3aa2f43e28f",
+            "670347c94138255e",
+            "a9a1e815467da76c",
+            "e2263c106be8ee44",
+            "52cbb131108a02f7",
+            "fd497a93ac24b99e",
+            "64b77345d2c02e51",
+            "93bdad8186170fba",
+            "c6bc4f90d144350d",
+            "38f613d2151f78ac",
+            "a22736cc2f7c03c0",
+            "d64ff09155af078f",
+            "0c7d50182f40a06c",
+            "d4546258e4fd2c43",
+            "948c245c80c18ed9",
+            "69133e5578d8d519",
+            "e4d5097ebd7590e3",
+            "216f55f9767ff53a",
+            "ee9edf6773dc9e80",
+            "get_in",
+            "get_path",
+            "get_filein",
+            "get_json",
+            "get_version",
+            "get_out",
+            "put_in",
+            "put_jsonreq",
+            "put_check",
+            "put_err1",
+            "put_path",
+            "put_filein",
+            "put_jsonfile",
+            "put_compare",
+            "put_err2",
+            "put_write",
+            "put_reply",
+            "put_out"
         ],
         "x": 114,
         "y": 1739,
         "w": 2112,
-        "h": 662
+        "h": 1282
     },
     {
         "id": "02b0fe64050de273",
@@ -321,12 +395,16 @@
             "57ddd026fc96906a",
             "26c73fb1b34dac58",
             "19241936d8672013",
-            "a6880e826ba5ad1a"
+            "a6880e826ba5ad1a",
+            "f33bbf72b9b63711",
+            "99a7ae697d4f679c",
+            "5159326f0de47168",
+            "86241f78f6249423"
         ],
         "x": 354,
-        "y": 1659,
-        "w": 1092,
-        "h": 222
+        "y": 1639,
+        "w": 1732,
+        "h": 242
     },
     {
         "id": "e921cd24dc377898",
@@ -4612,11 +4690,11 @@
         "type": "http in",
         "z": "dc0d981398a42d88",
         "name": "",
-        "url": "konfiguration",
+        "url": "api/konfiguration",
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
-        "x": 230,
+        "x": 240,
         "y": 1640,
         "wires": [
             [
@@ -4686,6 +4764,75 @@
         "statusType": "auto",
         "x": 980,
         "y": 2920,
+        "wires": []
+    },
+    {
+        "id": "f33bbf72b9b63711",
+        "type": "http in",
+        "z": "dc0d981398a42d88",
+        "g": "02b0fe64050de273",
+        "name": "",
+        "url": "/api/check-password",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 1600,
+        "y": 1680,
+        "wires": [
+            [
+                "99a7ae697d4f679c",
+                "86241f78f6249423"
+            ]
+        ]
+    },
+    {
+        "id": "99a7ae697d4f679c",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "g": "02b0fe64050de273",
+        "name": "Passwort-Check",
+        "func": "const sent = msg.payload && msg.payload.password;\nconst admin = global.get('adminPW') || '';\n\nif (!sent || sent !== admin) {\n    msg.statusCode = 401;\n    msg.payload = { ok: false, error: 'Passwort falsch' };\n    return msg;\n}\n\nmsg.payload = { ok: true };\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1830,
+        "y": 1680,
+        "wires": [
+            [
+                "5159326f0de47168"
+            ]
+        ]
+    },
+    {
+        "id": "5159326f0de47168",
+        "type": "http response",
+        "z": "dc0d981398a42d88",
+        "g": "02b0fe64050de273",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 2010,
+        "y": 1680,
+        "wires": []
+    },
+    {
+        "id": "86241f78f6249423",
+        "type": "debug",
+        "z": "dc0d981398a42d88",
+        "g": "02b0fe64050de273",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1820,
+        "y": 1740,
         "wires": []
     },
     {
@@ -6947,28 +7094,28 @@
         "z": "b1c585f0d25b86fd",
         "g": "b38df26cbb8bb4b3",
         "name": "Kunde hinzufügen",
-        "func": "// Hole bestehende Kunden aus flow\nlet kunden = flow.get(\"kundenStammdaten\") || [];\nlet neuerKunde = msg.payload;\nneuerKunde.ordner = []; // Leeres Ordner-Array für den Start\n\n// Prüfen, ob der Kunde schon existiert\nif (kunden.find(k => k.kunde === neuerKunde.kunde)) {\n    msg.payload = \"Kunde existiert bereits!\";\n    msg.topic = \"error\";\n    return [null, msg];\n}\n\nkunden.push(neuerKunde);\nmsg.payload = JSON.stringify(kunden, null, 2);\nmsg.topic = \"ok\";\nmsg.neukunde = neuerKunde;\nreturn [msg, null];\n",
+        "func": "// Erwartet: msg.payload = { kunde: \"Name\" }\n// Liest bestehende Kunden aus dem Flow-Kontext, ergänzt bei Erfolg und liefert JSON-String zurück.\n\n// 1) Eingabe validieren\nconst body = msg.payload && typeof msg.payload === 'object' ? msg.payload : {};\nconst nameRaw = (body.kunde || '').trim();\n\nif (!nameRaw) {\n    msg.statusCode = 400;                    // Bad Request\n    msg.payload = { error: 'kunde fehlt' };\n    msg.topic = 'error';\n    return [null, msg];                      // → Fehler-Output\n}\n\n// 2) Bestehende Liste holen\nlet kunden = flow.get('kundenStammdaten') || [];\n\n// 3) Duplikat-Check (case-insensitive)\nconst exists = kunden.some(k => (k.kunde || '').trim().toLowerCase() === nameRaw.toLowerCase());\nif (exists) {\n    msg.statusCode = 409;                    // Conflict\n    msg.payload = { error: 'Kunde existiert bereits' };\n    msg.topic = 'error';\n    return [null, msg];                      // → Fehler-Output\n}\n\n// 4) Neuen Kunden einfügen\nconst neuerKunde = { kunde: nameRaw, ordner: [] };\nkunden.push(neuerKunde);\n\n// 5) Liste im Flow aktualisieren (optional, falls du das woanders machst, kannst du’s weglassen)\n// flow.set('kundenStammdaten', kunden);\n\n// 6) Für File-Write vorbereiten & Metadaten setzen\nmsg.payload = JSON.stringify(kunden, null, 2);\nmsg.topic = 'ok';\nmsg.neukunde = neuerKunde;\nmsg.statusCode = 201;                      // Created (falls direkt an HTTP Response)\n\nreturn [msg, null];                        // → Erfolg-Output",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1010,
-        "y": 2300,
+        "x": 990,
+        "y": 2320,
         "wires": [
             [
                 "4a19a26eb247bcfb",
-                "3db5bdd353e02f42",
                 "5d8cb4ae2aa3f2ec"
             ],
             [
-                "a67a2cab1a358d44"
+                "a67a2cab1a358d44",
+                "9c53f64fe3de877c"
             ]
         ],
         "outputLabels": [
             "Kunde anlegen",
-            "Kunde vorhanden"
+            "Fehler: Kunde vorhanden"
         ]
     },
     {
@@ -7029,11 +7176,12 @@
         "createDir": false,
         "overwriteFile": "true",
         "encoding": "utf8",
-        "x": 1510,
+        "x": 1530,
         "y": 1980,
         "wires": [
             [
-                "027af555cc7c1332"
+                "027af555cc7c1332",
+                "57d258a6ea6ffd92"
             ]
         ]
     },
@@ -7771,7 +7919,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1550,
+        "x": 1530,
         "y": 1940,
         "wires": [
             [
@@ -7820,24 +7968,6 @@
         "statusType": "auto",
         "x": 1520,
         "y": 1240,
-        "wires": []
-    },
-    {
-        "id": "3db5bdd353e02f42",
-        "type": "debug",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "name": "debug 9",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1320,
-        "y": 2300,
         "wires": []
     },
     {
@@ -7995,6 +8125,1228 @@
         "info": "",
         "x": 2280,
         "y": 140,
+        "wires": []
+    },
+    {
+        "id": "2305fc706cda51ac",
+        "type": "http in",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "url": "/api/pb/customers",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 340,
+        "y": 2440,
+        "wires": [
+            [
+                "c02215de6b80ad47"
+            ]
+        ]
+    },
+    {
+        "id": "c02215de6b80ad47",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "Stammdaten-Pfad setzen",
+        "func": "msg.filename = global.get('PathStammdaten') + '/kunden_stammdaten.json';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 2440,
+        "wires": [
+            [
+                "58ddc703a5fc46b3"
+            ]
+        ]
+    },
+    {
+        "id": "58ddc703a5fc46b3",
+        "type": "file in",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 840,
+        "y": 2440,
+        "wires": [
+            [
+                "d0f086bb05d1dbca"
+            ]
+        ]
+    },
+    {
+        "id": "d0f086bb05d1dbca",
+        "type": "json",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 1010,
+        "y": 2440,
+        "wires": [
+            [
+                "c44b831c7f71f3f0"
+            ]
+        ]
+    },
+    {
+        "id": "c44b831c7f71f3f0",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1170,
+        "y": 2440,
+        "wires": []
+    },
+    {
+        "id": "229093bfc29724c5",
+        "type": "http in",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "url": "/api/pb/customers",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 350,
+        "y": 2480,
+        "wires": [
+            [
+                "41a1604a42cf8a96"
+            ]
+        ]
+    },
+    {
+        "id": "f445c6f1b8754602",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1710,
+        "y": 2400,
+        "wires": []
+    },
+    {
+        "id": "57d258a6ea6ffd92",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "Status",
+        "func": "msg.statusCode = 201;\nmsg.payload = { ok: true };\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1570,
+        "y": 2400,
+        "wires": [
+            [
+                "f445c6f1b8754602"
+            ]
+        ]
+    },
+    {
+        "id": "9c53f64fe3de877c",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1710,
+        "y": 2440,
+        "wires": []
+    },
+    {
+        "id": "efee96497b779fbf",
+        "type": "http in",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "url": "/api/pb/customers/:kunde",
+        "method": "delete",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 380,
+        "y": 2520,
+        "wires": [
+            [
+                "f819f6286d8877ac"
+            ]
+        ]
+    },
+    {
+        "id": "f819f6286d8877ac",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "Stammdaten-Pfad setzen",
+        "func": "msg.filename = global.get('PathStammdaten') + '/kunden_stammdaten.json';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 2520,
+        "wires": [
+            [
+                "faef63861048a934"
+            ]
+        ]
+    },
+    {
+        "id": "faef63861048a934",
+        "type": "file in",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 880,
+        "y": 2520,
+        "wires": [
+            [
+                "24a8b953ca577f10"
+            ]
+        ]
+    },
+    {
+        "id": "4e153b8c3c397e84",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "Kunde loeschen",
+        "func": "const param = (msg.req.params.kunde || '').trim();\nif (!param) { msg.statusCode = 400; msg.payload = { error: 'kunde fehlt' }; return [null, msg]; }\n\nlet arr = Array.isArray(msg.payload) ? msg.payload : [];\nconst before = arr.length;\narr = arr.filter(k => (k.kunde || '').toLowerCase() !== param.toLowerCase());\nif (arr.length === before) { msg.statusCode = 404; msg.payload = { error: 'nicht gefunden' }; return [null, msg]; }\n\nmsg.payload = JSON.stringify(arr, null, 2);\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1220,
+        "y": 2520,
+        "wires": [
+            [
+                "d408f2bf260c2d70"
+            ],
+            [
+                "6d70868f6fb23c66"
+            ]
+        ],
+        "outputLabels": [
+            "Speichern",
+            "Fehler"
+        ]
+    },
+    {
+        "id": "d408f2bf260c2d70",
+        "type": "file",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "kunden_stammdaten.json schreiben",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "utf8",
+        "x": 1490,
+        "y": 2500,
+        "wires": [
+            [
+                "8a0a359434b8320d"
+            ]
+        ]
+    },
+    {
+        "id": "8a0a359434b8320d",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1730,
+        "y": 2500,
+        "wires": []
+    },
+    {
+        "id": "6d70868f6fb23c66",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1430,
+        "y": 2540,
+        "wires": []
+    },
+    {
+        "id": "12e3163221d910ad",
+        "type": "http in",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "url": "/api/pb/customers/:kunde/folders",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 390,
+        "y": 2580,
+        "wires": [
+            [
+                "db9878092f0ecaf5"
+            ]
+        ]
+    },
+    {
+        "id": "24a8b953ca577f10",
+        "type": "json",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 1050,
+        "y": 2520,
+        "wires": [
+            [
+                "4e153b8c3c397e84"
+            ]
+        ]
+    },
+    {
+        "id": "db9878092f0ecaf5",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "Stammdaten-Pfad setzen",
+        "func": "msg.filename = global.get('PathStammdaten') + '/kunden_stammdaten.json';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 2580,
+        "wires": [
+            [
+                "fd1db7356666748a"
+            ]
+        ]
+    },
+    {
+        "id": "fd1db7356666748a",
+        "type": "file in",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 900,
+        "y": 2580,
+        "wires": [
+            [
+                "6fe2baae39839f1a"
+            ]
+        ]
+    },
+    {
+        "id": "6fe2baae39839f1a",
+        "type": "json",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 1070,
+        "y": 2580,
+        "wires": [
+            [
+                "fb507dc5d4767c29"
+            ]
+        ]
+    },
+    {
+        "id": "fb507dc5d4767c29",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "Ordnerliste",
+        "func": "const name = (msg.req.params.kunde || '').toLowerCase();\nconst arr = Array.isArray(msg.payload) ? msg.payload : [];\nconst k = arr.find(x => (x.kunde || '').toLowerCase() === name);\nif (!k) { msg.statusCode = 404; msg.payload = { error: 'kunde nicht gefunden' }; return msg; }\nmsg.payload = Array.isArray(k.ordner) ? k.ordner : [];\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1230,
+        "y": 2580,
+        "wires": [
+            [
+                "72ecfc50ae08ef2f"
+            ]
+        ]
+    },
+    {
+        "id": "72ecfc50ae08ef2f",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1390,
+        "y": 2580,
+        "wires": []
+    },
+    {
+        "id": "841470fce5aa44c3",
+        "type": "http in",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "url": "/api/pb/customers/:kunde/folders",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 390,
+        "y": 2620,
+        "wires": [
+            [
+                "d024dbe76a3f0926"
+            ]
+        ]
+    },
+    {
+        "id": "d024dbe76a3f0926",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "Stammdaten-Pfad setzen",
+        "func": "msg.filename = global.get('PathStammdaten') + '/kunden_stammdaten.json';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 2620,
+        "wires": [
+            [
+                "48b16f710a226513"
+            ]
+        ]
+    },
+    {
+        "id": "48b16f710a226513",
+        "type": "file in",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 900,
+        "y": 2620,
+        "wires": [
+            [
+                "c4605a91d07eacc9"
+            ]
+        ]
+    },
+    {
+        "id": "c4605a91d07eacc9",
+        "type": "json",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 1070,
+        "y": 2620,
+        "wires": [
+            [
+                "96085ec8b042313e"
+            ]
+        ]
+    },
+    {
+        "id": "96085ec8b042313e",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "Ordner hinzufügen, Duplikate prüfen",
+        "func": "// expects: msg.req.params.kunde, msg.payload (array aus datei), msg.req.body {name,label,ist_Produktionsstufe}\n\nconst kundeParam = (msg.req.params.kunde || '').trim().toLowerCase();\nconst body = msg.req.body || {};\nconst name = (body.name || '').trim();\nconst label = (body.label || '').trim();\nconst flag = !!body.ist_Produktionsstufe;\n\nif (!kundeParam) {\n    msg.statusCode = 400; msg.payload = { error: 'kunde fehlt' }; return [null, msg];\n}\nif (!name) {\n    msg.statusCode = 400; msg.payload = { error: 'name fehlt' }; return [null, msg];\n}\n\nlet arr = Array.isArray(msg.payload) ? msg.payload : [];\nconst k = arr.find(x => (x.kunde || '').toLowerCase() === kundeParam);\nif (!k) { msg.statusCode = 404; msg.payload = { error: 'kunde nicht gefunden' }; return [null, msg]; }\n\nk.ordner = Array.isArray(k.ordner) ? k.ordner : [];\nconst exists = k.ordner.some(o => (o.name || '').trim().toLowerCase() === name.toLowerCase());\nif (exists) { msg.statusCode = 409; msg.payload = { error: 'Ordnername existiert bereits' }; return [null, msg]; }\n\nk.ordner.push({ name, label, ist_Produktionsstufe: flag });\n\nmsg.payload = JSON.stringify(arr, null, 2);\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1310,
+        "y": 2620,
+        "wires": [
+            [
+                "ee9edf6773dc9e80"
+            ],
+            [
+                "44446a7c726fc41a"
+            ]
+        ],
+        "outputLabels": [
+            "Speichern",
+            "Fehler"
+        ]
+    },
+    {
+        "id": "9fe26839a1e98ab7",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "201 ok",
+        "func": "msg.statusCode = 201;\nmsg.payload = { ok: true };\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1870,
+        "y": 2600,
+        "wires": [
+            [
+                "c3c1ad3d3e10693a"
+            ]
+        ]
+    },
+    {
+        "id": "c3c1ad3d3e10693a",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 2010,
+        "y": 2600,
+        "wires": []
+    },
+    {
+        "id": "44446a7c726fc41a",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1550,
+        "y": 2640,
+        "wires": []
+    },
+    {
+        "id": "3390d3aa2f43e28f",
+        "type": "http in",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "url": "/api/pb/customers/:kunde/folders/:name",
+        "method": "put",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 410,
+        "y": 2700,
+        "wires": [
+            [
+                "670347c94138255e"
+            ]
+        ]
+    },
+    {
+        "id": "670347c94138255e",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "Stammdaten-Pfad setzen",
+        "func": "msg.filename = global.get('PathStammdaten') + '/kunden_stammdaten.json';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 710,
+        "y": 2700,
+        "wires": [
+            [
+                "a9a1e815467da76c"
+            ]
+        ]
+    },
+    {
+        "id": "a9a1e815467da76c",
+        "type": "file in",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 920,
+        "y": 2700,
+        "wires": [
+            [
+                "e2263c106be8ee44"
+            ]
+        ]
+    },
+    {
+        "id": "e2263c106be8ee44",
+        "type": "json",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 1090,
+        "y": 2700,
+        "wires": [
+            [
+                "52cbb131108a02f7"
+            ]
+        ]
+    },
+    {
+        "id": "52cbb131108a02f7",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "Ordner aktualisieren, Konflikte prüfen",
+        "func": "const kundeParam = (msg.req.params.kunde || '').trim().toLowerCase();\nconst oldName = (msg.req.params.name || '').trim().toLowerCase();\nconst body = msg.req.body || {};\nconst newName = (body.name || '').trim();\nconst label = (body.label || '').trim();\nconst flag = !!body.ist_Produktionsstufe;\n\nif (!kundeParam || !oldName) {\n    msg.statusCode = 400; msg.payload = { error: 'kunde oder alter name fehlt' }; return [null, msg];\n}\nif (!newName) {\n    msg.statusCode = 400; msg.payload = { error: 'neuer name fehlt' }; return [null, msg];\n}\n\nlet arr = Array.isArray(msg.payload) ? msg.payload : [];\nconst k = arr.find(x => (x.kunde || '').toLowerCase() === kundeParam);\nif (!k) { msg.statusCode = 404; msg.payload = { error: 'kunde nicht gefunden' }; return [null, msg]; }\n\nk.ordner = Array.isArray(k.ordner) ? k.ordner : [];\nconst idxOld = k.ordner.findIndex(o => (o.name || '').trim().toLowerCase() === oldName);\nif (idxOld < 0) { msg.statusCode = 404; msg.payload = { error: 'ordner (alt) nicht gefunden' }; return [null, msg]; }\n\n// Wenn Name geändert wird: Duplikate prüfen\nconst isRename = newName.toLowerCase() !== oldName;\nif (isRename) {\n    const conflict = k.ordner.some((o, i) =>\n        i !== idxOld && (o.name || '').trim().toLowerCase() === newName.toLowerCase()\n    );\n    if (conflict) { msg.statusCode = 409; msg.payload = { error: 'Ordnername existiert bereits' }; return [null, msg]; }\n}\n\n// Update\nk.ordner[idxOld] = { name: newName, label, ist_Produktionsstufe: flag };\n\nmsg.payload = JSON.stringify(arr, null, 2);\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1330,
+        "y": 2700,
+        "wires": [
+            [
+                "e4d5097ebd7590e3"
+            ],
+            [
+                "64b77345d2c02e51"
+            ]
+        ],
+        "outputLabels": [
+            "Speichern",
+            "Fehler"
+        ]
+    },
+    {
+        "id": "fd497a93ac24b99e",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "204 ok",
+        "func": "msg.statusCode = 204;\nmsg.payload = { ok: true };\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1890,
+        "y": 2680,
+        "wires": [
+            [
+                "93bdad8186170fba"
+            ]
+        ]
+    },
+    {
+        "id": "64b77345d2c02e51",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1550,
+        "y": 2720,
+        "wires": []
+    },
+    {
+        "id": "93bdad8186170fba",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 2030,
+        "y": 2680,
+        "wires": []
+    },
+    {
+        "id": "c6bc4f90d144350d",
+        "type": "http in",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "url": "/api/pb/customers/:kunde/folders/:name",
+        "method": "delete",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 420,
+        "y": 2740,
+        "wires": [
+            [
+                "38f613d2151f78ac"
+            ]
+        ]
+    },
+    {
+        "id": "38f613d2151f78ac",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "Stammdaten-Pfad setzen",
+        "func": "msg.filename = global.get('PathStammdaten') + '/kunden_stammdaten.json';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 730,
+        "y": 2740,
+        "wires": [
+            [
+                "a22736cc2f7c03c0"
+            ]
+        ]
+    },
+    {
+        "id": "a22736cc2f7c03c0",
+        "type": "file in",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 940,
+        "y": 2740,
+        "wires": [
+            [
+                "d64ff09155af078f"
+            ]
+        ]
+    },
+    {
+        "id": "d64ff09155af078f",
+        "type": "json",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 1110,
+        "y": 2740,
+        "wires": [
+            [
+                "0c7d50182f40a06c"
+            ]
+        ]
+    },
+    {
+        "id": "0c7d50182f40a06c",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "Ordner entfernen",
+        "func": "const kundeParam = (msg.req.params.kunde || '').trim().toLowerCase();\nconst nameParam = (msg.req.params.name || '').trim().toLowerCase();\nif (!kundeParam || !nameParam) { msg.statusCode = 400; msg.payload = { error: 'kunde oder name fehlt' }; return [null, msg]; }\n\nlet arr = Array.isArray(msg.payload) ? msg.payload : [];\nconst k = arr.find(x => (x.kunde || '').toLowerCase() === kundeParam);\nif (!k) { msg.statusCode = 404; msg.payload = { error: 'kunde nicht gefunden' }; return [null, msg]; }\n\nk.ordner = Array.isArray(k.ordner) ? k.ordner : [];\nconst before = k.ordner.length;\nk.ordner = k.ordner.filter(o => (o.name || '').trim().toLowerCase() !== nameParam);\n\nif (k.ordner.length === before) {\n    msg.statusCode = 404; msg.payload = { error: 'ordner nicht gefunden' }; return [null, msg];\n}\n\nmsg.payload = JSON.stringify(arr, null, 2);\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1270,
+        "y": 2780,
+        "wires": [
+            [
+                "216f55f9767ff53a"
+            ],
+            [
+                "948c245c80c18ed9"
+            ]
+        ],
+        "outputLabels": [
+            "Speichern",
+            "Fehler"
+        ]
+    },
+    {
+        "id": "d4546258e4fd2c43",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "204 ok",
+        "func": "msg.statusCode = 204;\nmsg.payload = { ok: true };\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1890,
+        "y": 2780,
+        "wires": [
+            [
+                "69133e5578d8d519"
+            ]
+        ]
+    },
+    {
+        "id": "948c245c80c18ed9",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1450,
+        "y": 2820,
+        "wires": []
+    },
+    {
+        "id": "69133e5578d8d519",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 2010,
+        "y": 2780,
+        "wires": []
+    },
+    {
+        "id": "e4d5097ebd7590e3",
+        "type": "file",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "kunden_stammdaten.json schreiben",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "utf8",
+        "x": 1650,
+        "y": 2680,
+        "wires": [
+            [
+                "fd497a93ac24b99e"
+            ]
+        ]
+    },
+    {
+        "id": "216f55f9767ff53a",
+        "type": "file",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "kunden_stammdaten.json schreiben",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "utf8",
+        "x": 1610,
+        "y": 2780,
+        "wires": [
+            [
+                "d4546258e4fd2c43"
+            ]
+        ]
+    },
+    {
+        "id": "ee9edf6773dc9e80",
+        "type": "file",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "kunden_stammdaten.json schreiben",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "utf8",
+        "x": 1650,
+        "y": 2600,
+        "wires": [
+            [
+                "9fe26839a1e98ab7"
+            ]
+        ]
+    },
+    {
+        "id": "get_in",
+        "type": "http in",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "GET /api/pb/snapshot",
+        "url": "/api/pb/snapshot",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 330,
+        "y": 2840,
+        "wires": [
+            [
+                "get_path"
+            ]
+        ]
+    },
+    {
+        "id": "get_path",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "Pfad setzen",
+        "func": "msg.filename = global.get('PathStammdaten') + '/kunden_stammdaten.json';\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 550,
+        "y": 2840,
+        "wires": [
+            [
+                "get_filein"
+            ]
+        ]
+    },
+    {
+        "id": "get_filein",
+        "type": "file in",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "lesen",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "x": 730,
+        "y": 2840,
+        "wires": [
+            [
+                "get_json"
+            ]
+        ]
+    },
+    {
+        "id": "get_json",
+        "type": "json",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "parse",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 890,
+        "y": 2840,
+        "wires": [
+            [
+                "get_version"
+            ]
+        ]
+    },
+    {
+        "id": "get_version",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "Version anhängen",
+        "func": "const crypto = require('crypto');\nconst arr = Array.isArray(msg.payload) ? msg.payload : [];\nconst str = JSON.stringify(arr);\nconst version = crypto.createHash('sha1').update(str).digest('hex');\nmsg.payload = { customers: arr, version };\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1080,
+        "y": 2840,
+        "wires": [
+            [
+                "get_out"
+            ]
+        ]
+    },
+    {
+        "id": "get_out",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1270,
+        "y": 2840,
+        "wires": []
+    },
+    {
+        "id": "put_in",
+        "type": "http in",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "PUT /api/pb/snapshot",
+        "url": "/api/pb/snapshot",
+        "method": "put",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 320,
+        "y": 2940,
+        "wires": [
+            [
+                "put_jsonreq"
+            ]
+        ]
+    },
+    {
+        "id": "put_jsonreq",
+        "type": "json",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "parse body",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 520,
+        "y": 2940,
+        "wires": [
+            [
+                "put_check"
+            ]
+        ]
+    },
+    {
+        "id": "put_check",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "Body prüfen",
+        "func": "const body = msg.payload || {};\nif (!Array.isArray(body.customers) || !body.version) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'bad_payload' };\n    return [null, msg];\n}\nmsg.body = body;\nreturn [msg, null];",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 710,
+        "y": 2940,
+        "wires": [
+            [
+                "put_path"
+            ],
+            [
+                "put_err1"
+            ]
+        ]
+    },
+    {
+        "id": "put_err1",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "400",
+        "statusCode": "",
+        "headers": {},
+        "x": 890,
+        "y": 2980,
+        "wires": []
+    },
+    {
+        "id": "put_path",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "Pfad setzen",
+        "func": "msg.filename = global.get('PathStammdaten') + '/kunden_stammdaten.json';\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 890,
+        "y": 2940,
+        "wires": [
+            [
+                "put_filein"
+            ]
+        ]
+    },
+    {
+        "id": "put_filein",
+        "type": "file in",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "lesen",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "x": 1070,
+        "y": 2940,
+        "wires": [
+            [
+                "put_jsonfile"
+            ]
+        ]
+    },
+    {
+        "id": "put_jsonfile",
+        "type": "json",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "parse file",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 1240,
+        "y": 2940,
+        "wires": [
+            [
+                "put_compare"
+            ]
+        ]
+    },
+    {
+        "id": "put_compare",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "Version vergleichen",
+        "func": "const crypto = require('crypto');\nconst current = Array.isArray(msg.payload) ? msg.payload : [];\nconst curStr = JSON.stringify(current);\nconst curVer = crypto.createHash('sha1').update(curStr).digest('hex');\n\nif (curVer !== msg.body.version) {\n    msg.statusCode = 409;\n    msg.payload = { error: 'version_conflict', currentVersion: curVer };\n    return [null, msg];\n}\n\n// Optionale Validierung von msg.body.customers\nconst next = msg.body.customers;\nmsg.payload = JSON.stringify(next, null, 2);\nreturn [msg, null];",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 1440,
+        "y": 2940,
+        "wires": [
+            [
+                "put_write"
+            ],
+            [
+                "put_err2"
+            ]
+        ]
+    },
+    {
+        "id": "put_err2",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "409/…",
+        "statusCode": "",
+        "headers": {},
+        "x": 1620,
+        "y": 2980,
+        "wires": []
+    },
+    {
+        "id": "put_write",
+        "type": "file",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "schreiben",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "utf8",
+        "x": 1620,
+        "y": 2940,
+        "wires": [
+            [
+                "put_reply"
+            ]
+        ]
+    },
+    {
+        "id": "put_reply",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "200 + neue Version",
+        "func": "const crypto = require('crypto');\nconst arr = JSON.parse(msg.payload);\nconst str = JSON.stringify(arr);\nconst ver = crypto.createHash('sha1').update(str).digest('hex');\nmsg.statusCode = 200;\nmsg.payload = { ok: true, version: ver };\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1800,
+        "y": 2940,
+        "wires": [
+            [
+                "put_out"
+            ]
+        ]
+    },
+    {
+        "id": "put_out",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1980,
+        "y": 2940,
         "wires": []
     },
     {

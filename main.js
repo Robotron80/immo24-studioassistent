@@ -183,40 +183,31 @@ function waitForDashboard(callback) {
 
 
 function createPreferencesWindow() {
-  if (prefWin && !prefWin.isDestroyed()) {
-    prefWin.focus();
-    return;
-  }
-  prefWin = new BrowserWindow({ 
-    width: 800,
-    height: 500,
-    resizable: true,
-    title: 'Konfiguration',
-    modal: false, // blockiert ggf. MainWindow
-    parent: mainWindow,
-    webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: true,
-    }
+  if (prefWin && !prefWin.isDestroyed()) { prefWin.focus(); return; }
 
-   });
-
-
-
+  prefWin = new BrowserWindow({
+    width: 900, height: 650, resizable: true, title: 'Konfiguration',
+    parent: mainWindow, modal: false,
+    webPreferences: { contextIsolation: true, nodeIntegration: false }
+  });
   prefWin.setMenu(null);
-  
-  prefWin.loadURL('http://localhost:1880/dashboard/konfiguration');
+
+  const isDev = !!process.env.ELECTRON_START_URL;
+  if (isDev) {
+    prefWin.loadURL(process.env.ELECTRON_START_URL + '/konfiguration'); // <— HIER
+    prefWin.webContents.openDevTools({ mode: 'detach' });
+  } else {
+    const file = path.join(__dirname, 'immo24-ui', 'dist', 'index.html');
+    // vorerst einfach Root laden — siehe Hinweis unten zu Prod
+    prefWin.loadFile(file);
+    // Optional: nach dem Load die App selbst zur Route navigieren lassen (nur wenn du einen Weg hast, z. B. via URL param/IPC)
+  }
+
   prefWin.on('closed', () => { prefWin = null; });
-
-    // HIER: DevTools automatisch öffnen!
-    // prefWin.webContents.openDevTools({ mode: 'detach' });
-
-
 }
 
 
-
-/*const isMac = process.platform === 'darwin'
+const isMac = process.platform === 'darwin'
 const template = [
   ...(isMac ? [{
     label: app.name,
@@ -251,7 +242,7 @@ const template = [
 
 const menu = Menu.buildFromTemplate(template)
 Menu.setApplicationMenu(menu)
-*/
+
 
 // …in app.whenReady():
 app.whenReady().then(() => {

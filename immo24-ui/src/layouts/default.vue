@@ -1,23 +1,41 @@
 <template>
   <v-app>
-    <AppBar />
-    <v-main>
-      <router-view v-slot="{ Component }">
-        <component :is="Component" class="page-root"/>
-      </router-view>
-    </v-main>
-    <AppFooter />
+    <template v-if="showChrome">
+      <AppBar />
+      <v-main>
+        <router-view v-slot="{ Component }">
+          <component :is="Component" class="page-root" />
+        </router-view>
+      </v-main>
+      <AppFooter />
+    </template>
+
+    <!-- Chrome ausblenden (Login/Konfiguration) -->
+    <template v-else>
+      <v-main>
+        <router-view v-slot="{ Component }">
+          <component :is="Component" class="page-root" />
+        </router-view>
+      </v-main>
+    </template>
   </v-app>
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 import AppBar from './AppBar.vue'
-console.info('[default.vue] layout mounted')  // <-- sichtbares Log
 import AppFooter from '@/components/AppFooter.vue'
+
+const route = useRoute()
+
+// Routen ohne AppBar/Footer
+const HIDE_CHROME = new Set(['/konfiguration'])
+
+const showChrome = computed(() => !HIDE_CHROME.has(route.path))
 </script>
 
 <style scoped>
-/* Optional: ensure main fills viewport under the app bar */
 :deep(.v-main) { min-height: calc(100vh - 64px); }
 :deep(.page-root) { height: 100%; }
 </style>

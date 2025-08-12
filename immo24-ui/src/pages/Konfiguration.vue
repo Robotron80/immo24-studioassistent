@@ -13,20 +13,12 @@
 
         <v-window v-model="tab">
           <v-window-item value="prod">
-            <KonfigProduktionsbuch />
+            <KonfigProduktionsbuch ref="pbRef" />
           </v-window-item>
 
-          <v-window-item value="schema">
-            <div class="py-6">[Namensschema – später]</div>
-          </v-window-item>
-
-          <v-window-item value="paths">
-            <div class="py-6">[Pfade – später]</div>
-          </v-window-item>
-
-          <v-window-item value="pwd">
-            <div class="py-6">[Passwort ändern – später]</div>
-          </v-window-item>
+          <v-window-item value="schema"><div class="py-6">[Namensschema – später]</div></v-window-item>
+          <v-window-item value="paths"><div class="py-6">[Pfade – später]</div></v-window-item>
+          <v-window-item value="pwd"><div class="py-6">[Passwort ändern – später]</div></v-window-item>
         </v-window>
       </div>
 
@@ -74,13 +66,45 @@
 import { ref, computed, nextTick, onMounted } from 'vue'
 import KonfigProduktionsbuch from '@/components/KonfigProduktionsbuch.vue'
 
+const API = import.meta.env.VITE_API_BASE || '/api'
+const pbRef = ref(null)
 const tab = ref('prod')
 const saving = ref(false)
 
-function onSave(){ /* optional: später */ }
-function onCancel(){ window.close?.() }
+/* Speichern */
+async function onSave() {
+  // Falls nichts geändert: Fenster schließen
+  if (!pbRef.value?.isDirty()) { window.close?.(); return }
+  saving.value = true
+  try {
+    const snap = pbRef.value.getSnapshotForSave()
+    const res = await fetch(`${API}/pb/snapshot`, {
+      method:'PUT', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(snap)
+    })
+    if (res.status === 409) {
+      await pbRef.value.resetToServer()
+      alert('Daten wurden zwischenzeitlich geändert. Ansicht wurde aktualisiert.')
+      return
+    }
+    if (!res.ok) throw new Error(await res.text())
+    await pbRef.value.resetToServer() // frische Version übernehmen
+    window.close?.()
+  } catch (e) {
+    console.error(e)
+    alert('Speichern fehlgeschlagen.')
+  } finally {
+    saving.value = false
+  }
+}
 
-/* Passwort-Dialog (simple Check gegen /api/check-password) */
+/* Abbrechen = lokale Änderungen verwerfen */
+async function onCancel() {
+  await pbRef.value?.resetToServer()
+  window.close?.()
+}
+
+/* Passwort-Dialog (gegen /api/check-password) */
 const authOpen = ref(true)
 const authPassword = ref('')
 const authError = ref('')
@@ -98,8 +122,8 @@ function onPwKey(ev){ try { capsOn.value = !!ev.getModifierState?.('CapsLock') }
 async function authenticate() {
   authError.value = ''; authLoading.value = true
   try {
-    const res = await fetch('/api/check-password', {
-      method:'POST', headers:{'Content-Type':'application/json'},
+    const res = await fetch(`${API}/check-password`, {
+      method:'POST', headers:{ 'Content-Type':'application/json' },
       body: JSON.stringify({ password: authPassword.value })
     })
     const data = await res.json().catch(()=> ({}))
@@ -108,7 +132,9 @@ async function authenticate() {
   } catch (e) {
     authError.value = e.message || 'Passwort falsch'
     authPassword.value = ''; focusPw()
-  } finally { authLoading.value = false }
+  } finally {
+    authLoading.value = false
+  }
 }
 </script>
 

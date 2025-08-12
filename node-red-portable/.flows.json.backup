@@ -24,7 +24,7 @@
         "env": []
     },
     {
-        "id": "b0c1d2e3f4a5b6c7",
+        "id": "623c029dfb789b73",
         "type": "tab",
         "label": "PB Snapshot API",
         "disabled": false,
@@ -358,7 +358,6 @@
             "get_version",
             "get_out",
             "put_in",
-            "put_jsonreq",
             "put_check",
             "put_err1",
             "put_path",
@@ -368,12 +367,29 @@
             "put_err2",
             "put_write",
             "put_reply",
-            "put_out"
+            "put_out",
+            "2fd8cd24ef3ca281",
+            "87c9602477bca030",
+            "7181e0b3b5441717",
+            "4406e8602c76e676",
+            "8bd88f7173449a9a",
+            "572f7613c5171676",
+            "0690323155aa8ef2",
+            "b739f83a1f86db3c",
+            "82033a023a5391bf",
+            "96edd07e868a5ac6",
+            "ec0b4bed560ac8d2",
+            "739e9b38e927c880",
+            "4e39262379dd4dd2",
+            "95f1c5e24f5f224e",
+            "5df24669e97283b6",
+            "bcad8f79ef187fef",
+            "5aece03cec227a21"
         ],
         "x": 114,
         "y": 1739,
         "w": 2112,
-        "h": 1282
+        "h": 1542
     },
     {
         "id": "02b0fe64050de273",
@@ -9052,8 +9068,9 @@
         "id": "get_in",
         "type": "http in",
         "z": "b1c585f0d25b86fd",
+        "d": true,
         "g": "b38df26cbb8bb4b3",
-        "name": "GET /api/pb/snapshot",
+        "name": "",
         "url": "/api/pb/snapshot",
         "method": "get",
         "upload": false,
@@ -9070,6 +9087,7 @@
         "id": "get_path",
         "type": "function",
         "z": "b1c585f0d25b86fd",
+        "d": true,
         "g": "b38df26cbb8bb4b3",
         "name": "Pfad setzen",
         "func": "msg.filename = global.get('PathStammdaten') + '/kunden_stammdaten.json';\nreturn msg;",
@@ -9087,6 +9105,7 @@
         "id": "get_filein",
         "type": "file in",
         "z": "b1c585f0d25b86fd",
+        "d": true,
         "g": "b38df26cbb8bb4b3",
         "name": "lesen",
         "filename": "filename",
@@ -9106,6 +9125,7 @@
         "id": "get_json",
         "type": "json",
         "z": "b1c585f0d25b86fd",
+        "d": true,
         "g": "b38df26cbb8bb4b3",
         "name": "parse",
         "property": "payload",
@@ -9123,12 +9143,17 @@
         "id": "get_version",
         "type": "function",
         "z": "b1c585f0d25b86fd",
+        "d": true,
         "g": "b38df26cbb8bb4b3",
         "name": "Version anhängen",
-        "func": "const crypto = require('crypto');\nconst arr = Array.isArray(msg.payload) ? msg.payload : [];\nconst str = JSON.stringify(arr);\nconst version = crypto.createHash('sha1').update(str).digest('hex');\nmsg.payload = { customers: arr, version };\nreturn msg;",
+        "func": "// Version aus globalem Kontext lesen oder initialisieren\nlet ver = global.get('pb_version')\nif (!ver) {\n    ver = String(Date.now())\n    global.set('pb_version', ver)\n}\n\nmsg.payload = {\n    customers: Array.isArray(msg.payload) ? msg.payload : [],\n    version: ver\n}\nreturn msg",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
-        "x": 1080,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1070,
         "y": 2840,
         "wires": [
             [
@@ -9140,6 +9165,7 @@
         "id": "get_out",
         "type": "http response",
         "z": "b1c585f0d25b86fd",
+        "d": true,
         "g": "b38df26cbb8bb4b3",
         "name": "",
         "statusCode": "",
@@ -9152,30 +9178,14 @@
         "id": "put_in",
         "type": "http in",
         "z": "b1c585f0d25b86fd",
+        "d": true,
         "g": "b38df26cbb8bb4b3",
-        "name": "PUT /api/pb/snapshot",
+        "name": "",
         "url": "/api/pb/snapshot",
         "method": "put",
         "upload": false,
         "swaggerDoc": "",
         "x": 320,
-        "y": 2940,
-        "wires": [
-            [
-                "put_jsonreq"
-            ]
-        ]
-    },
-    {
-        "id": "put_jsonreq",
-        "type": "json",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "name": "parse body",
-        "property": "payload",
-        "action": "",
-        "pretty": false,
-        "x": 520,
         "y": 2940,
         "wires": [
             [
@@ -9187,12 +9197,17 @@
         "id": "put_check",
         "type": "function",
         "z": "b1c585f0d25b86fd",
+        "d": true,
         "g": "b38df26cbb8bb4b3",
         "name": "Body prüfen",
-        "func": "const body = msg.payload || {};\nif (!Array.isArray(body.customers) || !body.version) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'bad_payload' };\n    return [null, msg];\n}\nmsg.body = body;\nreturn [msg, null];",
+        "func": "// Robust Body-Parser + Validierung\nfunction safeParse(x) {\n    if (x == null) return null;\n    if (Buffer.isBuffer(x)) { try { return JSON.parse(x.toString('utf8')) } catch { return null } }\n    if (typeof x === 'string') { try { return JSON.parse(x) } catch { return null } }\n    if (typeof x === 'object') return x;\n    return null;\n}\n\nconst body = safeParse(msg.payload);\nif (!body || !Array.isArray(body.customers) || typeof body.version !== 'string') {\n    msg.statusCode = 400;\n    msg.payload = { error: 'bad_payload' };\n    return [null, msg];           // Out2 -> http response (400)\n}\n\nmsg.body = { customers: body.customers, version: body.version };\nreturn [msg, null];             // Out1 -> weiter",
         "outputs": 2,
+        "timeout": "",
         "noerr": 0,
-        "x": 710,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
         "y": 2940,
         "wires": [
             [
@@ -9207,6 +9222,7 @@
         "id": "put_err1",
         "type": "http response",
         "z": "b1c585f0d25b86fd",
+        "d": true,
         "g": "b38df26cbb8bb4b3",
         "name": "400",
         "statusCode": "",
@@ -9219,6 +9235,7 @@
         "id": "put_path",
         "type": "function",
         "z": "b1c585f0d25b86fd",
+        "d": true,
         "g": "b38df26cbb8bb4b3",
         "name": "Pfad setzen",
         "func": "msg.filename = global.get('PathStammdaten') + '/kunden_stammdaten.json';\nreturn msg;",
@@ -9236,6 +9253,7 @@
         "id": "put_filein",
         "type": "file in",
         "z": "b1c585f0d25b86fd",
+        "d": true,
         "g": "b38df26cbb8bb4b3",
         "name": "lesen",
         "filename": "filename",
@@ -9255,6 +9273,7 @@
         "id": "put_jsonfile",
         "type": "json",
         "z": "b1c585f0d25b86fd",
+        "d": true,
         "g": "b38df26cbb8bb4b3",
         "name": "parse file",
         "property": "payload",
@@ -9272,11 +9291,16 @@
         "id": "put_compare",
         "type": "function",
         "z": "b1c585f0d25b86fd",
+        "d": true,
         "g": "b38df26cbb8bb4b3",
         "name": "Version vergleichen",
-        "func": "const crypto = require('crypto');\nconst current = Array.isArray(msg.payload) ? msg.payload : [];\nconst curStr = JSON.stringify(current);\nconst curVer = crypto.createHash('sha1').update(curStr).digest('hex');\n\nif (curVer !== msg.body.version) {\n    msg.statusCode = 409;\n    msg.payload = { error: 'version_conflict', currentVersion: curVer };\n    return [null, msg];\n}\n\n// Optionale Validierung von msg.body.customers\nconst next = msg.body.customers;\nmsg.payload = JSON.stringify(next, null, 2);\nreturn [msg, null];",
+        "func": "// 1) aktuelle Server-Version aus globalem Kontext\nconst currentVersion = global.get('pb_version') || \"0\"\n\n// 2) Client-Version aus Body\nconst clientVersion = (msg.body && String(msg.body.version)) || \"\"\n\n// 3) Konflikt?\nif (clientVersion !== currentVersion) {\n    msg.statusCode = 409\n    msg.payload = { error: 'version_conflict', currentVersion }\n    return [null, msg]   // Out2 → http response\n}\n\n// 4) Alles ok → Schreiben vorbereiten\nconst nextCustomers = Array.isArray(msg.body?.customers) ? msg.body.customers : []\nmsg.payload = JSON.stringify(nextCustomers, null, 2)\n\n// 5) Neue Version für nach dem Schreiben vormerken\nmsg.nextVersion = String(Date.now())\n\nreturn [msg, null]     // Out1 → file (overwrite)",
         "outputs": 2,
+        "timeout": "",
         "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
         "x": 1440,
         "y": 2940,
         "wires": [
@@ -9292,6 +9316,7 @@
         "id": "put_err2",
         "type": "http response",
         "z": "b1c585f0d25b86fd",
+        "d": true,
         "g": "b38df26cbb8bb4b3",
         "name": "409/…",
         "statusCode": "",
@@ -9304,6 +9329,7 @@
         "id": "put_write",
         "type": "file",
         "z": "b1c585f0d25b86fd",
+        "d": true,
         "g": "b38df26cbb8bb4b3",
         "name": "schreiben",
         "filename": "filename",
@@ -9324,11 +9350,16 @@
         "id": "put_reply",
         "type": "function",
         "z": "b1c585f0d25b86fd",
+        "d": true,
         "g": "b38df26cbb8bb4b3",
         "name": "200 + neue Version",
-        "func": "const crypto = require('crypto');\nconst arr = JSON.parse(msg.payload);\nconst str = JSON.stringify(arr);\nconst ver = crypto.createHash('sha1').update(str).digest('hex');\nmsg.statusCode = 200;\nmsg.payload = { ok: true, version: ver };\nreturn msg;",
+        "func": "// Nach dem erfolgreichen Schreiben: neue Version persistieren\nif (msg.nextVersion) {\n    global.set('pb_version', msg.nextVersion)\n}\n\nmsg.statusCode = 200\nmsg.payload = { ok: true, version: global.get('pb_version') || \"0\" }\nreturn msg",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
         "x": 1800,
         "y": 2940,
         "wires": [
@@ -9341,12 +9372,302 @@
         "id": "put_out",
         "type": "http response",
         "z": "b1c585f0d25b86fd",
+        "d": true,
         "g": "b38df26cbb8bb4b3",
         "name": "",
         "statusCode": "",
         "headers": {},
         "x": 1980,
         "y": 2940,
+        "wires": []
+    },
+    {
+        "id": "2fd8cd24ef3ca281",
+        "type": "http in",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "GET /api/pb/snapshot",
+        "url": "/api/pb/snapshot",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 340,
+        "y": 3040,
+        "wires": [
+            [
+                "87c9602477bca030"
+            ]
+        ]
+    },
+    {
+        "id": "87c9602477bca030",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "Pfad setzen",
+        "func": "msg.filename = global.get('PathStammdaten') + '/kunden_stammdaten.json';\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 550,
+        "y": 3040,
+        "wires": [
+            [
+                "7181e0b3b5441717"
+            ]
+        ]
+    },
+    {
+        "id": "7181e0b3b5441717",
+        "type": "fs-ops-access",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "existiert Datei?",
+        "path": "",
+        "pathType": "str",
+        "filename": "filename",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 750,
+        "y": 3040,
+        "wires": [
+            [
+                "4406e8602c76e676"
+            ],
+            [
+                "572f7613c5171676"
+            ]
+        ]
+    },
+    {
+        "id": "4406e8602c76e676",
+        "type": "file in",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "lesen (utf8)",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": true,
+        "x": 950,
+        "y": 3040,
+        "wires": [
+            [
+                "8bd88f7173449a9a"
+            ]
+        ]
+    },
+    {
+        "id": "8bd88f7173449a9a",
+        "type": "json",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "parse",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 1120,
+        "y": 3040,
+        "wires": [
+            [
+                "0690323155aa8ef2"
+            ]
+        ]
+    },
+    {
+        "id": "572f7613c5171676",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "Fallback: []",
+        "func": "msg.payload = [];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 960,
+        "y": 3100,
+        "wires": [
+            [
+                "0690323155aa8ef2"
+            ]
+        ]
+    },
+    {
+        "id": "0690323155aa8ef2",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "Version anhängen (global)",
+        "func": "let ver = global.get('pb_version');\nif (!ver) { ver = String(Date.now()); global.set('pb_version', ver); }\nmsg.payload = { customers: Array.isArray(msg.payload) ? msg.payload : [], version: ver };\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1340,
+        "y": 3060,
+        "wires": [
+            [
+                "b739f83a1f86db3c"
+            ]
+        ]
+    },
+    {
+        "id": "b739f83a1f86db3c",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "200",
+        "statusCode": "",
+        "headers": {},
+        "x": 1540,
+        "y": 3060,
+        "wires": []
+    },
+    {
+        "id": "82033a023a5391bf",
+        "type": "http in",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "PUT /api/pb/snapshot",
+        "url": "/api/pb/snapshot",
+        "method": "put",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 340,
+        "y": 3200,
+        "wires": [
+            [
+                "96edd07e868a5ac6"
+            ]
+        ]
+    },
+    {
+        "id": "96edd07e868a5ac6",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "Body parsen + prüfen",
+        "func": "function safeParse(x){\n  if (x == null) return null;\n  if (Buffer.isBuffer(x)) { try { return JSON.parse(x.toString('utf8')); } catch { return null; } }\n  if (typeof x === 'string') { try { return JSON.parse(x); } catch { return null; } }\n  if (typeof x === 'object') return x;\n  return null;\n}\nconst body = safeParse(msg.payload);\nif (!body || !Array.isArray(body.customers) || typeof body.version !== 'string') {\n  msg.statusCode = 400;\n  msg.payload = { error: 'bad_payload' };\n  return [null, msg];\n}\nmsg.body = { customers: body.customers, version: body.version };\nreturn [msg, null];",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 570,
+        "y": 3200,
+        "wires": [
+            [
+                "739e9b38e927c880"
+            ],
+            [
+                "ec0b4bed560ac8d2"
+            ]
+        ]
+    },
+    {
+        "id": "ec0b4bed560ac8d2",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "400 bad payload",
+        "statusCode": "400",
+        "headers": {},
+        "x": 790,
+        "y": 3240,
+        "wires": []
+    },
+    {
+        "id": "739e9b38e927c880",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "Pfad setzen",
+        "func": "msg.filename = global.get('PathStammdaten') + '/kunden_stammdaten.json';\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 790,
+        "y": 3200,
+        "wires": [
+            [
+                "4e39262379dd4dd2"
+            ]
+        ]
+    },
+    {
+        "id": "4e39262379dd4dd2",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "Version vergleichen (global)",
+        "func": "const currentVersion = global.get('pb_version') || '0';\nconst clientVersion  = String(msg.body?.version || '');\nif (clientVersion !== currentVersion) {\n  msg.statusCode = 409;\n  msg.payload = { error: 'version_conflict', currentVersion };\n  return [null, msg];\n}\nconst next = Array.isArray(msg.body.customers) ? msg.body.customers : [];\nmsg.payload = JSON.stringify(next, null, 2);\nmsg.nextVersion = String(Date.now());\nreturn [msg, null];",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 1050,
+        "y": 3200,
+        "wires": [
+            [
+                "5df24669e97283b6"
+            ],
+            [
+                "95f1c5e24f5f224e"
+            ]
+        ]
+    },
+    {
+        "id": "95f1c5e24f5f224e",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "409 conflict",
+        "statusCode": "409",
+        "headers": {},
+        "x": 1260,
+        "y": 3240,
+        "wires": []
+    },
+    {
+        "id": "5df24669e97283b6",
+        "type": "file",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "schreiben (overwrite)",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "utf8",
+        "x": 1270,
+        "y": 3200,
+        "wires": [
+            [
+                "bcad8f79ef187fef"
+            ]
+        ]
+    },
+    {
+        "id": "bcad8f79ef187fef",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "200 + neue Version setzen",
+        "func": "if (msg.nextVersion) { global.set('pb_version', msg.nextVersion); }\nmsg.statusCode = 200;\nmsg.payload = { ok: true, version: global.get('pb_version') || '0' };\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1490,
+        "y": 3200,
+        "wires": [
+            [
+                "5aece03cec227a21"
+            ]
+        ]
+    },
+    {
+        "id": "5aece03cec227a21",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {},
+        "x": 1690,
+        "y": 3200,
         "wires": []
     },
     {

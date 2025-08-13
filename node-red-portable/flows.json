@@ -116,7 +116,8 @@
             "ae748b2fe00cc633",
             "a56e7a1f4e0144f2",
             "e017b3a006d31550",
-            "2c322a0a469a0476"
+            "2c322a0a469a0476",
+            "2f1651475a302004"
         ],
         "x": 354,
         "y": 979,
@@ -5653,6 +5654,292 @@
         "x": 2900,
         "y": 820,
         "wires": []
+    },
+    {
+        "id": "5a6c0d60f2b278f3",
+        "type": "http in",
+        "z": "dc0d981398a42d88",
+        "name": "POST /api/user",
+        "url": "/api/user",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 2520,
+        "y": 1220,
+        "wires": [
+            [
+                "0429d8b08e8463f2",
+                "130f356fc940baa4"
+            ]
+        ]
+    },
+    {
+        "id": "0429d8b08e8463f2",
+        "type": "change",
+        "z": "dc0d981398a42d88",
+        "name": "global.activeUser = payload.user",
+        "rules": [
+            {
+                "t": "set",
+                "p": "activeUser",
+                "pt": "global",
+                "to": "payload.user",
+                "tot": "msg"
+            }
+        ],
+        "x": 3020,
+        "y": 1220,
+        "wires": [
+            [
+                "2b57da8d419bc3d5",
+                "130f356fc940baa4"
+            ]
+        ]
+    },
+    {
+        "id": "2b57da8d419bc3d5",
+        "type": "http response",
+        "z": "dc0d981398a42d88",
+        "name": "200 OK",
+        "statusCode": "200",
+        "headers": {},
+        "x": 3240,
+        "y": 1220,
+        "wires": []
+    },
+    {
+        "id": "f3f83af13edd1713",
+        "type": "http in",
+        "z": "dc0d981398a42d88",
+        "name": "POST /api/logout",
+        "url": "/api/logout",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 2520,
+        "y": 1280,
+        "wires": [
+            [
+                "89f32ddc71725f1e"
+            ]
+        ]
+    },
+    {
+        "id": "89f32ddc71725f1e",
+        "type": "change",
+        "z": "dc0d981398a42d88",
+        "name": "global.activeUser = null",
+        "rules": [
+            {
+                "t": "set",
+                "p": "activeUser",
+                "pt": "global",
+                "to": "null",
+                "tot": "json"
+            }
+        ],
+        "x": 2810,
+        "y": 1280,
+        "wires": [
+            [
+                "cd81f2a98454698b"
+            ]
+        ]
+    },
+    {
+        "id": "cd81f2a98454698b",
+        "type": "http response",
+        "z": "dc0d981398a42d88",
+        "name": "200 OK",
+        "statusCode": "200",
+        "headers": {},
+        "x": 3020,
+        "y": 1280,
+        "wires": []
+    },
+    {
+        "id": "0da6504fca3cf778",
+        "type": "http in",
+        "z": "dc0d981398a42d88",
+        "name": "GET /api/user",
+        "url": "/api/user",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 2510,
+        "y": 1360,
+        "wires": [
+            [
+                "d9b297f31f9dc13b",
+                "01a1f157779cd226"
+            ]
+        ]
+    },
+    {
+        "id": "d9b297f31f9dc13b",
+        "type": "fs-ops-dir",
+        "z": "dc0d981398a42d88",
+        "name": "MA-Ordner lesen",
+        "path": "PathMitarbeiter",
+        "pathType": "global",
+        "filter": "",
+        "filterType": "str",
+        "dir": "payload",
+        "dirType": "msg",
+        "x": 2730,
+        "y": 1360,
+        "wires": [
+            [
+                "3096787e353c556d"
+            ]
+        ]
+    },
+    {
+        "id": "3096787e353c556d",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "Unsichtbare filtern",
+        "func": "if(!Array.isArray(msg.payload)) msg.payload=[];\nmsg.payload = msg.payload.filter(n => typeof n === 'string' && !n.startsWith('.'));\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 2970,
+        "y": 1360,
+        "wires": [
+            [
+                "c2655f75caf7e0fd"
+            ]
+        ]
+    },
+    {
+        "id": "c2655f75caf7e0fd",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "zu Pfaden konvertieren",
+        "func": "const base = global.get('PathMitarbeiter') || '';\nmsg.payload = (msg.payload || []).map(n => base + '/' + n);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 3230,
+        "y": 1360,
+        "wires": [
+            [
+                "70eb62bc8ea71410"
+            ]
+        ]
+    },
+    {
+        "id": "70eb62bc8ea71410",
+        "type": "fs-ops-stats",
+        "z": "dc0d981398a42d88",
+        "name": "",
+        "path": "",
+        "pathType": "str",
+        "filename": "payload",
+        "filenameType": "msg",
+        "stats": "stats",
+        "sizeType": "msg",
+        "x": 3450,
+        "y": 1360,
+        "wires": [
+            [
+                "185f5c9f3eac71ee"
+            ]
+        ]
+    },
+    {
+        "id": "185f5c9f3eac71ee",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "Nur Ordnernamen (Array)",
+        "func": "const pfade = msg.payload || [];\nconst stats = msg.stats || [];\nconst out = [];\nfor (let i = 0; i < pfade.length; i++) {\n  const s = stats[i];\n  let isDir = false;\n  if (s) {\n    if (typeof s.isDirectory === 'function') {\n      isDir = s.isDirectory();\n    } else if (typeof s.mode === 'number') {\n      isDir = (s.mode & 0o170000) === 0o040000;\n    }\n  }\n  if (isDir) {\n    const teile = pfade[i].split(/[\\\\/]/);\n    const name = teile[teile.length - 1];\n    if (name && !name.startsWith('.')) {\n      out.push(name);\n    }\n  }\n}\nmsg.payload = out;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 3690,
+        "y": 1360,
+        "wires": [
+            [
+                "62b9723e77cfaae0"
+            ]
+        ]
+    },
+    {
+        "id": "62b9723e77cfaae0",
+        "type": "http response",
+        "z": "dc0d981398a42d88",
+        "name": "200 JSON",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 3910,
+        "y": 1360,
+        "wires": []
+    },
+    {
+        "id": "01a1f157779cd226",
+        "type": "debug",
+        "z": "dc0d981398a42d88",
+        "name": "debug 13",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3840,
+        "y": 1440,
+        "wires": []
+    },
+    {
+        "id": "130f356fc940baa4",
+        "type": "debug",
+        "z": "dc0d981398a42d88",
+        "name": "debug 14",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3220,
+        "y": 1120,
+        "wires": []
+    },
+    {
+        "id": "2f1651475a302004",
+        "type": "inject",
+        "z": "dc0d981398a42d88",
+        "g": "0e1923748c0d505b",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1710,
+        "y": 1020,
+        "wires": [
+            [
+                "3e3926b522449b96"
+            ]
+        ]
     },
     {
         "id": "886fa3dff40f66c4",

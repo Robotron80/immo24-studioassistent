@@ -10,6 +10,9 @@ declare module 'vue' {
   export interface GlobalComponents {
     AppFooter: typeof import('./src/components/AppFooter.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    KonfigNamensschema: typeof import('./src/components/KonfigNamensschema.vue')['default']
+    KonfigPasswort: typeof import('./src/components/KonfigPasswort.vue')['default']
+    KonfigPfade: typeof import('./src/components/KonfigPfade.vue')['default']
     KonfigProduktionsbuch: typeof import('./src/components/KonfigProduktionsbuch.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

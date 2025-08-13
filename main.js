@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu } = require('electron')
+const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron')
 const path = require('path')
 const { spawn } = require('child_process')
 const http = require('http')
@@ -130,6 +130,31 @@ function startNodeRED() {
   })
 }
 
+// --- IPC: Verzeichnis wählen ---
+function registerIpc() {
+  // Vorher evtl. doppelte Handler entfernen (falls Hot Reload)
+  ipcMain.removeHandler('pick-folder');
+
+  ipcMain.handle('pick-folder', async (evt, args = {}) => {
+    const { title, defaultPath } = args || {};
+    const win = BrowserWindow.fromWebContents(evt.sender);
+
+    const result = await dialog.showOpenDialog(win || undefined, {
+      title: title || 'Ordner auswählen',
+      defaultPath: defaultPath || undefined,
+      properties: ['openDirectory', 'createDirectory'],
+      buttonLabel: 'Auswählen',
+    });
+
+    // DEBUG console.log('[pick-folder main] canceled=', result.canceled, 'filePaths=', result.filePaths);
+
+    // GIB NUR EINEN STRING ZURÜCK:
+    return (!result.canceled && Array.isArray(result.filePaths) && result.filePaths[0])
+      ? result.filePaths[0]
+      : null;
+  });
+}
+
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -140,7 +165,8 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      webviewTag: true
+      webviewTag: true,
+      preload: path.join(__dirname, 'preload.js'),
     }
   });
   const isDev = !app.isPackaged || process.env.NODE_ENV === 'development' || process.env.ELECTRON_START_URL
@@ -188,7 +214,11 @@ function createPreferencesWindow() {
   prefWin = new BrowserWindow({
     width: 900, height: 650, resizable: true, title: 'Konfiguration',
     parent: mainWindow, modal: false,
-    webPreferences: { contextIsolation: true, nodeIntegration: false }
+    webPreferences: { 
+      contextIsolation: true, 
+      nodeIntegration: false, 
+      preload: path.join(__dirname, 'preload.js'),
+    }
   });
   prefWin.setMenu(null);
 
@@ -250,7 +280,9 @@ app.whenReady().then(() => {
   startNodeRED();
   createWindow();
   waitForDashboard();
+  registerIpc();
 });
+
 
 //app.whenReady().then(() => {
 //  ensureUserJsonFiles()

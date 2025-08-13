@@ -15,17 +15,22 @@
           <v-window-item value="prod">
             <KonfigProduktionsbuch ref="pbRef" />
           </v-window-item>
-
-          <v-window-item value="schema"><div class="py-6">[Namensschema – später]</div></v-window-item>
-          <v-window-item value="paths"><div class="py-6">[Pfade – später]</div></v-window-item>
-          <v-window-item value="pwd"><div class="py-6">[Passwort ändern – später]</div></v-window-item>
+          <v-window-item value="schema">
+            <KonfigNamensschema ref="schemaRef" />
+          </v-window-item>
+          <v-window-item value="paths">
+            <KonfigPfade ref="pfadeRef" />
+          </v-window-item>
+          <v-window-item value="pwd">
+            <KonfigPasswort ref="pwRef" />
+          </v-window-item>
         </v-window>
       </div>
 
       <!-- sticky actions unten -->
       <div class="actions-sticky d-flex justify-end ga-2">
         <v-btn variant="outlined" @click="onCancel">Abbrechen</v-btn>
-        <v-btn color="primary" :loading="saving" @click="onSave">Speichern</v-btn>
+        <v-btn color="primary" :loading="saving" :disabled="authOpen" @click="onSave">Speichern</v-btn>
       </div>
     </div>
 
@@ -65,31 +70,96 @@
 <script setup>
 import { ref, computed, nextTick, onMounted } from 'vue'
 import KonfigProduktionsbuch from '@/components/KonfigProduktionsbuch.vue'
+import KonfigPfade from '@/components/KonfigPfade.vue'
+import KonfigPasswort from '@/components/KonfigPasswort.vue'
+import KonfigNamensschema from '@/components/KonfigNamensschema.vue'
 
 const API = import.meta.env.VITE_API_BASE || '/api'
 const pbRef = ref(null)
+const pfadeRef = ref(null)
+const pwRef = ref(null)
+const schemaRef = ref(null)
 const tab = ref('prod')
 const saving = ref(false)
 
 /* Speichern */
 async function onSave() {
+  let dirtySomething = false
+
+  // Prüfen, ob Produktionsbuch Änderungen hat
+  if (pbRef.value?.isDirty()) dirtySomething = true
+
+  // Prüfen, ob Pfade Änderungen haben
+  if (pfadeRef.value?.isDirty()) dirtySomething = true
+
+  // Prüfen, ob Passwort Änderungen hat
+  if (pwRef.value?.isDirty()) dirtySomething = true
+
+  // Prüfen, ob Schema Änderungen hat
+  if (schemaRef.value?.isDirty()) dirtySomething = true
+
   // Falls nichts geändert: Fenster schließen
-  if (!pbRef.value?.isDirty()) { window.close?.(); return }
+  if (!dirtySomething) {
+    window.close?.()
+    return
+  }
+
   saving.value = true
   try {
-    const snap = pbRef.value.getSnapshotForSave()
-    const res = await fetch(`${API}/pb/snapshot`, {
-      method:'PUT', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify(snap)
-    })
-    if (res.status === 409) {
+    // Produktionsbuch speichern
+    if (pbRef.value?.isDirty()) {
+      const snap = pbRef.value.getSnapshotForSave()
+      const res = await fetch(`${API}/pb/snapshot`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(snap)
+      })
+      if (res.status === 409) {
+        await pbRef.value.resetToServer()
+        alert('Produktionsbuch wurde zwischenzeitlich geändert. Ansicht aktualisiert.')
+        return
+      }
+      if (!res.ok) throw new Error(await res.text())
       await pbRef.value.resetToServer()
-      alert('Daten wurden zwischenzeitlich geändert. Ansicht wurde aktualisiert.')
-      return
     }
-    if (!res.ok) throw new Error(await res.text())
-    await pbRef.value.resetToServer() // frische Version übernehmen
+
+    // Pfade speichern
+    if (pfadeRef.value?.isDirty()) {
+      const snap = pfadeRef.value.getSnapshotForSave()
+      const res = await fetch(`${API}/paths`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(snap)
+      })
+      if (res.status === 409) {
+        await pfadeRef.value.resetToServer()
+        alert('Pfade wurden zwischenzeitlich geändert. Ansicht aktualisiert.')
+        return
+      }
+      if (!res.ok) throw new Error(await res.text())
+      await pfadeRef.value.resetToServer()
+    }
+
+    // Passwort
+    if (pwRef.value?.isDirty()) {
+      await pwRef.value.saveToServer()
+    }
+
+    // Schema
+    if (schemaRef.value?.isDirty()) {
+      const snap = schemaRef.value.getSnapshotForSave()
+      const res = await fetch(`${API}/schema`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(snap)
+      })
+      if (!res.ok) throw new Error(await res.text())
+      await schemaRef.value.resetToServer()
+    }
+
+    // Wenn alles erfolgreich war → Fenster schließen
     window.close?.()
+
   } catch (e) {
     console.error(e)
     alert('Speichern fehlgeschlagen.')
@@ -101,6 +171,9 @@ async function onSave() {
 /* Abbrechen = lokale Änderungen verwerfen */
 async function onCancel() {
   await pbRef.value?.resetToServer()
+  await pfadeRef.value?.resetToServer()
+  await pwRef.value?.resetToServer()
+  await schemaRef.value?.resetToServer()
   window.close?.()
 }
 

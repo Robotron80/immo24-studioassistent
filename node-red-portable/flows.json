@@ -24,13 +24,6 @@
         "env": []
     },
     {
-        "id": "623c029dfb789b73",
-        "type": "tab",
-        "label": "PB Snapshot API",
-        "disabled": false,
-        "info": ""
-    },
-    {
         "id": "f10408fa2622e18b",
         "type": "group",
         "z": "24039523dcf573b0",
@@ -149,7 +142,7 @@
         ],
         "x": 368,
         "y": 193,
-        "w": 1744,
+        "w": 3114,
         "h": 754
     },
     {
@@ -398,12 +391,21 @@
             "f33bbf72b9b63711",
             "99a7ae697d4f679c",
             "5159326f0de47168",
-            "86241f78f6249423"
+            "86241f78f6249423",
+            "b31d7e3c8e683585",
+            "88c706e3490e5d0c",
+            "adminpw_in",
+            "adminpw_validate",
+            "adminpw_write",
+            "adminpw_ok",
+            "adminpw_err",
+            "adminpw_out",
+            "62d75ac90e54201e"
         ],
         "x": 354,
-        "y": 1639,
-        "w": 1732,
-        "h": 242
+        "y": 1619,
+        "w": 2452,
+        "h": 322
     },
     {
         "id": "e921cd24dc377898",
@@ -560,11 +562,31 @@
             "7f50215f36cae338",
             "1a15ac24124bdf48",
             "f08129ae41d7a57b",
-            "7b87b9d3b685a32f"
+            "7b87b9d3b685a32f",
+            "paths_get_in",
+            "paths_get_setfile",
+            "paths_get_access",
+            "paths_get_filein",
+            "paths_get_parse",
+            "paths_get_empty",
+            "paths_get_attach",
+            "paths_get_out",
+            "paths_put_in",
+            "paths_put_check",
+            "paths_put_400",
+            "paths_put_setfile",
+            "paths_put_compare",
+            "paths_put_409",
+            "paths_put_write",
+            "paths_put_globals",
+            "paths_put_200",
+            "fdf0491bc433bff1",
+            "390fc01b433f604d",
+            "31559c4fdeac3181"
         ],
         "x": 394,
         "y": 219,
-        "w": 1692,
+        "w": 3062,
         "h": 342
     },
     {
@@ -600,12 +622,13 @@
             "032a562dc99f4af8",
             "f51285520b00a3d3",
             "aeb8a17f71795a4c",
-            "8bb41dd550361de6"
+            "8bb41dd550361de6",
+            "f3f4b4a22f8d1111"
         ],
         "x": 394,
-        "y": 559,
-        "w": 1692,
-        "h": 362
+        "y": 553,
+        "w": 2958,
+        "h": 368
     },
     {
         "id": "c6bbd2b9b2d5d462",
@@ -686,6 +709,35 @@
         "y": 1519,
         "w": 572,
         "h": 149.5
+    },
+    {
+        "id": "f3f4b4a22f8d1111",
+        "type": "group",
+        "z": "dc0d981398a42d88",
+        "g": "2eb8ddaff3cdbe23",
+        "name": "API: Schema (GET/PUT)",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "c0a1ea6d1b9a1112",
+            "0c2bb7a2a83a1113",
+            "f5d8c9a8a2a1114",
+            "9f7b5d6ac2d1115",
+            "c3e4d5f6a7b1116",
+            "2a9c0d1e2f311117",
+            "8e7d6c5b4a311119",
+            "a1b2c3d4e5f61120",
+            "3f2e1d0c9b811121",
+            "7bbbd4653db740f1",
+            "77a939fd00b2c94a",
+            "5fa35bb78c259faa",
+            "2729b38d7e8e8fb5"
+        ],
+        "x": 2134,
+        "y": 579,
+        "w": 1192,
+        "h": 282
     },
     {
         "id": "826de81a1d3da833",
@@ -4779,8 +4831,8 @@
         "y": 1680,
         "wires": [
             [
-                "99a7ae697d4f679c",
-                "86241f78f6249423"
+                "86241f78f6249423",
+                "88c706e3490e5d0c"
             ]
         ]
     },
@@ -4790,15 +4842,15 @@
         "z": "dc0d981398a42d88",
         "g": "02b0fe64050de273",
         "name": "Passwort-Check",
-        "func": "const sent = msg.payload && msg.payload.password;\nconst admin = global.get('adminPW') || '';\n\nif (!sent || sent !== admin) {\n    msg.statusCode = 401;\n    msg.payload = { ok: false, error: 'Passwort falsch' };\n    return msg;\n}\n\nmsg.payload = { ok: true };\nreturn msg;",
+        "func": "const given = (msg.givenPassword ?? '').toString();\n\n// Datei-Inhalt steckt jetzt in msg.payload (utf8-String)\nlet stored = '';\nconst raw = (msg.payload ?? '').toString().trim();\n\nif (!raw) {\n    // Kein gespeichertes PW vorhanden -> Zugriff verweigern\n    msg.statusCode = 401;\n    msg.payload = { ok: false };\n    return msg;\n}\n\n// Erst versuchen, JSON zu lesen { \"password\": \"...\" }\ntry {\n    const obj = JSON.parse(raw);\n    if (obj && typeof obj.password === 'string') {\n        stored = obj.password;\n    } else {\n        // Kein Feld \"password\" -> treat as plain\n        stored = raw;\n    }\n} catch {\n    // Nicht-JSON -> treat as plain string\n    stored = raw;\n}\n\nif (given && stored && given === stored) {\n    msg.statusCode = 200;\n    msg.payload = { ok: true };\n} else {\n    msg.statusCode = 401;\n    msg.payload = { ok: false };\n}\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1830,
-        "y": 1680,
+        "x": 2550,
+        "y": 1660,
         "wires": [
             [
                 "5159326f0de47168"
@@ -4813,8 +4865,8 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 2010,
-        "y": 1680,
+        "x": 2730,
+        "y": 1660,
         "wires": []
     },
     {
@@ -4832,6 +4884,774 @@
         "statusType": "auto",
         "x": 1820,
         "y": 1740,
+        "wires": []
+    },
+    {
+        "id": "paths_get_in",
+        "type": "http in",
+        "z": "dc0d981398a42d88",
+        "g": "e05512e54561bc65",
+        "name": "GET /api/paths",
+        "url": "/api/paths",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 2040,
+        "y": 260,
+        "wires": [
+            [
+                "paths_get_setfile"
+            ]
+        ]
+    },
+    {
+        "id": "paths_get_setfile",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "g": "e05512e54561bc65",
+        "name": "Pfad setzen",
+        "func": "// Function-Node (Sandbox) → KEIN process.env!\n// Richtig: env.get('IMMO24_USERDATA')\nconst base =\n    env.get('IMMO24_USERDATA') ||\n    global.get('IMMO24_USERDATA') ||   // Fallback, falls du es global setzt\n    '';\n\nif (!base) {\n    // optionales Logging hilft beim Debuggen\n    node.warn('IMMO24_USERDATA ist leer – verwende Fallback im UserData-Verzeichnis?');\n    // Wenn du willst, kannst du hier noch einen Default setzen:\n    // msg.filename = '/tmp/path.json'; return msg;\n}\n\nmsg.filename = base + '/path.json';\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2260,
+        "y": 260,
+        "wires": [
+            [
+                "paths_get_access",
+                "fdf0491bc433bff1"
+            ]
+        ]
+    },
+    {
+        "id": "paths_get_access",
+        "type": "fs-ops-access",
+        "z": "dc0d981398a42d88",
+        "g": "e05512e54561bc65",
+        "name": "existiert Datei?",
+        "path": "",
+        "pathType": "str",
+        "filename": "filename",
+        "filenameType": "msg",
+        "read": true,
+        "write": false,
+        "throwerror": false,
+        "x": 2460,
+        "y": 260,
+        "wires": [
+            [
+                "paths_get_filein"
+            ],
+            [
+                "paths_get_empty"
+            ]
+        ]
+    },
+    {
+        "id": "paths_get_filein",
+        "type": "file in",
+        "z": "dc0d981398a42d88",
+        "g": "e05512e54561bc65",
+        "name": "lesen (utf8)",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": true,
+        "x": 2660,
+        "y": 260,
+        "wires": [
+            [
+                "paths_get_parse"
+            ]
+        ]
+    },
+    {
+        "id": "paths_get_parse",
+        "type": "json",
+        "z": "dc0d981398a42d88",
+        "g": "e05512e54561bc65",
+        "name": "parse",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 2830,
+        "y": 260,
+        "wires": [
+            [
+                "paths_get_attach"
+            ]
+        ]
+    },
+    {
+        "id": "paths_get_empty",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "g": "e05512e54561bc65",
+        "name": "Fallback: {}",
+        "func": "msg.payload = {};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 2670,
+        "y": 320,
+        "wires": [
+            [
+                "paths_get_attach"
+            ]
+        ]
+    },
+    {
+        "id": "paths_get_attach",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "g": "e05512e54561bc65",
+        "name": "Version anhängen + Globals",
+        "func": "let ver = global.get('paths_version');\nif (!ver) { ver = String(Date.now()); global.set('paths_version', ver); }\nconst data = typeof msg.payload === 'object' && msg.payload ? msg.payload : {};\nif (data.PathMitarbeiter !== undefined) global.set('PathMitarbeiter', data.PathMitarbeiter);\nif (data.PathProduktionen !== undefined) global.set('PathProduktionen', data.PathProduktionen);\nif (data.PathStammdaten !== undefined) global.set('PathStammdaten', data.PathStammdaten);\nmsg.payload = { data, version: ver };\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 3060,
+        "y": 290,
+        "wires": [
+            [
+                "paths_get_out"
+            ]
+        ]
+    },
+    {
+        "id": "paths_get_out",
+        "type": "http response",
+        "z": "dc0d981398a42d88",
+        "g": "e05512e54561bc65",
+        "name": "200",
+        "statusCode": "",
+        "headers": {},
+        "x": 3250,
+        "y": 290,
+        "wires": []
+    },
+    {
+        "id": "paths_put_in",
+        "type": "http in",
+        "z": "dc0d981398a42d88",
+        "g": "e05512e54561bc65",
+        "name": "PUT /api/paths",
+        "url": "/api/paths",
+        "method": "put",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 2040,
+        "y": 420,
+        "wires": [
+            [
+                "paths_put_check"
+            ]
+        ]
+    },
+    {
+        "id": "paths_put_check",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "g": "e05512e54561bc65",
+        "name": "Body parsen + prüfen",
+        "func": "// Robust parse helper\nfunction safeParse(x) {\n  if (x == null) return null;\n  if (Buffer.isBuffer(x)) { try { return JSON.parse(x.toString('utf8')); } catch { return null; } }\n  if (typeof x === 'string') { try { return JSON.parse(x); } catch { return null; } }\n  if (typeof x === 'object') return x;\n  return null;\n}\n\nconst body = safeParse(msg.payload);\n\n// Grundprüfung\nif (!body || typeof body.version !== 'string' || typeof body.data !== 'object' || body.data === null || Array.isArray(body.data)) {\n  msg.statusCode = 400;\n  msg.payload = { error: 'bad_payload' };\n  return [null, msg];\n}\n\n// Felder whitelisten/normalisieren\nconst d = body.data;\nconst normalized = {\n  PathMitarbeiter: typeof d.PathMitarbeiter === 'string' ? d.PathMitarbeiter : '',\n  PathProduktionen: typeof d.PathProduktionen === 'string' ? d.PathProduktionen : '',\n  PathStammdaten: typeof d.PathStammdaten === 'string' ? d.PathStammdaten : ''\n};\n\n// Ergebnis für die weiteren Nodes bereitstellen\nmsg.body = { data: normalized, version: body.version };\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2280,
+        "y": 420,
+        "wires": [
+            [
+                "paths_put_setfile",
+                "390fc01b433f604d"
+            ],
+            [
+                "paths_put_400",
+                "31559c4fdeac3181"
+            ]
+        ]
+    },
+    {
+        "id": "paths_put_400",
+        "type": "http response",
+        "z": "dc0d981398a42d88",
+        "g": "e05512e54561bc65",
+        "name": "400 bad payload",
+        "statusCode": "400",
+        "headers": {},
+        "x": 2510,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "paths_put_setfile",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "g": "e05512e54561bc65",
+        "name": "Pfad setzen",
+        "func": "// Function-Node (Sandbox) → KEIN process.env!\n// Richtig: env.get('IMMO24_USERDATA')\nconst base =\n    env.get('IMMO24_USERDATA') ||\n    global.get('IMMO24_USERDATA') ||   // Fallback, falls du es global setzt\n    '';\n\nif (!base) {\n    // optionales Logging hilft beim Debuggen\n    node.warn('IMMO24_USERDATA ist leer – verwende Fallback im UserData-Verzeichnis?');\n    // Wenn du willst, kannst du hier noch einen Default setzen:\n    // msg.filename = '/tmp/path.json'; return msg;\n}\n\nmsg.filename = base + '/path.json';\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2510,
+        "y": 420,
+        "wires": [
+            [
+                "paths_put_compare"
+            ]
+        ]
+    },
+    {
+        "id": "paths_put_compare",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "g": "e05512e54561bc65",
+        "name": "Version vergleichen",
+        "func": "const cur = global.get('paths_version') || '0';\nconst cli = String(msg.body?.version || '');\nif (cli !== cur) {\n  msg.statusCode = 409;\n  msg.payload = { error: 'version_conflict', currentVersion: cur };\n  return [null, msg];\n}\nconst next = msg.body.data || {};\nmsg.payload = JSON.stringify(next, null, 2);\nmsg.nextVersion = String(Date.now());\nreturn [msg, null];",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 2750,
+        "y": 420,
+        "wires": [
+            [
+                "paths_put_write"
+            ],
+            [
+                "paths_put_409"
+            ]
+        ]
+    },
+    {
+        "id": "paths_put_409",
+        "type": "http response",
+        "z": "dc0d981398a42d88",
+        "g": "e05512e54561bc65",
+        "name": "409 conflict",
+        "statusCode": "409",
+        "headers": {},
+        "x": 2960,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "paths_put_write",
+        "type": "file",
+        "z": "dc0d981398a42d88",
+        "g": "e05512e54561bc65",
+        "name": "path.json schreiben",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "utf8",
+        "x": 2960,
+        "y": 420,
+        "wires": [
+            [
+                "paths_put_globals"
+            ]
+        ]
+    },
+    {
+        "id": "paths_put_globals",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "g": "e05512e54561bc65",
+        "name": "Globals setzen + Antwort",
+        "func": "try { var data = JSON.parse(msg.payload); } catch(e) { data = {}; }\nif (data.PathMitarbeiter !== undefined) global.set('PathMitarbeiter', data.PathMitarbeiter);\nif (data.PathProduktionen !== undefined) global.set('PathProduktionen', data.PathProduktionen);\nif (data.PathStammdaten !== undefined) global.set('PathStammdaten', data.PathStammdaten);\nif (msg.nextVersion) global.set('paths_version', msg.nextVersion);\nmsg.statusCode = 200;\nmsg.payload = { ok: true, version: global.get('paths_version') || '0' };\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 3180,
+        "y": 420,
+        "wires": [
+            [
+                "paths_put_200"
+            ]
+        ]
+    },
+    {
+        "id": "paths_put_200",
+        "type": "http response",
+        "z": "dc0d981398a42d88",
+        "g": "e05512e54561bc65",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {},
+        "x": 3380,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "fdf0491bc433bff1",
+        "type": "debug",
+        "z": "dc0d981398a42d88",
+        "g": "e05512e54561bc65",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2370,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "390fc01b433f604d",
+        "type": "debug",
+        "z": "dc0d981398a42d88",
+        "g": "e05512e54561bc65",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2320,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "31559c4fdeac3181",
+        "type": "debug",
+        "z": "dc0d981398a42d88",
+        "g": "e05512e54561bc65",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2320,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "b31d7e3c8e683585",
+        "type": "file in",
+        "z": "dc0d981398a42d88",
+        "g": "02b0fe64050de273",
+        "name": "adminpw.json lesen",
+        "filename": "${IMMO24_USERDATA}/adminpw.json",
+        "filenameType": "env",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 2320,
+        "y": 1660,
+        "wires": [
+            [
+                "99a7ae697d4f679c"
+            ]
+        ]
+    },
+    {
+        "id": "88c706e3490e5d0c",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "g": "02b0fe64050de273",
+        "name": "Body sichern + Pfad setzen",
+        "func": "const body = (typeof msg.payload === 'object' && msg.payload) ? msg.payload : {};\nconst given = (body.password ?? '').toString();\n\nif (!given) {\n    msg.statusCode = 400;\n    msg.payload = { ok: false, error: 'missing_password' };\n    return [null, msg];\n}\n\n// Passwort für später parken\nmsg.givenPassword = given;\n\n// Datei-Pfad setzen (hier über den File-Node einfacher per ENV!)\n// -> im nachfolgenden \"file in\" Node dann Filename = ${IMMO24_USERDATA}/adminpw.json (Typ: env)\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2060,
+        "y": 1680,
+        "wires": [
+            [
+                "b31d7e3c8e683585"
+            ],
+            [
+                "5159326f0de47168"
+            ]
+        ]
+    },
+    {
+        "id": "adminpw_in",
+        "type": "http in",
+        "z": "dc0d981398a42d88",
+        "g": "02b0fe64050de273",
+        "name": "POST /api/adminpw",
+        "url": "/api/adminpw",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 1570,
+        "y": 1840,
+        "wires": [
+            [
+                "adminpw_validate"
+            ]
+        ]
+    },
+    {
+        "id": "adminpw_validate",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "g": "02b0fe64050de273",
+        "name": "validate fields",
+        "func": "const body = (typeof msg.payload === 'object' && msg.payload) ? msg.payload : {};\nconst newPassword = (body.newPassword ?? '').toString();\nconst repeatPassword = (body.repeatPassword ?? '').toString();\n\nif (!newPassword || !repeatPassword) {\n  msg.statusCode = 400;\n  msg.payload = { ok:false, error:'missing_fields' };\n  return [null, msg];\n}\nif (newPassword !== repeatPassword) {\n  msg.statusCode = 422;\n  msg.payload = { ok:false, error:'password_mismatch' };\n  return [null, msg];\n}\n// ok → für File-Node String vorbereiten\nmsg.payload = JSON.stringify({ password: newPassword }, null, 2);\nreturn [msg, null];",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 1970,
+        "y": 1840,
+        "wires": [
+            [
+                "adminpw_write",
+                "62d75ac90e54201e"
+            ],
+            [
+                "adminpw_err",
+                "62d75ac90e54201e"
+            ]
+        ]
+    },
+    {
+        "id": "adminpw_write",
+        "type": "file",
+        "z": "dc0d981398a42d88",
+        "g": "02b0fe64050de273",
+        "name": "write ${IMMO24_USERDATA}/adminpw.json",
+        "filename": "${IMMO24_USERDATA}/adminpw.json",
+        "filenameType": "env",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "utf8",
+        "x": 2270,
+        "y": 1840,
+        "wires": [
+            [
+                "adminpw_ok"
+            ]
+        ]
+    },
+    {
+        "id": "adminpw_ok",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "g": "02b0fe64050de273",
+        "name": "200 OK",
+        "func": "msg.statusCode = 200;\nmsg.payload = { ok: true };\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 2500,
+        "y": 1840,
+        "wires": [
+            [
+                "adminpw_out"
+            ]
+        ]
+    },
+    {
+        "id": "adminpw_err",
+        "type": "http response",
+        "z": "dc0d981398a42d88",
+        "g": "02b0fe64050de273",
+        "name": "error response",
+        "statusCode": "",
+        "headers": {},
+        "x": 2200,
+        "y": 1900,
+        "wires": []
+    },
+    {
+        "id": "adminpw_out",
+        "type": "http response",
+        "z": "dc0d981398a42d88",
+        "g": "02b0fe64050de273",
+        "name": "response",
+        "statusCode": "",
+        "headers": {},
+        "x": 2660,
+        "y": 1840,
+        "wires": []
+    },
+    {
+        "id": "62d75ac90e54201e",
+        "type": "debug",
+        "z": "dc0d981398a42d88",
+        "g": "02b0fe64050de273",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2260,
+        "y": 1760,
+        "wires": []
+    },
+    {
+        "id": "c0a1ea6d1b9a1112",
+        "type": "http in",
+        "z": "dc0d981398a42d88",
+        "g": "f3f4b4a22f8d1111",
+        "name": "",
+        "url": "/api/schema",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 2240,
+        "y": 620,
+        "wires": [
+            [
+                "7bbbd4653db740f1"
+            ]
+        ]
+    },
+    {
+        "id": "0c2bb7a2a83a1113",
+        "type": "file in",
+        "z": "dc0d981398a42d88",
+        "g": "f3f4b4a22f8d1111",
+        "name": "schemes.json lesen",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 2670,
+        "y": 680,
+        "wires": [
+            [
+                "f5d8c9a8a2a1114"
+            ]
+        ]
+    },
+    {
+        "id": "f5d8c9a8a2a1114",
+        "type": "json",
+        "z": "dc0d981398a42d88",
+        "g": "f3f4b4a22f8d1111",
+        "name": "parse (tolerant)",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 2670,
+        "y": 620,
+        "wires": [
+            [
+                "9f7b5d6ac2d1115"
+            ]
+        ]
+    },
+    {
+        "id": "9f7b5d6ac2d1115",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "g": "f3f4b4a22f8d1111",
+        "name": "Wrap {data, version}",
+        "func": "const obj = (typeof msg.payload === 'object' && msg.payload) ? msg.payload : {};\nconst data = {\n  projektordnerSchema: (obj.projektordnerSchema ?? '').toString(),\n  sessionSchema: (obj.sessionSchema ?? '').toString()\n};\nmsg.payload = { data, version: String(Date.now()) };\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 2900,
+        "y": 620,
+        "wires": [
+            [
+                "c3e4d5f6a7b1116",
+                "77a939fd00b2c94a"
+            ]
+        ]
+    },
+    {
+        "id": "c3e4d5f6a7b1116",
+        "type": "http response",
+        "z": "dc0d981398a42d88",
+        "g": "f3f4b4a22f8d1111",
+        "name": "200",
+        "statusCode": "",
+        "headers": {},
+        "x": 3100,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "2a9c0d1e2f311117",
+        "type": "http in",
+        "z": "dc0d981398a42d88",
+        "g": "f3f4b4a22f8d1111",
+        "name": "",
+        "url": "/api/schema",
+        "method": "put",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 2240,
+        "y": 740,
+        "wires": [
+            [
+                "8e7d6c5b4a311119",
+                "2729b38d7e8e8fb5"
+            ]
+        ]
+    },
+    {
+        "id": "8e7d6c5b4a311119",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "g": "f3f4b4a22f8d1111",
+        "name": "Validate + toWrite",
+        "func": "// Body robust ermitteln ({schema:{…}}, {data:{…}} oder flach)\nconst body = (typeof msg.payload === 'object' && msg.payload) ? msg.payload : {};\nconst container =\n  (body.schema && typeof body.schema === 'object') ? body.schema :\n    (body.data && typeof body.data === 'object') ? body.data :\n      body;\n\nconst projekt = container?.projektordnerSchema;\nconst session = container?.sessionSchema;\nconst version = body?.version;\n\n// Validierung\nif (typeof version !== 'string' || typeof projekt !== 'string' || typeof session !== 'string') {\n  msg.statusCode = 400;\n  msg.payload = { error: 'bad_payload' };\n  return [null, msg];\n}\n\n// Für File-Node (schreibt nur die Schemes, ohne Version)\nmsg.payload = JSON.stringify({\n  projektordnerSchema: projekt,\n  sessionSchema: session\n}, null, 2);\n\nmsg.clientVersion = version;\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2590,
+        "y": 800,
+        "wires": [
+            [
+                "5fa35bb78c259faa",
+                "2729b38d7e8e8fb5"
+            ],
+            [
+                "3f2e1d0c9b811121",
+                "2729b38d7e8e8fb5"
+            ]
+        ],
+        "outputLabels": [
+            "okay",
+            "error"
+        ]
+    },
+    {
+        "id": "a1b2c3d4e5f61120",
+        "type": "file",
+        "z": "dc0d981398a42d88",
+        "g": "f3f4b4a22f8d1111",
+        "name": "schemes.json schreiben",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "utf8",
+        "x": 2950,
+        "y": 720,
+        "wires": [
+            [
+                "3f2e1d0c9b811121"
+            ]
+        ]
+    },
+    {
+        "id": "3f2e1d0c9b811121",
+        "type": "http response",
+        "z": "dc0d981398a42d88",
+        "g": "f3f4b4a22f8d1111",
+        "name": "Reply",
+        "statusCode": "",
+        "headers": {},
+        "x": 3250,
+        "y": 780,
+        "wires": [],
+        "info": "Bei Erfolg sendet der vorangehende http response (200) schon –\ndieser Knoten dient als Fallback für Fehlerausgänge."
+    },
+    {
+        "id": "7bbbd4653db740f1",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "g": "f3f4b4a22f8d1111",
+        "name": "schemes.json Verzeichnis",
+        "func": "msg.filename = global.get('PathStammdaten') + \"/schemes.json\";\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2450,
+        "y": 660,
+        "wires": [
+            [
+                "0c2bb7a2a83a1113"
+            ]
+        ]
+    },
+    {
+        "id": "77a939fd00b2c94a",
+        "type": "debug",
+        "z": "dc0d981398a42d88",
+        "g": "f3f4b4a22f8d1111",
+        "name": "debug 9",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3200,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "5fa35bb78c259faa",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "g": "f3f4b4a22f8d1111",
+        "name": "schemes.json Verzeichnis",
+        "func": "const base = global.get('PathStammdaten');\nif (!base) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'no_stammdaten_path' };\n    return [null, msg];\n}\nmsg.filename = base + '/schemes.json';\nreturn [msg, null];",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2670,
+        "y": 740,
+        "wires": [
+            [
+                "a1b2c3d4e5f61120"
+            ]
+        ]
+    },
+    {
+        "id": "2729b38d7e8e8fb5",
+        "type": "debug",
+        "z": "dc0d981398a42d88",
+        "g": "f3f4b4a22f8d1111",
+        "name": "debug 12",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2900,
+        "y": 820,
         "wires": []
     },
     {

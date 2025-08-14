@@ -4718,11 +4718,11 @@
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
-        "x": 220,
-        "y": 1500,
+        "x": 100,
+        "y": 1400,
         "wires": [
             [
-                "3f759076853c1377"
+                "323882591cd862a3"
             ]
         ]
     },
@@ -5938,6 +5938,53 @@
         "wires": [
             [
                 "3e3926b522449b96"
+            ]
+        ]
+    },
+    {
+        "id": "323882591cd862a3",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "Wipe User",
+        "func": "// Globale Variable löschen (reset)\nglobal.set(\"activeUser\", null);\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 270,
+        "y": 1480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9468d90cbe4abb54",
+        "type": "inject",
+        "z": "dc0d981398a42d88",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 80,
+        "y": 1500,
+        "wires": [
+            [
+                "323882591cd862a3"
             ]
         ]
     },

@@ -103,11 +103,15 @@ async function onLogout() {
       headers: { 'Content-Type': 'application/json' }
     })
     activeUser.value = null
+    window.electronAPI.relogin()
     scheduleReconnect()
   } finally {
     loggingOut.value = false
   }
 }
+
+
+
 </script>
 <style scoped>
 .border-b { border-bottom: 1px solid rgba(0,0,0,0.08); }

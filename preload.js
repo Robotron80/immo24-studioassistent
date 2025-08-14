@@ -1,45 +1,39 @@
 // preload.js
 const { contextBridge, ipcRenderer } = require('electron')
 
-console.log('[preload] loaded')
+// Kleiner Helfer: registriert einen Listener und gibt eine unsubscribe-Funktion zurück
+function on(channel, handler) {
+  ipcRenderer.on(channel, handler)
+  return () => ipcRenderer.off(channel, handler)
+}
 
-// 1) Bestehende API beibehalten
+// 1) Renderer-API
 contextBridge.exposeInMainWorld('electronAPI', {
+  // Ordnerauswahl (invoke → Promise)
   pickFolder: async (title, defaultPath) => {
     try {
-      const res = await ipcRenderer.invoke('pick-folder', { title, defaultPath })
-      return res
-    } catch (e) {
+      return await ipcRenderer.invoke('pick-folder', { title, defaultPath })
+    } catch {
       return null
     }
   },
+
+  // Re-Login (Main blendet Hauptfenster aus, öffnet Picker)
+  relogin: () => ipcRenderer.send('request-relogin'),
+
+  // Aktiven User vom Main erhalten (nach erfolgreicher Picker-Auswahl)
   onActiveUser: (cb) => {
-      const handler = (_e, user) => { try { cb(user) } catch {} }
-      ipcRenderer.on('active-user', handler)
-      return () => ipcRenderer.off('active-user', handler)
+    const handler = (_e, user) => { try { cb(user) } catch {} }
+    return on('active-user', handler)
   }
 })
 
-// 2) Neue Picker-Bridge für das Mitarbeiter-Fenster
-//    -> passt zu den IPC-Channels aus dem Main-Prozess:
-//       'users' (Liste), 'user-picked' (Auswahl), 'user-cancel' (Abbruch)
+// 2) Picker-Bridge (für assets/login.html)
 contextBridge.exposeInMainWorld('picker', {
-  // Liste empfangen; gibt eine unsubscribe-Funktion zurück
   onUsers: (cb) => {
-    const handler = (_evt, list) => {
-      try { cb(list) } catch {}
-    }
-    ipcRenderer.on('users', handler)
-    return () => ipcRenderer.off('users', handler)
+    const handler = (_e, list) => { try { cb(list) } catch {} }
+    return on('users', handler)
   },
-
-  // Auswahl an den Main-Prozess senden
-  choose: (user) => {
-    ipcRenderer.send('user-picked', user)
-  },
-
-  // Abbrechen
-  cancel: () => {
-    ipcRenderer.send('user-cancel')
-  }
+  choose: (user) => ipcRenderer.send('user-picked', user),
+  cancel: () => ipcRenderer.send('user-cancel')
 })

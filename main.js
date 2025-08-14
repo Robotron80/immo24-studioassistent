@@ -4,45 +4,45 @@ const { spawn } = require('child_process')
 const http = require('http')
 const fs = require('fs')
 
+// ————— Globals
 let nodeRedProcess
 let mainWindow
 let prefWin = null
 let splashWindow
 let pickerWin = null
 
+// Reuse eine TCP-Verbindung (spart ms pro Request)
+const keepAliveAgent = new http.Agent({ keepAlive: true })
+
+// === 1) Setup: User-Dateien bereitstellen (synchron, aber winzig)
 function ensureUserJsonFiles() {
   const basePath = app.getPath('userData')
   const srcDir = path.join(__dirname, 'assets')
   const files = ['path.json', 'adminpw.json']
-
   for (const file of files) {
     const dest = path.join(basePath, file)
     if (!fs.existsSync(dest)) {
       const src = path.join(srcDir, file)
-      if (fs.existsSync(src)) {
-        fs.copyFileSync(src, dest)
-        console.log(`Kopiere ${file} nach ${dest}`)
-      } else {
-        fs.writeFileSync(dest, '{}')
-        console.log(`Erstelle leere Datei: ${dest}`)
-      }
+      if (fs.existsSync(src)) fs.copyFileSync(src, dest)
+      else fs.writeFileSync(dest, '{}')
     }
   }
 }
 
-// --- Node-RED Helpers ------------------------------------------------------
+// === 2) Node‑RED Helpers (mit Keep‑Alive & robusten Defaults)
 function getUsersFromNodeRed() {
   return new Promise((resolve) => {
-    const req = http.request({ host: '127.0.0.1', port: 1880, path: '/api/user', method: 'GET' }, res => {
-      let data = ''
-      res.on('data', chunk => data += chunk)
-      res.on('end', () => {
-        try {
-          const json = JSON.parse(data)
-          resolve(Array.isArray(json) ? json : [])
-        } catch { resolve([]) }
-      })
-    })
+    const req = http.request(
+      { host: '127.0.0.1', port: 1880, path: '/api/user', method: 'GET', agent: keepAliveAgent },
+      (res) => {
+        let data = ''
+        res.on('data', (c) => (data += c))
+        res.on('end', () => {
+          try { const json = JSON.parse(data); resolve(Array.isArray(json) ? json : []) }
+          catch { resolve([]) }
+        })
+      }
+    )
     req.on('error', () => resolve([]))
     req.end()
   })
@@ -51,36 +51,67 @@ function getUsersFromNodeRed() {
 function postActiveUserToNodeRed(user) {
   return new Promise((resolve) => {
     const payload = Buffer.from(JSON.stringify({ user }))
-    const req = http.request({
-      host: '127.0.0.1', port: 1880, path: '/api/user', method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Content-Length': payload.length }
-    }, res => resolve(res.statusCode >= 200 && res.statusCode < 300))
+    const req = http.request(
+      {
+        host: '127.0.0.1',
+        port: 1880,
+        path: '/api/user',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Content-Length': payload.length },
+        agent: keepAliveAgent
+      },
+      (res) => resolve(res.statusCode >= 200 && res.statusCode < 300)
+    )
     req.on('error', () => resolve(false))
     req.write(payload)
     req.end()
   })
 }
 
-function waitForNodeRedReady({ host = '127.0.0.1', port = 1880, path_ = '/api/user', timeoutMs = 15000, intervalMs = 300 } = {}) {
-  const start = Date.now()
+function postLogoutToNodeRed() {
   return new Promise((resolve) => {
-    const tryOnce = () => {
-      const req = http.request({ host, port, path: path_, method: 'HEAD' }, (res) => {
-        if (res.statusCode >= 200 && res.statusCode < 400) return resolve(true)
-        next()
-      })
-      req.on('error', next)
-      req.end()
-      function next() {
-        if (Date.now() - start >= timeoutMs) return resolve(false)
-        setTimeout(tryOnce, intervalMs)
-      }
-    }
-    tryOnce()
+    const req = http.request(
+      { host: '127.0.0.1', port: 1880, path: '/api/logout', method: 'POST', agent: keepAliveAgent },
+      (res) => resolve(res.statusCode >= 200 && res.statusCode < 300)
+    )
+    req.on('error', () => resolve(false))
+    req.end()
   })
 }
 
-// --- Windows ---------------------------------------------------------------
+// Schneller, fairer Ready‑Check: sofortiger Versuch + exponentielles Backoff
+async function waitForNodeRedReady({
+  host = '127.0.0.1',
+  port = 1880,
+  path_ = '/api/user',
+  timeoutMs = 12000,         // etwas straffer
+  minDelay = 120,
+  maxDelay = 600
+} = {}) {
+  const start = Date.now()
+  let delay = minDelay
+
+  const tryOnce = () =>
+    new Promise((resolve) => {
+      const req = http.request({ host, port, path: path_, method: 'HEAD', agent: keepAliveAgent }, (res) => {
+        resolve(res.statusCode >= 200 && res.statusCode < 400)
+      })
+      req.on('error', () => resolve(false))
+      req.end()
+    })
+
+  // Erster Versuch sofort:
+  if (await tryOnce()) return true
+
+  while (Date.now() - start < timeoutMs) {
+    await new Promise((r) => setTimeout(r, delay))
+    if (await tryOnce()) return true
+    delay = Math.min(Math.floor(delay * 1.6), maxDelay)
+  }
+  return false
+}
+
+// === 3) Windows
 function createUserPickerWindow() {
   if (pickerWin && !pickerWin.isDestroyed()) return pickerWin
   pickerWin = new BrowserWindow({
@@ -92,16 +123,10 @@ function createUserPickerWindow() {
 }
 
 function createSplashWindow() {
+  // Tipp: Lade Splash nur, wenn das Warten > 250ms dauern wird – vermeidet „Blinken“:
   splashWindow = new BrowserWindow({
-    width: 420,
-    height: 300,
-    resizable: false,
-    frame: false,
-    transparent: false,
-    alwaysOnTop: true,
-    center: true,
-    show: true,
-    movable: true,
+    width: 420, height: 300, resizable: false, frame: false, transparent: false,
+    alwaysOnTop: true, center: true, show: true, movable: true,
     webPreferences: { nodeIntegration: false, contextIsolation: true }
   })
   splashWindow.loadFile(path.join(__dirname, 'assets', 'loading.html'))
@@ -109,11 +134,9 @@ function createSplashWindow() {
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 900,
-    useContentSize: true,
+    width: 1200, height: 900, useContentSize: true,
     icon: path.join(__dirname, 'assets', 'icon.png'),
-    show: false, // wichtig: erst später zeigen
+    show: false, // erst nach Auswahl zeigen
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -121,10 +144,10 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
     }
   })
-  // WICHTIG: Hier KEIN loadURL/loadFile – erst nach Node-RED-Ready
+  // Wichtig: KEIN loadURL/loadFile hier – das passiert erst nach Ready‑Ping
 }
 
-// --- IPC -------------------------------------------------------------------
+// === 4) IPC
 ipcMain.on('user-picked', async (_evt, user) => {
   await postActiveUserToNodeRed(user)
   if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send('active-user', user)
@@ -136,66 +159,48 @@ ipcMain.on('user-picked', async (_evt, user) => {
 ipcMain.on('user-cancel', () => {
   if (pickerWin && !pickerWin.isDestroyed()) { pickerWin.close(); pickerWin = null }
   if (splashWindow && !splashWindow.isDestroyed()) { splashWindow.close(); splashWindow = null }
-  if (mainWindow && !mainWindow.isDestroyed()) mainWindow.show() // oder app.quit()
+  if (mainWindow && !mainWindow.isDestroyed()) mainWindow.show() // alternativ: app.quit()
 })
 
-// --- Node-RED Start --------------------------------------------------------
+ipcMain.on('request-relogin', async () => {
+  await postLogoutToNodeRed()
+  if (mainWindow && !mainWindow.isDestroyed()) mainWindow.hide()
+  const users = await getUsersFromNodeRed() // vorab laden → fühlt sich schneller an
+  const pw = createUserPickerWindow()
+  pw.webContents.once('did-finish-load', () => pw.webContents.send('users', users))
+})
+
+// === 5) Node‑RED starten (Früh, aber nicht blockierend)
 function startNodeRED() {
   const nodeRedDir = path.join(__dirname, 'node-red-portable')
   const redJs = path.join(nodeRedDir, 'node_modules', 'node-red', 'red.js')
   let nodeBinary
+  if (process.platform === 'win32') nodeBinary = path.join(__dirname, 'bin', 'node.exe')
+  else if (process.platform === 'darwin') nodeBinary = path.join(__dirname, 'bin', process.arch === 'arm64' ? 'node-arm64' : 'node-x64')
+  else nodeBinary = path.join(__dirname, 'bin', 'node')
 
-  if (process.platform === 'win32') {
-    nodeBinary = path.join(__dirname, 'bin', 'node.exe')
-  } else if (process.platform === 'darwin') {
-    if (process.arch === 'arm64') {
-      nodeBinary = path.join(__dirname, 'bin', 'node-arm64')
-    } else {
-      nodeBinary = path.join(__dirname, 'bin', 'node-x64')
-    }
-  } else {
-    nodeBinary = path.join(__dirname, 'bin', 'node')
-  }
-
-  console.log('Starte Node-RED!', { nodeBinary, redJs, nodeRedDir })
-
-  if (!fs.existsSync(nodeBinary)) {
-    console.error('Node-Binary NICHT gefunden!')
-    app.quit()
-    return
-  }
-  if (!fs.existsSync(redJs)) {
-    console.error('red.js NICHT gefunden!')
-    app.quit()
-    return
-  }
+  if (!fs.existsSync(nodeBinary) || !fs.existsSync(redJs)) { app.quit(); return }
 
   const basePath = app.getPath('userData')
-  const configPath = path.join(basePath, 'AppBasePath.json')
-  fs.writeFileSync(configPath, JSON.stringify({ AppBasePath: basePath }, null, 2))
-  console.log('App-Version an Node-RED:', app.getVersion())
+  fs.writeFileSync(path.join(basePath, 'AppBasePath.json'), JSON.stringify({ AppBasePath: basePath }, null, 2))
 
-  nodeRedProcess = spawn(
-    nodeBinary,
-    [redJs, '-u', nodeRedDir, '--port', '1880'],
-    {
-      cwd: nodeRedDir,
-      stdio: 'pipe',
-      env: {
-        ...process.env,
-        IMMO24_USERDATA: app.getPath('userData'),
-        APP_VERSION: app.getVersion()
-      }
-    }
-  )
+  nodeRedProcess = spawn(nodeBinary, [redJs, '-u', nodeRedDir, '--port', '1880'], {
+    cwd: nodeRedDir,
+    stdio: ['ignore', 'pipe', 'pipe'], // weniger IO als 'inherit'
+    env: { ...process.env, IMMO24_USERDATA: basePath, APP_VERSION: app.getVersion() }
+  })
 
-  nodeRedProcess.stdout.on('data', (data) => console.log(`[Node-RED] ${data}`))
-  nodeRedProcess.stderr.on('data', (data) => console.error(`[Node-RED ERROR] ${data}`))
+  // Logs drosseln (nur erste Zeilen + Fehler zeigen), um Console-Spam zu vermeiden
+  let firstOut = true
+  nodeRedProcess.stdout.on('data', (d) => {
+    if (firstOut) { console.log(`[Node-RED] ${String(d)}`.trim()); firstOut = false }
+  })
+  nodeRedProcess.stderr.on('data', (d) => console.error(`[Node-RED ERROR] ${String(d)}`.trim()))
   nodeRedProcess.on('error', (err) => console.error('[Node-RED SPAWN ERROR]', err))
   nodeRedProcess.on('exit', (code, signal) => console.log(`[Node-RED EXIT] code: ${code}, signal: ${signal}`))
 }
 
-// --- IPC: Verzeichnis wählen ----------------------------------------------
+// === 6) Sonstige IPC (Preferences)
 function registerIpc() {
   ipcMain.removeHandler('pick-folder')
   ipcMain.handle('pick-folder', async (evt, args = {}) => {
@@ -207,17 +212,13 @@ function registerIpc() {
       properties: ['openDirectory', 'createDirectory'],
       buttonLabel: 'Auswählen',
     })
-    return (!result.canceled && Array.isArray(result.filePaths) && result.filePaths[0])
-      ? result.filePaths[0]
-      : null
+    return (!result.canceled && Array.isArray(result.filePaths) && result.filePaths[0]) ? result.filePaths[0] : null
   })
 }
 
-// --- Preferences Window ----------------------------------------------------
 function createPreferencesWindow() {
   if (prefWin && !prefWin.isDestroyed()) { prefWin.focus(); return }
 
-  // Parent nur setzen, wenn ein sichtbares Fenster existiert:
   const parent =
     (pickerWin && !pickerWin.isDestroyed() && pickerWin.isVisible()) ? pickerWin :
     (mainWindow && !mainWindow.isDestroyed() && mainWindow.isVisible()) ? mainWindow :
@@ -225,103 +226,81 @@ function createPreferencesWindow() {
 
   const opts = {
     width: 900, height: 650, resizable: true, title: 'Konfiguration',
-    // Wenn der Picker offen ist: modal zum Picker, damit es oben bleibt
     parent: parent || undefined,
     modal: !!(pickerWin && !pickerWin.isDestroyed() && pickerWin.isVisible()),
-    show: false, // erst zeigen, wenn geladen
-    webPreferences: {
-      contextIsolation: true,
-      nodeIntegration: false,
-      preload: path.join(__dirname, 'preload.js'),
-    }
+    show: false,
+    webPreferences: { contextIsolation: true, nodeIntegration: false, preload: path.join(__dirname, 'preload.js') }
   }
-
-  // Wenn kein Parent ermittelt wurde, parent aus den Optionen entfernen
   if (!parent) delete opts.parent
 
   prefWin = new BrowserWindow(opts)
   prefWin.setMenu(null)
 
   const isDev = !!process.env.ELECTRON_START_URL
-  if (isDev) {
-    prefWin.loadURL(process.env.ELECTRON_START_URL + '/konfiguration')
-  } else {
-    const file = path.join(__dirname, 'immo24-ui', 'dist', 'index.html')
-    prefWin.loadFile(file)
-  }
+  if (isDev) prefWin.loadURL(process.env.ELECTRON_START_URL + '/konfiguration')
+  else prefWin.loadFile(path.join(__dirname, 'immo24-ui', 'dist', 'index.html'))
 
   prefWin.once('ready-to-show', () => prefWin.show())
   prefWin.on('closed', () => { prefWin = null })
 }
 
-// --- Menu ------------------------------------------------------------------
+// === 7) Menü
 const isMac = process.platform === 'darwin'
 const template = [
   ...(isMac ? [{
     label: app.name,
     submenu: [
-      { role: 'about' },
-      { type: 'separator' },
+      { role: 'about' }, { type: 'separator' },
       { label: 'Konfiguration', accelerator: 'CommandOrControl+,', click: createPreferencesWindow },
-      { type: 'separator' },
-      { role: 'hide' }, { role: 'hideOthers' }, { role: 'unhide' },
-      { type: 'separator' },
-      { role: 'quit' }
+      { type: 'separator' }, { role: 'hide' }, { role: 'hideOthers' }, { role: 'unhide' },
+      { type: 'separator' }, { role: 'quit' }
     ]
   }] : [{
     label: 'Datei',
     submenu: [
       { label: 'Konfiguration', accelerator: 'CommandOrControl+,', click: createPreferencesWindow },
-      { type: 'separator' },
-      { role: 'quit' }
+      { type: 'separator' }, { role: 'quit' }
     ]
   }]),
   {
     label: 'Ansicht',
     submenu: [
-      { role: 'reload' },
-      { role: 'forceReload' },
-      { role: 'toggleDevTools' },
-      { type: 'separator' },
-      { role: 'resetZoom' },
-      { role: 'zoomIn' },
-      { role: 'zoomOut' },
-      { type: 'separator' },
-      { role: 'togglefullscreen' }
+      { role: 'reload' }, { role: 'forceReload' }, { role: 'toggleDevTools' },
+      { type: 'separator' }, { role: 'resetZoom' }, { role: 'zoomIn' }, { role: 'zoomOut' },
+      { type: 'separator' }, { role: 'togglefullscreen' }
     ]
   }
 ]
 const menu = Menu.buildFromTemplate(template)
 Menu.setApplicationMenu(menu)
 
-// --- App Lifecycle ---------------------------------------------------------
+// === 8) App Lifecycle
 app.whenReady().then(async () => {
   ensureUserJsonFiles()
-  createSplashWindow()
+
+  // Splash nur zeigen, wenn’s voraussichtlich länger dauert (optional):
+  const splashTimer = setTimeout(() => createSplashWindow(), 250)
+
   startNodeRED()
   createWindow()
   registerIpc()
 
-  // 1) Warten bis Node-RED erreichbar
-  await waitForNodeRedReady({ path_: '/api/user', timeoutMs: 15000 })
+  const ready = await waitForNodeRedReady({ path_: '/api/user', timeoutMs: 12000 })
+  if (!ready) console.warn('Node‑RED nicht rechtzeitig bereit – starte trotzdem')
 
-  // 2) Erst jetzt die App in das Hauptfenster laden (damit nichts „im Hintergrund“ feuert)
-  const isDev = !app.isPackaged || process.env.NODE_ENV === 'development' || process.env.ELECTRON_START_URL
-  if (isDev) {
-    await mainWindow.loadURL(process.env.ELECTRON_START_URL || 'http://localhost:3000')
-  } else {
-    await mainWindow.loadFile(path.join(__dirname, 'immo24-ui', 'dist', 'index.html'))
-  }
-
-  // 3) Picker öffnen und mit Userliste füttern
-  const pw = createUserPickerWindow()
-  const users = await getUsersFromNodeRed()
-  pw.webContents.on('did-finish-load', () => {
-    pw.webContents.send('users', users)
-  })
-
-  // 4) Splash schließen – Hauptfenster wird erst nach 'user-picked' gezeigt
+  // Splash aufräumen
+  clearTimeout(splashTimer)
   if (splashWindow && !splashWindow.isDestroyed()) splashWindow.close()
+
+  // Jetzt erst die App laden (verhindert „Hintergrund‑Requests“)
+  const isDev = !app.isPackaged || process.env.NODE_ENV === 'development' || process.env.ELECTRON_START_URL
+  if (isDev) await mainWindow.loadURL(process.env.ELECTRON_START_URL || 'http://localhost:3000')
+  else await mainWindow.loadFile(path.join(__dirname, 'immo24-ui', 'dist', 'index.html'))
+
+  // Picker: Nutzerliste parallel holen, dann anzeigen
+  const users = await getUsersFromNodeRed()
+  const pw = createUserPickerWindow()
+  pw.webContents.once('did-finish-load', () => pw.webContents.send('users', users))
 })
 
 app.on('window-all-closed', () => {

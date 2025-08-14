@@ -32,58 +32,55 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
 const activeUser  = ref(null)
 const loggingOut  = ref(false)
+const reloginInProgress = ref(false)   // verhindert WS-Reconnect während Re-Login
 const isLoggedIn  = computed(() => !!activeUser.value)
 const displayName = computed(() => activeUser.value || 'Nicht angemeldet')
 
 let ws = null
 let reconnectTimer = null
 
+function getApiBase () {
+  const env = import.meta.env?.VITE_API_BASE
+  if (env) return env.replace(/\/$/, '')
+  if (typeof location !== 'undefined' && location.protocol.startsWith('http')) return location.origin
+  return 'http://127.0.0.1:1880'
+}
+const API_BASE = getApiBase()
+
 function resolveWsUrl() {
-  const env = import.meta.env.VITE_WS_URL
-  // ENV gesetzt?
+  const env = import.meta.env?.VITE_WS_URL
   if (env) {
-    // Relativer Pfad -> zu absoluter URL machen (Dev via Vite-Proxy)
-    if (env.startsWith('/')) {
-      const origin = (typeof window !== 'undefined' && window.location?.origin)
-        ? window.location.origin
-        : 'http://127.0.0.1:3000' // Fallback für Sicherheit
-      return origin.replace(/^http/, 'ws') + env
-    }
-    // Bereits absolut (ws:// oder wss://)
-    return env
+    if (/^wss?:\/\//i.test(env)) return env
+    const base = (typeof location !== 'undefined' && location.protocol.startsWith('http'))
+      ? location.origin
+      : API_BASE
+    return base.replace(/^http/, 'ws') + (env.startsWith('/') ? env : `/${env}`)
   }
-  // Kein ENV -> zur Laufzeit aus origin ableiten oder Electron-Fallback
-  if (location.protocol.startsWith('http')) {
+  if (typeof location !== 'undefined' && location.protocol.startsWith('http')) {
     return `${location.origin.replace(/^http/, 'ws')}/ws/activeUser`
   }
-  return 'ws://127.0.0.1:1880/ws/activeUser'
+  return API_BASE.replace(/^http/, 'ws') + '/ws/activeUser'
 }
 
 function connectWS() {
+  if (reloginInProgress.value) return
   const url = resolveWsUrl()
-  console.info('[WS] connecting to:', url)
-
-  try {
-    ws = new WebSocket(url)
-  } catch (e) {
+  try { ws = new WebSocket(url) } catch (e) {
     console.warn('[WS] ctor error', e)
     return scheduleReconnect()
   }
-
   ws.onopen = () => console.info('[WS] connected')
-
   ws.onmessage = (ev) => {
-    console.info('[WS] message', ev.data)
     try {
       const data = JSON.parse(ev.data)
       activeUser.value = data.activeUser || data.user || data.username || null
-    } catch {
-      activeUser.value = null
-    }
+    } catch { activeUser.value = null }
   }
-
   ws.onerror = (e) => { console.warn('[WS] error', e); try { ws.close() } catch {} }
-  ws.onclose = () => { console.warn('[WS] closed — retry in 2000ms'); scheduleReconnect() }
+  ws.onclose = () => {
+    console.warn('[WS] closed')
+    if (!reloginInProgress.value) scheduleReconnect()
+  }
 }
 
 function scheduleReconnect() {
@@ -91,28 +88,41 @@ function scheduleReconnect() {
   reconnectTimer = setTimeout(connectWS, 2000)
 }
 
-onMounted(connectWS)
-onBeforeUnmount(() => { try { ws?.close() } catch {}; clearTimeout(reconnectTimer) })
+onMounted(() => {
+  connectWS()
+
+  // Picker-Ende: Main sendet 'active-user', wenn im Picker bestätigt
+  const offActive = window.electronAPI?.onActiveUser?.((user) => {
+    console.log('[Renderer] active-user event', user)
+    activeUser.value = user || null
+    reloginInProgress.value = false
+    connectWS() // neuen WS starten, weil alter bei Logout beendet wurde
+  })
+
+  // Falls du das Unsubscribe nutzen willst:
+  onBeforeUnmount(() => {
+    if (typeof offActive === 'function') offActive()
+  })
+})
 
 async function onLogout() {
   loggingOut.value = true
   try {
-    await fetch('/api/logout', {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' }
-    })
+    // WS aus, keine Reconnects während Re-Login
+    clearTimeout(reconnectTimer)
+    try { ws?.close() } catch {}
     activeUser.value = null
-    window.electronAPI.relogin()
-    scheduleReconnect()
+
+    console.log('[Renderer] invoking hideAndOpenPicker…')
+    const res = await window.electronAPI?.hideAndOpenPicker?.({ doLogout: true })
+    console.log('[Renderer] hideAndOpenPicker result:', res)
+  } catch (e) {
+    console.error('[Renderer] hideAndOpenPicker failed', e)
   } finally {
     loggingOut.value = false
   }
-}
+}</script>
 
-
-
-</script>
 <style scoped>
 .border-b { border-bottom: 1px solid rgba(0,0,0,0.08); }
 </style>

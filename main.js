@@ -1,42 +1,41 @@
+// main.js
 const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron')
 const path = require('path')
 const { spawn } = require('child_process')
 const http = require('http')
 const fs = require('fs')
 
-// ————— Globals
+/* ────────────────────────────── Globals ────────────────────────────── */
 let nodeRedProcess
 let mainWindow
 let prefWin = null
 let splashWindow
 let pickerWin = null
 
-// Reuse eine TCP-Verbindung (spart ms pro Request)
+// Reuse TCP-Verbindungen für alle HTTP-Calls zu Node-RED
 const keepAliveAgent = new http.Agent({ keepAlive: true })
 
-// === 1) Setup: User-Dateien bereitstellen (synchron, aber winzig)
+/* ───────────────────────── Setup: User-Dateien ─────────────────────── */
 function ensureUserJsonFiles() {
   const basePath = app.getPath('userData')
   const srcDir = path.join(__dirname, 'assets')
-  const files = ['path.json', 'adminpw.json']
-  for (const file of files) {
+  for (const file of ['path.json', 'adminpw.json']) {
     const dest = path.join(basePath, file)
     if (!fs.existsSync(dest)) {
       const src = path.join(srcDir, file)
-      if (fs.existsSync(src)) fs.copyFileSync(src, dest)
-      else fs.writeFileSync(dest, '{}')
+      fs.existsSync(src) ? fs.copyFileSync(src, dest) : fs.writeFileSync(dest, '{}')
     }
   }
 }
 
-// === 2) Node‑RED Helpers (mit Keep‑Alive & robusten Defaults)
+/* ─────────────────────── Node‑RED: HTTP‑Helpers ────────────────────── */
 function getUsersFromNodeRed() {
   return new Promise((resolve) => {
     const req = http.request(
       { host: '127.0.0.1', port: 1880, path: '/api/user', method: 'GET', agent: keepAliveAgent },
       (res) => {
         let data = ''
-        res.on('data', (c) => (data += c))
+        res.on('data', c => (data += c))
         res.on('end', () => {
           try { const json = JSON.parse(data); resolve(Array.isArray(json) ? json : []) }
           catch { resolve([]) }
@@ -53,66 +52,55 @@ function postActiveUserToNodeRed(user) {
     const payload = Buffer.from(JSON.stringify({ user }))
     const req = http.request(
       {
-        host: '127.0.0.1',
-        port: 1880,
-        path: '/api/user',
-        method: 'POST',
+        host: '127.0.0.1', port: 1880, path: '/api/user', method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Content-Length': payload.length },
         agent: keepAliveAgent
       },
       (res) => resolve(res.statusCode >= 200 && res.statusCode < 300)
     )
     req.on('error', () => resolve(false))
-    req.write(payload)
-    req.end()
+    req.write(payload); req.end()
   })
 }
 
-function postLogoutToNodeRed() {
+// schneller, fehlertoleranter Logout (non-blocking verwendbar)
+function postLogoutToNodeRed(timeoutMs = 1200) {
   return new Promise((resolve) => {
     const req = http.request(
       { host: '127.0.0.1', port: 1880, path: '/api/logout', method: 'POST', agent: keepAliveAgent },
-      (res) => resolve(res.statusCode >= 200 && res.statusCode < 300)
+      (res) => { res.resume(); resolve(res.statusCode >= 200 && res.statusCode < 300) }
     )
+    req.setTimeout(timeoutMs, () => { try { req.destroy(new Error('logout timeout')) } catch {} })
     req.on('error', () => resolve(false))
     req.end()
   })
 }
 
-// Schneller, robuster Ready-Check mit Request-Timeout und Backoff
+/* ───────────── Ready‑Check: HEAD‑Ping mit Backoff & Timeout ─────────── */
 async function waitForNodeRedReady({
   host = '127.0.0.1',
   port = 1880,
   path_ = '/api/user',
-  timeoutMs = 12000,       // harte Obergrenze
-  perRequestTimeout = 1500,// Timeout je Probe
-  minDelay = 120,          // Backoff Start
+  timeoutMs = 12000,      // harte Obergrenze
+  perRequestTimeout = 1500,
+  minDelay = 120,
   maxDelay = 600,
-  useAgent = false         // wichtig: HEAD ohne Keep-Alive → vermeidet hängende Sockets
+  useAgent = false        // HEAD ohne Keep‑Alive vermeidet hängende Sockets
 } = {}) {
   const start = Date.now()
   let delay = minDelay
 
-  const tryOnce = () =>
-    new Promise((resolve) => {
-      const req = http.request(
-        { host, port, path: path_, method: 'HEAD', agent: useAgent ? keepAliveAgent : undefined },
-        (res) => {
-          // Body nicht lesen → sofort freigeben
-          res.resume()
-          resolve(res.statusCode >= 200 && res.statusCode < 400)
-        }
-      )
-      // Harte Abbruchkante für hängende Sockets
-      req.setTimeout(perRequestTimeout, () => { req.destroy(new Error('probe timeout')) })
-      req.on('error', () => resolve(false))
-      req.end()
-    })
+  const tryOnce = () => new Promise((resolve) => {
+    const req = http.request(
+      { host, port, path: path_, method: 'HEAD', agent: useAgent ? keepAliveAgent : undefined },
+      (res) => { res.resume(); resolve(res.statusCode >= 200 && res.statusCode < 400) }
+    )
+    req.setTimeout(perRequestTimeout, () => { try { req.destroy(new Error('probe timeout')) } catch {} })
+    req.on('error', () => resolve(false))
+    req.end()
+  })
 
-  // 1. Versuch sofort:
   if (await tryOnce()) return true
-
-  // Backoff bis Obergrenze:
   while (Date.now() - start < timeoutMs) {
     await new Promise(r => setTimeout(r, delay))
     if (await tryOnce()) return true
@@ -121,7 +109,7 @@ async function waitForNodeRedReady({
   return false
 }
 
-// === 3) Windows
+/* ───────────────────────────── Fenster ─────────────────────────────── */
 function createUserPickerWindow() {
   if (pickerWin && !pickerWin.isDestroyed()) return pickerWin
   pickerWin = new BrowserWindow({
@@ -133,7 +121,6 @@ function createUserPickerWindow() {
 }
 
 function createSplashWindow() {
-  // Tipp: Lade Splash nur, wenn das Warten > 250ms dauern wird – vermeidet „Blinken“:
   splashWindow = new BrowserWindow({
     width: 420, height: 300, resizable: false, frame: false, transparent: false,
     alwaysOnTop: true, center: true, show: true, movable: true,
@@ -146,7 +133,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200, height: 900, useContentSize: true,
     icon: path.join(__dirname, 'assets', 'icon.png'),
-    show: false, // erst nach Auswahl zeigen
+    show: false, // erst nach Anmeldung
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -154,10 +141,57 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
     }
   })
-  // Wichtig: KEIN loadURL/loadFile hier – das passiert erst nach Ready‑Ping
+  // WICHTIG: KEIN loadURL/loadFile hier – erst nach Node‑RED‑Ready
 }
 
-// === 4) IPC
+// zuverlässig verstecken (behandelt Fullscreen/Kiosk etc.)
+async function hideMainWindowRobust(win, maxWaitMs = 900) {
+  if (!win || win.isDestroyed()) return
+  try { win.setFullScreen(false) } catch {}
+  try { win.setKiosk(false) } catch {}
+  try { win.unmaximize() } catch {}
+  try { win.setAlwaysOnTop(false) } catch {}
+  try { win.setVisibleOnAllWorkspaces(false) } catch {}
+  try { win.blur() } catch {}
+  try { win.hide() } catch {}
+
+  const start = Date.now()
+  while (Date.now() - start < maxWaitMs) {
+    if (!win.isVisible()) break
+    await new Promise(r => setTimeout(r, 40))
+  }
+  if (win.isVisible()) { try { win.minimize() } catch {} }
+}
+
+/* ─────────────── Zentraler Flow: Fenster weg + Picker ──────────────── */
+async function openPickerFlow({ doLogout = true } = {}) {
+  // 1) Prefs schließen (sonst ziehen sie das Main ggf. hoch)
+  if (prefWin && !prefWin.isDestroyed()) { prefWin.close(); prefWin = null }
+
+  // 2) Main-Fenster robust verstecken
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    await hideMainWindowRobust(mainWindow)
+  }
+
+  // 3) Logout *parallel* (UI nicht blockieren)
+  if (doLogout) postLogoutToNodeRed(1200).catch(() => {})
+
+  // 4) Picker öffnen / fokussieren
+  if (!pickerWin || pickerWin.isDestroyed()) pickerWin = createUserPickerWindow()
+  else { pickerWin.show(); pickerWin.focus() }
+
+  // 5) Userliste laden und an Picker senden
+  const users = await getUsersFromNodeRed()
+  const sendUsers = () => { try { pickerWin.webContents.send('users', users) } catch {} }
+  pickerWin.webContents.isLoading()
+    ? pickerWin.webContents.once('did-finish-load', sendUsers)
+    : sendUsers()
+
+  return { ok: true }
+}
+
+/* ───────────────────────────── IPC ──────────────────────────────────── */
+// Picker bestätigt Auswahl → aktiven User an Renderer, Picker schließen, Main zeigen
 ipcMain.on('user-picked', async (_evt, user) => {
   await postActiveUserToNodeRed(user)
   if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send('active-user', user)
@@ -166,21 +200,16 @@ ipcMain.on('user-picked', async (_evt, user) => {
   if (mainWindow && !mainWindow.isDestroyed()) mainWindow.show()
 })
 
-ipcMain.on('user-cancel', () => {
-  if (pickerWin && !pickerWin.isDestroyed()) { pickerWin.close(); pickerWin = null }
-  if (splashWindow && !splashWindow.isDestroyed()) { splashWindow.close(); splashWindow = null }
-  if (mainWindow && !mainWindow.isDestroyed()) mainWindow.show() // alternativ: app.quit()
+// Picker „Beenden“ → ganze App schließen
+ipcMain.on('app-quit', () => { app.quit() })
+
+// Renderer will: Fenster verstecken + (optional) Logout + Picker öffnen
+ipcMain.handle('renderer-hide-and-pick', async (_evt, args) => {
+  try { return await openPickerFlow(args || { doLogout: true }) }
+  catch (e) { return { ok: false, error: String(e) } }
 })
 
-ipcMain.on('request-relogin', async () => {
-  await postLogoutToNodeRed()
-  if (mainWindow && !mainWindow.isDestroyed()) mainWindow.hide()
-  const users = await getUsersFromNodeRed() // vorab laden → fühlt sich schneller an
-  const pw = createUserPickerWindow()
-  pw.webContents.once('did-finish-load', () => pw.webContents.send('users', users))
-})
-
-// === 5) Node‑RED starten (Früh, aber nicht blockierend)
+/* ───────────────────────── Node‑RED Start ───────────────────────────── */
 function startNodeRED() {
   const nodeRedDir = path.join(__dirname, 'node-red-portable')
   const redJs = path.join(nodeRedDir, 'node_modules', 'node-red', 'red.js')
@@ -196,21 +225,18 @@ function startNodeRED() {
 
   nodeRedProcess = spawn(nodeBinary, [redJs, '-u', nodeRedDir, '--port', '1880'], {
     cwd: nodeRedDir,
-    stdio: ['ignore', 'pipe', 'pipe'], // weniger IO als 'inherit'
+    stdio: ['ignore', 'pipe', 'pipe'],
     env: { ...process.env, IMMO24_USERDATA: basePath, APP_VERSION: app.getVersion() }
   })
 
-  // Logs drosseln (nur erste Zeilen + Fehler zeigen), um Console-Spam zu vermeiden
   let firstOut = true
-  nodeRedProcess.stdout.on('data', (d) => {
-    if (firstOut) { console.log(`[Node-RED] ${String(d)}`.trim()); firstOut = false }
-  })
-  nodeRedProcess.stderr.on('data', (d) => console.error(`[Node-RED ERROR] ${String(d)}`.trim()))
-  nodeRedProcess.on('error', (err) => console.error('[Node-RED SPAWN ERROR]', err))
+  nodeRedProcess.stdout.on('data', d => { if (firstOut) { console.log(`[Node-RED] ${String(d)}`.trim()); firstOut = false } })
+  nodeRedProcess.stderr.on('data', d => console.error(`[Node-RED ERROR] ${String(d)}`.trim()))
+  nodeRedProcess.on('error', err => console.error('[Node-RED SPAWN ERROR]', err))
   nodeRedProcess.on('exit', (code, signal) => console.log(`[Node-RED EXIT] code: ${code}, signal: ${signal}`))
 }
 
-// === 6) Sonstige IPC (Preferences)
+/* ─────────────── Sonstige IPC (Ordnerauswahl/Prefs) ──────────────── */
 function registerIpc() {
   ipcMain.removeHandler('pick-folder')
   ipcMain.handle('pick-folder', async (evt, args = {}) => {
@@ -254,7 +280,7 @@ function createPreferencesWindow() {
   prefWin.on('closed', () => { prefWin = null })
 }
 
-// === 7) Menü
+/* ───────────────────────────── Menü ────────────────────────────────── */
 const isMac = process.platform === 'darwin'
 const template = [
   ...(isMac ? [{
@@ -262,8 +288,12 @@ const template = [
     submenu: [
       { role: 'about' }, { type: 'separator' },
       { label: 'Konfiguration', accelerator: 'CommandOrControl+,', click: createPreferencesWindow },
-      { type: 'separator' }, { role: 'hide' }, { role: 'hideOthers' }, { role: 'unhide' },
-      { type: 'separator' }, { role: 'quit' }
+      { type: 'separator' },
+      { role: 'hide' }, { role: 'hideOthers' }, { role: 'unhide' },
+      { type: 'separator' },
+      { label: 'Abmelden', click: () => openPickerFlow({ doLogout: false }) },
+      { type: 'separator' },
+      { role: 'quit' }
     ]
   }] : [{
     label: 'Datei',
@@ -281,14 +311,13 @@ const template = [
     ]
   }
 ]
-const menu = Menu.buildFromTemplate(template)
-Menu.setApplicationMenu(menu)
+Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 
-// === 8) App Lifecycle
+/* ───────────────────────── App Lifecycle ───────────────────────────── */
 app.whenReady().then(async () => {
   ensureUserJsonFiles()
 
-  // Splash nur zeigen, wenn’s >250ms dauert (vermeidet „Blinken“)
+  // Splash nur zeigen, wenn Start > 250ms dauert (vermeidet „Blinken“)
   const splashTimer = setTimeout(() => createSplashWindow(), 250)
 
   startNodeRED()
@@ -297,33 +326,30 @@ app.whenReady().then(async () => {
 
   const ready = await waitForNodeRedReady({
     path_: '/api/user',
-    timeoutMs: 12000,         // härter als vorher
+    timeoutMs: 12000,
     perRequestTimeout: 1500,
     minDelay: 120,
     maxDelay: 600
   })
 
-  // Splash aufräumen – IMMER
   clearTimeout(splashTimer)
   if (splashWindow && !splashWindow.isDestroyed()) splashWindow.close()
 
-  // App laden – egal ob ready oder nicht (fühlt sich nie „hängend“ an)
+  // App erst jetzt laden (verhindert Hintergrund-Requests vor Ready)
   const isDev = !app.isPackaged || process.env.NODE_ENV === 'development' || process.env.ELECTRON_START_URL
   if (isDev) await mainWindow.loadURL(process.env.ELECTRON_START_URL || 'http://localhost:3000')
   else await mainWindow.loadFile(path.join(__dirname, 'immo24-ui', 'dist', 'index.html'))
 
-  // Picker erst NACH dem Laden öffnen – Users ggf. leer, dann später nachschieben
+  // Direkt Picker öffnen, Users ggf. leer nachreichen
   const pw = createUserPickerWindow()
   const users = ready ? (await getUsersFromNodeRed()) : []
   pw.webContents.once('did-finish-load', () => pw.webContents.send('users', users))
 
-  // Falls nicht ready: Liste im Hintergrund nachreichen, sobald verfügbar
   if (!ready) {
     ;(async () => {
       const ok = await waitForNodeRedReady({ timeoutMs: 15000 })
       if (!ok || !pickerWin || pickerWin.isDestroyed()) return
-      const u2 = await getUsersFromNodeRed()
-      try { pickerWin.webContents.send('users', u2) } catch {}
+      try { pickerWin.webContents.send('users', await getUsersFromNodeRed()) } catch {}
     })()
   }
 })

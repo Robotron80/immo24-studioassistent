@@ -79,32 +79,42 @@ function postLogoutToNodeRed() {
   })
 }
 
-// Schneller, fairer Ready‑Check: sofortiger Versuch + exponentielles Backoff
+// Schneller, robuster Ready-Check mit Request-Timeout und Backoff
 async function waitForNodeRedReady({
   host = '127.0.0.1',
   port = 1880,
   path_ = '/api/user',
-  timeoutMs = 12000,         // etwas straffer
-  minDelay = 120,
-  maxDelay = 600
+  timeoutMs = 12000,       // harte Obergrenze
+  perRequestTimeout = 1500,// Timeout je Probe
+  minDelay = 120,          // Backoff Start
+  maxDelay = 600,
+  useAgent = false         // wichtig: HEAD ohne Keep-Alive → vermeidet hängende Sockets
 } = {}) {
   const start = Date.now()
   let delay = minDelay
 
   const tryOnce = () =>
     new Promise((resolve) => {
-      const req = http.request({ host, port, path: path_, method: 'HEAD', agent: keepAliveAgent }, (res) => {
-        resolve(res.statusCode >= 200 && res.statusCode < 400)
-      })
+      const req = http.request(
+        { host, port, path: path_, method: 'HEAD', agent: useAgent ? keepAliveAgent : undefined },
+        (res) => {
+          // Body nicht lesen → sofort freigeben
+          res.resume()
+          resolve(res.statusCode >= 200 && res.statusCode < 400)
+        }
+      )
+      // Harte Abbruchkante für hängende Sockets
+      req.setTimeout(perRequestTimeout, () => { req.destroy(new Error('probe timeout')) })
       req.on('error', () => resolve(false))
       req.end()
     })
 
-  // Erster Versuch sofort:
+  // 1. Versuch sofort:
   if (await tryOnce()) return true
 
+  // Backoff bis Obergrenze:
   while (Date.now() - start < timeoutMs) {
-    await new Promise((r) => setTimeout(r, delay))
+    await new Promise(r => setTimeout(r, delay))
     if (await tryOnce()) return true
     delay = Math.min(Math.floor(delay * 1.6), maxDelay)
   }
@@ -278,29 +288,44 @@ Menu.setApplicationMenu(menu)
 app.whenReady().then(async () => {
   ensureUserJsonFiles()
 
-  // Splash nur zeigen, wenn’s voraussichtlich länger dauert (optional):
+  // Splash nur zeigen, wenn’s >250ms dauert (vermeidet „Blinken“)
   const splashTimer = setTimeout(() => createSplashWindow(), 250)
 
   startNodeRED()
   createWindow()
   registerIpc()
 
-  const ready = await waitForNodeRedReady({ path_: '/api/user', timeoutMs: 12000 })
-  if (!ready) console.warn('Node‑RED nicht rechtzeitig bereit – starte trotzdem')
+  const ready = await waitForNodeRedReady({
+    path_: '/api/user',
+    timeoutMs: 12000,         // härter als vorher
+    perRequestTimeout: 1500,
+    minDelay: 120,
+    maxDelay: 600
+  })
 
-  // Splash aufräumen
+  // Splash aufräumen – IMMER
   clearTimeout(splashTimer)
   if (splashWindow && !splashWindow.isDestroyed()) splashWindow.close()
 
-  // Jetzt erst die App laden (verhindert „Hintergrund‑Requests“)
+  // App laden – egal ob ready oder nicht (fühlt sich nie „hängend“ an)
   const isDev = !app.isPackaged || process.env.NODE_ENV === 'development' || process.env.ELECTRON_START_URL
   if (isDev) await mainWindow.loadURL(process.env.ELECTRON_START_URL || 'http://localhost:3000')
   else await mainWindow.loadFile(path.join(__dirname, 'immo24-ui', 'dist', 'index.html'))
 
-  // Picker: Nutzerliste parallel holen, dann anzeigen
-  const users = await getUsersFromNodeRed()
+  // Picker erst NACH dem Laden öffnen – Users ggf. leer, dann später nachschieben
   const pw = createUserPickerWindow()
+  const users = ready ? (await getUsersFromNodeRed()) : []
   pw.webContents.once('did-finish-load', () => pw.webContents.send('users', users))
+
+  // Falls nicht ready: Liste im Hintergrund nachreichen, sobald verfügbar
+  if (!ready) {
+    ;(async () => {
+      const ok = await waitForNodeRedReady({ timeoutMs: 15000 })
+      if (!ok || !pickerWin || pickerWin.isDestroyed()) return
+      const u2 = await getUsersFromNodeRed()
+      try { pickerWin.webContents.send('users', u2) } catch {}
+    })()
+  }
 })
 
 app.on('window-all-closed', () => {

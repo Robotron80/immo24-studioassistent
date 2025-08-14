@@ -24,72 +24,6 @@
         "env": []
     },
     {
-        "id": "f10408fa2622e18b",
-        "type": "group",
-        "z": "24039523dcf573b0",
-        "style": {
-            "stroke": "#999999",
-            "stroke-opacity": "1",
-            "fill": "none",
-            "fill-opacity": "1",
-            "label": true,
-            "label-position": "nw",
-            "color": "#a4a4a4"
-        },
-        "nodes": [
-            "910c53735d84f790",
-            "0cc42adec31147b4",
-            "1390220b613fe431",
-            "cada920e0c496a2a",
-            "7ca845263df10a31",
-            "f8bbdd4a4830ea45",
-            "51bdc3a15b772ace",
-            "4bc886955c7f8b21",
-            "4d906e2f6038d015",
-            "7ae52513361ef5e1",
-            "511602a42b015aca",
-            "6a317b07fabc7061",
-            "2a662fab555d6f4f",
-            "db9b106015aaeca1",
-            "46e0cb69535901c8",
-            "edae72a537679007",
-            "210d631ebc82ecb4",
-            "428bed19fe6a1ebf",
-            "d79c25967e9dce9b",
-            "09979d6368f7e926",
-            "a99fc3e1fe669e9b",
-            "abd9f0565d3eebd3",
-            "1b10bdb535af0bbc",
-            "2ca85b2f7c28a9e0",
-            "67a6bc92fa9fe33c",
-            "bc737156d3e170ca",
-            "6653c8caed92f20c",
-            "e255f5433d4297ff",
-            "b3f55f2d76a1e5ba",
-            "fb366a78a424e81a",
-            "d53ba9235ee090fd",
-            "0a490146a7033fad",
-            "bfe2df3766e4f51c",
-            "3932d45de846bec7",
-            "0b584b15bbdbd2cd",
-            "2ed03f5bcc2c0594",
-            "1e4f421fda84a49c",
-            "5dfbd7873bf9b8f8",
-            "1bce45a28e5be938",
-            "50cd2dbcf91a3df4",
-            "c887e15d61d101e5",
-            "24973306c9218086",
-            "2aff8a3d3fd8f8f0",
-            "bb5b70ec65704ecc",
-            "a8fe68d6dfe78d47",
-            "9a599d140a8efe20"
-        ],
-        "x": 174,
-        "y": 119,
-        "w": 1712,
-        "h": 1042
-    },
-    {
         "id": "0e1923748c0d505b",
         "type": "group",
         "z": "dc0d981398a42d88",
@@ -460,7 +394,7 @@
         ],
         "x": 354,
         "y": 2379,
-        "w": 1392,
+        "w": 1152,
         "h": 262
     },
     {
@@ -888,42 +822,6 @@
         "disabled": false
     },
     {
-        "id": "1e41cb7e28df4e69",
-        "type": "ui-page",
-        "name": "Pro Tools",
-        "ui": "826de81a1d3da833",
-        "path": "/protools",
-        "icon": "home",
-        "layout": "grid",
-        "theme": "96222c515d2abba0",
-        "breakpoints": [
-            {
-                "name": "Default",
-                "px": "0",
-                "cols": "3"
-            },
-            {
-                "name": "Tablet",
-                "px": "576",
-                "cols": "6"
-            },
-            {
-                "name": "Small Desktop",
-                "px": "768",
-                "cols": "9"
-            },
-            {
-                "name": "Desktop",
-                "px": "1024",
-                "cols": "12"
-            }
-        ],
-        "order": 3,
-        "className": "",
-        "visible": true,
-        "disabled": false
-    },
-    {
         "id": "91ae8c83e547fbd7",
         "type": "ui-group",
         "name": "Projektinfos",
@@ -959,20 +857,6 @@
         "width": "6",
         "height": 1,
         "order": 2,
-        "showTitle": true,
-        "className": "",
-        "visible": "true",
-        "disabled": "false",
-        "groupType": "default"
-    },
-    {
-        "id": "2ffd9e5a045727c6",
-        "type": "ui-group",
-        "name": "Settings",
-        "page": "1e41cb7e28df4e69",
-        "width": 6,
-        "height": 1,
-        "order": 1,
         "showTitle": true,
         "className": "",
         "visible": "true",
@@ -3828,7 +3712,7 @@
         "createDir": true,
         "overwriteFile": "true",
         "encoding": "utf8",
-        "x": 1630,
+        "x": 1390,
         "y": 2600,
         "wires": [
             [
@@ -4739,23 +4623,6 @@
         "wires": []
     },
     {
-        "id": "cec015c32bf20cfd",
-        "type": "http in",
-        "z": "dc0d981398a42d88",
-        "name": "",
-        "url": "api/konfiguration",
-        "method": "post",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 240,
-        "y": 1640,
-        "wires": [
-            [
-                "43f8678fc93a7979"
-            ]
-        ]
-    },
-    {
         "id": "aeadd963dbb52430",
         "type": "ui-template",
         "z": "dc0d981398a42d88",
@@ -5011,9 +4878,13 @@
         "z": "dc0d981398a42d88",
         "g": "e05512e54561bc65",
         "name": "Version anhängen + Globals",
-        "func": "let ver = global.get('paths_version');\nif (!ver) { ver = String(Date.now()); global.set('paths_version', ver); }\nconst data = typeof msg.payload === 'object' && msg.payload ? msg.payload : {};\nif (data.PathMitarbeiter !== undefined) global.set('PathMitarbeiter', data.PathMitarbeiter);\nif (data.PathProduktionen !== undefined) global.set('PathProduktionen', data.PathProduktionen);\nif (data.PathStammdaten !== undefined) global.set('PathStammdaten', data.PathStammdaten);\nmsg.payload = { data, version: ver };\nreturn msg;",
+        "func": "let ver = global.get('paths_version');\nif (!ver) { ver = String(Date.now()); global.set('paths_version', ver); }\nconst data = typeof msg.payload === 'object' && msg.payload ? msg.payload : {};\nif (data.PathMitarbeiter !== undefined) global.set('PathMitarbeiter', data.PathMitarbeiter);\nif (data.PathProduktionen !== undefined) global.set('PathProduktionen', data.PathProduktionen);\nif (data.PathStammdaten !== undefined) global.set('PathStammdaten', data.PathStammdaten);\nif (data.PathPTUser !== undefined) global.set('PathPTUser', data.PathPTUser);\nmsg.payload = { data, version: ver };\nreturn msg;",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
         "x": 3060,
         "y": 290,
         "wires": [
@@ -5058,7 +4929,7 @@
         "z": "dc0d981398a42d88",
         "g": "e05512e54561bc65",
         "name": "Body parsen + prüfen",
-        "func": "// Robust parse helper\nfunction safeParse(x) {\n  if (x == null) return null;\n  if (Buffer.isBuffer(x)) { try { return JSON.parse(x.toString('utf8')); } catch { return null; } }\n  if (typeof x === 'string') { try { return JSON.parse(x); } catch { return null; } }\n  if (typeof x === 'object') return x;\n  return null;\n}\n\nconst body = safeParse(msg.payload);\n\n// Grundprüfung\nif (!body || typeof body.version !== 'string' || typeof body.data !== 'object' || body.data === null || Array.isArray(body.data)) {\n  msg.statusCode = 400;\n  msg.payload = { error: 'bad_payload' };\n  return [null, msg];\n}\n\n// Felder whitelisten/normalisieren\nconst d = body.data;\nconst normalized = {\n  PathMitarbeiter: typeof d.PathMitarbeiter === 'string' ? d.PathMitarbeiter : '',\n  PathProduktionen: typeof d.PathProduktionen === 'string' ? d.PathProduktionen : '',\n  PathStammdaten: typeof d.PathStammdaten === 'string' ? d.PathStammdaten : ''\n};\n\n// Ergebnis für die weiteren Nodes bereitstellen\nmsg.body = { data: normalized, version: body.version };\nreturn [msg, null];",
+        "func": "// Robust parse helper\nfunction safeParse(x) {\n  if (x == null) return null;\n  if (Buffer.isBuffer(x)) { try { return JSON.parse(x.toString('utf8')); } catch { return null; } }\n  if (typeof x === 'string') { try { return JSON.parse(x); } catch { return null; } }\n  if (typeof x === 'object') return x;\n  return null;\n}\n\nconst body = safeParse(msg.payload);\n\n// Grundprüfung\nif (!body || typeof body.version !== 'string' || typeof body.data !== 'object' || body.data === null || Array.isArray(body.data)) {\n  msg.statusCode = 400;\n  msg.payload = { error: 'bad_payload' };\n  return [null, msg];\n}\n\n// Felder whitelisten/normalisieren\nconst d = body.data;\nconst normalized = {\n  PathMitarbeiter: typeof d.PathMitarbeiter === 'string' ? d.PathMitarbeiter : '',\n  PathProduktionen: typeof d.PathProduktionen === 'string' ? d.PathProduktionen : '',\n  PathStammdaten: typeof d.PathStammdaten === 'string' ? d.PathStammdaten : '',\n  PathPTUser: typeof d.PathPTUser === 'string' ? d.PathPTUser : ''\n};\n\n// Ergebnis für die weiteren Nodes bereitstellen\nmsg.body = { data: normalized, version: body.version };\nreturn [msg, null];",
         "outputs": 2,
         "timeout": "",
         "noerr": 0,
@@ -5169,9 +5040,13 @@
         "z": "dc0d981398a42d88",
         "g": "e05512e54561bc65",
         "name": "Globals setzen + Antwort",
-        "func": "try { var data = JSON.parse(msg.payload); } catch(e) { data = {}; }\nif (data.PathMitarbeiter !== undefined) global.set('PathMitarbeiter', data.PathMitarbeiter);\nif (data.PathProduktionen !== undefined) global.set('PathProduktionen', data.PathProduktionen);\nif (data.PathStammdaten !== undefined) global.set('PathStammdaten', data.PathStammdaten);\nif (msg.nextVersion) global.set('paths_version', msg.nextVersion);\nmsg.statusCode = 200;\nmsg.payload = { ok: true, version: global.get('paths_version') || '0' };\nreturn msg;",
+        "func": "try { var data = JSON.parse(msg.payload); } catch(e) { data = {}; }\nif (data.PathMitarbeiter !== undefined) global.set('PathMitarbeiter', data.PathMitarbeiter);\nif (data.PathProduktionen !== undefined) global.set('PathProduktionen', data.PathProduktionen);\nif (data.PathStammdaten !== undefined) global.set('PathStammdaten', data.PathStammdaten);\nif (data.PathPTUser !== undefined) global.set('PathPTUser', data.PathPTUser);\nif (msg.nextVersion) global.set('paths_version', msg.nextVersion);\nmsg.statusCode = 200;\nmsg.payload = { ok: true, version: global.get('paths_version') || '0' };\nreturn msg;",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
         "x": 3180,
         "y": 420,
         "wires": [
@@ -5669,8 +5544,7 @@
         "y": 1220,
         "wires": [
             [
-                "0429d8b08e8463f2",
-                "130f356fc940baa4"
+                "0429d8b08e8463f2"
             ]
         ]
     },
@@ -5692,8 +5566,7 @@
         "y": 1220,
         "wires": [
             [
-                "2b57da8d419bc3d5",
-                "130f356fc940baa4"
+                "2b57da8d419bc3d5"
             ]
         ]
     },
@@ -5771,8 +5644,7 @@
         "y": 1360,
         "wires": [
             [
-                "d9b297f31f9dc13b",
-                "01a1f157779cd226"
+                "d9b297f31f9dc13b"
             ]
         ]
     },
@@ -5880,39 +5752,6 @@
         "wires": []
     },
     {
-        "id": "01a1f157779cd226",
-        "type": "debug",
-        "z": "dc0d981398a42d88",
-        "name": "debug 13",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 3840,
-        "y": 1440,
-        "wires": []
-    },
-    {
-        "id": "130f356fc940baa4",
-        "type": "debug",
-        "z": "dc0d981398a42d88",
-        "name": "debug 14",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 3220,
-        "y": 1120,
-        "wires": []
-    },
-    {
         "id": "2f1651475a302004",
         "type": "inject",
         "z": "dc0d981398a42d88",
@@ -5993,15 +5832,16 @@
         "id": "9d0818970aca3db6",
         "type": "debug",
         "z": "dc0d981398a42d88",
-        "name": "debug 15",
+        "name": "post logout",
         "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "false",
+        "complete": "payload",
+        "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 230,
+        "x": 240,
         "y": 1340,
         "wires": []
     },
@@ -10508,604 +10348,346 @@
         "wires": []
     },
     {
-        "id": "910c53735d84f790",
-        "type": "comment",
+        "id": "pt_status_in",
+        "type": "http in",
         "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "PT-Modul",
-        "info": "",
-        "x": 270,
+        "name": "",
+        "url": "/api/protools/status",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 150,
+        "y": 60,
+        "wires": [
+            [
+                "a2dad58a4cc5f504"
+            ]
+        ]
+    },
+    {
+        "id": "pt_status_exec",
+        "type": "exec",
+        "z": "24039523dcf573b0",
+        "command": "",
+        "addpay": "command",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "check Pro Tools",
+        "x": 720,
+        "y": 60,
+        "wires": [
+            [
+                "pt_status_parse"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "pt_status_parse",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "name": "to JSON",
+        "func": "const out = (msg.payload||'').toString().trim().toLowerCase();\nmsg.payload = { online: out === 'true' };\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 910,
+        "y": 60,
+        "wires": [
+            [
+                "pt_status_out"
+            ]
+        ]
+    },
+    {
+        "id": "pt_status_out",
+        "type": "http response",
+        "z": "24039523dcf573b0",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1090,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "pt_presets_in",
+        "type": "http in",
+        "z": "24039523dcf573b0",
+        "name": "",
+        "url": "/api/protools/presets",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 150,
+        "y": 120,
+        "wires": [
+            [
+                "cf5b4e3d9f7b919f",
+                "37f63096637fe26d"
+            ]
+        ]
+    },
+    {
+        "id": "pt_presets_parse",
+        "type": "json",
+        "z": "24039523dcf573b0",
+        "name": "parse body",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 390,
+        "y": 120,
+        "wires": [
+            [
+                "pt_presets_validate"
+            ]
+        ]
+    },
+    {
+        "id": "pt_presets_validate",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "name": "validate + normalize",
+        "func": "// Body lesen\nconst body = (typeof msg.payload === 'object' && msg.payload) ? msg.payload : {};\nconst action = (body.action||'').toLowerCase();\nconst selections = (typeof body.selections === 'object' && body.selections) ? body.selections : {};\nconst quick = (typeof body.quick === 'object' && body.quick) ? body.quick : {};\n\nif (action !== 'recall' && action !== 'store') {\n  msg.statusCode = 400; msg.payload = { ok:false, error:'bad_action' }; return [null, msg];\n}\n\n// Schlüssel, die wir akzeptieren\nconst keysAll = ['templates','trackPresets','pluginSettings','fadePresets','clipEffects','memoryLocations','trackData','keyboardShortcuts','pluginMaps'];\nconst keysQuick = ['fadePresets','clipEffects','memoryLocations','trackData'];\n\n// Booleans erzwingen\nconst normSel = {}; keysAll.forEach(k => normSel[k] = !!selections[k]);\nconst normQuick = {}; keysQuick.forEach(k => normQuick[k] = !!quick[k]);\n\n// Mindestens eine Auswahl?\nconst any = Object.values(normSel).some(Boolean);\nif (!any) { msg.statusCode = 422; msg.payload = { ok:false, error:'nothing_selected' }; return [null, msg]; }\n\n// Hier später: tatsächliche Ansteuerung / Skripte etc.\n// Für jetzt legen wir nur ein Log an und antworten OK.\nmsg.pt = { action, selections: normSel, quick: normQuick };\n\nreturn [msg, null];",
+        "outputs": 2,
+        "noerr": 0,
+        "x": 580,
+        "y": 120,
+        "wires": [
+            [
+                "pt_presets_stub"
+            ],
+            [
+                "pt_presets_err"
+            ]
+        ]
+    },
+    {
+        "id": "pt_presets_stub",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "name": "TODO: call scripts",
+        "func": "// Hier würdest du je nach action + Auswahl deine AppleScripts / CLI / Sockets ausführen.\n// Beispiel: msg.pt.action === 'recall'\n//          if (msg.pt.selections.templates) ...\n// Für jetzt nur OK zurückgeben.\nmsg.payload = { ok:true };\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 810,
+        "y": 120,
+        "wires": [
+            [
+                "pt_presets_out"
+            ]
+        ]
+    },
+    {
+        "id": "pt_presets_err",
+        "type": "http response",
+        "z": "24039523dcf573b0",
+        "name": "error",
+        "statusCode": "",
+        "headers": {},
+        "x": 810,
         "y": 160,
         "wires": []
     },
     {
-        "id": "0cc42adec31147b4",
+        "id": "pt_presets_out",
+        "type": "http response",
+        "z": "24039523dcf573b0",
+        "name": "200",
+        "statusCode": "",
+        "headers": {},
+        "x": 980,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "a2dad58a4cc5f504",
+        "type": "OS",
+        "z": "24039523dcf573b0",
+        "name": "",
+        "x": 330,
+        "y": 60,
+        "wires": [
+            [
+                "e70a29f8781adf94"
+            ]
+        ]
+    },
+    {
+        "id": "e70a29f8781adf94",
         "type": "function",
         "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "PT Documents Pfad setzen",
-        "func": "global.set(\"PathPTUser\", \"/Volumes/Macintosh HD/Users/philippmenzel/Documents/Pro Tools\");\nreturn msg;\n",
+        "name": "Befehle je nach OS",
+        "func": "const platform = (msg?.payload?.platform) || process.platform;\n\nif (platform === 'win32') {\n    // Windows: prüft auf Prozess \"ProTools\"\n    msg.command = `powershell -NoProfile -Command \"Get-Process | Where-Object { $_.ProcessName -eq 'ProTools' } | Measure | ForEach-Object { $_.Count -gt 0 }\"`;\n} else if (platform === 'darwin') {\n    // macOS: prüft auf Prozess \"Pro Tools\"\n    msg.command = `osascript -e 'tell application \"System Events\" to (exists process \"Pro Tools\")'`;\n} else {\n    msg.command = `echo OS nicht unterstützt`;\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 500,
-        "y": 340,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "1390220b613fe431",
-        "type": "inject",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "",
-        "props": [],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "x": 290,
-        "y": 340,
+        "x": 510,
+        "y": 60,
         "wires": [
             [
-                "0cc42adec31147b4"
+                "pt_status_exec"
             ]
         ]
     },
     {
-        "id": "cada920e0c496a2a",
-        "type": "debug",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "debug 5",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1520,
-        "y": 740,
-        "wires": []
-    },
-    {
-        "id": "7ca845263df10a31",
-        "type": "ui-switch",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "Templates",
-        "label": "Templates",
-        "group": "2ffd9e5a045727c6",
-        "order": 1,
-        "width": 0,
-        "height": 0,
-        "passthru": false,
-        "decouple": false,
-        "topic": "topic",
-        "topicType": "msg",
-        "style": "",
-        "className": "",
-        "layout": "row-left-swapped",
-        "clickableArea": "label",
-        "onvalue": "true",
-        "onvalueType": "bool",
-        "onicon": "",
-        "oncolor": "",
-        "offvalue": "false",
-        "offvalueType": "bool",
-        "officon": "",
-        "offcolor": "",
-        "x": 270,
-        "y": 420,
-        "wires": [
-            [
-                "7ae52513361ef5e1"
-            ]
-        ]
-    },
-    {
-        "id": "f8bbdd4a4830ea45",
-        "type": "ui-switch",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "Track Presets",
-        "label": "Track Presets",
-        "group": "2ffd9e5a045727c6",
-        "order": 2,
-        "width": 0,
-        "height": 0,
-        "passthru": false,
-        "decouple": false,
-        "topic": "topic",
-        "topicType": "msg",
-        "style": "",
-        "className": "",
-        "layout": "row-left-swapped",
-        "clickableArea": "label",
-        "onvalue": "true",
-        "onvalueType": "bool",
-        "onicon": "",
-        "oncolor": "",
-        "offvalue": "false",
-        "offvalueType": "bool",
-        "officon": "",
-        "offcolor": "",
-        "x": 280,
-        "y": 460,
-        "wires": [
-            [
-                "511602a42b015aca"
-            ]
-        ]
-    },
-    {
-        "id": "51bdc3a15b772ace",
-        "type": "ui-switch",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "Fade Presets",
-        "label": "Fade Presets",
-        "group": "2ffd9e5a045727c6",
-        "order": 3,
-        "width": 0,
-        "height": 0,
-        "passthru": false,
-        "decouple": false,
-        "topic": "topic",
-        "topicType": "msg",
-        "style": "",
-        "className": "",
-        "layout": "row-left-swapped",
-        "clickableArea": "label",
-        "onvalue": "true",
-        "onvalueType": "bool",
-        "onicon": "",
-        "oncolor": "",
-        "offvalue": "false",
-        "offvalueType": "bool",
-        "officon": "",
-        "offcolor": "",
-        "x": 270,
-        "y": 500,
-        "wires": [
-            [
-                "6a317b07fabc7061"
-            ]
-        ]
-    },
-    {
-        "id": "4bc886955c7f8b21",
-        "type": "ui-button",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "group": "2ffd9e5a045727c6",
-        "name": "Recall",
-        "label": "Recall",
-        "order": 6,
-        "width": "1",
-        "height": "1",
-        "emulateClick": false,
-        "tooltip": "",
-        "color": "",
-        "bgcolor": "",
-        "className": "",
-        "icon": "",
-        "iconPosition": "left",
-        "payload": "recall",
-        "payloadType": "str",
-        "topic": "topic",
-        "topicType": "msg",
-        "buttonColor": "",
-        "textColor": "",
-        "iconColor": "",
-        "enableClick": true,
-        "enablePointerdown": false,
-        "pointerdownPayload": "",
-        "pointerdownPayloadType": "str",
-        "enablePointerup": false,
-        "pointerupPayload": "",
-        "pointerupPayloadType": "str",
-        "x": 250,
-        "y": 640,
-        "wires": [
-            [
-                "edae72a537679007"
-            ]
-        ]
-    },
-    {
-        "id": "4d906e2f6038d015",
-        "type": "ui-button",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "group": "2ffd9e5a045727c6",
-        "name": "Store",
-        "label": "Store",
-        "order": 7,
-        "width": "1",
-        "height": "1",
-        "emulateClick": false,
-        "tooltip": "",
-        "color": "",
-        "bgcolor": "",
-        "className": "",
-        "icon": "",
-        "iconPosition": "left",
-        "payload": "store",
-        "payloadType": "str",
-        "topic": "topic",
-        "topicType": "msg",
-        "buttonColor": "",
-        "textColor": "",
-        "iconColor": "",
-        "enableClick": true,
-        "enablePointerdown": false,
-        "pointerdownPayload": "",
-        "pointerdownPayloadType": "str",
-        "enablePointerup": false,
-        "pointerupPayload": "",
-        "pointerupPayloadType": "str",
-        "x": 250,
-        "y": 700,
-        "wires": [
-            [
-                "edae72a537679007"
-            ]
-        ]
-    },
-    {
-        "id": "7ae52513361ef5e1",
-        "type": "change",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "templates",
-                "pt": "flow",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 520,
-        "y": 420,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "511602a42b015aca",
-        "type": "change",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "trackpresets",
-                "pt": "flow",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 530,
-        "y": 460,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "6a317b07fabc7061",
-        "type": "change",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "fadepresets",
-                "pt": "flow",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 520,
-        "y": 500,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "2a662fab555d6f4f",
-        "type": "fs-extra-copy",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "Copy Templates",
-        "source": "templateSrc",
-        "sourceType": "msg",
-        "target": "templateDest",
-        "targetType": "msg",
-        "x": 960,
-        "y": 640,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "db9b106015aaeca1",
-        "type": "fs-extra-copy",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "Copy Track Presets",
-        "source": "trackpresetSrc",
-        "sourceType": "msg",
-        "target": "trackpresetDest",
-        "targetType": "msg",
-        "x": 970,
-        "y": 680,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "46e0cb69535901c8",
-        "type": "fs-extra-copy",
-        "z": "24039523dcf573b0",
-        "d": true,
-        "g": "f10408fa2622e18b",
-        "name": "Copy Fade Presets",
-        "source": "fadepresetSrc",
-        "sourceType": "msg",
-        "target": "fadepresetDest",
-        "targetType": "msg",
-        "x": 970,
-        "y": 900,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "edae72a537679007",
+        "id": "cf5b4e3d9f7b919f",
         "type": "function",
         "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "Variablen / Auswahl",
-        "func": "let PathMitarbeiter = global.get('PathMitarbeiter') || '';\nlet PathPTUser = global.get('PathPTUser') || '';\nlet activeUser = global.get('activeUser');\n\nlet templates = flow.get('templates');\nlet trackpresets = flow.get('trackpresets');\nlet fadepresets = flow.get('fadepresets');\nlet pluginsettings = flow.get('pluginsettings');\nlet clipeffectspresets = flow.get('clipeffectspresets');\nlet pluginmaps = flow.get('pluginmaps');\nlet trackdatatorecallpresets = flow.get('trackdatatorecallpresets');\nlet memorylocationpresets = flow.get('memorylocationpresets');\nlet keyboardshortcuts = flow.get('keyboardshortcuts');\n\n\n\n\n// Default: keine Nachricht weitergeben\nlet msgTemplates = null;\nlet msgTrackpresets = null;\nlet msgFadepresets = null;\nlet msgPluginsettings = null;\nlet msgClipeffectspresets = null;\nlet msgPluginmaps = null;\nlet msgTrackdatatorecallpresets = null;\nlet msgMemorylocationpresets = null;\nlet msgKeyboardshortcuts = null;\n\n\nif (templates === true) {\n    msgTemplates = {\n        ...msg,\n        PathMitarbeiter: PathMitarbeiter,\n        PathPTUser: PathPTUser,\n        activeUser: activeUser\n    };\n}\nif (trackpresets === true) {\n    msgTrackpresets = {\n        ...msg,\n        PathMitarbeiter: PathMitarbeiter,\n        PathPTUser: PathPTUser,\n        activeUser: activeUser\n    };\n}\nif (fadepresets === true) {\n    msgFadepresets = {\n        ...msg,\n        PathMitarbeiter: PathMitarbeiter,\n        PathPTUser: PathPTUser,\n        activeUser: activeUser\n    };\n}\n\nif (pluginsettings === true) {\n    msgPluginsettings = {\n        ...msg,\n        PathMitarbeiter: PathMitarbeiter,\n        PluginPath: PathPTUser + '/Plug-In Settings',\n        activeUser: activeUser\n    };\n}\n\nif (clipeffectspresets === true) {\n    msgClipeffectspresets = {\n        ...msg,\n        PathMitarbeiter: PathMitarbeiter,\n        PathPTUser: PathPTUser,\n        activeUser: activeUser\n    };\n}\n\n\nreturn [msgTemplates, msgTrackpresets, msgFadepresets, msgPluginsettings, msgClipeffectspresets, msgPluginmaps, msgTrackdatatorecallpresets, msgMemorylocationpresets, msgKeyboardshortcuts];",
+        "name": "Auswahl",
+        "func": "// ===== Robust body lesen (String oder Objekt) =====\nlet body = msg.payload;\nif (Buffer.isBuffer(body)) {\n    try { body = JSON.parse(body.toString('utf8')); } catch { body = {}; }\n} else if (typeof body === 'string') {\n    try { body = JSON.parse(body); } catch { body = {}; }\n} else if (typeof body !== 'object' || body === null) {\n    body = {};\n}\n\n// Erwartetes Format:\n// { action: \"store\" | \"recall\", categories: { cat1: [{key}], cat2: [{key,quick?}], cat3: [{key}] } }\nconst action = (body.action || '').toLowerCase();\nconst cats = body.categories || {};\nconst cat1 = Array.isArray(cats.cat1) ? cats.cat1 : [];\nconst cat2 = Array.isArray(cats.cat2) ? cats.cat2 : [];\nconst cat3 = Array.isArray(cats.cat3) ? cats.cat3 : [];\n\n// ===== Globale Pfade & User holen =====\nconst PathMitarbeiter = global.get('PathMitarbeiter') || '';\nconst PathPTUser = global.get('PathPTUser') || '';\nconst activeUser = global.get('activeUser') || '';\n\n// ===== 9 Ausgänge vorbereiten =====\nconst outs = Array(9).fill(null);\n\n// kleine Helper zum Bauen der Payloads\nconst base = { action, PathMitarbeiter, PathPTUser, activeUser };\n\n// Mapping-Helfer: setzt outs[index] wenn Key in der Liste vorhanden ist\nfunction handleCat(items, matchKey, outIndex, extra = {}) {\n    const found = items.find(it => (it?.key || '').toLowerCase() === matchKey);\n    if (!found) return;\n    // quick bei cat2 optional durchreichen\n    outs[outIndex] = {\n        ...msg,\n        payload: { ...base, quick: !!found.quick, ...extra }\n    };\n}\n\n// ===== cat1 =====\nhandleCat(cat1, 'templates', 0);\nhandleCat(cat1, 'trackpresets', 1);\nhandleCat(cat1, 'pluginsettings', 2);\n\n// ===== cat2 =====\n// Achtung: deine UI liefert \"clipFxPresets\" → wir normalisieren auf lowercase:\nhandleCat(cat2, 'fadepresets', 3);\nhandleCat(cat2, 'clipfxpresets', 4);\nhandleCat(cat2, 'memorylocation', 5);\nhandleCat(cat2, 'trackdatatorecall', 6);\n\n// ===== cat3 =====\nhandleCat(cat3, 'keyboardshortcuts', 7);\nhandleCat(cat3, 'pluginmaps', 8);\n\n// Falls gar nichts ausgewählt war, kannst du optional 400 melden –\n// ich lasse das absichtlich als \"kein Output = kein Job\".\nreturn outs;",
         "outputs": 9,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 430,
-        "y": 680,
+        "x": 380,
+        "y": 300,
         "wires": [
             [
-                "210d631ebc82ecb4"
+                "c3540eab39bc2683"
             ],
             [
-                "428bed19fe6a1ebf"
+                "38fabf9728dfb576"
             ],
             [
-                "d79c25967e9dce9b"
+                "1e2070cb9d15c6a3"
             ],
             [
-                "09979d6368f7e926",
-                "1b10bdb535af0bbc"
+                "2f9a0a1f4a3c0d01"
             ],
             [
-                "2ed03f5bcc2c0594"
+                "926c052763c39e29"
             ],
-            [],
-            [],
-            [],
+            [
+                "defb410130f27b91",
+                "90ca02b246e667b7"
+            ],
+            [
+                "ad680f0fcc01ddb6"
+            ],
+            [
+                "97634934f5c4429f"
+            ],
             []
         ],
         "outputLabels": [
             "Templates",
             "Track Presets",
+            "Plug-In Settings",
             "Fade Presets",
-            "Plugin Settings",
             "Clip Effects Presets",
-            "Plug-In Maps",
-            "Track Data to Recall Presets",
             "Memory Location Presets",
-            "Keyboard Shortcuts"
+            "Track Data to Recall Presets",
+            "Keyboard Shortcuts",
+            "Plug-In Maps"
         ]
     },
     {
-        "id": "210d631ebc82ecb4",
+        "id": "c3540eab39bc2683",
         "type": "function",
         "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
         "name": "Template Funktion",
-        "func": "let PathMitarbeiter = msg.PathMitarbeiter;\nlet PathPTUser = msg.PathPTUser;\nlet activeUser = msg.activeUser;\n\n// Ohne passenden payload keine Aktion\nif (msg.payload === \"recall\") {\n    msg.templateSrc = `${PathMitarbeiter}/${activeUser}/immo24/templates`;\n    msg.templateDest = `${PathPTUser}/Session Templates/${activeUser}`;\n    msg.action = \"recall\";\n    return msg;\n} else if (msg.payload === \"store\") {\n    msg.templateSrc = `${PathPTUser}/Session Templates/${activeUser}`;\n    msg.templateDest = `${PathMitarbeiter}/${activeUser}/immo24/templates`;\n    msg.action = \"store\";\n    return msg;\n}\nreturn null;",
+        "func": "let PathMitarbeiter = msg.payload.PathMitarbeiter;\nlet PathPTUser = msg.payload.PathPTUser;\nlet activeUser = msg.payload.activeUser;\n\n// Ohne passenden payload keine Aktion\nif (msg.payload.action === \"recall\") {\n    msg.templateSrc = `${PathMitarbeiter}/${activeUser}/immo24/templates`;\n    msg.templateDest = `${PathPTUser}/Session Templates/${activeUser}`;\n    return msg;\n} else if (msg.payload.action === \"store\") {\n    msg.templateSrc = `${PathPTUser}/Session Templates/${activeUser}`;\n    msg.templateDest = `${PathMitarbeiter}/${activeUser}/immo24/templates`;\n    return msg;\n}\nreturn null;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 690,
-        "y": 640,
+        "x": 590,
+        "y": 240,
         "wires": [
             [
-                "2a662fab555d6f4f"
+                "dde28766e8809a51"
             ]
         ]
     },
     {
-        "id": "428bed19fe6a1ebf",
+        "id": "8d053651e71a88d0",
+        "type": "fs-extra-copy",
+        "z": "24039523dcf573b0",
+        "name": "Copy Templates",
+        "source": "templateSrc",
+        "sourceType": "msg",
+        "target": "templateDest",
+        "targetType": "msg",
+        "x": 1240,
+        "y": 240,
+        "wires": [
+            [
+                "2bdec4bf0c10cc13"
+            ]
+        ]
+    },
+    {
+        "id": "38fabf9728dfb576",
         "type": "function",
         "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
         "name": "Track Presets Funktion",
-        "func": "let PathMitarbeiter = msg.PathMitarbeiter;\nlet PathPTUser = msg.PathPTUser;\nlet activeUser = msg.activeUser;\n\n// Ohne passenden payload keine Aktion\nif (msg.payload === \"recall\") {\n    msg.trackpresetSrc = `${PathMitarbeiter}/${activeUser}/immo24/trackpresets`;\n    msg.trackpresetDest = `${PathPTUser}/Track Presets/${activeUser}`;\n    msg.action = \"recall\";\n    return msg;\n} else if (msg.payload === \"store\") {\n    msg.trackpresetSrc = `${PathPTUser}/Track Presets/${activeUser}`;\n    msg.trackpresetDest = `${PathMitarbeiter}/${activeUser}/immo24/trackpresets`;\n    msg.action = \"store\";\n    return msg;\n}\nreturn null;",
+        "func": "let PathMitarbeiter = msg.payload.PathMitarbeiter;\nlet PathPTUser = msg.payload.PathPTUser;\nlet activeUser = msg.payload.activeUser;\n\n// Ohne passenden payload keine Aktion\nif (msg.payload.action === \"recall\") {\n    msg.trackpresetSrc = `${PathMitarbeiter}/${activeUser}/immo24/trackpresets`;\n    msg.trackpresetDest = `${PathPTUser}/Track Presets/${activeUser}`;\n    return msg;\n} else if (msg.payload.action === \"store\") {\n    msg.trackpresetSrc = `${PathPTUser}/Track Presets/${activeUser}`;\n    msg.trackpresetDest = `${PathMitarbeiter}/${activeUser}/immo24/trackpresets`;\n    return msg;\n}\nreturn null;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 700,
-        "y": 680,
+        "x": 600,
+        "y": 280,
         "wires": [
             [
-                "db9b106015aaeca1"
+                "eafd6987fabe06d4"
             ]
         ]
     },
     {
-        "id": "d79c25967e9dce9b",
-        "type": "function",
+        "id": "a91d426e98c54d30",
+        "type": "fs-extra-copy",
         "z": "24039523dcf573b0",
-        "d": true,
-        "g": "f10408fa2622e18b",
-        "name": "Fade Presets Funktion",
-        "func": "let PathMitarbeiter = msg.PathMitarbeiter;\nlet PathPTUser = msg.PathPTUser;\nlet activeUser = msg.activeUser;\n\n// Ohne passenden payload keine Aktion\nif (msg.payload === \"recall\") {\n    msg.fadepresetSrc = `${PathMitarbeiter}/${activeUser}/immo24/fadepresets`;\n    msg.fadepresetDest = `${PathPTUser}/Fade Presets/${activeUser}`;\n    msg.action = \"recall\";\n    return msg;\n} else if (msg.payload === \"store\") {\n    msg.fadepresetSrc = `${PathPTUser}/Fade Presets/${activeUser}`;\n    msg.fadepresetDest = `${PathMitarbeiter}/${activeUser}/immo24/fadepresets`;\n    msg.action = \"store\";\n    return msg;\n}\nreturn null;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 700,
-        "y": 900,
+        "name": "Copy Track Presets",
+        "source": "trackpresetSrc",
+        "sourceType": "msg",
+        "target": "trackpresetDest",
+        "targetType": "msg",
+        "x": 1250,
+        "y": 280,
         "wires": [
             [
-                "46e0cb69535901c8"
+                "2bdec4bf0c10cc13"
             ]
         ]
     },
     {
-        "id": "09979d6368f7e926",
-        "type": "function",
-        "z": "24039523dcf573b0",
-        "d": true,
-        "g": "f10408fa2622e18b",
-        "name": "Plug-In Settings Funktion",
-        "func": "const fs = require('fs').promises;\nconst path = require('path');\n\n// Setze dein Plugin-Settings-Source Directory:\nconst pluginSrc = msg.pluginPath; // z.B. /Users/foo/Library/Pro Tools/Plugin Settings\n\nasync function findUserFolders(rootDir) {\n    let pluginDirs = await fs.readdir(rootDir, { withFileTypes: true });\n    let userFolders = [];\n    for (let entry of pluginDirs) {\n        if (entry.isDirectory()) {\n            let pluginFolder = path.join(rootDir, entry.name);\n            let userFolder = path.join(pluginFolder, \"peter\");\n            try {\n                let stat = await fs.stat(userFolder);\n                if (stat.isDirectory()) {\n                    userFolders.push({\n                        plugin: entry.name,\n                        userFolder: userFolder\n                    });\n                }\n            } catch (e) {\n                // Kein user-Unterordner, skippen\n            }\n        }\n    }\n    return userFolders;\n}\n\n(async () => {\n    msg.userFolders = await findUserFolders(pluginSrc);\n    // userFolders ist jetzt ein Array von Objekten: [{plugin: 'Compressor', userFolder: '/…/Compressor/user'}, ...]\n    return msg;\n})();",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 710,
-        "y": 940,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "a99fc3e1fe669e9b",
-        "type": "ui-switch",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "Plug-In Settings",
-        "label": "Plug-In Settings",
-        "group": "2ffd9e5a045727c6",
-        "order": 4,
-        "width": 0,
-        "height": 0,
-        "passthru": false,
-        "decouple": false,
-        "topic": "topic",
-        "topicType": "msg",
-        "style": "",
-        "className": "",
-        "layout": "row-left-swapped",
-        "clickableArea": "label",
-        "onvalue": "true",
-        "onvalueType": "bool",
-        "onicon": "",
-        "oncolor": "",
-        "offvalue": "false",
-        "offvalueType": "bool",
-        "officon": "",
-        "offcolor": "",
-        "x": 280,
-        "y": 540,
-        "wires": [
-            [
-                "abd9f0565d3eebd3"
-            ]
-        ]
-    },
-    {
-        "id": "abd9f0565d3eebd3",
-        "type": "change",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "pluginsettings",
-                "pt": "flow",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 530,
-        "y": 540,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "1b10bdb535af0bbc",
+        "id": "801fc15ef3777ecb",
         "type": "fs-ops-dir",
         "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
         "name": "Plugin Pfad durchsuchen",
-        "path": "PluginPath",
+        "path": "payload.PluginPath",
         "pathType": "msg",
         "filter": "*",
         "filterType": "str",
         "dir": "files",
         "dirType": "msg",
-        "x": 710,
-        "y": 980,
+        "x": 850,
+        "y": 320,
         "wires": [
             [
-                "2ca85b2f7c28a9e0"
+                "f9ae2e0d8b851b95"
             ]
         ]
     },
     {
-        "id": "2ca85b2f7c28a9e0",
+        "id": "f9ae2e0d8b851b95",
         "type": "split",
         "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
         "name": "Split Plugin-Ordner",
         "splt": "\\n",
         "spltType": "str",
@@ -11114,33 +10696,32 @@
         "stream": false,
         "addname": "",
         "property": "files",
-        "x": 950,
-        "y": 980,
+        "x": 1090,
+        "y": 320,
         "wires": [
             [
-                "67a6bc92fa9fe33c"
+                "27d01ea6c29f13b3"
             ]
         ]
     },
     {
-        "id": "67a6bc92fa9fe33c",
+        "id": "27d01ea6c29f13b3",
         "type": "change",
         "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
         "name": "Pfad zum user-Ordner bauen",
         "rules": [
             {
                 "t": "set",
-                "p": "pluginName",
+                "p": "payload.pluginName",
                 "pt": "msg",
                 "to": "files",
                 "tot": "msg"
             },
             {
                 "t": "set",
-                "p": "userDir",
+                "p": "payload.userDir",
                 "pt": "msg",
-                "to": "PluginPath & \"/\" & files & \"/\" & activeUser",
+                "to": "payload.PluginPath & \"/\" & files & \"/\" & payload.activeUser",
                 "tot": "jsonata"
             }
         ],
@@ -11149,57 +10730,37 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1200,
-        "y": 980,
+        "x": 1340,
+        "y": 320,
         "wires": [
             [
-                "bc737156d3e170ca"
+                "717547741be93b38"
             ]
         ]
     },
     {
-        "id": "bc737156d3e170ca",
+        "id": "717547741be93b38",
         "type": "fs-ops-stats",
         "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
         "name": "",
         "path": "",
         "pathType": "str",
-        "filename": "userDir",
+        "filename": "payload.userDir",
         "filenameType": "msg",
         "stats": "stats",
         "sizeType": "msg",
-        "x": 920,
-        "y": 1040,
+        "x": 1540,
+        "y": 320,
         "wires": [
             [
-                "e255f5433d4297ff"
+                "88826b980a9a9e60"
             ]
         ]
     },
     {
-        "id": "6653c8caed92f20c",
-        "type": "debug",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "Gefundener user-Ordner",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1230,
-        "y": 1120,
-        "wires": []
-    },
-    {
-        "id": "e255f5433d4297ff",
+        "id": "88826b980a9a9e60",
         "type": "function",
         "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
         "name": "Ist ein Verzeichnis?",
         "func": "// Prüfen ob Stat-Wert ein Verzeichnis ist\nif (msg.stats && typeof msg.stats.mode === \"number\") {\n    if ((msg.stats.mode & 57344) === 16384) {\n        // Ist ein Verzeichnis\n        return msg;\n    }\n}\n// Kein Verzeichnis: Nachricht verwerfen\nreturn null;",
         "outputs": 1,
@@ -11208,455 +10769,109 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1090,
-        "y": 1040,
+        "x": 1710,
+        "y": 320,
         "wires": [
             [
-                "b3f55f2d76a1e5ba"
+                "d59e642b1764df76"
             ]
         ]
     },
     {
-        "id": "b3f55f2d76a1e5ba",
+        "id": "d59e642b1764df76",
         "type": "function",
         "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "function 1",
-        "func": "function pfadJoin() {\n    // Join beliebig viele Argumente zu einem Pfad, ohne doppelte /\n    return Array.from(arguments).map(s => (s + '').replace(/(^\\/+|\\/+$)/g, '')).filter(Boolean).join('/');\n}\nmsg.pluginsettingDest = '/' + pfadJoin(msg.PathMitarbeiter, msg.activeUser, 'immo24', 'pluginsettings', msg.pluginName, msg.activeUser);\nreturn msg;",
+        "name": "Plug-In Settings Funktion",
+        "func": "let PathMitarbeiter = msg.payload.PathMitarbeiter;\nlet activeUser = msg.payload.activeUser;\nlet pluginName = msg.payload.pluginName;\nlet userDir = msg.payload.userDir;\n\n// Ohne passenden payload keine Aktion\nif (msg.payload.action === \"recall\") {\n    msg.pluginsettingSrc = `${PathMitarbeiter}/${activeUser}/immo24/pluginsettings/${pluginName}`;\n    msg.pluginsettingDest = `${userDir}`;\n    return msg;\n} else if (msg.payload.action === \"store\") {\n    msg.pluginsettingSrc = `${userDir}`;\n    msg.pluginsettingDest = `${PathMitarbeiter}/${activeUser}/immo24/pluginsettings/${pluginName}`;\n    return msg;\n}\nreturn null;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1280,
-        "y": 1040,
+        "x": 1930,
+        "y": 320,
         "wires": [
             [
-                "6653c8caed92f20c"
+                "1c85a7b73c4d0534"
             ]
         ]
     },
     {
-        "id": "fb366a78a424e81a",
-        "type": "ui-switch",
+        "id": "1e2070cb9d15c6a3",
+        "type": "function",
         "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "Clip Effects Presets",
-        "label": "Clip Effects Presets",
-        "group": "2ffd9e5a045727c6",
-        "order": 12,
-        "width": 0,
-        "height": 0,
-        "passthru": false,
-        "decouple": false,
-        "topic": "topic",
-        "topicType": "msg",
-        "style": "",
-        "className": "",
-        "layout": "row-left-swapped",
-        "clickableArea": "label",
-        "onvalue": "true",
-        "onvalueType": "bool",
-        "onicon": "",
-        "oncolor": "",
-        "offvalue": "false",
-        "offvalueType": "bool",
-        "officon": "",
-        "offcolor": "",
-        "x": 770,
-        "y": 400,
+        "name": "Pfad Plug-In Settings",
+        "func": "let PluginPath = msg.payload.PathPTUser + '/Plug-In Settings';\n\nmsg.payload.PluginPath = PluginPath;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 320,
         "wires": [
             [
-                "1bce45a28e5be938"
+                "801fc15ef3777ecb"
             ]
         ]
     },
     {
-        "id": "d53ba9235ee090fd",
-        "type": "ui-switch",
+        "id": "1c85a7b73c4d0534",
+        "type": "fs-extra-copy",
         "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "Plug-In Maps",
-        "label": "Plug-In Maps",
-        "group": "2ffd9e5a045727c6",
-        "order": 11,
-        "width": 0,
-        "height": 0,
-        "passthru": false,
-        "decouple": false,
-        "topic": "topic",
-        "topicType": "msg",
-        "style": "",
-        "className": "",
-        "layout": "row-left-swapped",
-        "clickableArea": "label",
-        "onvalue": "true",
-        "onvalueType": "bool",
-        "onicon": "",
-        "oncolor": "",
-        "offvalue": "false",
-        "offvalueType": "bool",
-        "officon": "",
-        "offcolor": "",
-        "x": 760,
+        "name": "Copy Plug-In Settings",
+        "source": "pluginsettingSrc",
+        "sourceType": "msg",
+        "target": "pluginsettingDest",
+        "targetType": "msg",
+        "x": 2180,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "926c052763c39e29",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "name": "Clip Effects Preset Funktion",
+        "func": "let PathMitarbeiter = msg.payload.PathMitarbeiter;\nlet PathPTUser = msg.payload.PathPTUser;\nlet activeUser = msg.payload.activeUser;\nlet quickPresetJobs = [];\nlet rootDir = `${PathPTUser}/Clip Effects Presets`;\nlet archiveDir = `${PathMitarbeiter}/${activeUser}/immo24/clipeffectspresets/Quick Presets`;\n\n// Ohne passenden payload keine Aktion\nif (msg.payload.action === \"recall\") {\n    msg.clipeffectSrc = `${PathMitarbeiter}/${activeUser}/immo24/clipeffectspresets`;\n    msg.clipeffectDest = `${PathPTUser}/Clip Effects Presets/${activeUser}`;\n\n    // Quick Presets NUR überschreiben, wenn Haken aktiv (recall)\n    if (msg.payload.quick === true) {\n        for (let i = 1; i <= 5; i++) {\n            quickPresetJobs.push({\n                src: `${archiveDir}/Quick Preset ${i}.tfx`,\n                destname: `Quick Preset ${i}.tfx`,\n                destpath: `${rootDir}`\n            });\n        }\n    }\n    msg.quickPresets = quickPresetJobs;\n    return msg;\n\n} else if (msg.payload.action === \"store\") {\n    msg.clipeffectSrc = `${PathPTUser}/Clip Effects Presets/${activeUser}`;\n    msg.clipeffectDest = `${PathMitarbeiter}/${activeUser}/immo24/clipeffectspresets`;\n    msg.action = \"store\";\n\n    // Quick Presets NUR überschreiben, wenn Haken aktiv (store)\n    if (msg.payload.quick === true) {\n        for (let i = 1; i <= 5; i++) {\n            quickPresetJobs.push({\n                src: `${rootDir}/Quick Preset ${i}.tfx`,\n                destname: `Quick Preset ${i}.tfx`,\n                destpath: `${archiveDir}`\n            });\n        }\n    }\n    msg.quickPresets = quickPresetJobs;\n    return msg;\n}\n\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
         "y": 440,
         "wires": [
             [
-                "50cd2dbcf91a3df4"
+                "53cbd277a23c9027",
+                "eee3ed5815c3c52d"
             ]
         ]
     },
     {
-        "id": "0a490146a7033fad",
-        "type": "ui-switch",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "Track Data to Recall Presets",
-        "label": "Track Data to Recall Presets",
-        "group": "2ffd9e5a045727c6",
-        "order": 10,
-        "width": 0,
-        "height": 0,
-        "passthru": false,
-        "decouple": false,
-        "topic": "topic",
-        "topicType": "msg",
-        "style": "",
-        "className": "",
-        "layout": "row-left-swapped",
-        "clickableArea": "label",
-        "onvalue": "true",
-        "onvalueType": "bool",
-        "onicon": "",
-        "oncolor": "",
-        "offvalue": "false",
-        "offvalueType": "bool",
-        "officon": "",
-        "offcolor": "",
-        "x": 800,
-        "y": 480,
-        "wires": [
-            [
-                "c887e15d61d101e5"
-            ]
-        ]
-    },
-    {
-        "id": "bfe2df3766e4f51c",
-        "type": "ui-switch",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "Memory Location Presets",
-        "label": "Memory Location Presets",
-        "group": "2ffd9e5a045727c6",
-        "order": 9,
-        "width": 0,
-        "height": 0,
-        "passthru": false,
-        "decouple": false,
-        "topic": "topic",
-        "topicType": "msg",
-        "style": "",
-        "className": "",
-        "layout": "row-left-swapped",
-        "clickableArea": "label",
-        "onvalue": "true",
-        "onvalueType": "bool",
-        "onicon": "",
-        "oncolor": "",
-        "offvalue": "false",
-        "offvalueType": "bool",
-        "officon": "",
-        "offcolor": "",
-        "x": 790,
-        "y": 520,
-        "wires": [
-            [
-                "24973306c9218086"
-            ]
-        ]
-    },
-    {
-        "id": "3932d45de846bec7",
-        "type": "ui-switch",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "Keyboard Shortcuts",
-        "label": "Keyboard Shortcuts",
-        "group": "2ffd9e5a045727c6",
-        "order": 8,
-        "width": 0,
-        "height": 0,
-        "passthru": false,
-        "decouple": false,
-        "topic": "topic",
-        "topicType": "msg",
-        "style": "",
-        "className": "",
-        "layout": "row-left-swapped",
-        "clickableArea": "label",
-        "onvalue": "true",
-        "onvalueType": "bool",
-        "onicon": "",
-        "oncolor": "",
-        "offvalue": "false",
-        "offvalueType": "bool",
-        "officon": "",
-        "offcolor": "",
-        "x": 780,
-        "y": 560,
-        "wires": [
-            [
-                "2aff8a3d3fd8f8f0"
-            ]
-        ]
-    },
-    {
-        "id": "0b584b15bbdbd2cd",
-        "type": "comment",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "Verhalten der Presets",
-        "info": "Fade Presets:\nNur Root-Folder!\nEs gibt Fadein, FadeOut, Crossfade, Batchfade. Dort liegen auch die QuickPresets drin, die überschrieben werden müssen.\n\nTrack Data:\nOrdnerstruktur wie bei Track Presets\nQuick Presets im Root\n\nMemory Location\nsiehe Track Data\n\nKeyboard\nsiehe Track Data\n\n\n\n",
-        "x": 1160,
-        "y": 320,
-        "wires": []
-    },
-    {
-        "id": "2ed03f5bcc2c0594",
-        "type": "function",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "Clip Effects Preset Funktion",
-        "func": "let PathMitarbeiter = msg.PathMitarbeiter;\nlet PathPTUser = msg.PathPTUser;\nlet activeUser = msg.activeUser;\nlet quickPresetJobs = [];\nlet rootDir = `${PathPTUser}/Clip Effects Presets`;\nlet archiveDir = `${PathMitarbeiter}/${activeUser}/immo24/clipeffectspresets/Quick Presets`;\n\n// Ohne passenden payload keine Aktion\nif (msg.payload === \"recall\") {\n    msg.clipeffectSrc = `${PathMitarbeiter}/${activeUser}/immo24/clipeffectspresets`;\n    msg.clipeffectDest = `${PathPTUser}/Clip Effects Presets/${activeUser}`;\n    msg.action = \"recall\";\n\n    // Quick Presets NUR überschreiben, wenn Haken aktiv (recall)\n    let overwrite = flow.get('quickclipeffects');\n    if (overwrite) {\n        for (let i = 1; i <= 5; i++) {\n            quickPresetJobs.push({\n                src: `${archiveDir}/Quick Preset ${i}.tfx`,\n                destname: `Quick Preset ${i}.tfx`,\n                destpath: `${rootDir}`\n            });\n        }\n    }\n    msg.quickPresets = quickPresetJobs;\n    return msg;\n\n} else if (msg.payload === \"store\") {\n    msg.clipeffectSrc = `${PathPTUser}/Clip Effects Presets/${activeUser}`;\n    msg.clipeffectDest = `${PathMitarbeiter}/${activeUser}/immo24/clipeffectspresets`;\n    msg.action = \"store\";\n\n    // Quick Presets NUR überschreiben, wenn Haken aktiv (store)\n    let overwrite = flow.get('quickclipeffects');\n    if (overwrite) {\n        for (let i = 1; i <= 5; i++) {\n            quickPresetJobs.push({\n                src: `${rootDir}/Quick Preset ${i}.tfx`,\n                destname: `Quick Preset ${i}.tfx`,\n                destpath: `${archiveDir}`\n            });\n        }\n    }\n    msg.quickPresets = quickPresetJobs;\n    return msg;\n}\n\nreturn null;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 720,
-        "y": 720,
-        "wires": [
-            [
-                "1e4f421fda84a49c",
-                "9a599d140a8efe20"
-            ]
-        ]
-    },
-    {
-        "id": "1e4f421fda84a49c",
+        "id": "498ec1618ef46be5",
         "type": "fs-extra-copy",
         "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
         "name": "Copy Clip Effects Presets",
         "source": "clipeffectSrc",
         "sourceType": "msg",
         "target": "clipeffectDest",
         "targetType": "msg",
-        "x": 990,
-        "y": 720,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "5dfbd7873bf9b8f8",
-        "type": "ui-switch",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "Clip Effects Quick Presets",
-        "label": "CE Quick Presets überschreiben",
-        "group": "2ffd9e5a045727c6",
-        "order": 5,
-        "width": 0,
-        "height": 0,
-        "passthru": false,
-        "decouple": false,
-        "topic": "topic",
-        "topicType": "msg",
-        "style": "",
-        "className": "",
-        "layout": "row-left-swapped",
-        "clickableArea": "label",
-        "onvalue": "true",
-        "onvalueType": "bool",
-        "onicon": "",
-        "oncolor": "",
-        "offvalue": "false",
-        "offvalueType": "bool",
-        "officon": "",
-        "offcolor": "",
-        "x": 1470,
-        "y": 400,
-        "wires": [
-            [
-                "bb5b70ec65704ecc"
-            ]
-        ]
-    },
-    {
-        "id": "1bce45a28e5be938",
-        "type": "change",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "clipeffectspresets",
-                "pt": "flow",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1100,
-        "y": 400,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "50cd2dbcf91a3df4",
-        "type": "change",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "pluginmaps",
-                "pt": "flow",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1080,
+        "x": 1970,
         "y": 440,
         "wires": [
             []
         ]
     },
     {
-        "id": "c887e15d61d101e5",
-        "type": "change",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "trackdatatorecallpresets",
-                "pt": "flow",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1120,
-        "y": 480,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "24973306c9218086",
-        "type": "change",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "memorylocationpresets",
-                "pt": "flow",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1120,
-        "y": 520,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "2aff8a3d3fd8f8f0",
-        "type": "change",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "keyboardshortcuts",
-                "pt": "flow",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1110,
-        "y": 560,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "bb5b70ec65704ecc",
-        "type": "change",
-        "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "quickclipeffects",
-                "pt": "flow",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1740,
-        "y": 400,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "a8fe68d6dfe78d47",
+        "id": "501cb80a18e2101f",
         "type": "fs-ops-copy",
         "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
         "name": "Quick Presets kopieren",
         "sourcePath": "",
         "sourcePathType": "str",
@@ -11668,17 +10883,16 @@
         "destFilenameType": "msg",
         "link": false,
         "overwrite": true,
-        "x": 1110,
-        "y": 760,
+        "x": 1050,
+        "y": 480,
         "wires": [
             []
         ]
     },
     {
-        "id": "9a599d140a8efe20",
+        "id": "53cbd277a23c9027",
         "type": "split",
         "z": "24039523dcf573b0",
-        "g": "f10408fa2622e18b",
         "name": "",
         "splt": "\\n",
         "spltType": "str",
@@ -11687,11 +10901,1129 @@
         "stream": false,
         "addname": "",
         "property": "quickPresets",
-        "x": 930,
-        "y": 760,
+        "x": 870,
+        "y": 480,
         "wires": [
             [
-                "a8fe68d6dfe78d47"
+                "501cb80a18e2101f"
+            ]
+        ]
+    },
+    {
+        "id": "eee3ed5815c3c52d",
+        "type": "fs-ops-dir",
+        "z": "24039523dcf573b0",
+        "name": "Pfad durchsuchen",
+        "path": "clipeffectSrc",
+        "pathType": "msg",
+        "filter": "*",
+        "filterType": "str",
+        "dir": "files",
+        "dirType": "msg",
+        "x": 910,
+        "y": 440,
+        "wires": [
+            [
+                "eb139f637a1151a8"
+            ]
+        ]
+    },
+    {
+        "id": "eb139f637a1151a8",
+        "type": "split",
+        "z": "24039523dcf573b0",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "files",
+        "x": 1070,
+        "y": 440,
+        "wires": [
+            [
+                "71be256f2fb63633"
+            ]
+        ]
+    },
+    {
+        "id": "71be256f2fb63633",
+        "type": "switch",
+        "z": "24039523dcf573b0",
+        "name": "Quick Presets rausfiltern",
+        "property": "files",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "neq",
+                "v": "Quick Presets",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1250,
+        "y": 440,
+        "wires": [
+            [
+                "5726ab925fa2402a"
+            ]
+        ]
+    },
+    {
+        "id": "5726ab925fa2402a",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "name": "Copy Pfade",
+        "func": "// Erwartet: msg.files (Eintragname vom split), msg.clipeffectSrc, msg.clipeffectDest\nif (!msg.files || !msg.clipeffectSrc || !msg.clipeffectDest) return null;\n\n// Einzelpfade für diesen Eintrag\nconst itemSrc = `${msg.clipeffectSrc}/${msg.files}`;\nconst itemDest = `${msg.clipeffectDest}/${msg.files}`;\n\n// Bestehende Copy-Node nutzt clipeffectSrc/Dest -> hier pro Item überschreiben:\nmsg.clipeffectSrc = itemSrc;\nmsg.clipeffectDest = itemDest;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1450,
+        "y": 440,
+        "wires": [
+            [
+                "aeb1dfa5ed86781b"
+            ]
+        ]
+    },
+    {
+        "id": "ccccb265ef4fb1dc",
+        "type": "switch",
+        "z": "24039523dcf573b0",
+        "name": "Quick Presets rausfiltern",
+        "property": "files",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "neq",
+                "v": "Quick Presets",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1570,
+        "y": 520,
+        "wires": [
+            [
+                "af2ab063726281c3"
+            ]
+        ]
+    },
+    {
+        "id": "defb410130f27b91",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "name": "Memory Location Preset Funktion",
+        "func": "let PathMitarbeiter = msg.payload.PathMitarbeiter;\nlet PathPTUser = msg.payload.PathPTUser;\nlet activeUser = msg.payload.activeUser;\nlet quickPresetJobs = [];\nlet rootDir = `${PathPTUser}/Pro Tools Presets/Memory Location Window`;\nlet archiveDir = `${PathMitarbeiter}/${activeUser}/immo24/memorylocationpresets/Quick Presets`;\n\n// Ohne passenden payload keine Aktion\nif (msg.payload.action === \"recall\") {\n    msg.memorylocationSrc = `${PathMitarbeiter}/${activeUser}/immo24/memorylocationpresets`;\n    msg.memorylocationDest = `${rootDir}/${activeUser}`;\n\n    // Quick Presets NUR überschreiben, wenn Haken aktiv (recall)\n    if (msg.payload.quick === true) {\n        for (let i = 1; i <= 5; i++) {\n            quickPresetJobs.push({\n                src: `${archiveDir}/Quick Preset ${i}.ptpreset`,\n                destname: `Quick Preset ${i}.ptpreset`,\n                destpath: `${rootDir}`\n            });\n        }\n    }\n    msg.quickPresets = quickPresetJobs;\n    return msg;\n\n} else if (msg.payload.action === \"store\") {\n    msg.memorylocationSrc = `${rootDir}/${activeUser}`;\n    msg.memorylocationDest = `${PathMitarbeiter}/${activeUser}/immo24/memorylocationpresets`;\n    msg.action = \"store\";\n\n    // Quick Presets NUR überschreiben, wenn Haken aktiv (store)\n    if (msg.payload.quick === true) {\n        for (let i = 1; i <= 5; i++) {\n            quickPresetJobs.push({\n                src: `${rootDir}/Quick Preset ${i}.ptpreset`,\n                destname: `Quick Preset ${i}.ptpreset`,\n                destpath: `${archiveDir}`\n            });\n        }\n    }\n    msg.quickPresets = quickPresetJobs;\n    return msg;\n}\n\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 520,
+        "wires": [
+            [
+                "8e5fd46df3643f82"
+            ]
+        ]
+    },
+    {
+        "id": "917f910377da205a",
+        "type": "fs-extra-copy",
+        "z": "24039523dcf573b0",
+        "name": "Copy Memory Location Presets",
+        "source": "memorylocationSrc",
+        "sourceType": "msg",
+        "target": "memorylocationDest",
+        "targetType": "msg",
+        "x": 1990,
+        "y": 520,
+        "wires": [
+            [
+                "dd0e50f3c1df94a2"
+            ]
+        ]
+    },
+    {
+        "id": "c8ca1d82140028e8",
+        "type": "fs-ops-copy",
+        "z": "24039523dcf573b0",
+        "name": "Quick Presets kopieren",
+        "sourcePath": "",
+        "sourcePathType": "str",
+        "sourceFilename": "quickPresets.src",
+        "sourceFilenameType": "msg",
+        "destPath": "quickPresets.destpath",
+        "destPathType": "msg",
+        "destFilename": "quickPresets.destname",
+        "destFilenameType": "msg",
+        "link": false,
+        "overwrite": true,
+        "x": 1430,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "dd0e50f3c1df94a2",
+        "type": "split",
+        "z": "24039523dcf573b0",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "quickPresets",
+        "x": 870,
+        "y": 560,
+        "wires": [
+            [
+                "9813dbafe6b048da"
+            ]
+        ]
+    },
+    {
+        "id": "8e5fd46df3643f82",
+        "type": "fs-ops-dir",
+        "z": "24039523dcf573b0",
+        "name": "Pfad durchsuchen",
+        "path": "memorylocationSrc",
+        "pathType": "msg",
+        "filter": "*",
+        "filterType": "str",
+        "dir": "files",
+        "dirType": "msg",
+        "x": 910,
+        "y": 520,
+        "wires": [
+            [
+                "7c5744bd352c2266"
+            ]
+        ]
+    },
+    {
+        "id": "bfc668c714f6589b",
+        "type": "split",
+        "z": "24039523dcf573b0",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "files",
+        "x": 1390,
+        "y": 520,
+        "wires": [
+            [
+                "ccccb265ef4fb1dc"
+            ]
+        ]
+    },
+    {
+        "id": "af2ab063726281c3",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "name": "Copy Pfade",
+        "func": "// Erwartet: msg.files (Eintragname vom split), msg.memorylocationSrc, msg.memorylocationDest\nif (!msg.files || !msg.memorylocationSrc || !msg.memorylocationDest) return null;\n\n// Einzelpfade für diesen Eintrag\nconst itemSrc = `${msg.memorylocationSrc}/${msg.files}`;\nconst itemDest = `${msg.memorylocationDest}/${msg.files}`;\n\n// Bestehende Copy-Node nutzt memorylocationSrc/Dest -> hier pro Item überschreiben:\nmsg.memorylocationSrc = itemSrc;\nmsg.memorylocationDest = itemDest;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1770,
+        "y": 520,
+        "wires": [
+            [
+                "917f910377da205a"
+            ]
+        ]
+    },
+    {
+        "id": "ad680f0fcc01ddb6",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "name": "TrackData Funktion",
+        "func": "let PathMitarbeiter = msg.payload.PathMitarbeiter;\nlet PathPTUser = msg.payload.PathPTUser;\nlet activeUser = msg.payload.activeUser;\nlet quickPresetJobs = [];\nlet rootDir = `${PathPTUser}/Pro Tools Presets/Track Data to Recall`;\nlet archiveDir = `${PathMitarbeiter}/${activeUser}/immo24/trackdatarecallpresets/Quick Presets`;\n\n// Ohne passenden payload keine Aktion\nif (msg.payload.action === \"recall\") {\n    msg.trackdataSrc = `${PathMitarbeiter}/${activeUser}/immo24/trackdatarecallpresets`;\n    msg.trackdataDest = `${rootDir}/${activeUser}`;\n\n    // Quick Presets NUR überschreiben, wenn Haken aktiv (recall)\n    if (msg.payload.quick === true) {\n        for (let i = 1; i <= 5; i++) {\n            quickPresetJobs.push({\n                src: `${archiveDir}/Quick Preset ${i}.ptpreset`,\n                destname: `Quick Preset ${i}.ptpreset`,\n                destpath: `${rootDir}`\n            });\n        }\n    }\n    msg.quickPresets = quickPresetJobs;\n    return msg;\n\n} else if (msg.payload.action === \"store\") {\n    msg.trackdataSrc = `${rootDir}/${activeUser}`;\n    msg.trackdataDest = `${PathMitarbeiter}/${activeUser}/immo24/trackdatarecallpresets`;\n    msg.action = \"store\";\n\n    // Quick Presets NUR überschreiben, wenn Haken aktiv (store)\n    if (msg.payload.quick === true) {\n        for (let i = 1; i <= 5; i++) {\n            quickPresetJobs.push({\n                src: `${rootDir}/Quick Preset ${i}.ptpreset`,\n                destname: `Quick Preset ${i}.ptpreset`,\n                destpath: `${archiveDir}`\n            });\n        }\n    }\n    msg.quickPresets = quickPresetJobs;\n    return msg;\n}\n\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 780,
+        "wires": [
+            [
+                "467ae7fcbc6b7735",
+                "d298d4ce858c6423"
+            ]
+        ]
+    },
+    {
+        "id": "2bbec99d791c83db",
+        "type": "fs-extra-copy",
+        "z": "24039523dcf573b0",
+        "name": "Copy TrackData Presets",
+        "source": "trackdataSrc",
+        "sourceType": "msg",
+        "target": "trackdataDest",
+        "targetType": "msg",
+        "x": 1970,
+        "y": 780,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f99608698a8bf030",
+        "type": "fs-ops-copy",
+        "z": "24039523dcf573b0",
+        "name": "Quick Presets kopieren",
+        "sourcePath": "",
+        "sourcePathType": "str",
+        "sourceFilename": "quickPresets.src",
+        "sourceFilenameType": "msg",
+        "destPath": "quickPresets.destpath",
+        "destPathType": "msg",
+        "destFilename": "quickPresets.destname",
+        "destFilenameType": "msg",
+        "link": false,
+        "overwrite": true,
+        "x": 1050,
+        "y": 820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "467ae7fcbc6b7735",
+        "type": "split",
+        "z": "24039523dcf573b0",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "quickPresets",
+        "x": 870,
+        "y": 820,
+        "wires": [
+            [
+                "f99608698a8bf030"
+            ]
+        ]
+    },
+    {
+        "id": "d298d4ce858c6423",
+        "type": "fs-ops-dir",
+        "z": "24039523dcf573b0",
+        "name": "Pfad durchsuchen",
+        "path": "trackdataSrc",
+        "pathType": "msg",
+        "filter": "*",
+        "filterType": "str",
+        "dir": "files",
+        "dirType": "msg",
+        "x": 910,
+        "y": 780,
+        "wires": [
+            [
+                "4de5265817a08368"
+            ]
+        ]
+    },
+    {
+        "id": "4de5265817a08368",
+        "type": "split",
+        "z": "24039523dcf573b0",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "files",
+        "x": 1070,
+        "y": 780,
+        "wires": [
+            [
+                "b58c7b938f4c91b8"
+            ]
+        ]
+    },
+    {
+        "id": "b58c7b938f4c91b8",
+        "type": "switch",
+        "z": "24039523dcf573b0",
+        "name": "Quick Presets rausfiltern",
+        "property": "files",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "neq",
+                "v": "Quick Presets",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1250,
+        "y": 780,
+        "wires": [
+            [
+                "1df69ea1c23c0c77"
+            ]
+        ]
+    },
+    {
+        "id": "1df69ea1c23c0c77",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "name": "Copy Pfade",
+        "func": "// Erwartet: msg.files (Eintragname vom split), msg.trackdataSrc, msg.trackdataDest\nif (!msg.files || !msg.trackdataSrc || !msg.trackdataDest) return null;\n\n// Einzelpfade für diesen Eintrag\nconst itemSrc = `${msg.trackdataSrc}/${msg.files}`;\nconst itemDest = `${msg.trackdataDest}/${msg.files}`;\n\n// Bestehende Copy-Node nutzt trackdataSrc/Dest -> hier pro Item überschreiben:\nmsg.trackdataSrc = itemSrc;\nmsg.trackdataDest = itemDest;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1450,
+        "y": 780,
+        "wires": [
+            [
+                "8f0eab772f9763a5"
+            ]
+        ]
+    },
+    {
+        "id": "97634934f5c4429f",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "name": "Keyboard Shortcut Funktion",
+        "func": "let PathMitarbeiter = msg.payload.PathMitarbeiter;\nlet PathPTUser = msg.payload.PathPTUser;\nlet activeUser = msg.payload.activeUser;\nlet quickPresetJobs = [];\nlet rootDir = `${PathPTUser}/Pro Tools Presets/Keyboard Shortcuts`;\nlet archiveDir = `${PathMitarbeiter}/${activeUser}/immo24/keyboardshortcuts/Quick Presets`;\n\n// Ohne passenden payload keine Aktion\nif (msg.payload.action === \"recall\") {\n    msg.kbshortcutSrc = `${PathMitarbeiter}/${activeUser}/immo24/keyboardshortcuts`;\n    msg.kbshortcutDest = `${rootDir}/${activeUser}`;\n\n    // Quick Presets NUR überschreiben, wenn Haken aktiv (recall)\n    if (msg.payload.quick === true) {\n        for (let i = 1; i <= 5; i++) {\n            quickPresetJobs.push({\n                src: `${archiveDir}/Quick Preset ${i}.ptpreset`,\n                destname: `Quick Preset ${i}.ptpreset`,\n                destpath: `${rootDir}`\n            });\n        }\n    }\n    msg.quickPresets = quickPresetJobs;\n    return msg;\n\n} else if (msg.payload.action === \"store\") {\n    msg.kbshortcutSrc = `${rootDir}/${activeUser}`;\n    msg.kbshortcutDest = `${PathMitarbeiter}/${activeUser}/immo24/keyboardshortcuts`;\n    msg.action = \"store\";\n\n    // Quick Presets NUR überschreiben, wenn Haken aktiv (store)\n    if (msg.payload.quick === true) {\n        for (let i = 1; i <= 5; i++) {\n            quickPresetJobs.push({\n                src: `${rootDir}/Quick Preset ${i}.ptpreset`,\n                destname: `Quick Preset ${i}.ptpreset`,\n                destpath: `${archiveDir}`\n            });\n        }\n    }\n    msg.quickPresets = quickPresetJobs;\n    return msg;\n}\n\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 860,
+        "wires": [
+            [
+                "e3ab610be9dc4093",
+                "9e68a0c8e7d4679a"
+            ]
+        ]
+    },
+    {
+        "id": "d9041e33883008cf",
+        "type": "fs-extra-copy",
+        "z": "24039523dcf573b0",
+        "name": "Copy Keyboard Shortcuts",
+        "source": "kbshortcutSrc",
+        "sourceType": "msg",
+        "target": "kbshortcutDest",
+        "targetType": "msg",
+        "x": 1970,
+        "y": 860,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1bac01adfacda892",
+        "type": "fs-ops-copy",
+        "z": "24039523dcf573b0",
+        "name": "Quick Presets kopieren",
+        "sourcePath": "",
+        "sourcePathType": "str",
+        "sourceFilename": "quickPresets.src",
+        "sourceFilenameType": "msg",
+        "destPath": "quickPresets.destpath",
+        "destPathType": "msg",
+        "destFilename": "quickPresets.destname",
+        "destFilenameType": "msg",
+        "link": false,
+        "overwrite": true,
+        "x": 1050,
+        "y": 900,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e3ab610be9dc4093",
+        "type": "split",
+        "z": "24039523dcf573b0",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "quickPresets",
+        "x": 870,
+        "y": 900,
+        "wires": [
+            [
+                "1bac01adfacda892"
+            ]
+        ]
+    },
+    {
+        "id": "9e68a0c8e7d4679a",
+        "type": "fs-ops-dir",
+        "z": "24039523dcf573b0",
+        "name": "Pfad durchsuchen",
+        "path": "kbshortcutSrc",
+        "pathType": "msg",
+        "filter": "*",
+        "filterType": "str",
+        "dir": "files",
+        "dirType": "msg",
+        "x": 910,
+        "y": 860,
+        "wires": [
+            [
+                "7daff11b9024d310"
+            ]
+        ]
+    },
+    {
+        "id": "7daff11b9024d310",
+        "type": "split",
+        "z": "24039523dcf573b0",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "files",
+        "x": 1070,
+        "y": 860,
+        "wires": [
+            [
+                "709e9e23a16f96f5"
+            ]
+        ]
+    },
+    {
+        "id": "709e9e23a16f96f5",
+        "type": "switch",
+        "z": "24039523dcf573b0",
+        "name": "Quick Presets rausfiltern",
+        "property": "files",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "neq",
+                "v": "Quick Presets",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1250,
+        "y": 860,
+        "wires": [
+            [
+                "63f6495b795634b9"
+            ]
+        ]
+    },
+    {
+        "id": "63f6495b795634b9",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "name": "Copy Pfade",
+        "func": "// Erwartet: msg.files (Eintragname vom split), msg.kbshortcutSrc, msg.kbshortcutDest\nif (!msg.files || !msg.kbshortcutSrc || !msg.kbshortcutDest) return null;\n\n// Einzelpfade für diesen Eintrag\nconst itemSrc = `${msg.kbshortcutSrc}/${msg.files}`;\nconst itemDest = `${msg.kbshortcutDest}/${msg.files}`;\n\n// Bestehende Copy-Node nutzt kbshortcutSrc/Dest -> hier pro Item überschreiben:\nmsg.kbshortcutSrc = itemSrc;\nmsg.kbshortcutDest = itemDest;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1450,
+        "y": 860,
+        "wires": [
+            [
+                "0d014e05ee032077"
+            ]
+        ]
+    },
+    {
+        "id": "2f9a0a1f4a3c0d01",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "name": "Fade Presets Funktion",
+        "func": "const { PathMitarbeiter, PathPTUser, activeUser, action, quick } = msg.payload || {};\nif (!PathMitarbeiter || !PathPTUser || !activeUser || !action) return null;\n\nconst rootDir    = `${PathPTUser}/Fade Presets`;\nconst archiveDir = `${PathMitarbeiter}/${activeUser}/immo24/fadepresets`;\nconst folders    = [\"Batch Fade\",\"Cross Fade\",\"Fade In\",\"Fade Out\"];\n\n// Quelle/Ziel für Bulk\nif (action === \"recall\") {\n    msg.fadeSrc  = archiveDir;\n    msg.fadeDest = rootDir;\n} else if (action === \"store\") {\n    msg.fadeSrc  = rootDir;\n    msg.fadeDest = archiveDir;\n} else {\n    return null;\n}\n\n// Quick Presets vorbereiten (separat kopieren)\nconst doQuick = (quick === true || quick === \"true\");\nmsg.quickPresets = [];\nif (doQuick) {\n    for (const folder of folders) {\n        for (let i = 1; i <= 5; i++) {\n            if (action === \"recall\") {\n                msg.quickPresets.push({\n                    src: `${archiveDir}/${folder}/Quick Preset ${i}.fdpreset`,\n                    destname: `Quick Preset ${i}.fdpreset`,\n                    destpath: `${rootDir}/${folder}`\n                });\n            } else { // store\n                msg.quickPresets.push({\n                    src: `${rootDir}/${folder}/Quick Preset ${i}.fdpreset`,\n                    destname: `Quick Preset ${i}.fdpreset`,\n                    destpath: `${archiveDir}/${folder}`\n                });\n            }\n        }\n    }\n}\n\n// Ordnerliste für Bulk-Pfade übergeben\nmsg.folders = folders;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 360,
+        "wires": [
+            [
+                "e0e4b5c2b9a1d7f5",
+                "0c9f2f7f2db2d1f9"
+            ]
+        ]
+    },
+    {
+        "id": "0c9f2f7f2db2d1f9",
+        "type": "split",
+        "z": "24039523dcf573b0",
+        "name": "Split Ordner (4x)",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "folders",
+        "x": 820,
+        "y": 360,
+        "wires": [
+            [
+                "d9b7b4ec5f1f3e7e"
+            ]
+        ]
+    },
+    {
+        "id": "d9b7b4ec5f1f3e7e",
+        "type": "change",
+        "z": "24039523dcf573b0",
+        "name": "scanSrc / destFolder bauen",
+        "rules": [
+            {
+                "t": "set",
+                "p": "scanFolder",
+                "pt": "msg",
+                "to": "folders",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "scanSrc",
+                "pt": "msg",
+                "to": "fadeSrc & \"/\" & folders",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "destFolder",
+                "pt": "msg",
+                "to": "fadeDest & \"/\" & folders",
+                "tot": "jsonata"
+            }
+        ],
+        "x": 1040,
+        "y": 360,
+        "wires": [
+            [
+                "a35b9f8b5f3c9a11"
+            ]
+        ]
+    },
+    {
+        "id": "a35b9f8b5f3c9a11",
+        "type": "fs-ops-dir",
+        "z": "24039523dcf573b0",
+        "name": "List .fdpreset im Ordner",
+        "path": "scanSrc",
+        "pathType": "msg",
+        "filter": "*",
+        "filterType": "msg",
+        "dir": "state",
+        "dirType": "msg",
+        "x": 1290,
+        "y": 360,
+        "wires": [
+            [
+                "f8f7f0fb2f6a5b33"
+            ]
+        ]
+    },
+    {
+        "id": "f8f7f0fb2f6a5b33",
+        "type": "split",
+        "z": "24039523dcf573b0",
+        "name": "Split Dateien",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "files",
+        "x": 1490,
+        "y": 360,
+        "wires": [
+            [
+                "2f0a7a3d7b0c44a2"
+            ]
+        ]
+    },
+    {
+        "id": "2f0a7a3d7b0c44a2",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "name": "Quick Presets filtern",
+        "func": "// erwartet: msg.files (Dateiname), msg.scanSrc, msg.destFolder\nconst name = msg.files;\nif (!name || !msg.scanSrc || !msg.destFolder) return null;\n\n// nur .fdpreset\nconst isFdpreset = /\\.fdpreset$/i.test(name);\n// Quick Presets ausschließen\nconst isQuick = /^Quick Preset\\s+[1-5]\\.fdpreset$/i.test(name);\n\nif (!isFdpreset || isQuick) return null;\n\nmsg.fileSrc   = `${msg.scanSrc}/${name}`;\nmsg.fileName  = name;\n// Zielordner existiert ggf. noch nicht – fs-ops-copy legt Datei im destFolder/destFilename ab\nmsg.destFolder = msg.destFolder;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1680,
+        "y": 360,
+        "wires": [
+            [
+                "3c1e6a6d7b1b2c44"
+            ]
+        ]
+    },
+    {
+        "id": "3c1e6a6d7b1b2c44",
+        "type": "fs-ops-copy",
+        "z": "24039523dcf573b0",
+        "name": "Copy .fdpreset (Bulk)",
+        "sourcePath": "",
+        "sourcePathType": "str",
+        "sourceFilename": "fileSrc",
+        "sourceFilenameType": "msg",
+        "destPath": "destFolder",
+        "destPathType": "msg",
+        "destFilename": "fileName",
+        "destFilenameType": "msg",
+        "link": false,
+        "overwrite": true,
+        "x": 1900,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e0e4b5c2b9a1d7f5",
+        "type": "split",
+        "z": "24039523dcf573b0",
+        "name": "Split Quick Presets",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "quickPresets",
+        "x": 830,
+        "y": 400,
+        "wires": [
+            [
+                "5a8d0f1b3e2c4d66"
+            ]
+        ]
+    },
+    {
+        "id": "5a8d0f1b3e2c4d66",
+        "type": "fs-ops-copy",
+        "z": "24039523dcf573b0",
+        "name": "Quick Presets kopieren (5×4)",
+        "sourcePath": "",
+        "sourcePathType": "str",
+        "sourceFilename": "quickPresets.src",
+        "sourceFilenameType": "msg",
+        "destPath": "quickPresets.destpath",
+        "destPathType": "msg",
+        "destFilename": "quickPresets.destname",
+        "destFilenameType": "msg",
+        "link": false,
+        "overwrite": true,
+        "x": 1060,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "eafd6987fabe06d4",
+        "type": "fs-ops-access",
+        "z": "24039523dcf573b0",
+        "name": "Zielpfad existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "trackpresetDest",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 830,
+        "y": 280,
+        "wires": [
+            [
+                "a91d426e98c54d30"
+            ],
+            [
+                "500e912ee9aa5646"
+            ]
+        ]
+    },
+    {
+        "id": "500e912ee9aa5646",
+        "type": "fs-ops-mkdir",
+        "z": "24039523dcf573b0",
+        "name": "Ordner anlegen",
+        "path": "",
+        "pathType": "str",
+        "dirname": "trackpresetDest",
+        "dirnameType": "msg",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 1040,
+        "y": 260,
+        "wires": [
+            [
+                "a91d426e98c54d30"
+            ]
+        ]
+    },
+    {
+        "id": "f1ddf879ad3e29dc",
+        "type": "fs-ops-mkdir",
+        "z": "24039523dcf573b0",
+        "name": "Ordner anlegen",
+        "path": "",
+        "pathType": "str",
+        "dirname": "templateDest",
+        "dirnameType": "msg",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 1040,
+        "y": 220,
+        "wires": [
+            [
+                "8d053651e71a88d0"
+            ]
+        ]
+    },
+    {
+        "id": "dde28766e8809a51",
+        "type": "fs-ops-access",
+        "z": "24039523dcf573b0",
+        "name": "Zielpfad existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "templateDest",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 830,
+        "y": 240,
+        "wires": [
+            [
+                "8d053651e71a88d0"
+            ],
+            [
+                "f1ddf879ad3e29dc"
+            ]
+        ]
+    },
+    {
+        "id": "2bdec4bf0c10cc13",
+        "type": "http response",
+        "z": "24039523dcf573b0",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1450,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "aeb1dfa5ed86781b",
+        "type": "fs-ops-access",
+        "z": "24039523dcf573b0",
+        "name": "Zielpfad existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "clipeffectDest",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 1630,
+        "y": 440,
+        "wires": [
+            [
+                "498ec1618ef46be5"
+            ],
+            [
+                "34313754fe3f1597"
+            ]
+        ]
+    },
+    {
+        "id": "34313754fe3f1597",
+        "type": "fs-ops-mkdir",
+        "z": "24039523dcf573b0",
+        "name": "Ordner anlegen",
+        "path": "",
+        "pathType": "str",
+        "dirname": "clipeffectDest",
+        "dirnameType": "msg",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 1800,
+        "y": 400,
+        "wires": [
+            [
+                "498ec1618ef46be5"
+            ]
+        ]
+    },
+    {
+        "id": "8f0eab772f9763a5",
+        "type": "fs-ops-access",
+        "z": "24039523dcf573b0",
+        "name": "Zielpfad existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "trackdataDest",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 1630,
+        "y": 780,
+        "wires": [
+            [
+                "2bbec99d791c83db"
+            ],
+            [
+                "eb5bcc3a7f293191"
+            ]
+        ]
+    },
+    {
+        "id": "eb5bcc3a7f293191",
+        "type": "fs-ops-mkdir",
+        "z": "24039523dcf573b0",
+        "name": "Ordner anlegen",
+        "path": "",
+        "pathType": "str",
+        "dirname": "trackdataDest",
+        "dirnameType": "msg",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 1800,
+        "y": 740,
+        "wires": [
+            [
+                "2bbec99d791c83db"
+            ]
+        ]
+    },
+    {
+        "id": "7356de3b99e788d8",
+        "type": "fs-ops-mkdir",
+        "z": "24039523dcf573b0",
+        "name": "Ordner anlegen",
+        "path": "",
+        "pathType": "str",
+        "dirname": "kbshortcutDest",
+        "dirnameType": "msg",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 1800,
+        "y": 820,
+        "wires": [
+            [
+                "d9041e33883008cf"
+            ]
+        ]
+    },
+    {
+        "id": "0d014e05ee032077",
+        "type": "fs-ops-access",
+        "z": "24039523dcf573b0",
+        "name": "Zielpfad existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "kbshortcutDest",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 1630,
+        "y": 860,
+        "wires": [
+            [
+                "d9041e33883008cf"
+            ],
+            [
+                "7356de3b99e788d8"
+            ]
+        ]
+    },
+    {
+        "id": "9813dbafe6b048da",
+        "type": "fs-ops-access",
+        "z": "24039523dcf573b0",
+        "name": "Zielpfad existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "quickPresets.destpath",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 1030,
+        "y": 560,
+        "wires": [
+            [
+                "c8ca1d82140028e8"
+            ],
+            [
+                "4b6d8a94e30892b5"
+            ]
+        ]
+    },
+    {
+        "id": "4b6d8a94e30892b5",
+        "type": "fs-ops-mkdir",
+        "z": "24039523dcf573b0",
+        "name": "Ordner anlegen",
+        "path": "",
+        "pathType": "str",
+        "dirname": "quickPresets.destpath",
+        "dirnameType": "msg",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 1220,
+        "y": 560,
+        "wires": [
+            [
+                "c8ca1d82140028e8"
+            ]
+        ]
+    },
+    {
+        "id": "37f63096637fe26d",
+        "type": "debug",
+        "z": "24039523dcf573b0",
+        "name": "debug 24",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 110,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "90ca02b246e667b7",
+        "type": "debug",
+        "z": "24039523dcf573b0",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 370,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "9bb5182f2a01f7f2",
+        "type": "fs-ops-mkdir",
+        "z": "24039523dcf573b0",
+        "name": "Ordner anlegen",
+        "path": "",
+        "pathType": "str",
+        "dirname": "memorylocationDest",
+        "dirnameType": "msg",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 940,
+        "y": 680,
+        "wires": [
+            [
+                "bfc668c714f6589b"
+            ]
+        ]
+    },
+    {
+        "id": "7c5744bd352c2266",
+        "type": "fs-ops-access",
+        "z": "24039523dcf573b0",
+        "name": "Zielpfad existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "memorylocationDest",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 730,
+        "y": 680,
+        "wires": [
+            [
+                "bfc668c714f6589b"
+            ],
+            [
+                "9bb5182f2a01f7f2"
             ]
         ]
     }

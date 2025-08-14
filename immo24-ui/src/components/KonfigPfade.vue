@@ -31,6 +31,17 @@
             @click:append-inner="browseInto('PathStammdaten', 'Pfad Stammdaten auswählen')"
           />
         </v-col>
+
+        <v-col cols="12" md="6">
+          <v-text-field
+            v-model="staged.PathPTUser"
+            label="Pfad Pro Tools User"
+            density="comfortable"
+            append-inner-icon="mdi-folder"
+            @click:append-inner="browseInto('PathPTUser', 'Pfad Pro Tools User auswählen')"
+          />
+        </v-col>
+
       </v-row>
 
       <v-alert v-if="error" type="error" class="mt-4">
@@ -47,8 +58,8 @@ import { ref, reactive, computed, onMounted } from 'vue'
 const API = import.meta.env.VITE_API_BASE || '/api'
 
 // Serverzustand + Arbeitskopie
-const original = ref({ data:{ PathMitarbeiter:'', PathProduktionen:'', PathStammdaten:'' }, version:'' })
-const staged   = reactive({ PathMitarbeiter:'', PathProduktionen:'', PathStammdaten:'' })
+const original = ref({ data:{ PathMitarbeiter:'', PathProduktionen:'', PathStammdaten:'', PathPTUser:'' }, version:'' })
+const staged   = reactive({ PathMitarbeiter:'', PathProduktionen:'', PathStammdaten:'', PathPTUser:'' })
 const loading  = ref(false)
 const error    = ref('')
 
@@ -67,6 +78,7 @@ async function loadSnapshot() {
         PathMitarbeiter: snap?.data?.PathMitarbeiter || '',
         PathProduktionen: snap?.data?.PathProduktionen || '',
         PathStammdaten:   snap?.data?.PathStammdaten   || '',
+        PathPTUser:       snap?.data?.PathPTUser       || '',
       },
       version: snap?.version || ''
     }

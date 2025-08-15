@@ -24,6 +24,14 @@
         "env": []
     },
     {
+        "id": "aa20e869f3621f0d",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "0e1923748c0d505b",
         "type": "group",
         "z": "dc0d981398a42d88",
@@ -673,6 +681,189 @@
         "y": 579,
         "w": 1192,
         "h": 282
+    },
+    {
+        "id": "21da7a611532cde9",
+        "type": "group",
+        "z": "24039523dcf573b0",
+        "name": "Track Data",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "ad680f0fcc01ddb6",
+            "2bbec99d791c83db",
+            "f99608698a8bf030",
+            "467ae7fcbc6b7735",
+            "d298d4ce858c6423",
+            "4de5265817a08368",
+            "b58c7b938f4c91b8",
+            "1df69ea1c23c0c77",
+            "585a9df6e2d4fc8f",
+            "5ce80ee7862fa202",
+            "6abd7f2dbd599246",
+            "0390d6ddd4e2c499",
+            "91137af6b7515c1b",
+            "83efdb60310b9f66",
+            "32c6fc7eee758dc2",
+            "41005d8cd172bc9d",
+            "8cb029efa37424c0",
+            "b45491f8febc2229",
+            "716f54db6d32889b"
+        ],
+        "x": 474,
+        "y": 1199,
+        "w": 1752,
+        "h": 202
+    },
+    {
+        "id": "bf4eee564e09bce7",
+        "type": "group",
+        "z": "24039523dcf573b0",
+        "name": "Memory Location",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "ccccb265ef4fb1dc",
+            "defb410130f27b91",
+            "917f910377da205a",
+            "c8ca1d82140028e8",
+            "dd0e50f3c1df94a2",
+            "8e5fd46df3643f82",
+            "bfc668c714f6589b",
+            "af2ab063726281c3",
+            "9813dbafe6b048da",
+            "4b6d8a94e30892b5",
+            "9bb5182f2a01f7f2",
+            "7c5744bd352c2266",
+            "mem_counter_inc_bulk",
+            "mem_quick_src_exists",
+            "mem_counter_inc_quick",
+            "mem_report_skipped",
+            "3882283dafc8f7ae",
+            "e2f3a4b5c6d7e8f1",
+            "f1e2d3c4b5a69788",
+            "2c1fc212585a73f0"
+        ],
+        "x": 474,
+        "y": 959,
+        "w": 1792,
+        "h": 222
+    },
+    {
+        "id": "70677eb1b82c5a42",
+        "type": "group",
+        "z": "24039523dcf573b0",
+        "name": "Clip Effects Presets",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "926c052763c39e29",
+            "501cb80a18e2101f",
+            "eee3ed5815c3c52d",
+            "5726ab925fa2402a",
+            "4ffb2321785ac98b",
+            "6f4c05fec7be2cb3",
+            "7f28c8932dfe9550",
+            "ecac37490d9bab96",
+            "c9e0e810f99a762b",
+            "1f67eb9de416c2b3",
+            "5659f0cda1297389",
+            "9b7306709391a052",
+            "db8c2123cd78a2a1",
+            "8ed53db524f61578",
+            "1961473680376c87",
+            "1a5269fddad889e9",
+            "1a3576d54deb10e1",
+            "47f58a92faa4b273",
+            "4f8384d0182832a6"
+        ],
+        "x": 474,
+        "y": 719,
+        "w": 1752,
+        "h": 222
+    },
+    {
+        "id": "7ca6f5ba8382e25f",
+        "type": "group",
+        "z": "24039523dcf573b0",
+        "name": "Keyboard Shortcuts",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "97634934f5c4429f",
+            "9e68a0c8e7d4679a",
+            "63f6495b795634b9",
+            "f149ab4d6c3361d7",
+            "ec8625296b55c237",
+            "673b872c6bbacb4a",
+            "d3eacd5953e17d84",
+            "bda8dd2c31472a75",
+            "5c7b329f612ecf44",
+            "983f0f1fddf2f572",
+            "e8576083d81a103e",
+            "916a53a295dcad47",
+            "54f5060cfecb013f",
+            "0a7ff522ecc866b5",
+            "0f74cb45dd82a5ba",
+            "5b841c6ebce3b6fa",
+            "26a33c971f7b20c7",
+            "b938dced525b1034",
+            "0cfb6f4a3d4d0171"
+        ],
+        "x": 474,
+        "y": 1419,
+        "w": 1752,
+        "h": 222
+    },
+    {
+        "id": "32425cc956c27352",
+        "type": "group",
+        "z": "24039523dcf573b0",
+        "name": "Templates",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "c3540eab39bc2683",
+            "8d053651e71a88d0",
+            "f1ddf879ad3e29dc",
+            "dde28766e8809a51",
+            "e60e5ab898a0a6de",
+            "0177cdfae37f423d",
+            "0455b0dd8e131085",
+            "c27c1122548ae7b8"
+        ],
+        "x": 474,
+        "y": 359,
+        "w": 1172,
+        "h": 162
+    },
+    {
+        "id": "45092586c8772558",
+        "type": "group",
+        "z": "24039523dcf573b0",
+        "name": "Track Presets",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "a266be18af804bb0",
+            "2aaacffa74b4ebdc",
+            "1b464dea68e4fbcb",
+            "122a96507f2fb522",
+            "b5c5c6741c0f3ad0",
+            "f319bb1b3f5a5649",
+            "7bf21c3b7172136f",
+            "ddf7a61881eb3321"
+        ],
+        "x": 474,
+        "y": 539,
+        "w": 1192,
+        "h": 162
     },
     {
         "id": "826de81a1d3da833",
@@ -2587,7 +2778,7 @@
         "z": "dc0d981398a42d88",
         "g": "e05512e54561bc65",
         "name": "tmp-Flows + Global initialisieren",
-        "func": "let data = msg.payload || {};\n\n// flow.set für UI-Textfelder (z. B. damit Pflichtfeldprüfung funktioniert)\nflow.set(\"tmpPathMitarbeiter\", data.PathMitarbeiter || \"\");\nflow.set(\"tmpPathProduktionen\", data.PathProduktionen || \"\");\nflow.set(\"tmpPathStammdaten\", data.PathStammdaten || \"\");\n\n// global.set für allgemeine Verwendung im Flow\nglobal.set(\"PathMitarbeiter\", data.PathMitarbeiter || \"\");\nglobal.set(\"PathProduktionen\", data.PathProduktionen || \"\");\nglobal.set(\"PathStammdaten\", data.PathStammdaten || \"\");\n\nreturn msg;",
+        "func": "let data = msg.payload || {};\n\n// flow.set für UI-Textfelder (z. B. damit Pflichtfeldprüfung funktioniert)\nflow.set(\"tmpPathMitarbeiter\", data.PathMitarbeiter || \"\");\nflow.set(\"tmpPathProduktionen\", data.PathProduktionen || \"\");\nflow.set(\"tmpPathStammdaten\", data.PathStammdaten || \"\");\nflow.set(\"tmpPathPTUser\", data.PathPTUser || \"\");\n\n// global.set für allgemeine Verwendung im Flow\nglobal.set(\"PathMitarbeiter\", data.PathMitarbeiter || \"\");\nglobal.set(\"PathProduktionen\", data.PathProduktionen || \"\");\nglobal.set(\"PathStammdaten\", data.PathStammdaten || \"\");\nglobal.set(\"PathPTUser\", data.PathPTUser || \"\");\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -10426,83 +10617,10 @@
         "y": 120,
         "wires": [
             [
-                "cf5b4e3d9f7b919f",
+                "b3dcee3be9daa59d",
                 "37f63096637fe26d"
             ]
         ]
-    },
-    {
-        "id": "pt_presets_parse",
-        "type": "json",
-        "z": "24039523dcf573b0",
-        "name": "parse body",
-        "property": "payload",
-        "action": "",
-        "pretty": false,
-        "x": 390,
-        "y": 120,
-        "wires": [
-            [
-                "pt_presets_validate"
-            ]
-        ]
-    },
-    {
-        "id": "pt_presets_validate",
-        "type": "function",
-        "z": "24039523dcf573b0",
-        "name": "validate + normalize",
-        "func": "// Body lesen\nconst body = (typeof msg.payload === 'object' && msg.payload) ? msg.payload : {};\nconst action = (body.action||'').toLowerCase();\nconst selections = (typeof body.selections === 'object' && body.selections) ? body.selections : {};\nconst quick = (typeof body.quick === 'object' && body.quick) ? body.quick : {};\n\nif (action !== 'recall' && action !== 'store') {\n  msg.statusCode = 400; msg.payload = { ok:false, error:'bad_action' }; return [null, msg];\n}\n\n// Schlüssel, die wir akzeptieren\nconst keysAll = ['templates','trackPresets','pluginSettings','fadePresets','clipEffects','memoryLocations','trackData','keyboardShortcuts','pluginMaps'];\nconst keysQuick = ['fadePresets','clipEffects','memoryLocations','trackData'];\n\n// Booleans erzwingen\nconst normSel = {}; keysAll.forEach(k => normSel[k] = !!selections[k]);\nconst normQuick = {}; keysQuick.forEach(k => normQuick[k] = !!quick[k]);\n\n// Mindestens eine Auswahl?\nconst any = Object.values(normSel).some(Boolean);\nif (!any) { msg.statusCode = 422; msg.payload = { ok:false, error:'nothing_selected' }; return [null, msg]; }\n\n// Hier später: tatsächliche Ansteuerung / Skripte etc.\n// Für jetzt legen wir nur ein Log an und antworten OK.\nmsg.pt = { action, selections: normSel, quick: normQuick };\n\nreturn [msg, null];",
-        "outputs": 2,
-        "noerr": 0,
-        "x": 580,
-        "y": 120,
-        "wires": [
-            [
-                "pt_presets_stub"
-            ],
-            [
-                "pt_presets_err"
-            ]
-        ]
-    },
-    {
-        "id": "pt_presets_stub",
-        "type": "function",
-        "z": "24039523dcf573b0",
-        "name": "TODO: call scripts",
-        "func": "// Hier würdest du je nach action + Auswahl deine AppleScripts / CLI / Sockets ausführen.\n// Beispiel: msg.pt.action === 'recall'\n//          if (msg.pt.selections.templates) ...\n// Für jetzt nur OK zurückgeben.\nmsg.payload = { ok:true };\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 810,
-        "y": 120,
-        "wires": [
-            [
-                "pt_presets_out"
-            ]
-        ]
-    },
-    {
-        "id": "pt_presets_err",
-        "type": "http response",
-        "z": "24039523dcf573b0",
-        "name": "error",
-        "statusCode": "",
-        "headers": {},
-        "x": 810,
-        "y": 160,
-        "wires": []
-    },
-    {
-        "id": "pt_presets_out",
-        "type": "http response",
-        "z": "24039523dcf573b0",
-        "name": "200",
-        "statusCode": "",
-        "headers": {},
-        "x": 980,
-        "y": 120,
-        "wires": []
     },
     {
         "id": "a2dad58a4cc5f504",
@@ -10542,21 +10660,21 @@
         "type": "function",
         "z": "24039523dcf573b0",
         "name": "Auswahl",
-        "func": "// ===== Robust body lesen (String oder Objekt) =====\nlet body = msg.payload;\nif (Buffer.isBuffer(body)) {\n    try { body = JSON.parse(body.toString('utf8')); } catch { body = {}; }\n} else if (typeof body === 'string') {\n    try { body = JSON.parse(body); } catch { body = {}; }\n} else if (typeof body !== 'object' || body === null) {\n    body = {};\n}\n\n// Erwartetes Format:\n// { action: \"store\" | \"recall\", categories: { cat1: [{key}], cat2: [{key,quick?}], cat3: [{key}] } }\nconst action = (body.action || '').toLowerCase();\nconst cats = body.categories || {};\nconst cat1 = Array.isArray(cats.cat1) ? cats.cat1 : [];\nconst cat2 = Array.isArray(cats.cat2) ? cats.cat2 : [];\nconst cat3 = Array.isArray(cats.cat3) ? cats.cat3 : [];\n\n// ===== Globale Pfade & User holen =====\nconst PathMitarbeiter = global.get('PathMitarbeiter') || '';\nconst PathPTUser = global.get('PathPTUser') || '';\nconst activeUser = global.get('activeUser') || '';\n\n// ===== 9 Ausgänge vorbereiten =====\nconst outs = Array(9).fill(null);\n\n// kleine Helper zum Bauen der Payloads\nconst base = { action, PathMitarbeiter, PathPTUser, activeUser };\n\n// Mapping-Helfer: setzt outs[index] wenn Key in der Liste vorhanden ist\nfunction handleCat(items, matchKey, outIndex, extra = {}) {\n    const found = items.find(it => (it?.key || '').toLowerCase() === matchKey);\n    if (!found) return;\n    // quick bei cat2 optional durchreichen\n    outs[outIndex] = {\n        ...msg,\n        payload: { ...base, quick: !!found.quick, ...extra }\n    };\n}\n\n// ===== cat1 =====\nhandleCat(cat1, 'templates', 0);\nhandleCat(cat1, 'trackpresets', 1);\nhandleCat(cat1, 'pluginsettings', 2);\n\n// ===== cat2 =====\n// Achtung: deine UI liefert \"clipFxPresets\" → wir normalisieren auf lowercase:\nhandleCat(cat2, 'fadepresets', 3);\nhandleCat(cat2, 'clipfxpresets', 4);\nhandleCat(cat2, 'memorylocation', 5);\nhandleCat(cat2, 'trackdatatorecall', 6);\n\n// ===== cat3 =====\nhandleCat(cat3, 'keyboardshortcuts', 7);\nhandleCat(cat3, 'pluginmaps', 8);\n\n// Falls gar nichts ausgewählt war, kannst du optional 400 melden –\n// ich lasse das absichtlich als \"kein Output = kein Job\".\nreturn outs;",
+        "func": "// ===== Robust body lesen (String oder Objekt) =====\nlet body = msg.payload;\nif (Buffer.isBuffer(body)) {\n    try { body = JSON.parse(body.toString('utf8')); } catch { body = {}; }\n} else if (typeof body === 'string') {\n    try { body = JSON.parse(body); } catch { body = {}; }\n} else if (typeof body !== 'object' || body === null) {\n    body = {};\n}\n\n// Erwartetes Format:\n// { action: \"store\" | \"recall\", categories: { cat1: [{key}], cat2: [{key,quick?}], cat3: [{key}] } }\nconst action = (body.action || '').toLowerCase();\nconst cats = body.categories || {};\nconst cat1 = Array.isArray(cats.cat1) ? cats.cat1 : [];\nconst cat2 = Array.isArray(cats.cat2) ? cats.cat2 : [];\nconst cat3 = Array.isArray(cats.cat3) ? cats.cat3 : [];\n\n// ===== Globale Pfade & User holen =====\nconst PathMitarbeiter = global.get('PathMitarbeiter') || '';\nconst PathPTUser = global.get('PathPTUser') || '';\nconst activeUser = global.get('activeUser') || '';\n\n// ===== 9 Ausgänge vorbereiten =====\nconst outs = Array(9).fill(null);\n\n// kleine Helper zum Bauen der Payloads\nconst base = { action, PathMitarbeiter, PathPTUser, activeUser };\n\n// Mapping-Helfer: setzt outs[index] wenn Key in der Liste vorhanden ist\nfunction handleCat(items, matchKey, outIndex, extra = {}) {\n    const found = items.find(it => (it?.key || '').toLowerCase() === matchKey);\n    if (!found) return;\n    // quick bei cat2 optional durchreichen\n    outs[outIndex] = {\n        ...msg,\n        payload: { ...base, quick: !!found.quick, ...extra }\n    };\n}\n\n// ===== cat1 =====\nhandleCat(cat1, 'templates', 0);\nhandleCat(cat1, 'trackpresets', 1);\nhandleCat(cat1, 'pluginsettings', 2);\n\n// ===== cat2 =====\n// Achtung: deine UI liefert \"clipFxPresets\" → wir normalisieren auf lowercase:\nhandleCat(cat2, 'fadepresets', 3);\nhandleCat(cat2, 'clipfxpresets', 4);\nhandleCat(cat2, 'memorylocation', 5);\nhandleCat(cat2, 'trackdatatorecall', 6);\n\n// ===== cat3 =====\nhandleCat(cat3, 'keyboardshortcuts', 7);\nhandleCat(cat3, 'pluginmaps', 8);\n\n// Falls gar nichts ausgewählt war, kannst du optional 400 melden –\n// ich lasse das absichtlich als \"kein Output = kein Job\".\n// ganz am Ende der Funktion:\nmsg.job = msg.job || {};\nmsg.job.action = action;   // \"store\" | \"recall\"\n\nreturn outs;",
         "outputs": 9,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 380,
-        "y": 300,
+        "x": 180,
+        "y": 980,
         "wires": [
             [
                 "c3540eab39bc2683"
             ],
             [
-                "38fabf9728dfb576"
+                "a266be18af804bb0"
             ],
             [
                 "1e2070cb9d15c6a3"
@@ -10568,8 +10686,7 @@
                 "926c052763c39e29"
             ],
             [
-                "defb410130f27b91",
-                "90ca02b246e667b7"
+                "defb410130f27b91"
             ],
             [
                 "ad680f0fcc01ddb6"
@@ -10595,73 +10712,45 @@
         "id": "c3540eab39bc2683",
         "type": "function",
         "z": "24039523dcf573b0",
+        "g": "32425cc956c27352",
         "name": "Template Funktion",
-        "func": "let PathMitarbeiter = msg.payload.PathMitarbeiter;\nlet PathPTUser = msg.payload.PathPTUser;\nlet activeUser = msg.payload.activeUser;\n\n// Ohne passenden payload keine Aktion\nif (msg.payload.action === \"recall\") {\n    msg.templateSrc = `${PathMitarbeiter}/${activeUser}/immo24/templates`;\n    msg.templateDest = `${PathPTUser}/Session Templates/${activeUser}`;\n    return msg;\n} else if (msg.payload.action === \"store\") {\n    msg.templateSrc = `${PathPTUser}/Session Templates/${activeUser}`;\n    msg.templateDest = `${PathMitarbeiter}/${activeUser}/immo24/templates`;\n    return msg;\n}\nreturn null;",
-        "outputs": 1,
+        "func": "// Template Funktion (Outputs: 2)\n// Out1 = normal weiter, Out2 = startCat / error\ntry {\n    const { PathMitarbeiter, PathPTUser, activeUser, action } = msg.payload || {};\n    msg.category = \"templates\";\n\n    // startCat nur 1x nebenbei senden\n    let startCat = null;\n    if (msg.job && msg.job.id) {\n        startCat = {\n            topic: \"report\",\n            payload: { type: \"startCat\", category: msg.category },\n            job: msg.job\n        };\n    }\n\n    if (action === \"recall\") {\n        msg.templateSrc = `${PathMitarbeiter}/${activeUser}/immo24/templates`;\n        msg.templateDest = `${PathPTUser}/Session Templates/${activeUser}`;\n        return [msg, startCat];\n    } else if (action === \"store\") {\n        msg.templateSrc = `${PathPTUser}/Session Templates/${activeUser}`;\n        msg.templateDest = `${PathMitarbeiter}/${activeUser}/immo24/templates`;\n        return [msg, startCat];\n    }\n\n    // ungültige Aktion\n    return [null, startCat];\n\n} catch (err) {\n    const errorMsg = {\n        topic: \"report\",\n        payload: { type: \"error\", category: \"templates\", message: err.message },\n        job: msg.job\n    };\n    return [null, errorMsg];\n}",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 590,
-        "y": 240,
+        "y": 400,
         "wires": [
             [
                 "dde28766e8809a51"
+            ],
+            [
+                "e60e5ab898a0a6de"
             ]
+        ],
+        "outputLabels": [
+            "",
+            "REPORT IN"
         ]
     },
     {
         "id": "8d053651e71a88d0",
         "type": "fs-extra-copy",
         "z": "24039523dcf573b0",
+        "g": "32425cc956c27352",
         "name": "Copy Templates",
         "source": "templateSrc",
         "sourceType": "msg",
         "target": "templateDest",
         "targetType": "msg",
-        "x": 1240,
-        "y": 240,
+        "x": 1540,
+        "y": 400,
         "wires": [
             [
-                "2bdec4bf0c10cc13"
-            ]
-        ]
-    },
-    {
-        "id": "38fabf9728dfb576",
-        "type": "function",
-        "z": "24039523dcf573b0",
-        "name": "Track Presets Funktion",
-        "func": "let PathMitarbeiter = msg.payload.PathMitarbeiter;\nlet PathPTUser = msg.payload.PathPTUser;\nlet activeUser = msg.payload.activeUser;\n\n// Ohne passenden payload keine Aktion\nif (msg.payload.action === \"recall\") {\n    msg.trackpresetSrc = `${PathMitarbeiter}/${activeUser}/immo24/trackpresets`;\n    msg.trackpresetDest = `${PathPTUser}/Track Presets/${activeUser}`;\n    return msg;\n} else if (msg.payload.action === \"store\") {\n    msg.trackpresetSrc = `${PathPTUser}/Track Presets/${activeUser}`;\n    msg.trackpresetDest = `${PathMitarbeiter}/${activeUser}/immo24/trackpresets`;\n    return msg;\n}\nreturn null;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 600,
-        "y": 280,
-        "wires": [
-            [
-                "eafd6987fabe06d4"
-            ]
-        ]
-    },
-    {
-        "id": "a91d426e98c54d30",
-        "type": "fs-extra-copy",
-        "z": "24039523dcf573b0",
-        "name": "Copy Track Presets",
-        "source": "trackpresetSrc",
-        "sourceType": "msg",
-        "target": "trackpresetDest",
-        "targetType": "msg",
-        "x": 1250,
-        "y": 280,
-        "wires": [
-            [
-                "2bdec4bf0c10cc13"
+                "mem_counter_dec_done"
             ]
         ]
     },
@@ -10677,7 +10766,7 @@
         "dir": "files",
         "dirType": "msg",
         "x": 850,
-        "y": 320,
+        "y": 220,
         "wires": [
             [
                 "f9ae2e0d8b851b95"
@@ -10697,7 +10786,7 @@
         "addname": "",
         "property": "files",
         "x": 1090,
-        "y": 320,
+        "y": 220,
         "wires": [
             [
                 "27d01ea6c29f13b3"
@@ -10731,7 +10820,7 @@
         "to": "",
         "reg": false,
         "x": 1340,
-        "y": 320,
+        "y": 220,
         "wires": [
             [
                 "717547741be93b38"
@@ -10750,7 +10839,7 @@
         "stats": "stats",
         "sizeType": "msg",
         "x": 1540,
-        "y": 320,
+        "y": 220,
         "wires": [
             [
                 "88826b980a9a9e60"
@@ -10770,7 +10859,7 @@
         "finalize": "",
         "libs": [],
         "x": 1710,
-        "y": 320,
+        "y": 220,
         "wires": [
             [
                 "d59e642b1764df76"
@@ -10789,8 +10878,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1930,
-        "y": 320,
+        "x": 1950,
+        "y": 220,
         "wires": [
             [
                 "1c85a7b73c4d0534"
@@ -10810,7 +10899,7 @@
         "finalize": "",
         "libs": [],
         "x": 600,
-        "y": 320,
+        "y": 220,
         "wires": [
             [
                 "801fc15ef3777ecb"
@@ -10826,8 +10915,8 @@
         "sourceType": "msg",
         "target": "pluginsettingDest",
         "targetType": "msg",
-        "x": 2180,
-        "y": 320,
+        "x": 2200,
+        "y": 220,
         "wires": [
             []
         ]
@@ -10836,42 +10925,36 @@
         "id": "926c052763c39e29",
         "type": "function",
         "z": "24039523dcf573b0",
+        "g": "70677eb1b82c5a42",
         "name": "Clip Effects Preset Funktion",
-        "func": "let PathMitarbeiter = msg.payload.PathMitarbeiter;\nlet PathPTUser = msg.payload.PathPTUser;\nlet activeUser = msg.payload.activeUser;\nlet quickPresetJobs = [];\nlet rootDir = `${PathPTUser}/Clip Effects Presets`;\nlet archiveDir = `${PathMitarbeiter}/${activeUser}/immo24/clipeffectspresets/Quick Presets`;\n\n// Ohne passenden payload keine Aktion\nif (msg.payload.action === \"recall\") {\n    msg.clipeffectSrc = `${PathMitarbeiter}/${activeUser}/immo24/clipeffectspresets`;\n    msg.clipeffectDest = `${PathPTUser}/Clip Effects Presets/${activeUser}`;\n\n    // Quick Presets NUR überschreiben, wenn Haken aktiv (recall)\n    if (msg.payload.quick === true) {\n        for (let i = 1; i <= 5; i++) {\n            quickPresetJobs.push({\n                src: `${archiveDir}/Quick Preset ${i}.tfx`,\n                destname: `Quick Preset ${i}.tfx`,\n                destpath: `${rootDir}`\n            });\n        }\n    }\n    msg.quickPresets = quickPresetJobs;\n    return msg;\n\n} else if (msg.payload.action === \"store\") {\n    msg.clipeffectSrc = `${PathPTUser}/Clip Effects Presets/${activeUser}`;\n    msg.clipeffectDest = `${PathMitarbeiter}/${activeUser}/immo24/clipeffectspresets`;\n    msg.action = \"store\";\n\n    // Quick Presets NUR überschreiben, wenn Haken aktiv (store)\n    if (msg.payload.quick === true) {\n        for (let i = 1; i <= 5; i++) {\n            quickPresetJobs.push({\n                src: `${rootDir}/Quick Preset ${i}.tfx`,\n                destname: `Quick Preset ${i}.tfx`,\n                destpath: `${archiveDir}`\n            });\n        }\n    }\n    msg.quickPresets = quickPresetJobs;\n    return msg;\n}\n\nreturn null;",
-        "outputs": 1,
+        "func": "// Memory Location Preset Funktion mit Error-Catch (Outputs: 2)\n// Out1 = normal weiter, Out2 = startCat / error\n\ntry {\n    let PathMitarbeiter = msg.payload.PathMitarbeiter;\n    let PathPTUser = msg.payload.PathPTUser;\n    let activeUser = msg.payload.activeUser;\n\n    let quickPresetJobs = [];\n    let rootDir = `${PathPTUser}/Clip Effects Presets`;\n    let archiveDir = `${PathMitarbeiter}/${activeUser}/immo24/clipeffectspresets/Quick Presets`;\n\n    msg.category = \"clipfxpresets\";\n\n    // ---- startCat nur 1x nebenbei senden ----\n    let startCat = null;\n    if (msg.job && msg.job.id) {\n        startCat = {\n            topic: \"report\",\n            payload: { type: \"startCat\", category: msg.category },\n            job: msg.job\n        };\n    }\n\n    // ---- Aktion verzweigen ----\n    if (msg.payload.action === \"recall\") {\n        msg.clipeffectSrc = `${PathMitarbeiter}/${activeUser}/immo24/clipeffectspresets`;\n        msg.clipeffectDest = `${rootDir}/${activeUser}`;\n\n        if (msg.payload.quick === true) {\n            for (let i = 1; i <= 5; i++) {\n                quickPresetJobs.push({\n                    src: `${archiveDir}/Quick Preset ${i}.tfx`,\n                    destname: `Quick Preset ${i}.tfx`,\n                    destpath: `${rootDir}`\n                });\n            }\n        }\n        msg.quickPresets = quickPresetJobs;\n        return [msg, startCat];\n\n    } else if (msg.payload.action === \"store\") {\n        msg.clipeffectSrc = `${rootDir}/${activeUser}`;\n        msg.clipeffectDest = `${PathMitarbeiter}/${activeUser}/immo24/clipeffectspresets`;\n\n        if (msg.payload.quick === true) {\n            for (let i = 1; i <= 5; i++) {\n                quickPresetJobs.push({\n                    src: `${rootDir}/Quick Preset ${i}.tfx`,\n                    destname: `Quick Preset ${i}.tfx`,\n                    destpath: `${archiveDir}`\n                });\n            }\n        }\n        msg.quickPresets = quickPresetJobs;\n        return [msg, startCat];\n    }\n\n    // Keine gültige Aktion\n    return [null, null];\n\n} catch (err) {\n    // Fehler an Aggregator melden\n    const errorMsg = {\n        topic: \"report\",\n        payload: { type: \"error\", category: \"clipfxpresets\", message: err.message },\n        job: msg.job\n    };\n    return [null, errorMsg];\n}",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 620,
-        "y": 440,
+        "y": 820,
         "wires": [
             [
-                "53cbd277a23c9027",
-                "eee3ed5815c3c52d"
+                "eee3ed5815c3c52d",
+                "1a5269fddad889e9"
+            ],
+            [
+                "1a3576d54deb10e1"
             ]
-        ]
-    },
-    {
-        "id": "498ec1618ef46be5",
-        "type": "fs-extra-copy",
-        "z": "24039523dcf573b0",
-        "name": "Copy Clip Effects Presets",
-        "source": "clipeffectSrc",
-        "sourceType": "msg",
-        "target": "clipeffectDest",
-        "targetType": "msg",
-        "x": 1970,
-        "y": 440,
-        "wires": [
-            []
+        ],
+        "outputLabels": [
+            "",
+            "REPORT IN"
         ]
     },
     {
         "id": "501cb80a18e2101f",
         "type": "fs-ops-copy",
         "z": "24039523dcf573b0",
+        "g": "70677eb1b82c5a42",
         "name": "Quick Presets kopieren",
         "sourcePath": "",
         "sourcePathType": "str",
@@ -10883,29 +10966,11 @@
         "destFilenameType": "msg",
         "link": false,
         "overwrite": true,
-        "x": 1050,
-        "y": 480,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "53cbd277a23c9027",
-        "type": "split",
-        "z": "24039523dcf573b0",
-        "name": "",
-        "splt": "\\n",
-        "spltType": "str",
-        "arraySplt": 1,
-        "arraySpltType": "len",
-        "stream": false,
-        "addname": "",
-        "property": "quickPresets",
-        "x": 870,
-        "y": 480,
+        "x": 1810,
+        "y": 820,
         "wires": [
             [
-                "501cb80a18e2101f"
+                "mem_counter_dec_done"
             ]
         ]
     },
@@ -10913,6 +10978,7 @@
         "id": "eee3ed5815c3c52d",
         "type": "fs-ops-dir",
         "z": "24039523dcf573b0",
+        "g": "70677eb1b82c5a42",
         "name": "Pfad durchsuchen",
         "path": "clipeffectSrc",
         "pathType": "msg",
@@ -10921,55 +10987,10 @@
         "dir": "files",
         "dirType": "msg",
         "x": 910,
-        "y": 440,
+        "y": 780,
         "wires": [
             [
-                "eb139f637a1151a8"
-            ]
-        ]
-    },
-    {
-        "id": "eb139f637a1151a8",
-        "type": "split",
-        "z": "24039523dcf573b0",
-        "name": "",
-        "splt": "\\n",
-        "spltType": "str",
-        "arraySplt": 1,
-        "arraySpltType": "len",
-        "stream": false,
-        "addname": "",
-        "property": "files",
-        "x": 1070,
-        "y": 440,
-        "wires": [
-            [
-                "71be256f2fb63633"
-            ]
-        ]
-    },
-    {
-        "id": "71be256f2fb63633",
-        "type": "switch",
-        "z": "24039523dcf573b0",
-        "name": "Quick Presets rausfiltern",
-        "property": "files",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "neq",
-                "v": "Quick Presets",
-                "vt": "str"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 1,
-        "x": 1250,
-        "y": 440,
-        "wires": [
-            [
-                "5726ab925fa2402a"
+                "7f28c8932dfe9550"
             ]
         ]
     },
@@ -10977,6 +10998,7 @@
         "id": "5726ab925fa2402a",
         "type": "function",
         "z": "24039523dcf573b0",
+        "g": "70677eb1b82c5a42",
         "name": "Copy Pfade",
         "func": "// Erwartet: msg.files (Eintragname vom split), msg.clipeffectSrc, msg.clipeffectDest\nif (!msg.files || !msg.clipeffectSrc || !msg.clipeffectDest) return null;\n\n// Einzelpfade für diesen Eintrag\nconst itemSrc = `${msg.clipeffectSrc}/${msg.files}`;\nconst itemDest = `${msg.clipeffectDest}/${msg.files}`;\n\n// Bestehende Copy-Node nutzt clipeffectSrc/Dest -> hier pro Item überschreiben:\nmsg.clipeffectSrc = itemSrc;\nmsg.clipeffectDest = itemDest;\n\nreturn msg;",
         "outputs": 1,
@@ -10985,11 +11007,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1450,
-        "y": 440,
+        "x": 1690,
+        "y": 760,
         "wires": [
             [
-                "aeb1dfa5ed86781b"
+                "1f67eb9de416c2b3"
             ]
         ]
     },
@@ -10997,6 +11019,7 @@
         "id": "ccccb265ef4fb1dc",
         "type": "switch",
         "z": "24039523dcf573b0",
+        "g": "bf4eee564e09bce7",
         "name": "Quick Presets rausfiltern",
         "property": "files",
         "propertyType": "msg",
@@ -11010,8 +11033,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 1570,
-        "y": 520,
+        "x": 1490,
+        "y": 1000,
         "wires": [
             [
                 "af2ab063726281c3"
@@ -11022,36 +11045,47 @@
         "id": "defb410130f27b91",
         "type": "function",
         "z": "24039523dcf573b0",
+        "g": "bf4eee564e09bce7",
         "name": "Memory Location Preset Funktion",
-        "func": "let PathMitarbeiter = msg.payload.PathMitarbeiter;\nlet PathPTUser = msg.payload.PathPTUser;\nlet activeUser = msg.payload.activeUser;\nlet quickPresetJobs = [];\nlet rootDir = `${PathPTUser}/Pro Tools Presets/Memory Location Window`;\nlet archiveDir = `${PathMitarbeiter}/${activeUser}/immo24/memorylocationpresets/Quick Presets`;\n\n// Ohne passenden payload keine Aktion\nif (msg.payload.action === \"recall\") {\n    msg.memorylocationSrc = `${PathMitarbeiter}/${activeUser}/immo24/memorylocationpresets`;\n    msg.memorylocationDest = `${rootDir}/${activeUser}`;\n\n    // Quick Presets NUR überschreiben, wenn Haken aktiv (recall)\n    if (msg.payload.quick === true) {\n        for (let i = 1; i <= 5; i++) {\n            quickPresetJobs.push({\n                src: `${archiveDir}/Quick Preset ${i}.ptpreset`,\n                destname: `Quick Preset ${i}.ptpreset`,\n                destpath: `${rootDir}`\n            });\n        }\n    }\n    msg.quickPresets = quickPresetJobs;\n    return msg;\n\n} else if (msg.payload.action === \"store\") {\n    msg.memorylocationSrc = `${rootDir}/${activeUser}`;\n    msg.memorylocationDest = `${PathMitarbeiter}/${activeUser}/immo24/memorylocationpresets`;\n    msg.action = \"store\";\n\n    // Quick Presets NUR überschreiben, wenn Haken aktiv (store)\n    if (msg.payload.quick === true) {\n        for (let i = 1; i <= 5; i++) {\n            quickPresetJobs.push({\n                src: `${rootDir}/Quick Preset ${i}.ptpreset`,\n                destname: `Quick Preset ${i}.ptpreset`,\n                destpath: `${archiveDir}`\n            });\n        }\n    }\n    msg.quickPresets = quickPresetJobs;\n    return msg;\n}\n\nreturn null;",
-        "outputs": 1,
+        "func": "// Memory Location Preset Funktion mit Error-Catch (Outputs: 2)\n// Out1 = normal weiter, Out2 = startCat / error\n\ntry {\n    let PathMitarbeiter = msg.payload.PathMitarbeiter;\n    let PathPTUser = msg.payload.PathPTUser;\n    let activeUser = msg.payload.activeUser;\n\n    let quickPresetJobs = [];\n    let rootDir = `${PathPTUser}/Pro Tools Presets/Memory Location Window`;\n    let archiveDir = `${PathMitarbeiter}/${activeUser}/immo24/memorylocationpresets/Quick Presets`;\n\n    msg.category = \"memoryLocation\";\n\n    // ---- startCat nur 1x nebenbei senden ----\n    let startCat = null;\n    if (msg.job && msg.job.id) {\n        startCat = {\n            topic: \"report\",\n            payload: { type: \"startCat\", category: msg.category },\n            job: msg.job\n        };\n    }\n\n    // ---- Aktion verzweigen ----\n    if (msg.payload.action === \"recall\") {\n        msg.memorylocationSrc = `${PathMitarbeiter}/${activeUser}/immo24/memorylocationpresets`;\n        msg.memorylocationDest = `${rootDir}/${activeUser}`;\n\n        if (msg.payload.quick === true) {\n            for (let i = 1; i <= 5; i++) {\n                quickPresetJobs.push({\n                    src: `${archiveDir}/Quick Preset ${i}.ptpreset`,\n                    destname: `Quick Preset ${i}.ptpreset`,\n                    destpath: `${rootDir}`\n                });\n            }\n        }\n        msg.quickPresets = quickPresetJobs;\n        return [msg, startCat];\n\n    } else if (msg.payload.action === \"store\") {\n        msg.memorylocationSrc = `${rootDir}/${activeUser}`;\n        msg.memorylocationDest = `${PathMitarbeiter}/${activeUser}/immo24/memorylocationpresets`;\n\n        if (msg.payload.quick === true) {\n            for (let i = 1; i <= 5; i++) {\n                quickPresetJobs.push({\n                    src: `${rootDir}/Quick Preset ${i}.ptpreset`,\n                    destname: `Quick Preset ${i}.ptpreset`,\n                    destpath: `${archiveDir}`\n                });\n            }\n        }\n        msg.quickPresets = quickPresetJobs;\n        return [msg, startCat];\n    }\n\n    // Keine gültige Aktion\n    return [null, null];\n\n} catch (err) {\n    // Fehler an Aggregator melden\n    const errorMsg = {\n        topic: \"report\",\n        payload: { type: \"error\", category: \"memoryLocation\", message: err.message },\n        job: msg.job\n    };\n    return [null, errorMsg];\n}",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 640,
-        "y": 520,
+        "y": 1060,
         "wires": [
             [
-                "8e5fd46df3643f82"
+                "8e5fd46df3643f82",
+                "9813dbafe6b048da",
+                "2c1fc212585a73f0"
+            ],
+            [
+                "3882283dafc8f7ae"
             ]
+        ],
+        "outputLabels": [
+            "",
+            "REPORT IN"
         ]
     },
     {
         "id": "917f910377da205a",
         "type": "fs-extra-copy",
         "z": "24039523dcf573b0",
+        "g": "bf4eee564e09bce7",
         "name": "Copy Memory Location Presets",
         "source": "memorylocationSrc",
         "sourceType": "msg",
         "target": "memorylocationDest",
         "targetType": "msg",
-        "x": 1990,
-        "y": 520,
+        "x": 2110,
+        "y": 1000,
         "wires": [
             [
-                "dd0e50f3c1df94a2"
+                "mem_counter_dec_done"
             ]
         ]
     },
@@ -11059,6 +11093,7 @@
         "id": "c8ca1d82140028e8",
         "type": "fs-ops-copy",
         "z": "24039523dcf573b0",
+        "g": "bf4eee564e09bce7",
         "name": "Quick Presets kopieren",
         "sourcePath": "",
         "sourcePathType": "str",
@@ -11070,17 +11105,20 @@
         "destFilenameType": "msg",
         "link": false,
         "overwrite": true,
-        "x": 1430,
-        "y": 560,
+        "x": 1810,
+        "y": 1060,
         "wires": [
-            []
+            [
+                "mem_counter_dec_done"
+            ]
         ]
     },
     {
         "id": "dd0e50f3c1df94a2",
         "type": "split",
         "z": "24039523dcf573b0",
-        "name": "",
+        "g": "bf4eee564e09bce7",
+        "name": "split quick",
         "splt": "\\n",
         "spltType": "str",
         "arraySplt": 1,
@@ -11088,11 +11126,11 @@
         "stream": false,
         "addname": "",
         "property": "quickPresets",
-        "x": 870,
-        "y": 560,
+        "x": 1130,
+        "y": 1080,
         "wires": [
             [
-                "9813dbafe6b048da"
+                "mem_quick_src_exists"
             ]
         ]
     },
@@ -11100,6 +11138,7 @@
         "id": "8e5fd46df3643f82",
         "type": "fs-ops-dir",
         "z": "24039523dcf573b0",
+        "g": "bf4eee564e09bce7",
         "name": "Pfad durchsuchen",
         "path": "memorylocationSrc",
         "pathType": "msg",
@@ -11108,7 +11147,7 @@
         "dir": "files",
         "dirType": "msg",
         "x": 910,
-        "y": 520,
+        "y": 1020,
         "wires": [
             [
                 "7c5744bd352c2266"
@@ -11119,7 +11158,8 @@
         "id": "bfc668c714f6589b",
         "type": "split",
         "z": "24039523dcf573b0",
-        "name": "",
+        "g": "bf4eee564e09bce7",
+        "name": "split files",
         "splt": "\\n",
         "spltType": "str",
         "arraySplt": 1,
@@ -11127,8 +11167,8 @@
         "stream": false,
         "addname": "",
         "property": "files",
-        "x": 1390,
-        "y": 520,
+        "x": 1300,
+        "y": 1000,
         "wires": [
             [
                 "ccccb265ef4fb1dc"
@@ -11139,6 +11179,7 @@
         "id": "af2ab063726281c3",
         "type": "function",
         "z": "24039523dcf573b0",
+        "g": "bf4eee564e09bce7",
         "name": "Copy Pfade",
         "func": "// Erwartet: msg.files (Eintragname vom split), msg.memorylocationSrc, msg.memorylocationDest\nif (!msg.files || !msg.memorylocationSrc || !msg.memorylocationDest) return null;\n\n// Einzelpfade für diesen Eintrag\nconst itemSrc = `${msg.memorylocationSrc}/${msg.files}`;\nconst itemDest = `${msg.memorylocationDest}/${msg.files}`;\n\n// Bestehende Copy-Node nutzt memorylocationSrc/Dest -> hier pro Item überschreiben:\nmsg.memorylocationSrc = itemSrc;\nmsg.memorylocationDest = itemDest;\n\nreturn msg;",
         "outputs": 1,
@@ -11147,11 +11188,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1770,
-        "y": 520,
+        "x": 1690,
+        "y": 1000,
         "wires": [
             [
-                "917f910377da205a"
+                "mem_counter_inc_bulk"
             ]
         ]
     },
@@ -11159,42 +11200,52 @@
         "id": "ad680f0fcc01ddb6",
         "type": "function",
         "z": "24039523dcf573b0",
+        "g": "21da7a611532cde9",
         "name": "TrackData Funktion",
-        "func": "let PathMitarbeiter = msg.payload.PathMitarbeiter;\nlet PathPTUser = msg.payload.PathPTUser;\nlet activeUser = msg.payload.activeUser;\nlet quickPresetJobs = [];\nlet rootDir = `${PathPTUser}/Pro Tools Presets/Track Data to Recall`;\nlet archiveDir = `${PathMitarbeiter}/${activeUser}/immo24/trackdatarecallpresets/Quick Presets`;\n\n// Ohne passenden payload keine Aktion\nif (msg.payload.action === \"recall\") {\n    msg.trackdataSrc = `${PathMitarbeiter}/${activeUser}/immo24/trackdatarecallpresets`;\n    msg.trackdataDest = `${rootDir}/${activeUser}`;\n\n    // Quick Presets NUR überschreiben, wenn Haken aktiv (recall)\n    if (msg.payload.quick === true) {\n        for (let i = 1; i <= 5; i++) {\n            quickPresetJobs.push({\n                src: `${archiveDir}/Quick Preset ${i}.ptpreset`,\n                destname: `Quick Preset ${i}.ptpreset`,\n                destpath: `${rootDir}`\n            });\n        }\n    }\n    msg.quickPresets = quickPresetJobs;\n    return msg;\n\n} else if (msg.payload.action === \"store\") {\n    msg.trackdataSrc = `${rootDir}/${activeUser}`;\n    msg.trackdataDest = `${PathMitarbeiter}/${activeUser}/immo24/trackdatarecallpresets`;\n    msg.action = \"store\";\n\n    // Quick Presets NUR überschreiben, wenn Haken aktiv (store)\n    if (msg.payload.quick === true) {\n        for (let i = 1; i <= 5; i++) {\n            quickPresetJobs.push({\n                src: `${rootDir}/Quick Preset ${i}.ptpreset`,\n                destname: `Quick Preset ${i}.ptpreset`,\n                destpath: `${archiveDir}`\n            });\n        }\n    }\n    msg.quickPresets = quickPresetJobs;\n    return msg;\n}\n\nreturn null;",
-        "outputs": 1,
+        "func": "// Memory Location Preset Funktion mit Error-Catch (Outputs: 2)\n// Out1 = normal weiter, Out2 = startCat / error\n\ntry {\n    let PathMitarbeiter = msg.payload.PathMitarbeiter;\n    let PathPTUser = msg.payload.PathPTUser;\n    let activeUser = msg.payload.activeUser;\n\n    let quickPresetJobs = [];\n    let rootDir = `${PathPTUser}/Pro Tools Presets/Track Data to Recall`;\n    let archiveDir = `${PathMitarbeiter}/${activeUser}/immo24/trackdatarecallpresets/Quick Presets`;\n\n    msg.category = \"trackdatarecall\";\n\n    // ---- startCat nur 1x nebenbei senden ----\n    let startCat = null;\n    if (msg.job && msg.job.id) {\n        startCat = {\n            topic: \"report\",\n            payload: { type: \"startCat\", category: msg.category },\n            job: msg.job\n        };\n    }\n\n    // ---- Aktion verzweigen ----\n    if (msg.payload.action === \"recall\") {\n        msg.trackdataSrc = `${PathMitarbeiter}/${activeUser}/immo24/trackdatapresets`;\n        msg.trackdataDest = `${rootDir}/${activeUser}`;\n\n        if (msg.payload.quick === true) {\n            for (let i = 1; i <= 5; i++) {\n                quickPresetJobs.push({\n                    src: `${archiveDir}/Quick Preset ${i}.ptpreset`,\n                    destname: `Quick Preset ${i}.ptpreset`,\n                    destpath: `${rootDir}`\n                });\n            }\n        }\n        msg.quickPresets = quickPresetJobs;\n        return [msg, startCat];\n\n    } else if (msg.payload.action === \"store\") {\n        msg.trackdataSrc = `${rootDir}/${activeUser}`;\n        msg.trackdataDest = `${PathMitarbeiter}/${activeUser}/immo24/trackdatapresets`;\n\n        if (msg.payload.quick === true) {\n            for (let i = 1; i <= 5; i++) {\n                quickPresetJobs.push({\n                    src: `${rootDir}/Quick Preset ${i}.ptpreset`,\n                    destname: `Quick Preset ${i}.ptpreset`,\n                    destpath: `${archiveDir}`\n                });\n            }\n        }\n        msg.quickPresets = quickPresetJobs;\n        return [msg, startCat];\n    }\n\n    // Keine gültige Aktion\n    return [null, null];\n\n} catch (err) {\n    // Fehler an Aggregator melden\n    const errorMsg = {\n        topic: \"report\",\n        payload: { type: \"error\", category: \"trackdatarecall\", message: err.message },\n        job: msg.job\n    };\n    return [null, errorMsg];\n}",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 590,
-        "y": 780,
+        "y": 1280,
         "wires": [
             [
-                "467ae7fcbc6b7735",
-                "d298d4ce858c6423"
-            ]
+                "d298d4ce858c6423",
+                "83efdb60310b9f66"
+            ],
+            []
+        ],
+        "outputLabels": [
+            "",
+            "REPORT IN"
         ]
     },
     {
         "id": "2bbec99d791c83db",
         "type": "fs-extra-copy",
         "z": "24039523dcf573b0",
+        "g": "21da7a611532cde9",
         "name": "Copy TrackData Presets",
         "source": "trackdataSrc",
         "sourceType": "msg",
         "target": "trackdataDest",
         "targetType": "msg",
-        "x": 1970,
-        "y": 780,
+        "x": 2090,
+        "y": 1240,
         "wires": [
-            []
+            [
+                "mem_counter_dec_done"
+            ]
         ]
     },
     {
         "id": "f99608698a8bf030",
         "type": "fs-ops-copy",
         "z": "24039523dcf573b0",
+        "g": "21da7a611532cde9",
         "name": "Quick Presets kopieren",
         "sourcePath": "",
         "sourcePathType": "str",
@@ -11206,17 +11257,20 @@
         "destFilenameType": "msg",
         "link": false,
         "overwrite": true,
-        "x": 1050,
-        "y": 820,
+        "x": 1810,
+        "y": 1300,
         "wires": [
-            []
+            [
+                "mem_counter_dec_done"
+            ]
         ]
     },
     {
         "id": "467ae7fcbc6b7735",
         "type": "split",
         "z": "24039523dcf573b0",
-        "name": "",
+        "g": "21da7a611532cde9",
+        "name": "split quick",
         "splt": "\\n",
         "spltType": "str",
         "arraySplt": 1,
@@ -11224,11 +11278,11 @@
         "stream": false,
         "addname": "",
         "property": "quickPresets",
-        "x": 870,
-        "y": 820,
+        "x": 1130,
+        "y": 1320,
         "wires": [
             [
-                "f99608698a8bf030"
+                "41005d8cd172bc9d"
             ]
         ]
     },
@@ -11236,6 +11290,7 @@
         "id": "d298d4ce858c6423",
         "type": "fs-ops-dir",
         "z": "24039523dcf573b0",
+        "g": "21da7a611532cde9",
         "name": "Pfad durchsuchen",
         "path": "trackdataSrc",
         "pathType": "msg",
@@ -11244,10 +11299,10 @@
         "dir": "files",
         "dirType": "msg",
         "x": 910,
-        "y": 780,
+        "y": 1240,
         "wires": [
             [
-                "4de5265817a08368"
+                "6abd7f2dbd599246"
             ]
         ]
     },
@@ -11255,7 +11310,8 @@
         "id": "4de5265817a08368",
         "type": "split",
         "z": "24039523dcf573b0",
-        "name": "",
+        "g": "21da7a611532cde9",
+        "name": "split files",
         "splt": "\\n",
         "spltType": "str",
         "arraySplt": 1,
@@ -11263,8 +11319,8 @@
         "stream": false,
         "addname": "",
         "property": "files",
-        "x": 1070,
-        "y": 780,
+        "x": 1300,
+        "y": 1240,
         "wires": [
             [
                 "b58c7b938f4c91b8"
@@ -11275,6 +11331,7 @@
         "id": "b58c7b938f4c91b8",
         "type": "switch",
         "z": "24039523dcf573b0",
+        "g": "21da7a611532cde9",
         "name": "Quick Presets rausfiltern",
         "property": "files",
         "propertyType": "msg",
@@ -11288,8 +11345,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 1,
-        "x": 1250,
-        "y": 780,
+        "x": 1490,
+        "y": 1240,
         "wires": [
             [
                 "1df69ea1c23c0c77"
@@ -11300,6 +11357,7 @@
         "id": "1df69ea1c23c0c77",
         "type": "function",
         "z": "24039523dcf573b0",
+        "g": "21da7a611532cde9",
         "name": "Copy Pfade",
         "func": "// Erwartet: msg.files (Eintragname vom split), msg.trackdataSrc, msg.trackdataDest\nif (!msg.files || !msg.trackdataSrc || !msg.trackdataDest) return null;\n\n// Einzelpfade für diesen Eintrag\nconst itemSrc = `${msg.trackdataSrc}/${msg.files}`;\nconst itemDest = `${msg.trackdataDest}/${msg.files}`;\n\n// Bestehende Copy-Node nutzt trackdataSrc/Dest -> hier pro Item überschreiben:\nmsg.trackdataSrc = itemSrc;\nmsg.trackdataDest = itemDest;\n\nreturn msg;",
         "outputs": 1,
@@ -11308,11 +11366,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1450,
-        "y": 780,
+        "x": 1690,
+        "y": 1240,
         "wires": [
             [
-                "8f0eab772f9763a5"
+                "91137af6b7515c1b"
             ]
         ]
     },
@@ -11320,83 +11378,36 @@
         "id": "97634934f5c4429f",
         "type": "function",
         "z": "24039523dcf573b0",
+        "g": "7ca6f5ba8382e25f",
         "name": "Keyboard Shortcut Funktion",
-        "func": "let PathMitarbeiter = msg.payload.PathMitarbeiter;\nlet PathPTUser = msg.payload.PathPTUser;\nlet activeUser = msg.payload.activeUser;\nlet quickPresetJobs = [];\nlet rootDir = `${PathPTUser}/Pro Tools Presets/Keyboard Shortcuts`;\nlet archiveDir = `${PathMitarbeiter}/${activeUser}/immo24/keyboardshortcuts/Quick Presets`;\n\n// Ohne passenden payload keine Aktion\nif (msg.payload.action === \"recall\") {\n    msg.kbshortcutSrc = `${PathMitarbeiter}/${activeUser}/immo24/keyboardshortcuts`;\n    msg.kbshortcutDest = `${rootDir}/${activeUser}`;\n\n    // Quick Presets NUR überschreiben, wenn Haken aktiv (recall)\n    if (msg.payload.quick === true) {\n        for (let i = 1; i <= 5; i++) {\n            quickPresetJobs.push({\n                src: `${archiveDir}/Quick Preset ${i}.ptpreset`,\n                destname: `Quick Preset ${i}.ptpreset`,\n                destpath: `${rootDir}`\n            });\n        }\n    }\n    msg.quickPresets = quickPresetJobs;\n    return msg;\n\n} else if (msg.payload.action === \"store\") {\n    msg.kbshortcutSrc = `${rootDir}/${activeUser}`;\n    msg.kbshortcutDest = `${PathMitarbeiter}/${activeUser}/immo24/keyboardshortcuts`;\n    msg.action = \"store\";\n\n    // Quick Presets NUR überschreiben, wenn Haken aktiv (store)\n    if (msg.payload.quick === true) {\n        for (let i = 1; i <= 5; i++) {\n            quickPresetJobs.push({\n                src: `${rootDir}/Quick Preset ${i}.ptpreset`,\n                destname: `Quick Preset ${i}.ptpreset`,\n                destpath: `${archiveDir}`\n            });\n        }\n    }\n    msg.quickPresets = quickPresetJobs;\n    return msg;\n}\n\nreturn null;",
-        "outputs": 1,
+        "func": "// Memory Location Preset Funktion mit Error-Catch (Outputs: 2)\n// Out1 = normal weiter, Out2 = startCat / error\n\ntry {\n    let PathMitarbeiter = msg.payload.PathMitarbeiter;\n    let PathPTUser = msg.payload.PathPTUser;\n    let activeUser = msg.payload.activeUser;\n\n    let quickPresetJobs = [];\n    let rootDir = `${PathPTUser}/Pro Tools Presets/Keyboard Shortcuts`;\n    let archiveDir = `${PathMitarbeiter}/${activeUser}/immo24/keyboardshortcuts/Quick Presets`;\n\n    msg.category = \"keyboardshortcuts\";\n\n    // ---- startCat nur 1x nebenbei senden ----\n    let startCat = null;\n    if (msg.job && msg.job.id) {\n        startCat = {\n            topic: \"report\",\n            payload: { type: \"startCat\", category: msg.category },\n            job: msg.job\n        };\n    }\n\n    // ---- Aktion verzweigen ----\n    if (msg.payload.action === \"recall\") {\n        msg.kbshortcutSrc = `${PathMitarbeiter}/${activeUser}/immo24/keyboardshortscuts`;\n        msg.kbshortcutDest = `${rootDir}/${activeUser}`;\n\n        if (msg.payload.quick === true) {\n            for (let i = 1; i <= 5; i++) {\n                quickPresetJobs.push({\n                    src: `${archiveDir}/Quick Preset ${i}.ptpreset`,\n                    destname: `Quick Preset ${i}.ptpreset`,\n                    destpath: `${rootDir}`\n                });\n            }\n        }\n        msg.quickPresets = quickPresetJobs;\n        return [msg, startCat];\n\n    } else if (msg.payload.action === \"store\") {\n        msg.kbshortcutSrc = `${rootDir}/${activeUser}`;\n        msg.kbshortcutDest = `${PathMitarbeiter}/${activeUser}/immo24/keyboardshortcuts`;\n\n        if (msg.payload.quick === true) {\n            for (let i = 1; i <= 5; i++) {\n                quickPresetJobs.push({\n                    src: `${rootDir}/Quick Preset ${i}.ptpreset`,\n                    destname: `Quick Preset ${i}.ptpreset`,\n                    destpath: `${archiveDir}`\n                });\n            }\n        }\n        msg.quickPresets = quickPresetJobs;\n        return [msg, startCat];\n    }\n\n    // Keine gültige Aktion\n    return [null, null];\n\n} catch (err) {\n    // Fehler an Aggregator melden\n    const errorMsg = {\n        topic: \"report\",\n        payload: { type: \"error\", category: \"keyboardshortcuts\", message: err.message },\n        job: msg.job\n    };\n    return [null, errorMsg];\n}",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 620,
-        "y": 860,
+        "y": 1520,
         "wires": [
             [
-                "e3ab610be9dc4093",
-                "9e68a0c8e7d4679a"
-            ]
-        ]
-    },
-    {
-        "id": "d9041e33883008cf",
-        "type": "fs-extra-copy",
-        "z": "24039523dcf573b0",
-        "name": "Copy Keyboard Shortcuts",
-        "source": "kbshortcutSrc",
-        "sourceType": "msg",
-        "target": "kbshortcutDest",
-        "targetType": "msg",
-        "x": 1970,
-        "y": 860,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "1bac01adfacda892",
-        "type": "fs-ops-copy",
-        "z": "24039523dcf573b0",
-        "name": "Quick Presets kopieren",
-        "sourcePath": "",
-        "sourcePathType": "str",
-        "sourceFilename": "quickPresets.src",
-        "sourceFilenameType": "msg",
-        "destPath": "quickPresets.destpath",
-        "destPathType": "msg",
-        "destFilename": "quickPresets.destname",
-        "destFilenameType": "msg",
-        "link": false,
-        "overwrite": true,
-        "x": 1050,
-        "y": 900,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "e3ab610be9dc4093",
-        "type": "split",
-        "z": "24039523dcf573b0",
-        "name": "",
-        "splt": "\\n",
-        "spltType": "str",
-        "arraySplt": 1,
-        "arraySpltType": "len",
-        "stream": false,
-        "addname": "",
-        "property": "quickPresets",
-        "x": 870,
-        "y": 900,
-        "wires": [
+                "9e68a0c8e7d4679a",
+                "54f5060cfecb013f"
+            ],
             [
-                "1bac01adfacda892"
+                "673b872c6bbacb4a"
             ]
+        ],
+        "outputLabels": [
+            "",
+            "REPORT IN"
         ]
     },
     {
         "id": "9e68a0c8e7d4679a",
         "type": "fs-ops-dir",
         "z": "24039523dcf573b0",
+        "g": "7ca6f5ba8382e25f",
         "name": "Pfad durchsuchen",
         "path": "kbshortcutSrc",
         "pathType": "msg",
@@ -11405,55 +11416,10 @@
         "dir": "files",
         "dirType": "msg",
         "x": 910,
-        "y": 860,
+        "y": 1460,
         "wires": [
             [
-                "7daff11b9024d310"
-            ]
-        ]
-    },
-    {
-        "id": "7daff11b9024d310",
-        "type": "split",
-        "z": "24039523dcf573b0",
-        "name": "",
-        "splt": "\\n",
-        "spltType": "str",
-        "arraySplt": 1,
-        "arraySpltType": "len",
-        "stream": false,
-        "addname": "",
-        "property": "files",
-        "x": 1070,
-        "y": 860,
-        "wires": [
-            [
-                "709e9e23a16f96f5"
-            ]
-        ]
-    },
-    {
-        "id": "709e9e23a16f96f5",
-        "type": "switch",
-        "z": "24039523dcf573b0",
-        "name": "Quick Presets rausfiltern",
-        "property": "files",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "neq",
-                "v": "Quick Presets",
-                "vt": "str"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 1,
-        "x": 1250,
-        "y": 860,
-        "wires": [
-            [
-                "63f6495b795634b9"
+                "d3eacd5953e17d84"
             ]
         ]
     },
@@ -11461,6 +11427,7 @@
         "id": "63f6495b795634b9",
         "type": "function",
         "z": "24039523dcf573b0",
+        "g": "7ca6f5ba8382e25f",
         "name": "Copy Pfade",
         "func": "// Erwartet: msg.files (Eintragname vom split), msg.kbshortcutSrc, msg.kbshortcutDest\nif (!msg.files || !msg.kbshortcutSrc || !msg.kbshortcutDest) return null;\n\n// Einzelpfade für diesen Eintrag\nconst itemSrc = `${msg.kbshortcutSrc}/${msg.files}`;\nconst itemDest = `${msg.kbshortcutDest}/${msg.files}`;\n\n// Bestehende Copy-Node nutzt kbshortcutSrc/Dest -> hier pro Item überschreiben:\nmsg.kbshortcutSrc = itemSrc;\nmsg.kbshortcutDest = itemDest;\n\nreturn msg;",
         "outputs": 1,
@@ -11469,11 +11436,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1450,
-        "y": 860,
+        "x": 1690,
+        "y": 1460,
         "wires": [
             [
-                "0d014e05ee032077"
+                "e8576083d81a103e"
             ]
         ]
     },
@@ -11482,20 +11449,28 @@
         "type": "function",
         "z": "24039523dcf573b0",
         "name": "Fade Presets Funktion",
-        "func": "const { PathMitarbeiter, PathPTUser, activeUser, action, quick } = msg.payload || {};\nif (!PathMitarbeiter || !PathPTUser || !activeUser || !action) return null;\n\nconst rootDir    = `${PathPTUser}/Fade Presets`;\nconst archiveDir = `${PathMitarbeiter}/${activeUser}/immo24/fadepresets`;\nconst folders    = [\"Batch Fade\",\"Cross Fade\",\"Fade In\",\"Fade Out\"];\n\n// Quelle/Ziel für Bulk\nif (action === \"recall\") {\n    msg.fadeSrc  = archiveDir;\n    msg.fadeDest = rootDir;\n} else if (action === \"store\") {\n    msg.fadeSrc  = rootDir;\n    msg.fadeDest = archiveDir;\n} else {\n    return null;\n}\n\n// Quick Presets vorbereiten (separat kopieren)\nconst doQuick = (quick === true || quick === \"true\");\nmsg.quickPresets = [];\nif (doQuick) {\n    for (const folder of folders) {\n        for (let i = 1; i <= 5; i++) {\n            if (action === \"recall\") {\n                msg.quickPresets.push({\n                    src: `${archiveDir}/${folder}/Quick Preset ${i}.fdpreset`,\n                    destname: `Quick Preset ${i}.fdpreset`,\n                    destpath: `${rootDir}/${folder}`\n                });\n            } else { // store\n                msg.quickPresets.push({\n                    src: `${rootDir}/${folder}/Quick Preset ${i}.fdpreset`,\n                    destname: `Quick Preset ${i}.fdpreset`,\n                    destpath: `${archiveDir}/${folder}`\n                });\n            }\n        }\n    }\n}\n\n// Ordnerliste für Bulk-Pfade übergeben\nmsg.folders = folders;\nreturn msg;",
-        "outputs": 1,
+        "func": "// Fade Presets Funktion (Outputs: 2)\n// Out1 = normal weiter, Out2 = startCat / error\n\ntry {\n    const { PathMitarbeiter, PathPTUser, activeUser, action, quick } = msg.payload || {};\n    if (!PathMitarbeiter || !PathPTUser || !activeUser || !action) return [null, null];\n\n    msg.category = \"fadePresets\";\n\n    // --- startCat NUR 1x pro Job+Kategorie senden (Flow-Flag) ---\n    let startCat = null;\n    const startKey = `startcat:${msg.job?.id || 'none'}:${msg.category}`;\n    if (!flow.get(startKey) && msg.job && msg.job.id) {\n        flow.set(startKey, true);\n        startCat = {\n            topic: \"report\",\n            payload: { type: \"startCat\", category: msg.category },\n            job: msg.job\n        };\n    }\n\n    const rootDir = `${PathPTUser}/Fade Presets`;\n    const archiveDir = `${PathMitarbeiter}/${activeUser}/immo24/fadepresets`;\n    const folders = [\"Batch Fade\", \"Cross Fade\", \"Fade In\", \"Fade Out\"];\n\n    // Quelle/Ziel für Bulk\n    if (action === \"recall\") {\n        msg.fadeSrc = archiveDir;\n        msg.fadeDest = rootDir;\n    } else if (action === \"store\") {\n        msg.fadeSrc = rootDir;\n        msg.fadeDest = archiveDir;\n    } else {\n        return [null, startCat];\n    }\n\n    // Quick Presets vorbereiten (separat kopieren)\n    const doQuick = (quick === true || quick === \"true\");\n    msg.quickPresets = [];\n    if (doQuick) {\n        for (const folder of folders) {\n            for (let i = 1; i <= 5; i++) {\n                if (action === \"recall\") {\n                    msg.quickPresets.push({\n                        src: `${archiveDir}/${folder}/Quick Preset ${i}.fdpreset`,\n                        destname: `Quick Preset ${i}.fdpreset`,\n                        destpath: `${rootDir}/${folder}`\n                    });\n                } else {\n                    msg.quickPresets.push({\n                        src: `${rootDir}/${folder}/Quick Preset ${i}.fdpreset`,\n                        destname: `Quick Preset ${i}.fdpreset`,\n                        destpath: `${archiveDir}/${folder}`\n                    });\n                }\n            }\n        }\n    }\n\n    // Ordnerliste für Bulk übergeben\n    msg.folders = folders;\n\n    return [msg, startCat];\n\n} catch (err) {\n    const errorMsg = {\n        topic: \"report\",\n        payload: { type: \"error\", category: \"fadePresets\", message: err.message },\n        job: msg.job\n    };\n    return [null, errorMsg];\n}",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 600,
-        "y": 360,
+        "y": 260,
         "wires": [
             [
                 "e0e4b5c2b9a1d7f5",
-                "0c9f2f7f2db2d1f9"
+                "0c9f2f7f2db2d1f9",
+                "d16554d476592212"
+            ],
+            [
+                "0e22a946caa8156b"
             ]
+        ],
+        "outputLabels": [
+            "",
+            "REPORT IN"
         ]
     },
     {
@@ -11511,7 +11486,7 @@
         "addname": "",
         "property": "folders",
         "x": 820,
-        "y": 360,
+        "y": 260,
         "wires": [
             [
                 "d9b7b4ec5f1f3e7e"
@@ -11547,7 +11522,7 @@
             }
         ],
         "x": 1040,
-        "y": 360,
+        "y": 260,
         "wires": [
             [
                 "a35b9f8b5f3c9a11"
@@ -11566,7 +11541,7 @@
         "dir": "state",
         "dirType": "msg",
         "x": 1290,
-        "y": 360,
+        "y": 260,
         "wires": [
             [
                 "f8f7f0fb2f6a5b33"
@@ -11586,7 +11561,7 @@
         "addname": "",
         "property": "files",
         "x": 1490,
-        "y": 360,
+        "y": 260,
         "wires": [
             [
                 "2f0a7a3d7b0c44a2"
@@ -11606,10 +11581,10 @@
         "finalize": "",
         "libs": [],
         "x": 1680,
-        "y": 360,
+        "y": 260,
         "wires": [
             [
-                "3c1e6a6d7b1b2c44"
+                "22c35c48819fd2c5"
             ]
         ]
     },
@@ -11628,10 +11603,12 @@
         "destFilenameType": "msg",
         "link": false,
         "overwrite": true,
-        "x": 1900,
-        "y": 360,
+        "x": 2140,
+        "y": 260,
         "wires": [
-            []
+            [
+                "mem_counter_dec_done"
+            ]
         ]
     },
     {
@@ -11647,10 +11624,10 @@
         "addname": "",
         "property": "quickPresets",
         "x": 830,
-        "y": 400,
+        "y": 300,
         "wires": [
             [
-                "5a8d0f1b3e2c4d66"
+                "bd97d6f6ce673d8c"
             ]
         ]
     },
@@ -11669,53 +11646,11 @@
         "destFilenameType": "msg",
         "link": false,
         "overwrite": true,
-        "x": 1060,
-        "y": 400,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "eafd6987fabe06d4",
-        "type": "fs-ops-access",
-        "z": "24039523dcf573b0",
-        "name": "Zielpfad existiert?",
-        "path": "",
-        "pathType": "str",
-        "filename": "trackpresetDest",
-        "filenameType": "msg",
-        "read": false,
-        "write": false,
-        "throwerror": false,
-        "x": 830,
-        "y": 280,
+        "x": 1540,
+        "y": 300,
         "wires": [
             [
-                "a91d426e98c54d30"
-            ],
-            [
-                "500e912ee9aa5646"
-            ]
-        ]
-    },
-    {
-        "id": "500e912ee9aa5646",
-        "type": "fs-ops-mkdir",
-        "z": "24039523dcf573b0",
-        "name": "Ordner anlegen",
-        "path": "",
-        "pathType": "str",
-        "dirname": "trackpresetDest",
-        "dirnameType": "msg",
-        "recursive": false,
-        "mode": "755",
-        "fullpath": "directory",
-        "fullpathType": "msg",
-        "x": 1040,
-        "y": 260,
-        "wires": [
-            [
-                "a91d426e98c54d30"
+                "mem_counter_dec_done"
             ]
         ]
     },
@@ -11723,6 +11658,7 @@
         "id": "f1ddf879ad3e29dc",
         "type": "fs-ops-mkdir",
         "z": "24039523dcf573b0",
+        "g": "32425cc956c27352",
         "name": "Ordner anlegen",
         "path": "",
         "pathType": "str",
@@ -11732,11 +11668,11 @@
         "mode": "755",
         "fullpath": "directory",
         "fullpathType": "msg",
-        "x": 1040,
-        "y": 220,
+        "x": 1120,
+        "y": 420,
         "wires": [
             [
-                "8d053651e71a88d0"
+                "0177cdfae37f423d"
             ]
         ]
     },
@@ -11744,6 +11680,7 @@
         "id": "dde28766e8809a51",
         "type": "fs-ops-access",
         "z": "24039523dcf573b0",
+        "g": "32425cc956c27352",
         "name": "Zielpfad existiert?",
         "path": "",
         "pathType": "str",
@@ -11752,11 +11689,11 @@
         "read": false,
         "write": false,
         "throwerror": false,
-        "x": 830,
-        "y": 240,
+        "x": 910,
+        "y": 400,
         "wires": [
             [
-                "8d053651e71a88d0"
+                "0177cdfae37f423d"
             ],
             [
                 "f1ddf879ad3e29dc"
@@ -11764,153 +11701,11 @@
         ]
     },
     {
-        "id": "2bdec4bf0c10cc13",
-        "type": "http response",
-        "z": "24039523dcf573b0",
-        "name": "",
-        "statusCode": "",
-        "headers": {},
-        "x": 1450,
-        "y": 260,
-        "wires": []
-    },
-    {
-        "id": "aeb1dfa5ed86781b",
-        "type": "fs-ops-access",
-        "z": "24039523dcf573b0",
-        "name": "Zielpfad existiert?",
-        "path": "",
-        "pathType": "str",
-        "filename": "clipeffectDest",
-        "filenameType": "msg",
-        "read": false,
-        "write": false,
-        "throwerror": false,
-        "x": 1630,
-        "y": 440,
-        "wires": [
-            [
-                "498ec1618ef46be5"
-            ],
-            [
-                "34313754fe3f1597"
-            ]
-        ]
-    },
-    {
-        "id": "34313754fe3f1597",
-        "type": "fs-ops-mkdir",
-        "z": "24039523dcf573b0",
-        "name": "Ordner anlegen",
-        "path": "",
-        "pathType": "str",
-        "dirname": "clipeffectDest",
-        "dirnameType": "msg",
-        "recursive": false,
-        "mode": "755",
-        "fullpath": "directory",
-        "fullpathType": "msg",
-        "x": 1800,
-        "y": 400,
-        "wires": [
-            [
-                "498ec1618ef46be5"
-            ]
-        ]
-    },
-    {
-        "id": "8f0eab772f9763a5",
-        "type": "fs-ops-access",
-        "z": "24039523dcf573b0",
-        "name": "Zielpfad existiert?",
-        "path": "",
-        "pathType": "str",
-        "filename": "trackdataDest",
-        "filenameType": "msg",
-        "read": false,
-        "write": false,
-        "throwerror": false,
-        "x": 1630,
-        "y": 780,
-        "wires": [
-            [
-                "2bbec99d791c83db"
-            ],
-            [
-                "eb5bcc3a7f293191"
-            ]
-        ]
-    },
-    {
-        "id": "eb5bcc3a7f293191",
-        "type": "fs-ops-mkdir",
-        "z": "24039523dcf573b0",
-        "name": "Ordner anlegen",
-        "path": "",
-        "pathType": "str",
-        "dirname": "trackdataDest",
-        "dirnameType": "msg",
-        "recursive": false,
-        "mode": "755",
-        "fullpath": "directory",
-        "fullpathType": "msg",
-        "x": 1800,
-        "y": 740,
-        "wires": [
-            [
-                "2bbec99d791c83db"
-            ]
-        ]
-    },
-    {
-        "id": "7356de3b99e788d8",
-        "type": "fs-ops-mkdir",
-        "z": "24039523dcf573b0",
-        "name": "Ordner anlegen",
-        "path": "",
-        "pathType": "str",
-        "dirname": "kbshortcutDest",
-        "dirnameType": "msg",
-        "recursive": false,
-        "mode": "755",
-        "fullpath": "directory",
-        "fullpathType": "msg",
-        "x": 1800,
-        "y": 820,
-        "wires": [
-            [
-                "d9041e33883008cf"
-            ]
-        ]
-    },
-    {
-        "id": "0d014e05ee032077",
-        "type": "fs-ops-access",
-        "z": "24039523dcf573b0",
-        "name": "Zielpfad existiert?",
-        "path": "",
-        "pathType": "str",
-        "filename": "kbshortcutDest",
-        "filenameType": "msg",
-        "read": false,
-        "write": false,
-        "throwerror": false,
-        "x": 1630,
-        "y": 860,
-        "wires": [
-            [
-                "d9041e33883008cf"
-            ],
-            [
-                "7356de3b99e788d8"
-            ]
-        ]
-    },
-    {
         "id": "9813dbafe6b048da",
         "type": "fs-ops-access",
         "z": "24039523dcf573b0",
-        "name": "Zielpfad existiert?",
+        "g": "bf4eee564e09bce7",
+        "name": "Quick Pfad existiert?",
         "path": "",
         "pathType": "str",
         "filename": "quickPresets.destpath",
@@ -11918,11 +11713,11 @@
         "read": false,
         "write": false,
         "throwerror": false,
-        "x": 1030,
-        "y": 560,
+        "x": 920,
+        "y": 1100,
         "wires": [
             [
-                "c8ca1d82140028e8"
+                "dd0e50f3c1df94a2"
             ],
             [
                 "4b6d8a94e30892b5"
@@ -11933,6 +11728,7 @@
         "id": "4b6d8a94e30892b5",
         "type": "fs-ops-mkdir",
         "z": "24039523dcf573b0",
+        "g": "bf4eee564e09bce7",
         "name": "Ordner anlegen",
         "path": "",
         "pathType": "str",
@@ -11942,11 +11738,11 @@
         "mode": "755",
         "fullpath": "directory",
         "fullpathType": "msg",
-        "x": 1220,
-        "y": 560,
+        "x": 1140,
+        "y": 1120,
         "wires": [
             [
-                "c8ca1d82140028e8"
+                "dd0e50f3c1df94a2"
             ]
         ]
     },
@@ -11959,34 +11755,19 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 110,
-        "y": 200,
-        "wires": []
-    },
-    {
-        "id": "90ca02b246e667b7",
-        "type": "debug",
-        "z": "24039523dcf573b0",
-        "name": "debug 5",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
         "complete": "true",
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 370,
-        "y": 500,
+        "x": 520,
+        "y": 120,
         "wires": []
     },
     {
         "id": "9bb5182f2a01f7f2",
         "type": "fs-ops-mkdir",
         "z": "24039523dcf573b0",
+        "g": "bf4eee564e09bce7",
         "name": "Ordner anlegen",
         "path": "",
         "pathType": "str",
@@ -11996,8 +11777,8 @@
         "mode": "755",
         "fullpath": "directory",
         "fullpathType": "msg",
-        "x": 940,
-        "y": 680,
+        "x": 1320,
+        "y": 1040,
         "wires": [
             [
                 "bfc668c714f6589b"
@@ -12008,6 +11789,7 @@
         "id": "7c5744bd352c2266",
         "type": "fs-ops-access",
         "z": "24039523dcf573b0",
+        "g": "bf4eee564e09bce7",
         "name": "Zielpfad existiert?",
         "path": "",
         "pathType": "str",
@@ -12016,14 +11798,1766 @@
         "read": false,
         "write": false,
         "throwerror": false,
-        "x": 730,
-        "y": 680,
+        "x": 1110,
+        "y": 1020,
         "wires": [
             [
                 "bfc668c714f6589b"
             ],
             [
                 "9bb5182f2a01f7f2"
+            ]
+        ]
+    },
+    {
+        "id": "b3dcee3be9daa59d",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "name": "Job ID",
+        "func": "// 2 Outputs: [weiter zum Flow, Start-Report an Aggregator]\nconst id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);\n\nmsg.job = {\n    id,\n    started: new Date().toISOString()\n};\n\n// HTTP response Handle zwischenspeichern\nflow.set(\"job:\" + id + \":res\", msg.res);\n\n// 1) Normal weiter\nconst next = RED.util.cloneMessage(msg);\n\n// 2) Start-Event (optional, registriert res auch im Aggregator)\nconst start = {\n    topic: \"report\",\n    payload: { type: \"start\" },\n    job: msg.job,\n    res: msg.res\n};\n\nreturn [next, start];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 90,
+        "y": 800,
+        "wires": [
+            [
+                "cf5b4e3d9f7b919f",
+                "fc844a7e96cc53cb"
+            ],
+            [
+                "8c9f71b21e0933ff"
+            ]
+        ],
+        "outputLabels": [
+            "Auswahl",
+            "Report"
+        ]
+    },
+    {
+        "id": "c031ce02b7ae1ff1",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "name": "Aggregator",
+        "func": "// Aggregiert ohne Counts, nur Flags je Kategorie\nconst key = \"job:\" + (msg.job?.id || \"none\");\nlet st = flow.get(key) || {\n  started: msg.job?.started || new Date().toISOString(),\n  expect: {},    // cat → true (gestartet)\n  done: {},      // cat → true (fertig)\n  hasError: {},  // cat → true (Fehler aufgetreten)\n  hasSkipped: {} // cat → true (irgendwas übersprungen)\n};\n\n// 'start' kann res registrieren\nif (msg.topic === \"report\" && msg.payload?.type === \"start\" && msg.res) {\n  flow.set(key + \":res\", msg.res);\n}\n\nif (msg.topic === \"report\" && msg.payload) {\n  const p = msg.payload;\n\n  if (p.type === \"startCat\") {\n    const cat = p.category || \"unknown\";\n    st.expect[cat] = true;\n  }\n\n  if (p.type === \"skipped\") {\n    const cat = p.category || \"unknown\";\n    st.hasSkipped[cat] = true;\n  }\n\n  if (p.type === \"error\") {\n    const cat = p.category || \"unknown\";\n    st.hasError[cat] = true;\n  }\n\n  if (p.type === \"doneCat\") {\n    const cat = p.category || \"unknown\";\n    st.done[cat] = true;\n  }\n}\n\n// sichern\nflow.set(key, st);\n\n// fertig, wenn alle erwarteten Kategorien done sind\nconst expectedCats = Object.keys(st.expect);\nconst finished = expectedCats.length > 0 && expectedCats.every(cat => st.done[cat]);\n\nconst progressMsg = { ...msg, aggregated: st };\nif (finished) {\n  const finalizeMsg = { ...msg, aggregated: st, _ready: true };\n  return [progressMsg, finalizeMsg];\n}\nreturn [progressMsg, null];",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2650,
+        "y": 880,
+        "wires": [
+            [],
+            [
+                "89b0d90d58155de5"
+            ]
+        ],
+        "outputLabels": [
+            "Progress",
+            "Finalize"
+        ]
+    },
+    {
+        "id": "89b0d90d58155de5",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "name": "Finalize → HTTP response",
+        "func": "// Nur antworten, wenn _ready\nif (!msg._ready) return null;\n\nconst key = \"job:\" + (msg.job?.id || \"none\");\nconst st = msg.aggregated || flow.get(key) || { expect: {}, done: {}, hasError: {}, hasSkipped: {} };\n\n// Kategorien sortiert (optional)\nconst cats = Object.keys(st.expect);\n\n// details ohne Counts\nconst details = cats.map(cat => {\n  const error = !!st.hasError[cat];\n  const skipped = !!st.hasSkipped[cat];\n\n  const status = error ? \"error\" : (skipped ? \"partial\" : \"ok\");\n  const note = status === \"partial\" ? \"some items were not present\" : undefined;\n\n  return { category: cat, status, note };\n});\n\n// overall + HTTP-Status\nconst hasError = details.some(d => d.status === \"error\");\nconst hasPartial = details.some(d => d.status === \"partial\");\nconst overall = hasError ? \"error\" : \"ok\";\n\n// res holen\nconst res = flow.get(key + \":res\");\nif (!res) {\n  flow.set(key, null);\n  flow.set(key + \":res\", null);\n  return null;\n}\n\n// Aktion, die wir schon in \"Auswahl\" auf msg.job.action gesetzt haben\nconst action = msg.job?.action || \"unknown\";\n\nmsg.res = res;\n// -> 207 jetzt auch bei \"partial\", nicht nur error\nmsg.statusCode = (hasError || hasPartial) ? 207 : 200;\n\nmsg.payload = {\n  action,             // \"store\" | \"recall\"\n  overall,            // \"ok\" | \"error\"\n  details,            // [{ category, status, note? }]\n  jobId: msg.job?.id,\n  started: st.started,\n  finished: new Date().toISOString(),\n  // Text fürs UI (Frontend nutzt bevorzugt \"message\")\n  message: hasError\n    ? \"Vorgang abgeschlossen – Fehler aufgetreten\"\n    : (hasPartial\n      ? \"Vorgang abgeschlossen – mit Hinweisen\"\n      : (action === \"store\" ? \"Store erfolgreich\" : \"Recall erfolgreich\"))\n};\n\n// Cleanup\nflow.set(key, null);\nflow.set(key + \":res\", null);\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2880,
+        "y": 880,
+        "wires": [
+            [
+                "70e019b4dabfee92",
+                "cf04cf1b1b45cbc5"
+            ]
+        ]
+    },
+    {
+        "id": "70e019b4dabfee92",
+        "type": "http response",
+        "z": "24039523dcf573b0",
+        "name": "HTTP 200/207",
+        "statusCode": "",
+        "headers": {},
+        "x": 3120,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "cf04cf1b1b45cbc5",
+        "type": "debug",
+        "z": "24039523dcf573b0",
+        "name": "debug 13",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2960,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "fc844a7e96cc53cb",
+        "type": "debug",
+        "z": "24039523dcf573b0",
+        "name": "debug 5",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 240,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "958a9bcb116f0244",
+        "type": "link in",
+        "z": "24039523dcf573b0",
+        "name": "REPORT IN",
+        "links": [
+            "89b879d584cc6631",
+            "8c9f71b21e0933ff",
+            "6a97d32f092e37f5",
+            "mem_report_copied_from_bulk",
+            "mem_report_copied_from_quick",
+            "3882283dafc8f7ae",
+            "de25b2f6dfafa2d1",
+            "716f54db6d32889b",
+            "1ef4b04c5ba1c09a",
+            "1a3576d54deb10e1",
+            "49855b09c6570cb6",
+            "673b872c6bbacb4a",
+            "e60e5ab898a0a6de",
+            "b5c5c6741c0f3ad0",
+            "0e22a946caa8156b"
+        ],
+        "x": 2545,
+        "y": 920,
+        "wires": [
+            [
+                "c031ce02b7ae1ff1"
+            ]
+        ]
+    },
+    {
+        "id": "8c9f71b21e0933ff",
+        "type": "link out",
+        "z": "24039523dcf573b0",
+        "name": "REPORT OUT",
+        "mode": "link",
+        "links": [
+            "958a9bcb116f0244"
+        ],
+        "x": 185,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "mem_counter_inc_bulk",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "bf4eee564e09bce7",
+        "name": "Counter ++ (bulk)",
+        "func": "const cat = msg.category || \"unknown\";\nconst key = `pending:${msg.job?.id || 'none'}:${cat}`;\nflow.set(key, (flow.get(key) || 0) + 1);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1870,
+        "y": 1000,
+        "wires": [
+            [
+                "917f910377da205a"
+            ]
+        ]
+    },
+    {
+        "id": "mem_counter_dec_done",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "name": "Counter -- & DONE",
+        "func": "const cat = msg.category || \"unknown\";\nconst key = `pending:${msg.job?.id || 'none'}:${cat}`;\nlet n = flow.get(key) || 0;\nif (n > 0) n--; else n = 0;\nflow.set(key, n);\nif (n === 0 && msg.job && msg.job.id) {\n  node.send({\n    topic: \"report\",\n    payload: { type: \"doneCat\", category: cat },\n    job: msg.job\n  });\n}\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 2490,
+        "y": 820,
+        "wires": [
+            [
+                "c031ce02b7ae1ff1"
+            ]
+        ]
+    },
+    {
+        "id": "mem_quick_src_exists",
+        "type": "fs-ops-access",
+        "z": "24039523dcf573b0",
+        "g": "bf4eee564e09bce7",
+        "name": "Quick Src existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "quickPresets.src",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 1330,
+        "y": 1080,
+        "wires": [
+            [
+                "mem_counter_inc_quick"
+            ],
+            [
+                "mem_report_skipped"
+            ]
+        ]
+    },
+    {
+        "id": "mem_counter_inc_quick",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "bf4eee564e09bce7",
+        "name": "Counter ++ (quick)",
+        "func": "const cat = msg.category || \"unknown\";\nconst key = `pending:${msg.job?.id || 'none'}:${cat}`;\nflow.set(key, (flow.get(key) || 0) + 1);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1570,
+        "y": 1060,
+        "wires": [
+            [
+                "c8ca1d82140028e8"
+            ]
+        ]
+    },
+    {
+        "id": "mem_report_skipped",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "bf4eee564e09bce7",
+        "name": "REPORT SKIPPED",
+        "func": "node.send({\n  topic: \"report\",\n  payload: { type: \"skipped\", category: msg.category || \"unknown\" },\n  job: msg.job\n});\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1570,
+        "y": 1100,
+        "wires": [
+            [
+                "c031ce02b7ae1ff1"
+            ]
+        ]
+    },
+    {
+        "id": "2c1fc212585a73f0",
+        "type": "debug",
+        "z": "24039523dcf573b0",
+        "g": "bf4eee564e09bce7",
+        "name": "debug 15",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "3882283dafc8f7ae",
+        "type": "link out",
+        "z": "24039523dcf573b0",
+        "g": "bf4eee564e09bce7",
+        "name": "REPORT OUT",
+        "mode": "link",
+        "links": [
+            "958a9bcb116f0244"
+        ],
+        "x": 875,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "e2f3a4b5c6d7e8f1",
+        "type": "catch",
+        "z": "24039523dcf573b0",
+        "g": "bf4eee564e09bce7",
+        "name": "CATCH memoryLocation",
+        "scope": [
+            "8e5fd46df3643f82",
+            "917f910377da205a",
+            "c8ca1d82140028e8",
+            "4b6d8a94e30892b5",
+            "9bb5182f2a01f7f2",
+            "7c5744bd352c2266",
+            "9813dbafe6b048da"
+        ],
+        "uncaught": false,
+        "x": 610,
+        "y": 1100,
+        "wires": [
+            [
+                "f1e2d3c4b5a69788"
+            ]
+        ]
+    },
+    {
+        "id": "f1e2d3c4b5a69788",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "bf4eee564e09bce7",
+        "name": "ERROR → report + counter -- + doneCat",
+        "func": "const category = msg.category || 'memoryLocation';\n\n// 1) Fehlertext bestimmen\nconst e = msg.error || {};\nconst message = e.message || (typeof e === 'string' ? e : (e && e.toString ? e.toString() : 'unknown error'));\n\n// 2) error an Aggregator senden\nnode.send({\n  topic: 'report',\n  payload: { type: 'error', category, message },\n  job: msg.job\n});\n\n// 3) pending-Counter dekrementieren (falls zuvor ++ passiert ist)\nconst key = `pending:${msg.job?.id || 'none'}:${category}`;\nlet n = flow.get(key) || 0;\nif (n > 0) {\n  n = n - 1;\n  flow.set(key, n);\n}\n\n// 4) Wenn nichts mehr pending → doneCat, damit Aggregator abschließen kann\nif (n === 0 && msg.job && msg.job.id) {\n  node.send({\n    topic: 'report',\n    payload: { type: 'doneCat', category },\n    job: msg.job\n  });\n}\n\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 1140,
+        "wires": [
+            [
+                "3882283dafc8f7ae"
+            ]
+        ]
+    },
+    {
+        "id": "585a9df6e2d4fc8f",
+        "type": "catch",
+        "z": "24039523dcf573b0",
+        "g": "21da7a611532cde9",
+        "name": "CATCH trackdata",
+        "scope": [
+            "2bbec99d791c83db",
+            "f99608698a8bf030",
+            "0390d6ddd4e2c499",
+            "32c6fc7eee758dc2",
+            "6abd7f2dbd599246",
+            "d298d4ce858c6423",
+            "83efdb60310b9f66"
+        ],
+        "uncaught": false,
+        "x": 580,
+        "y": 1320,
+        "wires": [
+            [
+                "5ce80ee7862fa202"
+            ]
+        ]
+    },
+    {
+        "id": "5ce80ee7862fa202",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "21da7a611532cde9",
+        "name": "ERROR → report + counter -- + doneCat",
+        "func": "const category = msg.category || 'trackdatarecall';\n\n// 1) Fehlertext bestimmen\nconst e = msg.error || {};\nconst message = e.message || (typeof e === 'string' ? e : (e && e.toString ? e.toString() : 'unknown error'));\n\n// 2) error an Aggregator senden\nnode.send({\n  topic: 'report',\n  payload: { type: 'error', category, message },\n  job: msg.job\n});\n\n// 3) pending-Counter dekrementieren (falls zuvor ++ passiert ist)\nconst key = `pending:${msg.job?.id || 'none'}:${category}`;\nlet n = flow.get(key) || 0;\nif (n > 0) {\n  n = n - 1;\n  flow.set(key, n);\n}\n\n// 4) Wenn nichts mehr pending → doneCat, damit Aggregator abschließen kann\nif (n === 0 && msg.job && msg.job.id) {\n  node.send({\n    topic: 'report',\n    payload: { type: 'doneCat', category },\n    job: msg.job\n  });\n}\n\nreturn null;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 1360,
+        "wires": [
+            [
+                "716f54db6d32889b"
+            ]
+        ]
+    },
+    {
+        "id": "6abd7f2dbd599246",
+        "type": "fs-ops-access",
+        "z": "24039523dcf573b0",
+        "g": "21da7a611532cde9",
+        "name": "Zielpfad existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "trackdataDest",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 1110,
+        "y": 1240,
+        "wires": [
+            [
+                "4de5265817a08368"
+            ],
+            [
+                "0390d6ddd4e2c499"
+            ]
+        ]
+    },
+    {
+        "id": "0390d6ddd4e2c499",
+        "type": "fs-ops-mkdir",
+        "z": "24039523dcf573b0",
+        "g": "21da7a611532cde9",
+        "name": "Ordner anlegen",
+        "path": "",
+        "pathType": "str",
+        "dirname": "trackdataDest",
+        "dirnameType": "msg",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 1320,
+        "y": 1280,
+        "wires": [
+            [
+                "4de5265817a08368"
+            ]
+        ]
+    },
+    {
+        "id": "91137af6b7515c1b",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "21da7a611532cde9",
+        "name": "Counter ++ (bulk)",
+        "func": "const cat = msg.category || \"unknown\";\nconst key = `pending:${msg.job?.id || 'none'}:${cat}`;\nflow.set(key, (flow.get(key) || 0) + 1);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1870,
+        "y": 1240,
+        "wires": [
+            [
+                "2bbec99d791c83db"
+            ]
+        ]
+    },
+    {
+        "id": "83efdb60310b9f66",
+        "type": "fs-ops-access",
+        "z": "24039523dcf573b0",
+        "g": "21da7a611532cde9",
+        "name": "Quick Pfad existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "quickPresets.destpath",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 920,
+        "y": 1320,
+        "wires": [
+            [
+                "467ae7fcbc6b7735"
+            ],
+            [
+                "32c6fc7eee758dc2"
+            ]
+        ]
+    },
+    {
+        "id": "32c6fc7eee758dc2",
+        "type": "fs-ops-mkdir",
+        "z": "24039523dcf573b0",
+        "g": "21da7a611532cde9",
+        "name": "Ordner anlegen",
+        "path": "",
+        "pathType": "str",
+        "dirname": "quickPresets.destpath",
+        "dirnameType": "msg",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 1140,
+        "y": 1360,
+        "wires": [
+            [
+                "467ae7fcbc6b7735"
+            ]
+        ]
+    },
+    {
+        "id": "41005d8cd172bc9d",
+        "type": "fs-ops-access",
+        "z": "24039523dcf573b0",
+        "g": "21da7a611532cde9",
+        "name": "Quick Src existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "quickPresets.src",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 1330,
+        "y": 1320,
+        "wires": [
+            [
+                "8cb029efa37424c0"
+            ],
+            [
+                "b45491f8febc2229"
+            ]
+        ]
+    },
+    {
+        "id": "8cb029efa37424c0",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "21da7a611532cde9",
+        "name": "Counter ++ (quick)",
+        "func": "const cat = msg.category || \"unknown\";\nconst key = `pending:${msg.job?.id || 'none'}:${cat}`;\nflow.set(key, (flow.get(key) || 0) + 1);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1570,
+        "y": 1300,
+        "wires": [
+            [
+                "f99608698a8bf030"
+            ]
+        ]
+    },
+    {
+        "id": "b45491f8febc2229",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "21da7a611532cde9",
+        "name": "REPORT SKIPPED",
+        "func": "node.send({\n  topic: \"report\",\n  payload: { type: \"skipped\", category: msg.category || \"unknown\" },\n  job: msg.job\n});\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1570,
+        "y": 1340,
+        "wires": [
+            [
+                "c031ce02b7ae1ff1"
+            ]
+        ]
+    },
+    {
+        "id": "716f54db6d32889b",
+        "type": "link out",
+        "z": "24039523dcf573b0",
+        "g": "21da7a611532cde9",
+        "name": "REPORT OUT",
+        "mode": "link",
+        "links": [
+            "958a9bcb116f0244"
+        ],
+        "x": 875,
+        "y": 1360,
+        "wires": []
+    },
+    {
+        "id": "4ffb2321785ac98b",
+        "type": "catch",
+        "z": "24039523dcf573b0",
+        "g": "70677eb1b82c5a42",
+        "name": "CATCH clipeffects",
+        "scope": [
+            "eee3ed5815c3c52d",
+            "1a5269fddad889e9",
+            "7f28c8932dfe9550",
+            "1961473680376c87",
+            "9b7306709391a052",
+            "501cb80a18e2101f",
+            "5659f0cda1297389"
+        ],
+        "uncaught": false,
+        "x": 590,
+        "y": 860,
+        "wires": [
+            [
+                "6f4c05fec7be2cb3"
+            ]
+        ]
+    },
+    {
+        "id": "6f4c05fec7be2cb3",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "70677eb1b82c5a42",
+        "name": "ERROR → report + counter -- + doneCat",
+        "func": "const category = msg.category || 'clipfxpresets';\n\n// 1) Fehlertext bestimmen\nconst e = msg.error || {};\nconst message = e.message || (typeof e === 'string' ? e : (e && e.toString ? e.toString() : 'unknown error'));\n\n// 2) error an Aggregator senden\nnode.send({\n  topic: 'report',\n  payload: { type: 'error', category, message },\n  job: msg.job\n});\n\n// 3) pending-Counter dekrementieren (falls zuvor ++ passiert ist)\nconst key = `pending:${msg.job?.id || 'none'}:${category}`;\nlet n = flow.get(key) || 0;\nif (n > 0) {\n  n = n - 1;\n  flow.set(key, n);\n}\n\n// 4) Wenn nichts mehr pending → doneCat, damit Aggregator abschließen kann\nif (n === 0 && msg.job && msg.job.id) {\n  node.send({\n    topic: 'report',\n    payload: { type: 'doneCat', category },\n    job: msg.job\n  });\n}\n\nreturn null;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 900,
+        "wires": [
+            [
+                "1a3576d54deb10e1"
+            ]
+        ]
+    },
+    {
+        "id": "7f28c8932dfe9550",
+        "type": "fs-ops-access",
+        "z": "24039523dcf573b0",
+        "g": "70677eb1b82c5a42",
+        "name": "Zielpfad existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "clipeffectDest",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 1110,
+        "y": 780,
+        "wires": [
+            [
+                "ecac37490d9bab96"
+            ],
+            [
+                "9b7306709391a052"
+            ]
+        ]
+    },
+    {
+        "id": "ecac37490d9bab96",
+        "type": "split",
+        "z": "24039523dcf573b0",
+        "g": "70677eb1b82c5a42",
+        "name": "split files",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "files",
+        "x": 1300,
+        "y": 760,
+        "wires": [
+            [
+                "c9e0e810f99a762b"
+            ]
+        ]
+    },
+    {
+        "id": "c9e0e810f99a762b",
+        "type": "switch",
+        "z": "24039523dcf573b0",
+        "g": "70677eb1b82c5a42",
+        "name": "Quick Presets rausfiltern",
+        "property": "files",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "neq",
+                "v": "Quick Presets",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1490,
+        "y": 760,
+        "wires": [
+            [
+                "5726ab925fa2402a"
+            ]
+        ]
+    },
+    {
+        "id": "1f67eb9de416c2b3",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "70677eb1b82c5a42",
+        "name": "Counter ++ (bulk)",
+        "func": "const cat = msg.category || \"unknown\";\nconst key = `pending:${msg.job?.id || 'none'}:${cat}`;\nflow.set(key, (flow.get(key) || 0) + 1);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1870,
+        "y": 760,
+        "wires": [
+            [
+                "5659f0cda1297389"
+            ]
+        ]
+    },
+    {
+        "id": "5659f0cda1297389",
+        "type": "fs-extra-copy",
+        "z": "24039523dcf573b0",
+        "g": "70677eb1b82c5a42",
+        "name": "Copy Clip Effects Presets",
+        "source": "clipeffectSrc",
+        "sourceType": "msg",
+        "target": "clipeffectDest",
+        "targetType": "msg",
+        "x": 2090,
+        "y": 760,
+        "wires": [
+            [
+                "mem_counter_dec_done"
+            ]
+        ]
+    },
+    {
+        "id": "9b7306709391a052",
+        "type": "fs-ops-mkdir",
+        "z": "24039523dcf573b0",
+        "g": "70677eb1b82c5a42",
+        "name": "Ordner anlegen",
+        "path": "",
+        "pathType": "str",
+        "dirname": "clipeffectDest",
+        "dirnameType": "msg",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 1320,
+        "y": 800,
+        "wires": [
+            [
+                "ecac37490d9bab96"
+            ]
+        ]
+    },
+    {
+        "id": "db8c2123cd78a2a1",
+        "type": "fs-ops-access",
+        "z": "24039523dcf573b0",
+        "g": "70677eb1b82c5a42",
+        "name": "Quick Src existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "quickPresets.src",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 1330,
+        "y": 840,
+        "wires": [
+            [
+                "47f58a92faa4b273"
+            ],
+            [
+                "4f8384d0182832a6"
+            ]
+        ]
+    },
+    {
+        "id": "8ed53db524f61578",
+        "type": "split",
+        "z": "24039523dcf573b0",
+        "g": "70677eb1b82c5a42",
+        "name": "split quick",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "quickPresets",
+        "x": 1130,
+        "y": 840,
+        "wires": [
+            [
+                "db8c2123cd78a2a1"
+            ]
+        ]
+    },
+    {
+        "id": "1961473680376c87",
+        "type": "fs-ops-mkdir",
+        "z": "24039523dcf573b0",
+        "g": "70677eb1b82c5a42",
+        "name": "Ordner anlegen",
+        "path": "",
+        "pathType": "str",
+        "dirname": "quickPresets.destpath",
+        "dirnameType": "msg",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 1140,
+        "y": 880,
+        "wires": [
+            [
+                "8ed53db524f61578"
+            ]
+        ]
+    },
+    {
+        "id": "1a5269fddad889e9",
+        "type": "fs-ops-access",
+        "z": "24039523dcf573b0",
+        "g": "70677eb1b82c5a42",
+        "name": "Quick Pfad existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "quickPresets.destpath",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 920,
+        "y": 860,
+        "wires": [
+            [
+                "8ed53db524f61578"
+            ],
+            [
+                "1961473680376c87"
+            ]
+        ]
+    },
+    {
+        "id": "1a3576d54deb10e1",
+        "type": "link out",
+        "z": "24039523dcf573b0",
+        "g": "70677eb1b82c5a42",
+        "name": "REPORT OUT",
+        "mode": "link",
+        "links": [
+            "958a9bcb116f0244"
+        ],
+        "x": 875,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "47f58a92faa4b273",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "70677eb1b82c5a42",
+        "name": "Counter ++ (quick)",
+        "func": "const cat = msg.category || \"unknown\";\nconst key = `pending:${msg.job?.id || 'none'}:${cat}`;\nflow.set(key, (flow.get(key) || 0) + 1);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1570,
+        "y": 820,
+        "wires": [
+            [
+                "501cb80a18e2101f"
+            ]
+        ]
+    },
+    {
+        "id": "4f8384d0182832a6",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "70677eb1b82c5a42",
+        "name": "REPORT SKIPPED",
+        "func": "node.send({\n  topic: \"report\",\n  payload: { type: \"skipped\", category: msg.category || \"unknown\" },\n  job: msg.job\n});\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1570,
+        "y": 860,
+        "wires": [
+            [
+                "c031ce02b7ae1ff1"
+            ]
+        ]
+    },
+    {
+        "id": "f149ab4d6c3361d7",
+        "type": "catch",
+        "z": "24039523dcf573b0",
+        "g": "7ca6f5ba8382e25f",
+        "name": "CATCH trackdata",
+        "scope": [
+            "2bbec99d791c83db",
+            "f99608698a8bf030",
+            "0390d6ddd4e2c499",
+            "32c6fc7eee758dc2",
+            "6abd7f2dbd599246",
+            "d298d4ce858c6423",
+            "83efdb60310b9f66"
+        ],
+        "uncaught": false,
+        "x": 580,
+        "y": 1560,
+        "wires": [
+            [
+                "ec8625296b55c237"
+            ]
+        ]
+    },
+    {
+        "id": "ec8625296b55c237",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "7ca6f5ba8382e25f",
+        "name": "ERROR → report + counter -- + doneCat",
+        "func": "const category = msg.category || 'keyboardshortcuts';\n\n// 1) Fehlertext bestimmen\nconst e = msg.error || {};\nconst message = e.message || (typeof e === 'string' ? e : (e && e.toString ? e.toString() : 'unknown error'));\n\n// 2) error an Aggregator senden\nnode.send({\n  topic: 'report',\n  payload: { type: 'error', category, message },\n  job: msg.job\n});\n\n// 3) pending-Counter dekrementieren (falls zuvor ++ passiert ist)\nconst key = `pending:${msg.job?.id || 'none'}:${category}`;\nlet n = flow.get(key) || 0;\nif (n > 0) {\n  n = n - 1;\n  flow.set(key, n);\n}\n\n// 4) Wenn nichts mehr pending → doneCat, damit Aggregator abschließen kann\nif (n === 0 && msg.job && msg.job.id) {\n  node.send({\n    topic: 'report',\n    payload: { type: 'doneCat', category },\n    job: msg.job\n  });\n}\n\nreturn null;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 1600,
+        "wires": [
+            [
+                "673b872c6bbacb4a"
+            ]
+        ]
+    },
+    {
+        "id": "673b872c6bbacb4a",
+        "type": "link out",
+        "z": "24039523dcf573b0",
+        "g": "7ca6f5ba8382e25f",
+        "name": "REPORT OUT",
+        "mode": "link",
+        "links": [
+            "958a9bcb116f0244"
+        ],
+        "x": 875,
+        "y": 1600,
+        "wires": []
+    },
+    {
+        "id": "d3eacd5953e17d84",
+        "type": "fs-ops-access",
+        "z": "24039523dcf573b0",
+        "g": "7ca6f5ba8382e25f",
+        "name": "Zielpfad existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "kbshortcutDest",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 1110,
+        "y": 1460,
+        "wires": [
+            [
+                "bda8dd2c31472a75"
+            ],
+            [
+                "983f0f1fddf2f572"
+            ]
+        ]
+    },
+    {
+        "id": "bda8dd2c31472a75",
+        "type": "split",
+        "z": "24039523dcf573b0",
+        "g": "7ca6f5ba8382e25f",
+        "name": "split files",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "files",
+        "x": 1300,
+        "y": 1460,
+        "wires": [
+            [
+                "5c7b329f612ecf44"
+            ]
+        ]
+    },
+    {
+        "id": "5c7b329f612ecf44",
+        "type": "switch",
+        "z": "24039523dcf573b0",
+        "g": "7ca6f5ba8382e25f",
+        "name": "Quick Presets rausfiltern",
+        "property": "files",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "neq",
+                "v": "Quick Presets",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1490,
+        "y": 1460,
+        "wires": [
+            [
+                "63f6495b795634b9"
+            ]
+        ]
+    },
+    {
+        "id": "983f0f1fddf2f572",
+        "type": "fs-ops-mkdir",
+        "z": "24039523dcf573b0",
+        "g": "7ca6f5ba8382e25f",
+        "name": "Ordner anlegen",
+        "path": "",
+        "pathType": "str",
+        "dirname": "kbshortcutDest",
+        "dirnameType": "msg",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 1320,
+        "y": 1500,
+        "wires": [
+            [
+                "bda8dd2c31472a75"
+            ]
+        ]
+    },
+    {
+        "id": "e8576083d81a103e",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "7ca6f5ba8382e25f",
+        "name": "Counter ++ (bulk)",
+        "func": "const cat = msg.category || \"unknown\";\nconst key = `pending:${msg.job?.id || 'none'}:${cat}`;\nflow.set(key, (flow.get(key) || 0) + 1);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1870,
+        "y": 1460,
+        "wires": [
+            [
+                "916a53a295dcad47"
+            ]
+        ]
+    },
+    {
+        "id": "916a53a295dcad47",
+        "type": "fs-extra-copy",
+        "z": "24039523dcf573b0",
+        "g": "7ca6f5ba8382e25f",
+        "name": "Copy Keyboard Shortcuts",
+        "source": "kbshortcutSrc",
+        "sourceType": "msg",
+        "target": "kbshortcutDest",
+        "targetType": "msg",
+        "x": 2090,
+        "y": 1460,
+        "wires": [
+            [
+                "mem_counter_dec_done"
+            ]
+        ]
+    },
+    {
+        "id": "54f5060cfecb013f",
+        "type": "fs-ops-access",
+        "z": "24039523dcf573b0",
+        "g": "7ca6f5ba8382e25f",
+        "name": "Quick Pfad existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "quickPresets.destpath",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 920,
+        "y": 1540,
+        "wires": [
+            [
+                "0a7ff522ecc866b5"
+            ],
+            [
+                "0f74cb45dd82a5ba"
+            ]
+        ]
+    },
+    {
+        "id": "0a7ff522ecc866b5",
+        "type": "split",
+        "z": "24039523dcf573b0",
+        "g": "7ca6f5ba8382e25f",
+        "name": "split quick",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "quickPresets",
+        "x": 1130,
+        "y": 1540,
+        "wires": [
+            [
+                "5b841c6ebce3b6fa"
+            ]
+        ]
+    },
+    {
+        "id": "0f74cb45dd82a5ba",
+        "type": "fs-ops-mkdir",
+        "z": "24039523dcf573b0",
+        "g": "7ca6f5ba8382e25f",
+        "name": "Ordner anlegen",
+        "path": "",
+        "pathType": "str",
+        "dirname": "quickPresets.destpath",
+        "dirnameType": "msg",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 1140,
+        "y": 1580,
+        "wires": [
+            [
+                "0a7ff522ecc866b5"
+            ]
+        ]
+    },
+    {
+        "id": "5b841c6ebce3b6fa",
+        "type": "fs-ops-access",
+        "z": "24039523dcf573b0",
+        "g": "7ca6f5ba8382e25f",
+        "name": "Quick Src existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "quickPresets.src",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 1330,
+        "y": 1540,
+        "wires": [
+            [
+                "26a33c971f7b20c7"
+            ],
+            [
+                "b938dced525b1034"
+            ]
+        ]
+    },
+    {
+        "id": "26a33c971f7b20c7",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "7ca6f5ba8382e25f",
+        "name": "Counter ++ (quick)",
+        "func": "const cat = msg.category || \"unknown\";\nconst key = `pending:${msg.job?.id || 'none'}:${cat}`;\nflow.set(key, (flow.get(key) || 0) + 1);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1570,
+        "y": 1520,
+        "wires": [
+            [
+                "0cfb6f4a3d4d0171"
+            ]
+        ]
+    },
+    {
+        "id": "b938dced525b1034",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "7ca6f5ba8382e25f",
+        "name": "REPORT SKIPPED",
+        "func": "node.send({\n  topic: \"report\",\n  payload: { type: \"skipped\", category: msg.category || \"unknown\" },\n  job: msg.job\n});\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1570,
+        "y": 1560,
+        "wires": [
+            [
+                "c031ce02b7ae1ff1"
+            ]
+        ]
+    },
+    {
+        "id": "0cfb6f4a3d4d0171",
+        "type": "fs-ops-copy",
+        "z": "24039523dcf573b0",
+        "g": "7ca6f5ba8382e25f",
+        "name": "Quick Presets kopieren",
+        "sourcePath": "",
+        "sourcePathType": "str",
+        "sourceFilename": "quickPresets.src",
+        "sourceFilenameType": "msg",
+        "destPath": "quickPresets.destpath",
+        "destPathType": "msg",
+        "destFilename": "quickPresets.destname",
+        "destFilenameType": "msg",
+        "link": false,
+        "overwrite": true,
+        "x": 1810,
+        "y": 1520,
+        "wires": [
+            [
+                "mem_counter_dec_done"
+            ]
+        ]
+    },
+    {
+        "id": "e60e5ab898a0a6de",
+        "type": "link out",
+        "z": "24039523dcf573b0",
+        "g": "32425cc956c27352",
+        "name": "REPORT OUT",
+        "mode": "link",
+        "links": [
+            "958a9bcb116f0244"
+        ],
+        "x": 885,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "0177cdfae37f423d",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "32425cc956c27352",
+        "name": "Counter ++ (bulk)",
+        "func": "const cat = msg.category || \"unknown\";\nconst key = `pending:${msg.job?.id || 'none'}:${cat}`;\nflow.set(key, (flow.get(key) || 0) + 1);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1330,
+        "y": 400,
+        "wires": [
+            [
+                "8d053651e71a88d0"
+            ]
+        ]
+    },
+    {
+        "id": "0455b0dd8e131085",
+        "type": "catch",
+        "z": "24039523dcf573b0",
+        "g": "32425cc956c27352",
+        "name": "CATCH template",
+        "scope": [
+            "dde28766e8809a51",
+            "f1ddf879ad3e29dc",
+            "8d053651e71a88d0"
+        ],
+        "uncaught": false,
+        "x": 580,
+        "y": 440,
+        "wires": [
+            [
+                "c27c1122548ae7b8"
+            ]
+        ]
+    },
+    {
+        "id": "c27c1122548ae7b8",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "32425cc956c27352",
+        "name": "ERROR → report + counter -- + doneCat",
+        "func": "const category = msg.category || 'templates';\n\n// 1) Fehlertext bestimmen\nconst e = msg.error || {};\nconst message = e.message || (typeof e === 'string' ? e : (e && e.toString ? e.toString() : 'unknown error'));\n\n// 2) error an Aggregator senden\nnode.send({\n  topic: 'report',\n  payload: { type: 'error', category, message },\n  job: msg.job\n});\n\n// 3) pending-Counter dekrementieren (falls zuvor ++ passiert ist)\nconst key = `pending:${msg.job?.id || 'none'}:${category}`;\nlet n = flow.get(key) || 0;\nif (n > 0) {\n  n = n - 1;\n  flow.set(key, n);\n}\n\n// 4) Wenn nichts mehr pending → doneCat, damit Aggregator abschließen kann\nif (n === 0 && msg.job && msg.job.id) {\n  node.send({\n    topic: 'report',\n    payload: { type: 'doneCat', category },\n    job: msg.job\n  });\n}\n\nreturn null;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 480,
+        "wires": [
+            [
+                "e60e5ab898a0a6de"
+            ]
+        ]
+    },
+    {
+        "id": "a266be18af804bb0",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "45092586c8772558",
+        "name": "Track Presets Funktion",
+        "func": "// trackkpreset Funktion (Outputs: 2)\n// Out1 = normal weiter, Out2 = startCat / error\ntry {\n    const { PathMitarbeiter, PathPTUser, activeUser, action } = msg.payload || {};\n    msg.category = \"trackpresets\";\n\n    // startCat nur 1x nebenbei senden\n    let startCat = null;\n    if (msg.job && msg.job.id) {\n        startCat = {\n            topic: \"report\",\n            payload: { type: \"startCat\", category: msg.category },\n            job: msg.job\n        };\n    }\n\n    if (action === \"recall\") {\n        msg.trackkpresetSrc = `${PathMitarbeiter}/${activeUser}/immo24/trackpresets`;\n        msg.trackkpresetDest = `${PathPTUser}/Track Presets/${activeUser}`;\n        return [msg, startCat];\n    } else if (action === \"store\") {\n        msg.trackkpresetSrc = `${PathPTUser}/Track Presets/${activeUser}`;\n        msg.trackkpresetDest = `${PathMitarbeiter}/${activeUser}/immo24/trackpresets`;\n        return [msg, startCat];\n    }\n\n    // ungültige Aktion\n    return [null, startCat];\n\n} catch (err) {\n    const errorMsg = {\n        topic: \"report\",\n        payload: { type: \"error\", category: \"trackpresets\", message: err.message },\n        job: msg.job\n    };\n    return [null, errorMsg];\n}",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 580,
+        "wires": [
+            [
+                "122a96507f2fb522"
+            ],
+            [
+                "b5c5c6741c0f3ad0"
+            ]
+        ],
+        "outputLabels": [
+            "",
+            "REPORT IN"
+        ]
+    },
+    {
+        "id": "2aaacffa74b4ebdc",
+        "type": "fs-extra-copy",
+        "z": "24039523dcf573b0",
+        "g": "45092586c8772558",
+        "name": "Copy Track Presets",
+        "source": "trackpresetSrc",
+        "sourceType": "msg",
+        "target": "trackpresetDest",
+        "targetType": "msg",
+        "x": 1550,
+        "y": 580,
+        "wires": [
+            [
+                "mem_counter_dec_done"
+            ]
+        ]
+    },
+    {
+        "id": "1b464dea68e4fbcb",
+        "type": "fs-ops-mkdir",
+        "z": "24039523dcf573b0",
+        "g": "45092586c8772558",
+        "name": "Ordner anlegen",
+        "path": "",
+        "pathType": "str",
+        "dirname": "trackpresetDest",
+        "dirnameType": "msg",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 1120,
+        "y": 600,
+        "wires": [
+            [
+                "f319bb1b3f5a5649"
+            ]
+        ]
+    },
+    {
+        "id": "122a96507f2fb522",
+        "type": "fs-ops-access",
+        "z": "24039523dcf573b0",
+        "g": "45092586c8772558",
+        "name": "Zielpfad existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "trackpresetDest",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 910,
+        "y": 580,
+        "wires": [
+            [
+                "f319bb1b3f5a5649"
+            ],
+            [
+                "1b464dea68e4fbcb"
+            ]
+        ]
+    },
+    {
+        "id": "b5c5c6741c0f3ad0",
+        "type": "link out",
+        "z": "24039523dcf573b0",
+        "g": "45092586c8772558",
+        "name": "REPORT OUT",
+        "mode": "link",
+        "links": [
+            "958a9bcb116f0244"
+        ],
+        "x": 885,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "f319bb1b3f5a5649",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "45092586c8772558",
+        "name": "Counter ++ (bulk)",
+        "func": "const cat = msg.category || \"unknown\";\nconst key = `pending:${msg.job?.id || 'none'}:${cat}`;\nflow.set(key, (flow.get(key) || 0) + 1);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1330,
+        "y": 580,
+        "wires": [
+            [
+                "2aaacffa74b4ebdc"
+            ]
+        ]
+    },
+    {
+        "id": "7bf21c3b7172136f",
+        "type": "catch",
+        "z": "24039523dcf573b0",
+        "g": "45092586c8772558",
+        "name": "CATCH template",
+        "scope": [
+            "122a96507f2fb522",
+            "1b464dea68e4fbcb",
+            "2aaacffa74b4ebdc"
+        ],
+        "uncaught": false,
+        "x": 580,
+        "y": 620,
+        "wires": [
+            [
+                "ddf7a61881eb3321"
+            ]
+        ]
+    },
+    {
+        "id": "ddf7a61881eb3321",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "45092586c8772558",
+        "name": "ERROR → report + counter -- + doneCat",
+        "func": "const category = msg.category || 'trackpresets';\n\n// 1) Fehlertext bestimmen\nconst e = msg.error || {};\nconst message = e.message || (typeof e === 'string' ? e : (e && e.toString ? e.toString() : 'unknown error'));\n\n// 2) error an Aggregator senden\nnode.send({\n  topic: 'report',\n  payload: { type: 'error', category, message },\n  job: msg.job\n});\n\n// 3) pending-Counter dekrementieren (falls zuvor ++ passiert ist)\nconst key = `pending:${msg.job?.id || 'none'}:${category}`;\nlet n = flow.get(key) || 0;\nif (n > 0) {\n  n = n - 1;\n  flow.set(key, n);\n}\n\n// 4) Wenn nichts mehr pending → doneCat, damit Aggregator abschließen kann\nif (n === 0 && msg.job && msg.job.id) {\n  node.send({\n    topic: 'report',\n    payload: { type: 'doneCat', category },\n    job: msg.job\n  });\n}\n\nreturn null;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 660,
+        "wires": [
+            [
+                "b5c5c6741c0f3ad0"
+            ]
+        ]
+    },
+    {
+        "id": "0e22a946caa8156b",
+        "type": "link out",
+        "z": "24039523dcf573b0",
+        "name": "REPORT OUT",
+        "mode": "link",
+        "links": [
+            "958a9bcb116f0244"
+        ],
+        "x": 705,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "22c35c48819fd2c5",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "name": "Counter ++ (bulk)",
+        "func": "const cat = msg.category || \"unknown\";\nconst key = `pending:${msg.job?.id || 'none'}:${cat}`;\nflow.set(key, (flow.get(key) || 0) + 1);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1910,
+        "y": 260,
+        "wires": [
+            [
+                "3c1e6a6d7b1b2c44"
+            ]
+        ]
+    },
+    {
+        "id": "d16554d476592212",
+        "type": "debug",
+        "z": "24039523dcf573b0",
+        "name": "fnction",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 800,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "bd97d6f6ce673d8c",
+        "type": "fs-ops-access",
+        "z": "24039523dcf573b0",
+        "name": "Quick Src existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "quickPresets.src",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 1030,
+        "y": 300,
+        "wires": [
+            [
+                "e47f1ae67263dc1b",
+                "cb629a6342c84f4d"
+            ],
+            [
+                "7956ea8999198d23"
+            ]
+        ]
+    },
+    {
+        "id": "e47f1ae67263dc1b",
+        "type": "debug",
+        "z": "24039523dcf573b0",
+        "name": "srccheck",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1080,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "7956ea8999198d23",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "name": "REPORT SKIPPED",
+        "func": "node.send({\n  topic: \"report\",\n  payload: { type: \"skipped\", category: msg.category || \"unknown\" },\n  job: msg.job\n});\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1270,
+        "y": 340,
+        "wires": [
+            [
+                "c031ce02b7ae1ff1"
+            ]
+        ]
+    },
+    {
+        "id": "cb629a6342c84f4d",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "name": "Counter ++ (quick)",
+        "func": "const cat = msg.category || \"unknown\";\nconst key = `pending:${msg.job?.id || 'none'}:${cat}`;\nflow.set(key, (flow.get(key) || 0) + 1);\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1270,
+        "y": 300,
+        "wires": [
+            [
+                "5a8d0f1b3e2c4d66"
+            ]
+        ]
+    },
+    {
+        "id": "report_init_job",
+        "type": "function",
+        "z": "aa20e869f3621f0d",
+        "name": "Init Job",
+        "func": "// Erzeugt Job-ID, speichert HTTP res Handle\nconst id = Date.now().toString(36) + Math.random().toString(36).slice(2,8);\nmsg.job = { id, started: new Date().toISOString() };\nflow.set(\"job:\"+id+\":res\", msg.res);\n// optional: Endpunkt merken\nmsg.replyTo = \"/api/protools/presets\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "x": 340,
+        "y": 920,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "report_link_in",
+        "type": "link in",
+        "z": "aa20e869f3621f0d",
+        "name": "REPORT IN",
+        "links": [
+            "report_link_out"
+        ],
+        "x": 370,
+        "y": 1000,
+        "wires": [
+            [
+                "report_aggregate"
+            ]
+        ]
+    },
+    {
+        "id": "report_link_out",
+        "type": "link out",
+        "z": "aa20e869f3621f0d",
+        "name": "REPORT OUT",
+        "mode": "link",
+        "links": [
+            "report_link_in"
+        ],
+        "x": 1515,
+        "y": 1180,
+        "wires": []
+    },
+    {
+        "id": "report_copied",
+        "type": "function",
+        "z": "aa20e869f3621f0d",
+        "name": "Report COPIED",
+        "func": "// Sende einen 'copied'-Event an den Aggregator\nfunction inferCategory(m){\n  if (m.templateDest) return \"templates\";\n  if (m.trackpresetDest) return \"trackPresets\";\n  if (m.pluginsettingDest) return \"pluginSettings\";\n  if (m.fadeDest) return \"fadePresets\";\n  if (m.clipeffectDest) return \"clipEffects\";\n  if (m.memorylocationDest) return \"memoryLocation\";\n  if (m.trackdataDest) return \"trackDataRecall\";\n  if (m.kbshortcutDest) return \"keyboardShortcuts\";\n  if (m.destFolder && /Fade Presets/.test(m.destFolder||'')) return \"fadePresets\";\n  return m.category || m.__category || \"unknown\";\n}\n\nconst category = inferCategory(msg);\nconst file = msg.fileName || msg.files || (msg.quickPresets && msg.quickPresets.destname) || undefined;\n\nnode.send({\n  topic: \"report\",\n  payload: { type: \"item\", status: \"copied\", category, file },\n  job: msg.job\n});\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1350,
+        "y": 1140,
+        "wires": [
+            [
+                "report_link_out"
+            ]
+        ]
+    },
+    {
+        "id": "report_skipped",
+        "type": "function",
+        "z": "aa20e869f3621f0d",
+        "name": "Report SKIPPED",
+        "func": "// Für fehlende Quick Presets oder bewusst übersprungene Dateien\nfunction inferCategory(m){\n  if (m.templateDest) return \"templates\";\n  if (m.trackpresetDest) return \"trackPresets\";\n  if (m.pluginsettingDest) return \"pluginSettings\";\n  if (m.fadeDest) return \"fadePresets\";\n  if (m.clipeffectDest) return \"clipEffects\";\n  if (m.memorylocationDest) return \"memoryLocation\";\n  if (m.trackdataDest) return \"trackDataRecall\";\n  if (m.kbshortcutDest) return \"keyboardShortcuts\";\n  if (m.destFolder && /Fade Presets/.test(m.destFolder||'')) return \"fadePresets\";\n  return m.category || m.__category || \"unknown\";\n}\n\nconst category = inferCategory(msg);\nconst file = msg.fileName || msg.files || (msg.quickPresets && msg.quickPresets.destname) || undefined;\n\nnode.send({\n  topic: \"report\",\n  payload: { type: \"item\", status: \"skipped\", reason: \"not_found\", category, file },\n  job: msg.job\n});\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1350,
+        "y": 1180,
+        "wires": [
+            [
+                "report_link_out"
+            ]
+        ]
+    },
+    {
+        "id": "report_error",
+        "type": "function",
+        "z": "aa20e869f3621f0d",
+        "name": "Report ERROR",
+        "func": "// Catch-Handler → Fehler melden\nconst err = msg.error || {};\nconst category = msg.category || msg.__category || (err.source && err.source.name) || \"unknown\";\nconst file = msg.fileName || err.file || undefined;\n\nnode.send({\n  topic: \"report\",\n  payload: { type: \"item\", status: \"error\", category, file, message: err.message },\n  job: msg.job\n});\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1350,
+        "y": 1220,
+        "wires": [
+            [
+                "report_link_out"
+            ]
+        ]
+    },
+    {
+        "id": "report_done",
+        "type": "function",
+        "z": "aa20e869f3621f0d",
+        "name": "Report DONE (Branch)",
+        "func": "// Am Ende eines Branches genau einmal senden\nconst category = msg.category || msg.__category || \"unknown\";\nnode.send({\n  topic: \"report\",\n  payload: { type: \"done\", category },\n  job: msg.job\n});\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1360,
+        "y": 1260,
+        "wires": [
+            [
+                "report_link_out"
+            ]
+        ]
+    },
+    {
+        "id": "report_aggregate",
+        "type": "function",
+        "z": "aa20e869f3621f0d",
+        "name": "Aggregator",
+        "func": "// Aggregiert alle Reports pro Job-ID\nconst key = \"job:\" + (msg.job?.id || \"none\");\nlet state = flow.get(key) || { counts:{}, done:{}, started: msg.job?.started || new Date().toISOString() };\n\nfunction bump(cat, field){\n  state.counts[cat] = state.counts[cat] || {copied:0, skipped:0, error:0};\n  state.counts[cat][field] += 1;\n}\n\nif (msg.topic === \"report\" && msg.payload?.type === \"item\") {\n  const cat = msg.payload.category || \"unknown\";\n  const st = msg.payload.status;\n  if (st === \"copied\") bump(cat, \"copied\");\n  if (st === \"skipped\") bump(cat, \"skipped\");\n  if (st === \"error\")   bump(cat, \"error\");\n}\n\nif (msg.topic === \"report\" && msg.payload?.type === \"done\") {\n  const cat = msg.payload.category || \"unknown\";\n  state.done[cat] = true;\n}\n\nflow.set(key, state);\nmsg.aggregated = state;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 560,
+        "y": 1000,
+        "wires": [
+            [
+                "report_throttle"
+            ]
+        ]
+    },
+    {
+        "id": "report_throttle",
+        "type": "delay",
+        "z": "aa20e869f3621f0d",
+        "name": "Throttle (merge bursts)",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "0.5",
+        "rateUnits": "second",
+        "randomFirst": "0",
+        "randomLast": "0",
+        "randomUnits": "seconds",
+        "drop": true,
+        "outputs": 1,
+        "x": 780,
+        "y": 1000,
+        "wires": [
+            [
+                "report_finalize"
+            ]
+        ]
+    },
+    {
+        "id": "report_finalize",
+        "type": "function",
+        "z": "aa20e869f3621f0d",
+        "name": "Finalize → HTTP response",
+        "func": "// Baut finale Antwort und sendet sie an den HTTP response\nconst key = \"job:\" + (msg.job?.id || \"none\");\nconst st = msg.aggregated || flow.get(key) || {counts:{}, done:{}};\n\nlet totalCopied=0, totalSkipped=0, totalError=0;\nconst details = Object.entries(st.counts).map(([cat,c])=>{\n  totalCopied  += c.copied||0;\n  totalSkipped += c.skipped||0;\n  totalError   += c.error||0;\n  const status = c.error>0 ? \"error\" : ((c.copied||0)+(c.skipped||0)>0 ? \"ok\" : \"idle\");\n  const note   = (c.skipped>0 && c.error===0) ? \"partial (some items missing)\" : undefined;\n  return { category: cat, copied: c.copied||0, skipped: c.skipped||0, error: c.error||0, status, note };\n});\n\nconst overall = totalError>0 ? \"error\" : ((totalCopied+totalSkipped)>0 ? \"ok\" : \"idle\");\n\n// HTTP res wiederherstellen\nconst res = flow.get(key+\":res\");\nmsg.res = res;\nmsg.statusCode = (overall === \"error\") ? 207 : 200; // 207 für Teil-/Fehler möglich\nmsg.payload = {\n  jobId: msg.job?.id,\n  started: st.started,\n  finished: new Date().toISOString(),\n  overall,\n  totals: { copied: totalCopied, skipped: totalSkipped, error: totalError },\n  details\n};\n\n// Cleanup\nflow.set(key, null);\nflow.set(key+\":res\", null);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1030,
+        "y": 1000,
+        "wires": [
+            [
+                "report_http_out"
+            ]
+        ]
+    },
+    {
+        "id": "report_http_out",
+        "type": "http response",
+        "z": "aa20e869f3621f0d",
+        "name": "HTTP 200/207",
+        "statusCode": "",
+        "headers": {},
+        "x": 1280,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "report_catch",
+        "type": "catch",
+        "z": "aa20e869f3621f0d",
+        "name": "Catch all Copy errors",
+        "scope": null,
+        "uncaught": false,
+        "x": 1120,
+        "y": 1220,
+        "wires": [
+            [
+                "report_error"
             ]
         ]
     }

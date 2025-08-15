@@ -11,8 +11,9 @@
             @click:append-inner="browseInto('PathMitarbeiter', 'Pfad Mitarbeiter auswählen')"
           />
         </v-col>
-
-        <v-col cols="12" md="6">
+      </v-row>
+      <v-row>
+        <v-col cols="2" md="6">
           <v-text-field
             v-model="staged.PathProduktionen"
             label="Pfad Produktionen"
@@ -20,8 +21,13 @@
             append-inner-icon="mdi-folder"
             @click:append-inner="browseInto('PathProduktionen', 'Pfad Produktionen auswählen')"
           />
+          <v-button @click="browseInto('PathProduktionen', 'Pfad Produktionen auswählen')">Durchsuchen</v-button>
+          <v-col>
+            <v-button @click="browseInto('PathProduktionen', 'Pfad Produktionen auswählen')">Durchsuchen</v-button>
+          </v-col>
         </v-col>
-
+      </v-row>
+      <v-row>
         <v-col cols="12" md="6">
           <v-text-field
             v-model="staged.PathStammdaten"
@@ -31,7 +37,8 @@
             @click:append-inner="browseInto('PathStammdaten', 'Pfad Stammdaten auswählen')"
           />
         </v-col>
-
+      </v-row>
+      <v-row> 
         <v-col cols="12" md="6">
           <v-text-field
             v-model="staged.PathPTUser"

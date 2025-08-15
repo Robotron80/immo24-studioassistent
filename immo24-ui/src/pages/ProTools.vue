@@ -18,7 +18,6 @@
 
     <!-- Kategorie 1 -->
     <v-card class="mb-3" outlined>
-      <v-card-title class="py-2 text-subtitle-2 font-weight-medium">Kategorie 1</v-card-title>
       <v-divider />
       <v-list density="compact">
         <v-list-item v-for="item in cat1" :key="item.key">
@@ -31,7 +30,6 @@
 
     <!-- Kategorie 2 -->
     <v-card class="mb-3" outlined>
-      <v-card-title class="py-2 text-subtitle-2 font-weight-medium">Kategorie 2</v-card-title>
       <v-divider />
       <v-list density="compact">
         <v-list-item v-for="item in cat2" :key="item.key">
@@ -53,7 +51,6 @@
 
     <!-- Kategorie 3 -->
     <v-card class="mb-3" outlined>
-      <v-card-title class="py-2 text-subtitle-2 font-weight-medium">Kategorie 3</v-card-title>
       <v-divider />
       <v-list density="compact">
         <v-list-item v-for="item in cat3" :key="item.key">
@@ -82,7 +79,6 @@ const POLL_MS = 3000
 const isOnline = ref(false)
 let pollTimer = null
 
-// Daten
 const cat1 = reactive([
   { key: 'templates', label: 'Templates', selected: false },
   { key: 'trackPresets', label: 'Track Presets', selected: false },
@@ -103,7 +99,7 @@ const anySelected = computed(() =>
   [...cat1, ...cat2, ...cat3].some(i => i.selected)
 )
 
-const snack = reactive({ open: false, text: '' })
+const snack = reactive({ open: false, text: '', color: 'success' })
 
 function onRecallAll() { sendAction('recall') }
 function onStoreAll() { sendAction('store') }
@@ -117,52 +113,38 @@ async function sendAction(action) {
       cat3: cat3.filter(i => i.selected).map(i => ({ key: i.key }))
     }
   }
+
   try {
     const res = await fetch(`${API}/protools/presets`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     })
-    if (!res.ok) throw new Error(await res.text())
-    snack.text = `Aktion "${action}" ausgeführt`
+
+    const data = await res.json()
+
+    // Backend-Message bevorzugt nutzen
+    const text = data.message
+      || (data.overall === 'ok'
+          ? (data.action === 'store' ? 'Store erfolgreich' : 'Recall erfolgreich')
+          : 'Vorgang abgeschlossen – mit Hinweisen')
+
+    // Statusfarbe bestimmen
+    if (res.status === 200) {
+      snack.color = 'success'
+    } else if (res.status === 207) {
+      snack.color = 'warning'
+    } else {
+      snack.color = 'error'
+    }
+
+    snack.text = text
     snack.open = true
+
   } catch (e) {
+    snack.color = 'error'
     snack.text = 'Fehler: ' + (e.message || 'Aktion fehlgeschlagen')
     snack.open = true
   }
 }
-
-// Status-Poll
-async function pollStatus() {
-  try {
-    const res = await fetch(`${API}/protools/status`)
-    const data = await res.json()
-    isOnline.value = !!data?.online
-  } catch {
-    isOnline.value = false
-  }
-}
-onMounted(() => {
-  pollStatus()
-  pollTimer = setInterval(pollStatus, POLL_MS)
-})
-onBeforeUnmount(() => clearInterval(pollTimer))
 </script>
-
-<style scoped>
-.status-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: inline-block;
-}
-.status-dot.online { background-color: #4caf50; }
-.status-dot.offline { background-color: #f44336; }
-.actions-sticky {
-  position: sticky;
-  bottom: 0;
-  padding: 12px 16px;
-  background: rgb(var(--v-theme-surface));
-  border-top: 1px solid rgba(0,0,0,.08);
-}
-</style>

@@ -435,6 +435,223 @@
         "h": 242
     },
     {
+        "id": "21da7a611532cde9",
+        "type": "group",
+        "z": "24039523dcf573b0",
+        "name": "Track Data",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "ad680f0fcc01ddb6",
+            "2bbec99d791c83db",
+            "f99608698a8bf030",
+            "467ae7fcbc6b7735",
+            "d298d4ce858c6423",
+            "4de5265817a08368",
+            "b58c7b938f4c91b8",
+            "1df69ea1c23c0c77",
+            "585a9df6e2d4fc8f",
+            "5ce80ee7862fa202",
+            "6abd7f2dbd599246",
+            "0390d6ddd4e2c499",
+            "91137af6b7515c1b",
+            "83efdb60310b9f66",
+            "32c6fc7eee758dc2",
+            "41005d8cd172bc9d",
+            "8cb029efa37424c0",
+            "b45491f8febc2229",
+            "716f54db6d32889b"
+        ],
+        "x": 474,
+        "y": 1519,
+        "w": 1752,
+        "h": 202
+    },
+    {
+        "id": "bf4eee564e09bce7",
+        "type": "group",
+        "z": "24039523dcf573b0",
+        "name": "Memory Location",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "ccccb265ef4fb1dc",
+            "defb410130f27b91",
+            "917f910377da205a",
+            "c8ca1d82140028e8",
+            "dd0e50f3c1df94a2",
+            "8e5fd46df3643f82",
+            "bfc668c714f6589b",
+            "af2ab063726281c3",
+            "9813dbafe6b048da",
+            "4b6d8a94e30892b5",
+            "9bb5182f2a01f7f2",
+            "7c5744bd352c2266",
+            "mem_counter_inc_bulk",
+            "mem_quick_src_exists",
+            "mem_counter_inc_quick",
+            "mem_report_skipped",
+            "3882283dafc8f7ae",
+            "e2f3a4b5c6d7e8f1",
+            "f1e2d3c4b5a69788"
+        ],
+        "x": 474,
+        "y": 1279,
+        "w": 1792,
+        "h": 222
+    },
+    {
+        "id": "70677eb1b82c5a42",
+        "type": "group",
+        "z": "24039523dcf573b0",
+        "name": "Clip Effects Presets",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "926c052763c39e29",
+            "501cb80a18e2101f",
+            "eee3ed5815c3c52d",
+            "5726ab925fa2402a",
+            "4ffb2321785ac98b",
+            "6f4c05fec7be2cb3",
+            "7f28c8932dfe9550",
+            "ecac37490d9bab96",
+            "c9e0e810f99a762b",
+            "1f67eb9de416c2b3",
+            "5659f0cda1297389",
+            "9b7306709391a052",
+            "db8c2123cd78a2a1",
+            "8ed53db524f61578",
+            "1961473680376c87",
+            "1a5269fddad889e9",
+            "1a3576d54deb10e1",
+            "47f58a92faa4b273",
+            "4f8384d0182832a6"
+        ],
+        "x": 474,
+        "y": 1039,
+        "w": 1752,
+        "h": 222
+    },
+    {
+        "id": "7ca6f5ba8382e25f",
+        "type": "group",
+        "z": "24039523dcf573b0",
+        "name": "Keyboard Shortcuts",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "97634934f5c4429f",
+            "9e68a0c8e7d4679a",
+            "63f6495b795634b9",
+            "f149ab4d6c3361d7",
+            "ec8625296b55c237",
+            "673b872c6bbacb4a",
+            "d3eacd5953e17d84",
+            "bda8dd2c31472a75",
+            "5c7b329f612ecf44",
+            "983f0f1fddf2f572",
+            "e8576083d81a103e",
+            "916a53a295dcad47",
+            "54f5060cfecb013f",
+            "0a7ff522ecc866b5",
+            "0f74cb45dd82a5ba",
+            "5b841c6ebce3b6fa",
+            "26a33c971f7b20c7",
+            "b938dced525b1034",
+            "0cfb6f4a3d4d0171"
+        ],
+        "x": 474,
+        "y": 1739,
+        "w": 1752,
+        "h": 222
+    },
+    {
+        "id": "32425cc956c27352",
+        "type": "group",
+        "z": "24039523dcf573b0",
+        "name": "Templates",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "c3540eab39bc2683",
+            "8d053651e71a88d0",
+            "f1ddf879ad3e29dc",
+            "dde28766e8809a51",
+            "e60e5ab898a0a6de",
+            "0177cdfae37f423d",
+            "0455b0dd8e131085",
+            "c27c1122548ae7b8"
+        ],
+        "x": 614,
+        "y": 259,
+        "w": 1172,
+        "h": 162
+    },
+    {
+        "id": "45092586c8772558",
+        "type": "group",
+        "z": "24039523dcf573b0",
+        "name": "Track Presets",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "a266be18af804bb0",
+            "2aaacffa74b4ebdc",
+            "1b464dea68e4fbcb",
+            "122a96507f2fb522",
+            "b5c5c6741c0f3ad0",
+            "f319bb1b3f5a5649",
+            "7bf21c3b7172136f",
+            "ddf7a61881eb3321"
+        ],
+        "x": 614,
+        "y": 439,
+        "w": 1192,
+        "h": 162
+    },
+    {
+        "id": "aba0adf3e81a1c0b",
+        "type": "group",
+        "z": "24039523dcf573b0",
+        "name": "Fade Presets",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "2f9a0a1f4a3c0d01",
+            "0c9f2f7f2db2d1f9",
+            "d9b7b4ec5f1f3e7e",
+            "a35b9f8b5f3c9a11",
+            "f8f7f0fb2f6a5b33",
+            "2f0a7a3d7b0c44a2",
+            "3c1e6a6d7b1b2c44",
+            "e0e4b5c2b9a1d7f5",
+            "5a8d0f1b3e2c4d66",
+            "0e22a946caa8156b",
+            "22c35c48819fd2c5",
+            "bd97d6f6ce673d8c",
+            "7956ea8999198d23",
+            "cb629a6342c84f4d",
+            "6de7257c65f1e165",
+            "0c2c43bf90d12f7b",
+            "8b5cc652c67109bc",
+            "f7a0dd6dcd042919",
+            "49e52f42aa4489e3",
+            "5d719dadc9ded89c"
+        ],
+        "x": 474,
+        "y": 839,
+        "w": 1892,
+        "h": 182
+    },
+    {
         "id": "a101d0e8677d1f77",
         "type": "group",
         "z": "dc0d981398a42d88",
@@ -683,187 +900,34 @@
         "h": 282
     },
     {
-        "id": "21da7a611532cde9",
+        "id": "7152f8cea3400281",
         "type": "group",
         "z": "24039523dcf573b0",
-        "name": "Track Data",
+        "name": "Plug-In Settings",
         "style": {
             "label": true
         },
         "nodes": [
-            "ad680f0fcc01ddb6",
-            "2bbec99d791c83db",
-            "f99608698a8bf030",
-            "467ae7fcbc6b7735",
-            "d298d4ce858c6423",
-            "4de5265817a08368",
-            "b58c7b938f4c91b8",
-            "1df69ea1c23c0c77",
-            "585a9df6e2d4fc8f",
-            "5ce80ee7862fa202",
-            "6abd7f2dbd599246",
-            "0390d6ddd4e2c499",
-            "91137af6b7515c1b",
-            "83efdb60310b9f66",
-            "32c6fc7eee758dc2",
-            "41005d8cd172bc9d",
-            "8cb029efa37424c0",
-            "b45491f8febc2229",
-            "716f54db6d32889b"
+            "801fc15ef3777ecb",
+            "f9ae2e0d8b851b95",
+            "27d01ea6c29f13b3",
+            "717547741be93b38",
+            "88826b980a9a9e60",
+            "d59e642b1764df76",
+            "1c85a7b73c4d0534",
+            "321d3cfaf3ad264f",
+            "c122ef2968a5229e",
+            "34ab116ea9fc7b9a",
+            "97dbf2e19dec5ed0",
+            "15ed22f12517848f",
+            "46d02e8955535559",
+            "5438f780f5fc4fff",
+            "3a65d89c850f97fd"
         ],
         "x": 474,
-        "y": 1199,
-        "w": 1752,
+        "y": 619,
+        "w": 2172,
         "h": 202
-    },
-    {
-        "id": "bf4eee564e09bce7",
-        "type": "group",
-        "z": "24039523dcf573b0",
-        "name": "Memory Location",
-        "style": {
-            "label": true
-        },
-        "nodes": [
-            "ccccb265ef4fb1dc",
-            "defb410130f27b91",
-            "917f910377da205a",
-            "c8ca1d82140028e8",
-            "dd0e50f3c1df94a2",
-            "8e5fd46df3643f82",
-            "bfc668c714f6589b",
-            "af2ab063726281c3",
-            "9813dbafe6b048da",
-            "4b6d8a94e30892b5",
-            "9bb5182f2a01f7f2",
-            "7c5744bd352c2266",
-            "mem_counter_inc_bulk",
-            "mem_quick_src_exists",
-            "mem_counter_inc_quick",
-            "mem_report_skipped",
-            "3882283dafc8f7ae",
-            "e2f3a4b5c6d7e8f1",
-            "f1e2d3c4b5a69788",
-            "2c1fc212585a73f0"
-        ],
-        "x": 474,
-        "y": 959,
-        "w": 1792,
-        "h": 222
-    },
-    {
-        "id": "70677eb1b82c5a42",
-        "type": "group",
-        "z": "24039523dcf573b0",
-        "name": "Clip Effects Presets",
-        "style": {
-            "label": true
-        },
-        "nodes": [
-            "926c052763c39e29",
-            "501cb80a18e2101f",
-            "eee3ed5815c3c52d",
-            "5726ab925fa2402a",
-            "4ffb2321785ac98b",
-            "6f4c05fec7be2cb3",
-            "7f28c8932dfe9550",
-            "ecac37490d9bab96",
-            "c9e0e810f99a762b",
-            "1f67eb9de416c2b3",
-            "5659f0cda1297389",
-            "9b7306709391a052",
-            "db8c2123cd78a2a1",
-            "8ed53db524f61578",
-            "1961473680376c87",
-            "1a5269fddad889e9",
-            "1a3576d54deb10e1",
-            "47f58a92faa4b273",
-            "4f8384d0182832a6"
-        ],
-        "x": 474,
-        "y": 719,
-        "w": 1752,
-        "h": 222
-    },
-    {
-        "id": "7ca6f5ba8382e25f",
-        "type": "group",
-        "z": "24039523dcf573b0",
-        "name": "Keyboard Shortcuts",
-        "style": {
-            "label": true
-        },
-        "nodes": [
-            "97634934f5c4429f",
-            "9e68a0c8e7d4679a",
-            "63f6495b795634b9",
-            "f149ab4d6c3361d7",
-            "ec8625296b55c237",
-            "673b872c6bbacb4a",
-            "d3eacd5953e17d84",
-            "bda8dd2c31472a75",
-            "5c7b329f612ecf44",
-            "983f0f1fddf2f572",
-            "e8576083d81a103e",
-            "916a53a295dcad47",
-            "54f5060cfecb013f",
-            "0a7ff522ecc866b5",
-            "0f74cb45dd82a5ba",
-            "5b841c6ebce3b6fa",
-            "26a33c971f7b20c7",
-            "b938dced525b1034",
-            "0cfb6f4a3d4d0171"
-        ],
-        "x": 474,
-        "y": 1419,
-        "w": 1752,
-        "h": 222
-    },
-    {
-        "id": "32425cc956c27352",
-        "type": "group",
-        "z": "24039523dcf573b0",
-        "name": "Templates",
-        "style": {
-            "label": true
-        },
-        "nodes": [
-            "c3540eab39bc2683",
-            "8d053651e71a88d0",
-            "f1ddf879ad3e29dc",
-            "dde28766e8809a51",
-            "e60e5ab898a0a6de",
-            "0177cdfae37f423d",
-            "0455b0dd8e131085",
-            "c27c1122548ae7b8"
-        ],
-        "x": 474,
-        "y": 359,
-        "w": 1172,
-        "h": 162
-    },
-    {
-        "id": "45092586c8772558",
-        "type": "group",
-        "z": "24039523dcf573b0",
-        "name": "Track Presets",
-        "style": {
-            "label": true
-        },
-        "nodes": [
-            "a266be18af804bb0",
-            "2aaacffa74b4ebdc",
-            "1b464dea68e4fbcb",
-            "122a96507f2fb522",
-            "b5c5c6741c0f3ad0",
-            "f319bb1b3f5a5649",
-            "7bf21c3b7172136f",
-            "ddf7a61881eb3321"
-        ],
-        "x": 474,
-        "y": 539,
-        "w": 1192,
-        "h": 162
     },
     {
         "id": "826de81a1d3da833",
@@ -10668,7 +10732,7 @@
         "finalize": "",
         "libs": [],
         "x": 180,
-        "y": 980,
+        "y": 1140,
         "wires": [
             [
                 "c3540eab39bc2683"
@@ -10677,7 +10741,7 @@
                 "a266be18af804bb0"
             ],
             [
-                "1e2070cb9d15c6a3"
+                "15ed22f12517848f"
             ],
             [
                 "2f9a0a1f4a3c0d01"
@@ -10721,8 +10785,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 590,
-        "y": 400,
+        "x": 730,
+        "y": 300,
         "wires": [
             [
                 "dde28766e8809a51"
@@ -10746,8 +10810,8 @@
         "sourceType": "msg",
         "target": "templateDest",
         "targetType": "msg",
-        "x": 1540,
-        "y": 400,
+        "x": 1680,
+        "y": 300,
         "wires": [
             [
                 "mem_counter_dec_done"
@@ -10758,6 +10822,7 @@
         "id": "801fc15ef3777ecb",
         "type": "fs-ops-dir",
         "z": "24039523dcf573b0",
+        "g": "7152f8cea3400281",
         "name": "Plugin Pfad durchsuchen",
         "path": "payload.PluginPath",
         "pathType": "msg",
@@ -10765,8 +10830,8 @@
         "filterType": "str",
         "dir": "files",
         "dirType": "msg",
-        "x": 850,
-        "y": 220,
+        "x": 930,
+        "y": 700,
         "wires": [
             [
                 "f9ae2e0d8b851b95"
@@ -10777,6 +10842,7 @@
         "id": "f9ae2e0d8b851b95",
         "type": "split",
         "z": "24039523dcf573b0",
+        "g": "7152f8cea3400281",
         "name": "Split Plugin-Ordner",
         "splt": "\\n",
         "spltType": "str",
@@ -10785,8 +10851,8 @@
         "stream": false,
         "addname": "",
         "property": "files",
-        "x": 1090,
-        "y": 220,
+        "x": 1150,
+        "y": 700,
         "wires": [
             [
                 "27d01ea6c29f13b3"
@@ -10797,6 +10863,7 @@
         "id": "27d01ea6c29f13b3",
         "type": "change",
         "z": "24039523dcf573b0",
+        "g": "7152f8cea3400281",
         "name": "Pfad zum user-Ordner bauen",
         "rules": [
             {
@@ -10819,11 +10886,11 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1340,
-        "y": 220,
+        "x": 1380,
+        "y": 700,
         "wires": [
             [
-                "717547741be93b38"
+                "3a65d89c850f97fd"
             ]
         ]
     },
@@ -10831,6 +10898,7 @@
         "id": "717547741be93b38",
         "type": "fs-ops-stats",
         "z": "24039523dcf573b0",
+        "g": "7152f8cea3400281",
         "name": "",
         "path": "",
         "pathType": "str",
@@ -10838,8 +10906,8 @@
         "filenameType": "msg",
         "stats": "stats",
         "sizeType": "msg",
-        "x": 1540,
-        "y": 220,
+        "x": 1580,
+        "y": 660,
         "wires": [
             [
                 "88826b980a9a9e60"
@@ -10850,6 +10918,7 @@
         "id": "88826b980a9a9e60",
         "type": "function",
         "z": "24039523dcf573b0",
+        "g": "7152f8cea3400281",
         "name": "Ist ein Verzeichnis?",
         "func": "// Prüfen ob Stat-Wert ein Verzeichnis ist\nif (msg.stats && typeof msg.stats.mode === \"number\") {\n    if ((msg.stats.mode & 57344) === 16384) {\n        // Ist ein Verzeichnis\n        return msg;\n    }\n}\n// Kein Verzeichnis: Nachricht verwerfen\nreturn null;",
         "outputs": 1,
@@ -10858,11 +10927,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1710,
-        "y": 220,
+        "x": 1750,
+        "y": 700,
         "wires": [
             [
-                "d59e642b1764df76"
+                "34ab116ea9fc7b9a"
             ]
         ]
     },
@@ -10870,6 +10939,7 @@
         "id": "d59e642b1764df76",
         "type": "function",
         "z": "24039523dcf573b0",
+        "g": "7152f8cea3400281",
         "name": "Plug-In Settings Funktion",
         "func": "let PathMitarbeiter = msg.payload.PathMitarbeiter;\nlet activeUser = msg.payload.activeUser;\nlet pluginName = msg.payload.pluginName;\nlet userDir = msg.payload.userDir;\n\n// Ohne passenden payload keine Aktion\nif (msg.payload.action === \"recall\") {\n    msg.pluginsettingSrc = `${PathMitarbeiter}/${activeUser}/immo24/pluginsettings/${pluginName}`;\n    msg.pluginsettingDest = `${userDir}`;\n    return msg;\n} else if (msg.payload.action === \"store\") {\n    msg.pluginsettingSrc = `${userDir}`;\n    msg.pluginsettingDest = `${PathMitarbeiter}/${activeUser}/immo24/pluginsettings/${pluginName}`;\n    return msg;\n}\nreturn null;",
         "outputs": 1,
@@ -10878,31 +10948,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1950,
-        "y": 220,
+        "x": 2190,
+        "y": 700,
         "wires": [
             [
-                "1c85a7b73c4d0534"
-            ]
-        ]
-    },
-    {
-        "id": "1e2070cb9d15c6a3",
-        "type": "function",
-        "z": "24039523dcf573b0",
-        "name": "Pfad Plug-In Settings",
-        "func": "let PluginPath = msg.payload.PathPTUser + '/Plug-In Settings';\n\nmsg.payload.PluginPath = PluginPath;\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 600,
-        "y": 220,
-        "wires": [
-            [
-                "801fc15ef3777ecb"
+                "46d02e8955535559"
             ]
         ]
     },
@@ -10910,15 +10960,18 @@
         "id": "1c85a7b73c4d0534",
         "type": "fs-extra-copy",
         "z": "24039523dcf573b0",
+        "g": "7152f8cea3400281",
         "name": "Copy Plug-In Settings",
         "source": "pluginsettingSrc",
         "sourceType": "msg",
         "target": "pluginsettingDest",
         "targetType": "msg",
-        "x": 2200,
-        "y": 220,
+        "x": 2520,
+        "y": 700,
         "wires": [
-            []
+            [
+                "mem_counter_dec_done"
+            ]
         ]
     },
     {
@@ -10935,7 +10988,7 @@
         "finalize": "",
         "libs": [],
         "x": 620,
-        "y": 820,
+        "y": 1140,
         "wires": [
             [
                 "eee3ed5815c3c52d",
@@ -10967,7 +11020,7 @@
         "link": false,
         "overwrite": true,
         "x": 1810,
-        "y": 820,
+        "y": 1140,
         "wires": [
             [
                 "mem_counter_dec_done"
@@ -10987,7 +11040,7 @@
         "dir": "files",
         "dirType": "msg",
         "x": 910,
-        "y": 780,
+        "y": 1100,
         "wires": [
             [
                 "7f28c8932dfe9550"
@@ -11008,7 +11061,7 @@
         "finalize": "",
         "libs": [],
         "x": 1690,
-        "y": 760,
+        "y": 1080,
         "wires": [
             [
                 "1f67eb9de416c2b3"
@@ -11034,7 +11087,7 @@
         "repair": false,
         "outputs": 1,
         "x": 1490,
-        "y": 1000,
+        "y": 1320,
         "wires": [
             [
                 "af2ab063726281c3"
@@ -11055,12 +11108,11 @@
         "finalize": "",
         "libs": [],
         "x": 640,
-        "y": 1060,
+        "y": 1380,
         "wires": [
             [
                 "8e5fd46df3643f82",
-                "9813dbafe6b048da",
-                "2c1fc212585a73f0"
+                "9813dbafe6b048da"
             ],
             [
                 "3882283dafc8f7ae"
@@ -11082,7 +11134,7 @@
         "target": "memorylocationDest",
         "targetType": "msg",
         "x": 2110,
-        "y": 1000,
+        "y": 1320,
         "wires": [
             [
                 "mem_counter_dec_done"
@@ -11106,7 +11158,7 @@
         "link": false,
         "overwrite": true,
         "x": 1810,
-        "y": 1060,
+        "y": 1380,
         "wires": [
             [
                 "mem_counter_dec_done"
@@ -11127,7 +11179,7 @@
         "addname": "",
         "property": "quickPresets",
         "x": 1130,
-        "y": 1080,
+        "y": 1400,
         "wires": [
             [
                 "mem_quick_src_exists"
@@ -11147,7 +11199,7 @@
         "dir": "files",
         "dirType": "msg",
         "x": 910,
-        "y": 1020,
+        "y": 1340,
         "wires": [
             [
                 "7c5744bd352c2266"
@@ -11168,7 +11220,7 @@
         "addname": "",
         "property": "files",
         "x": 1300,
-        "y": 1000,
+        "y": 1320,
         "wires": [
             [
                 "ccccb265ef4fb1dc"
@@ -11189,7 +11241,7 @@
         "finalize": "",
         "libs": [],
         "x": 1690,
-        "y": 1000,
+        "y": 1320,
         "wires": [
             [
                 "mem_counter_inc_bulk"
@@ -11210,13 +11262,15 @@
         "finalize": "",
         "libs": [],
         "x": 590,
-        "y": 1280,
+        "y": 1600,
         "wires": [
             [
                 "d298d4ce858c6423",
                 "83efdb60310b9f66"
             ],
-            []
+            [
+                "716f54db6d32889b"
+            ]
         ],
         "outputLabels": [
             "",
@@ -11234,7 +11288,7 @@
         "target": "trackdataDest",
         "targetType": "msg",
         "x": 2090,
-        "y": 1240,
+        "y": 1560,
         "wires": [
             [
                 "mem_counter_dec_done"
@@ -11258,7 +11312,7 @@
         "link": false,
         "overwrite": true,
         "x": 1810,
-        "y": 1300,
+        "y": 1620,
         "wires": [
             [
                 "mem_counter_dec_done"
@@ -11279,7 +11333,7 @@
         "addname": "",
         "property": "quickPresets",
         "x": 1130,
-        "y": 1320,
+        "y": 1640,
         "wires": [
             [
                 "41005d8cd172bc9d"
@@ -11299,7 +11353,7 @@
         "dir": "files",
         "dirType": "msg",
         "x": 910,
-        "y": 1240,
+        "y": 1560,
         "wires": [
             [
                 "6abd7f2dbd599246"
@@ -11320,7 +11374,7 @@
         "addname": "",
         "property": "files",
         "x": 1300,
-        "y": 1240,
+        "y": 1560,
         "wires": [
             [
                 "b58c7b938f4c91b8"
@@ -11346,7 +11400,7 @@
         "repair": false,
         "outputs": 1,
         "x": 1490,
-        "y": 1240,
+        "y": 1560,
         "wires": [
             [
                 "1df69ea1c23c0c77"
@@ -11367,7 +11421,7 @@
         "finalize": "",
         "libs": [],
         "x": 1690,
-        "y": 1240,
+        "y": 1560,
         "wires": [
             [
                 "91137af6b7515c1b"
@@ -11388,7 +11442,7 @@
         "finalize": "",
         "libs": [],
         "x": 620,
-        "y": 1520,
+        "y": 1840,
         "wires": [
             [
                 "9e68a0c8e7d4679a",
@@ -11416,7 +11470,7 @@
         "dir": "files",
         "dirType": "msg",
         "x": 910,
-        "y": 1460,
+        "y": 1780,
         "wires": [
             [
                 "d3eacd5953e17d84"
@@ -11437,7 +11491,7 @@
         "finalize": "",
         "libs": [],
         "x": 1690,
-        "y": 1460,
+        "y": 1780,
         "wires": [
             [
                 "e8576083d81a103e"
@@ -11448,6 +11502,7 @@
         "id": "2f9a0a1f4a3c0d01",
         "type": "function",
         "z": "24039523dcf573b0",
+        "g": "aba0adf3e81a1c0b",
         "name": "Fade Presets Funktion",
         "func": "// Fade Presets Funktion (Outputs: 2)\n// Out1 = normal weiter, Out2 = startCat / error\n\ntry {\n    const { PathMitarbeiter, PathPTUser, activeUser, action, quick } = msg.payload || {};\n    if (!PathMitarbeiter || !PathPTUser || !activeUser || !action) return [null, null];\n\n    msg.category = \"fadePresets\";\n\n    // --- startCat NUR 1x pro Job+Kategorie senden (Flow-Flag) ---\n    let startCat = null;\n    const startKey = `startcat:${msg.job?.id || 'none'}:${msg.category}`;\n    if (!flow.get(startKey) && msg.job && msg.job.id) {\n        flow.set(startKey, true);\n        startCat = {\n            topic: \"report\",\n            payload: { type: \"startCat\", category: msg.category },\n            job: msg.job\n        };\n    }\n\n    const rootDir = `${PathPTUser}/Fade Presets`;\n    const archiveDir = `${PathMitarbeiter}/${activeUser}/immo24/fadepresets`;\n    const folders = [\"Batch Fade\", \"Cross Fade\", \"Fade In\", \"Fade Out\"];\n\n    // Quelle/Ziel für Bulk\n    if (action === \"recall\") {\n        msg.fadeSrc = archiveDir;\n        msg.fadeDest = rootDir;\n    } else if (action === \"store\") {\n        msg.fadeSrc = rootDir;\n        msg.fadeDest = archiveDir;\n    } else {\n        return [null, startCat];\n    }\n\n    // Quick Presets vorbereiten (separat kopieren)\n    const doQuick = (quick === true || quick === \"true\");\n    msg.quickPresets = [];\n    if (doQuick) {\n        for (const folder of folders) {\n            for (let i = 1; i <= 5; i++) {\n                if (action === \"recall\") {\n                    msg.quickPresets.push({\n                        src: `${archiveDir}/${folder}/Quick Preset ${i}.fdpreset`,\n                        destname: `Quick Preset ${i}.fdpreset`,\n                        destpath: `${rootDir}/${folder}`\n                    });\n                } else {\n                    msg.quickPresets.push({\n                        src: `${rootDir}/${folder}/Quick Preset ${i}.fdpreset`,\n                        destname: `Quick Preset ${i}.fdpreset`,\n                        destpath: `${archiveDir}/${folder}`\n                    });\n                }\n            }\n        }\n    }\n\n    // Ordnerliste für Bulk übergeben\n    msg.folders = folders;\n\n    return [msg, startCat];\n\n} catch (err) {\n    const errorMsg = {\n        topic: \"report\",\n        payload: { type: \"error\", category: \"fadePresets\", message: err.message },\n        job: msg.job\n    };\n    return [null, errorMsg];\n}",
         "outputs": 2,
@@ -11457,7 +11512,7 @@
         "finalize": "",
         "libs": [],
         "x": 600,
-        "y": 260,
+        "y": 880,
         "wires": [
             [
                 "e0e4b5c2b9a1d7f5",
@@ -11476,6 +11531,7 @@
         "id": "0c9f2f7f2db2d1f9",
         "type": "split",
         "z": "24039523dcf573b0",
+        "g": "aba0adf3e81a1c0b",
         "name": "Split Ordner (4x)",
         "splt": "\\n",
         "spltType": "str",
@@ -11485,7 +11541,7 @@
         "addname": "",
         "property": "folders",
         "x": 820,
-        "y": 260,
+        "y": 880,
         "wires": [
             [
                 "d9b7b4ec5f1f3e7e"
@@ -11496,6 +11552,7 @@
         "id": "d9b7b4ec5f1f3e7e",
         "type": "change",
         "z": "24039523dcf573b0",
+        "g": "aba0adf3e81a1c0b",
         "name": "scanSrc / destFolder bauen",
         "rules": [
             {
@@ -11521,11 +11578,10 @@
             }
         ],
         "x": 1040,
-        "y": 260,
+        "y": 880,
         "wires": [
             [
-                "a35b9f8b5f3c9a11",
-                "cf3f2af48b63a6a5"
+                "a35b9f8b5f3c9a11"
             ]
         ]
     },
@@ -11533,15 +11589,16 @@
         "id": "a35b9f8b5f3c9a11",
         "type": "fs-ops-dir",
         "z": "24039523dcf573b0",
+        "g": "aba0adf3e81a1c0b",
         "name": "List .fdpreset im Ordner",
         "path": "scanSrc",
         "pathType": "msg",
         "filter": "*",
-        "filterType": "msg",
-        "dir": "state",
+        "filterType": "str",
+        "dir": "files",
         "dirType": "msg",
         "x": 1290,
-        "y": 260,
+        "y": 880,
         "wires": [
             [
                 "f8f7f0fb2f6a5b33"
@@ -11552,6 +11609,7 @@
         "id": "f8f7f0fb2f6a5b33",
         "type": "split",
         "z": "24039523dcf573b0",
+        "g": "aba0adf3e81a1c0b",
         "name": "Split Dateien",
         "splt": "\\n",
         "spltType": "str",
@@ -11561,7 +11619,7 @@
         "addname": "",
         "property": "files",
         "x": 1490,
-        "y": 260,
+        "y": 880,
         "wires": [
             [
                 "2f0a7a3d7b0c44a2"
@@ -11572,6 +11630,7 @@
         "id": "2f0a7a3d7b0c44a2",
         "type": "function",
         "z": "24039523dcf573b0",
+        "g": "aba0adf3e81a1c0b",
         "name": "Quick Presets filtern",
         "func": "// erwartet: msg.files (Dateiname), msg.scanSrc, msg.destFolder\nconst name = msg.files;\nif (!name || !msg.scanSrc || !msg.destFolder) return null;\n\n// nur .fdpreset\nconst isFdpreset = /\\.fdpreset$/i.test(name);\n// Quick Presets ausschließen\nconst isQuick = /^Quick Preset\\s+[1-5]\\.fdpreset$/i.test(name);\n\nif (!isFdpreset || isQuick) return null;\n\nmsg.fileSrc   = `${msg.scanSrc}/${name}`;\nmsg.fileName  = name;\n// Zielordner existiert ggf. noch nicht – fs-ops-copy legt Datei im destFolder/destFilename ab\nmsg.destFolder = msg.destFolder;\n\nreturn msg;",
         "outputs": 1,
@@ -11581,7 +11640,7 @@
         "finalize": "",
         "libs": [],
         "x": 1680,
-        "y": 260,
+        "y": 880,
         "wires": [
             [
                 "22c35c48819fd2c5"
@@ -11592,6 +11651,7 @@
         "id": "3c1e6a6d7b1b2c44",
         "type": "fs-ops-copy",
         "z": "24039523dcf573b0",
+        "g": "aba0adf3e81a1c0b",
         "name": "Copy .fdpreset (Bulk)",
         "sourcePath": "",
         "sourcePathType": "str",
@@ -11604,7 +11664,7 @@
         "link": false,
         "overwrite": true,
         "x": 2140,
-        "y": 260,
+        "y": 880,
         "wires": [
             [
                 "mem_counter_dec_done"
@@ -11615,6 +11675,7 @@
         "id": "e0e4b5c2b9a1d7f5",
         "type": "split",
         "z": "24039523dcf573b0",
+        "g": "aba0adf3e81a1c0b",
         "name": "Split Quick Presets",
         "splt": "\\n",
         "spltType": "str",
@@ -11624,7 +11685,7 @@
         "addname": "",
         "property": "quickPresets",
         "x": 830,
-        "y": 300,
+        "y": 920,
         "wires": [
             [
                 "bd97d6f6ce673d8c"
@@ -11635,6 +11696,7 @@
         "id": "5a8d0f1b3e2c4d66",
         "type": "fs-ops-copy",
         "z": "24039523dcf573b0",
+        "g": "aba0adf3e81a1c0b",
         "name": "Quick Presets kopieren (5×4)",
         "sourcePath": "",
         "sourcePathType": "str",
@@ -11647,7 +11709,7 @@
         "link": false,
         "overwrite": true,
         "x": 1540,
-        "y": 300,
+        "y": 920,
         "wires": [
             [
                 "mem_counter_dec_done"
@@ -11668,8 +11730,8 @@
         "mode": "755",
         "fullpath": "directory",
         "fullpathType": "msg",
-        "x": 1120,
-        "y": 420,
+        "x": 1260,
+        "y": 320,
         "wires": [
             [
                 "0177cdfae37f423d"
@@ -11689,8 +11751,8 @@
         "read": false,
         "write": false,
         "throwerror": false,
-        "x": 910,
-        "y": 400,
+        "x": 1050,
+        "y": 300,
         "wires": [
             [
                 "0177cdfae37f423d"
@@ -11714,7 +11776,7 @@
         "write": false,
         "throwerror": false,
         "x": 920,
-        "y": 1100,
+        "y": 1420,
         "wires": [
             [
                 "dd0e50f3c1df94a2"
@@ -11739,7 +11801,7 @@
         "fullpath": "directory",
         "fullpathType": "msg",
         "x": 1140,
-        "y": 1120,
+        "y": 1440,
         "wires": [
             [
                 "dd0e50f3c1df94a2"
@@ -11750,7 +11812,7 @@
         "id": "37f63096637fe26d",
         "type": "debug",
         "z": "24039523dcf573b0",
-        "name": "debug 24",
+        "name": "POST",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -11759,7 +11821,7 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 520,
+        "x": 510,
         "y": 120,
         "wires": []
     },
@@ -11778,7 +11840,7 @@
         "fullpath": "directory",
         "fullpathType": "msg",
         "x": 1320,
-        "y": 1040,
+        "y": 1360,
         "wires": [
             [
                 "bfc668c714f6589b"
@@ -11799,7 +11861,7 @@
         "write": false,
         "throwerror": false,
         "x": 1110,
-        "y": 1020,
+        "y": 1340,
         "wires": [
             [
                 "bfc668c714f6589b"
@@ -11821,8 +11883,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 90,
-        "y": 800,
+        "x": 50,
+        "y": 1040,
         "wires": [
             [
                 "cf5b4e3d9f7b919f",
@@ -11849,8 +11911,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2650,
-        "y": 880,
+        "x": 2870,
+        "y": 1200,
         "wires": [
             [],
             [
@@ -11874,8 +11936,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2880,
-        "y": 880,
+        "x": 3100,
+        "y": 1200,
         "wires": [
             [
                 "70e019b4dabfee92",
@@ -11890,15 +11952,15 @@
         "name": "HTTP 200/207",
         "statusCode": "",
         "headers": {},
-        "x": 3120,
-        "y": 880,
+        "x": 3340,
+        "y": 1200,
         "wires": []
     },
     {
         "id": "cf04cf1b1b45cbc5",
         "type": "debug",
         "z": "24039523dcf573b0",
-        "name": "debug 13",
+        "name": "HTTP RESPONSE",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -11907,8 +11969,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 2960,
-        "y": 940,
+        "x": 3210,
+        "y": 1260,
         "wires": []
     },
     {
@@ -11934,24 +11996,18 @@
         "z": "24039523dcf573b0",
         "name": "REPORT IN",
         "links": [
-            "89b879d584cc6631",
             "8c9f71b21e0933ff",
-            "6a97d32f092e37f5",
-            "mem_report_copied_from_bulk",
-            "mem_report_copied_from_quick",
             "3882283dafc8f7ae",
-            "de25b2f6dfafa2d1",
             "716f54db6d32889b",
-            "1ef4b04c5ba1c09a",
             "1a3576d54deb10e1",
-            "49855b09c6570cb6",
             "673b872c6bbacb4a",
             "e60e5ab898a0a6de",
             "b5c5c6741c0f3ad0",
-            "0e22a946caa8156b"
+            "0e22a946caa8156b",
+            "97dbf2e19dec5ed0"
         ],
-        "x": 2545,
-        "y": 920,
+        "x": 2755,
+        "y": 1260,
         "wires": [
             [
                 "c031ce02b7ae1ff1"
@@ -11981,7 +12037,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1870,
-        "y": 1000,
+        "y": 1320,
         "wires": [
             [
                 "917f910377da205a"
@@ -11996,8 +12052,8 @@
         "func": "const cat = msg.category || \"unknown\";\nconst key = `pending:${msg.job?.id || 'none'}:${cat}`;\nlet n = flow.get(key) || 0;\nif (n > 0) n--; else n = 0;\nflow.set(key, n);\nif (n === 0 && msg.job && msg.job.id) {\n  node.send({\n    topic: \"report\",\n    payload: { type: \"doneCat\", category: cat },\n    job: msg.job\n  });\n}\nreturn null;",
         "outputs": 1,
         "noerr": 0,
-        "x": 2490,
-        "y": 820,
+        "x": 2710,
+        "y": 1140,
         "wires": [
             [
                 "c031ce02b7ae1ff1"
@@ -12018,7 +12074,7 @@
         "write": false,
         "throwerror": false,
         "x": 1330,
-        "y": 1080,
+        "y": 1400,
         "wires": [
             [
                 "mem_counter_inc_quick"
@@ -12038,7 +12094,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1570,
-        "y": 1060,
+        "y": 1380,
         "wires": [
             [
                 "c8ca1d82140028e8"
@@ -12049,36 +12105,19 @@
         "id": "mem_report_skipped",
         "type": "function",
         "z": "24039523dcf573b0",
+        "d": true,
         "g": "bf4eee564e09bce7",
         "name": "REPORT SKIPPED",
         "func": "node.send({\n  topic: \"report\",\n  payload: { type: \"skipped\", category: msg.category || \"unknown\" },\n  job: msg.job\n});\nreturn null;",
         "outputs": 1,
         "noerr": 0,
         "x": 1570,
-        "y": 1100,
+        "y": 1420,
         "wires": [
             [
                 "c031ce02b7ae1ff1"
             ]
         ]
-    },
-    {
-        "id": "2c1fc212585a73f0",
-        "type": "debug",
-        "z": "24039523dcf573b0",
-        "g": "bf4eee564e09bce7",
-        "name": "debug 15",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 740,
-        "y": 1000,
-        "wires": []
     },
     {
         "id": "3882283dafc8f7ae",
@@ -12091,7 +12130,7 @@
             "958a9bcb116f0244"
         ],
         "x": 875,
-        "y": 1140,
+        "y": 1460,
         "wires": []
     },
     {
@@ -12111,7 +12150,7 @@
         ],
         "uncaught": false,
         "x": 610,
-        "y": 1100,
+        "y": 1420,
         "wires": [
             [
                 "f1e2d3c4b5a69788"
@@ -12131,7 +12170,7 @@
         "finalize": "",
         "libs": [],
         "x": 660,
-        "y": 1140,
+        "y": 1460,
         "wires": [
             [
                 "3882283dafc8f7ae"
@@ -12155,7 +12194,7 @@
         ],
         "uncaught": false,
         "x": 580,
-        "y": 1320,
+        "y": 1640,
         "wires": [
             [
                 "5ce80ee7862fa202"
@@ -12176,7 +12215,7 @@
         "finalize": "",
         "libs": [],
         "x": 660,
-        "y": 1360,
+        "y": 1680,
         "wires": [
             [
                 "716f54db6d32889b"
@@ -12197,7 +12236,7 @@
         "write": false,
         "throwerror": false,
         "x": 1110,
-        "y": 1240,
+        "y": 1560,
         "wires": [
             [
                 "4de5265817a08368"
@@ -12222,7 +12261,7 @@
         "fullpath": "directory",
         "fullpathType": "msg",
         "x": 1320,
-        "y": 1280,
+        "y": 1600,
         "wires": [
             [
                 "4de5265817a08368"
@@ -12239,7 +12278,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1870,
-        "y": 1240,
+        "y": 1560,
         "wires": [
             [
                 "2bbec99d791c83db"
@@ -12260,7 +12299,7 @@
         "write": false,
         "throwerror": false,
         "x": 920,
-        "y": 1320,
+        "y": 1640,
         "wires": [
             [
                 "467ae7fcbc6b7735"
@@ -12285,7 +12324,7 @@
         "fullpath": "directory",
         "fullpathType": "msg",
         "x": 1140,
-        "y": 1360,
+        "y": 1680,
         "wires": [
             [
                 "467ae7fcbc6b7735"
@@ -12306,7 +12345,7 @@
         "write": false,
         "throwerror": false,
         "x": 1330,
-        "y": 1320,
+        "y": 1640,
         "wires": [
             [
                 "8cb029efa37424c0"
@@ -12326,7 +12365,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1570,
-        "y": 1300,
+        "y": 1620,
         "wires": [
             [
                 "f99608698a8bf030"
@@ -12337,13 +12376,14 @@
         "id": "b45491f8febc2229",
         "type": "function",
         "z": "24039523dcf573b0",
+        "d": true,
         "g": "21da7a611532cde9",
         "name": "REPORT SKIPPED",
         "func": "node.send({\n  topic: \"report\",\n  payload: { type: \"skipped\", category: msg.category || \"unknown\" },\n  job: msg.job\n});\nreturn null;",
         "outputs": 1,
         "noerr": 0,
         "x": 1570,
-        "y": 1340,
+        "y": 1660,
         "wires": [
             [
                 "c031ce02b7ae1ff1"
@@ -12361,7 +12401,7 @@
             "958a9bcb116f0244"
         ],
         "x": 875,
-        "y": 1360,
+        "y": 1680,
         "wires": []
     },
     {
@@ -12381,7 +12421,7 @@
         ],
         "uncaught": false,
         "x": 590,
-        "y": 860,
+        "y": 1180,
         "wires": [
             [
                 "6f4c05fec7be2cb3"
@@ -12402,7 +12442,7 @@
         "finalize": "",
         "libs": [],
         "x": 660,
-        "y": 900,
+        "y": 1220,
         "wires": [
             [
                 "1a3576d54deb10e1"
@@ -12423,7 +12463,7 @@
         "write": false,
         "throwerror": false,
         "x": 1110,
-        "y": 780,
+        "y": 1100,
         "wires": [
             [
                 "ecac37490d9bab96"
@@ -12447,7 +12487,7 @@
         "addname": "",
         "property": "files",
         "x": 1300,
-        "y": 760,
+        "y": 1080,
         "wires": [
             [
                 "c9e0e810f99a762b"
@@ -12473,7 +12513,7 @@
         "repair": false,
         "outputs": 1,
         "x": 1490,
-        "y": 760,
+        "y": 1080,
         "wires": [
             [
                 "5726ab925fa2402a"
@@ -12490,7 +12530,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1870,
-        "y": 760,
+        "y": 1080,
         "wires": [
             [
                 "5659f0cda1297389"
@@ -12508,7 +12548,7 @@
         "target": "clipeffectDest",
         "targetType": "msg",
         "x": 2090,
-        "y": 760,
+        "y": 1080,
         "wires": [
             [
                 "mem_counter_dec_done"
@@ -12530,7 +12570,7 @@
         "fullpath": "directory",
         "fullpathType": "msg",
         "x": 1320,
-        "y": 800,
+        "y": 1120,
         "wires": [
             [
                 "ecac37490d9bab96"
@@ -12551,7 +12591,7 @@
         "write": false,
         "throwerror": false,
         "x": 1330,
-        "y": 840,
+        "y": 1160,
         "wires": [
             [
                 "47f58a92faa4b273"
@@ -12575,7 +12615,7 @@
         "addname": "",
         "property": "quickPresets",
         "x": 1130,
-        "y": 840,
+        "y": 1160,
         "wires": [
             [
                 "db8c2123cd78a2a1"
@@ -12597,7 +12637,7 @@
         "fullpath": "directory",
         "fullpathType": "msg",
         "x": 1140,
-        "y": 880,
+        "y": 1200,
         "wires": [
             [
                 "8ed53db524f61578"
@@ -12618,7 +12658,7 @@
         "write": false,
         "throwerror": false,
         "x": 920,
-        "y": 860,
+        "y": 1180,
         "wires": [
             [
                 "8ed53db524f61578"
@@ -12639,7 +12679,7 @@
             "958a9bcb116f0244"
         ],
         "x": 875,
-        "y": 900,
+        "y": 1220,
         "wires": []
     },
     {
@@ -12652,7 +12692,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1570,
-        "y": 820,
+        "y": 1140,
         "wires": [
             [
                 "501cb80a18e2101f"
@@ -12663,13 +12703,14 @@
         "id": "4f8384d0182832a6",
         "type": "function",
         "z": "24039523dcf573b0",
+        "d": true,
         "g": "70677eb1b82c5a42",
         "name": "REPORT SKIPPED",
         "func": "node.send({\n  topic: \"report\",\n  payload: { type: \"skipped\", category: msg.category || \"unknown\" },\n  job: msg.job\n});\nreturn null;",
         "outputs": 1,
         "noerr": 0,
         "x": 1570,
-        "y": 860,
+        "y": 1180,
         "wires": [
             [
                 "c031ce02b7ae1ff1"
@@ -12693,7 +12734,7 @@
         ],
         "uncaught": false,
         "x": 580,
-        "y": 1560,
+        "y": 1880,
         "wires": [
             [
                 "ec8625296b55c237"
@@ -12714,7 +12755,7 @@
         "finalize": "",
         "libs": [],
         "x": 660,
-        "y": 1600,
+        "y": 1920,
         "wires": [
             [
                 "673b872c6bbacb4a"
@@ -12732,7 +12773,7 @@
             "958a9bcb116f0244"
         ],
         "x": 875,
-        "y": 1600,
+        "y": 1920,
         "wires": []
     },
     {
@@ -12749,7 +12790,7 @@
         "write": false,
         "throwerror": false,
         "x": 1110,
-        "y": 1460,
+        "y": 1780,
         "wires": [
             [
                 "bda8dd2c31472a75"
@@ -12773,7 +12814,7 @@
         "addname": "",
         "property": "files",
         "x": 1300,
-        "y": 1460,
+        "y": 1780,
         "wires": [
             [
                 "5c7b329f612ecf44"
@@ -12799,7 +12840,7 @@
         "repair": false,
         "outputs": 1,
         "x": 1490,
-        "y": 1460,
+        "y": 1780,
         "wires": [
             [
                 "63f6495b795634b9"
@@ -12821,7 +12862,7 @@
         "fullpath": "directory",
         "fullpathType": "msg",
         "x": 1320,
-        "y": 1500,
+        "y": 1820,
         "wires": [
             [
                 "bda8dd2c31472a75"
@@ -12838,7 +12879,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1870,
-        "y": 1460,
+        "y": 1780,
         "wires": [
             [
                 "916a53a295dcad47"
@@ -12856,7 +12897,7 @@
         "target": "kbshortcutDest",
         "targetType": "msg",
         "x": 2090,
-        "y": 1460,
+        "y": 1780,
         "wires": [
             [
                 "mem_counter_dec_done"
@@ -12877,7 +12918,7 @@
         "write": false,
         "throwerror": false,
         "x": 920,
-        "y": 1540,
+        "y": 1860,
         "wires": [
             [
                 "0a7ff522ecc866b5"
@@ -12901,7 +12942,7 @@
         "addname": "",
         "property": "quickPresets",
         "x": 1130,
-        "y": 1540,
+        "y": 1860,
         "wires": [
             [
                 "5b841c6ebce3b6fa"
@@ -12923,7 +12964,7 @@
         "fullpath": "directory",
         "fullpathType": "msg",
         "x": 1140,
-        "y": 1580,
+        "y": 1900,
         "wires": [
             [
                 "0a7ff522ecc866b5"
@@ -12944,7 +12985,7 @@
         "write": false,
         "throwerror": false,
         "x": 1330,
-        "y": 1540,
+        "y": 1860,
         "wires": [
             [
                 "26a33c971f7b20c7"
@@ -12964,7 +13005,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1570,
-        "y": 1520,
+        "y": 1840,
         "wires": [
             [
                 "0cfb6f4a3d4d0171"
@@ -12975,13 +13016,14 @@
         "id": "b938dced525b1034",
         "type": "function",
         "z": "24039523dcf573b0",
+        "d": true,
         "g": "7ca6f5ba8382e25f",
         "name": "REPORT SKIPPED",
         "func": "node.send({\n  topic: \"report\",\n  payload: { type: \"skipped\", category: msg.category || \"unknown\" },\n  job: msg.job\n});\nreturn null;",
         "outputs": 1,
         "noerr": 0,
         "x": 1570,
-        "y": 1560,
+        "y": 1880,
         "wires": [
             [
                 "c031ce02b7ae1ff1"
@@ -13005,7 +13047,7 @@
         "link": false,
         "overwrite": true,
         "x": 1810,
-        "y": 1520,
+        "y": 1840,
         "wires": [
             [
                 "mem_counter_dec_done"
@@ -13022,8 +13064,8 @@
         "links": [
             "958a9bcb116f0244"
         ],
-        "x": 885,
-        "y": 480,
+        "x": 1025,
+        "y": 380,
         "wires": []
     },
     {
@@ -13035,8 +13077,8 @@
         "func": "const cat = msg.category || \"unknown\";\nconst key = `pending:${msg.job?.id || 'none'}:${cat}`;\nflow.set(key, (flow.get(key) || 0) + 1);\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 1330,
-        "y": 400,
+        "x": 1470,
+        "y": 300,
         "wires": [
             [
                 "8d053651e71a88d0"
@@ -13050,13 +13092,13 @@
         "g": "32425cc956c27352",
         "name": "CATCH template",
         "scope": [
-            "dde28766e8809a51",
+            "8d053651e71a88d0",
             "f1ddf879ad3e29dc",
-            "8d053651e71a88d0"
+            "dde28766e8809a51"
         ],
         "uncaught": false,
-        "x": 580,
-        "y": 440,
+        "x": 720,
+        "y": 340,
         "wires": [
             [
                 "c27c1122548ae7b8"
@@ -13076,8 +13118,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 660,
-        "y": 480,
+        "x": 800,
+        "y": 380,
         "wires": [
             [
                 "e60e5ab898a0a6de"
@@ -13097,8 +13139,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 600,
-        "y": 580,
+        "x": 740,
+        "y": 480,
         "wires": [
             [
                 "122a96507f2fb522"
@@ -13122,8 +13164,8 @@
         "sourceType": "msg",
         "target": "trackpresetDest",
         "targetType": "msg",
-        "x": 1550,
-        "y": 580,
+        "x": 1690,
+        "y": 480,
         "wires": [
             [
                 "mem_counter_dec_done"
@@ -13144,8 +13186,8 @@
         "mode": "755",
         "fullpath": "directory",
         "fullpathType": "msg",
-        "x": 1120,
-        "y": 600,
+        "x": 1260,
+        "y": 500,
         "wires": [
             [
                 "f319bb1b3f5a5649"
@@ -13165,8 +13207,8 @@
         "read": false,
         "write": false,
         "throwerror": false,
-        "x": 910,
-        "y": 580,
+        "x": 1050,
+        "y": 480,
         "wires": [
             [
                 "f319bb1b3f5a5649"
@@ -13186,8 +13228,8 @@
         "links": [
             "958a9bcb116f0244"
         ],
-        "x": 885,
-        "y": 660,
+        "x": 1025,
+        "y": 560,
         "wires": []
     },
     {
@@ -13199,8 +13241,8 @@
         "func": "const cat = msg.category || \"unknown\";\nconst key = `pending:${msg.job?.id || 'none'}:${cat}`;\nflow.set(key, (flow.get(key) || 0) + 1);\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 1330,
-        "y": 580,
+        "x": 1470,
+        "y": 480,
         "wires": [
             [
                 "2aaacffa74b4ebdc"
@@ -13212,15 +13254,15 @@
         "type": "catch",
         "z": "24039523dcf573b0",
         "g": "45092586c8772558",
-        "name": "CATCH template",
+        "name": "CATCH trackpresets",
         "scope": [
-            "122a96507f2fb522",
+            "2aaacffa74b4ebdc",
             "1b464dea68e4fbcb",
-            "2aaacffa74b4ebdc"
+            "122a96507f2fb522"
         ],
         "uncaught": false,
-        "x": 580,
-        "y": 620,
+        "x": 730,
+        "y": 520,
         "wires": [
             [
                 "ddf7a61881eb3321"
@@ -13240,8 +13282,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 660,
-        "y": 660,
+        "x": 800,
+        "y": 560,
         "wires": [
             [
                 "b5c5c6741c0f3ad0"
@@ -13252,28 +13294,31 @@
         "id": "0e22a946caa8156b",
         "type": "link out",
         "z": "24039523dcf573b0",
+        "g": "aba0adf3e81a1c0b",
         "name": "REPORT OUT",
         "mode": "link",
         "links": [
             "958a9bcb116f0244"
         ],
-        "x": 705,
-        "y": 320,
+        "x": 885,
+        "y": 960,
         "wires": []
     },
     {
         "id": "22c35c48819fd2c5",
         "type": "function",
         "z": "24039523dcf573b0",
+        "g": "aba0adf3e81a1c0b",
         "name": "Counter ++ (bulk)",
         "func": "const cat = msg.category || \"unknown\";\nconst key = `pending:${msg.job?.id || 'none'}:${cat}`;\nflow.set(key, (flow.get(key) || 0) + 1);\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "x": 1910,
-        "y": 260,
+        "y": 880,
         "wires": [
             [
-                "3c1e6a6d7b1b2c44"
+                "3c1e6a6d7b1b2c44",
+                "8b5cc652c67109bc"
             ]
         ]
     },
@@ -13281,6 +13326,7 @@
         "id": "bd97d6f6ce673d8c",
         "type": "fs-ops-access",
         "z": "24039523dcf573b0",
+        "g": "aba0adf3e81a1c0b",
         "name": "Quick Src existiert?",
         "path": "",
         "pathType": "str",
@@ -13290,7 +13336,7 @@
         "write": false,
         "throwerror": false,
         "x": 1030,
-        "y": 300,
+        "y": 920,
         "wires": [
             [
                 "cb629a6342c84f4d"
@@ -13304,12 +13350,14 @@
         "id": "7956ea8999198d23",
         "type": "function",
         "z": "24039523dcf573b0",
+        "d": true,
+        "g": "aba0adf3e81a1c0b",
         "name": "REPORT SKIPPED",
         "func": "node.send({\n  topic: \"report\",\n  payload: { type: \"skipped\", category: msg.category || \"unknown\" },\n  job: msg.job\n});\nreturn null;",
         "outputs": 1,
         "noerr": 0,
         "x": 1270,
-        "y": 340,
+        "y": 960,
         "wires": [
             [
                 "c031ce02b7ae1ff1"
@@ -13320,6 +13368,7 @@
         "id": "cb629a6342c84f4d",
         "type": "function",
         "z": "24039523dcf573b0",
+        "g": "aba0adf3e81a1c0b",
         "name": "Counter ++ (quick)",
         "func": "const cat = msg.category || \"unknown\";\nconst key = `pending:${msg.job?.id || 'none'}:${cat}`;\nflow.set(key, (flow.get(key) || 0) + 1);\nreturn msg;",
         "outputs": 1,
@@ -13329,29 +13378,321 @@
         "finalize": "",
         "libs": [],
         "x": 1270,
-        "y": 300,
+        "y": 920,
+        "wires": [
+            [
+                "49e52f42aa4489e3"
+            ]
+        ]
+    },
+    {
+        "id": "6de7257c65f1e165",
+        "type": "catch",
+        "z": "24039523dcf573b0",
+        "g": "aba0adf3e81a1c0b",
+        "name": "CATCH fadepresets",
+        "scope": [
+            "a35b9f8b5f3c9a11",
+            "3c1e6a6d7b1b2c44",
+            "5a8d0f1b3e2c4d66",
+            "bd97d6f6ce673d8c",
+            "49e52f42aa4489e3",
+            "5d719dadc9ded89c",
+            "8b5cc652c67109bc",
+            "f7a0dd6dcd042919"
+        ],
+        "uncaught": false,
+        "x": 590,
+        "y": 920,
+        "wires": [
+            [
+                "0c2c43bf90d12f7b"
+            ]
+        ]
+    },
+    {
+        "id": "0c2c43bf90d12f7b",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "aba0adf3e81a1c0b",
+        "name": "ERROR → report + counter -- + doneCat",
+        "func": "const category = msg.category || 'fadepresets';\n\n// 1) Fehlertext bestimmen\nconst e = msg.error || {};\nconst message = e.message || (typeof e === 'string' ? e : (e && e.toString ? e.toString() : 'unknown error'));\n\n// 2) error an Aggregator senden\nnode.send({\n  topic: 'report',\n  payload: { type: 'error', category, message },\n  job: msg.job\n});\n\n// 3) pending-Counter dekrementieren (falls zuvor ++ passiert ist)\nconst key = `pending:${msg.job?.id || 'none'}:${category}`;\nlet n = flow.get(key) || 0;\nif (n > 0) {\n  n = n - 1;\n  flow.set(key, n);\n}\n\n// 4) Wenn nichts mehr pending → doneCat, damit Aggregator abschließen kann\nif (n === 0 && msg.job && msg.job.id) {\n  node.send({\n    topic: 'report',\n    payload: { type: 'doneCat', category },\n    job: msg.job\n  });\n}\n\nreturn null;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 960,
+        "wires": [
+            [
+                "0e22a946caa8156b"
+            ]
+        ]
+    },
+    {
+        "id": "321d3cfaf3ad264f",
+        "type": "catch",
+        "z": "24039523dcf573b0",
+        "g": "7152f8cea3400281",
+        "name": "CATCH pluginsettings",
+        "scope": [
+            "801fc15ef3777ecb",
+            "717547741be93b38",
+            "1c85a7b73c4d0534",
+            "3a65d89c850f97fd",
+            "46d02e8955535559",
+            "5438f780f5fc4fff"
+        ],
+        "uncaught": false,
+        "x": 600,
+        "y": 740,
+        "wires": [
+            [
+                "c122ef2968a5229e"
+            ]
+        ]
+    },
+    {
+        "id": "c122ef2968a5229e",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "7152f8cea3400281",
+        "name": "ERROR → report + counter -- + doneCat",
+        "func": "const category = msg.category || 'pluginsettings';\n\n// 1) Fehlertext bestimmen\nconst e = msg.error || {};\nconst message = e.message || (typeof e === 'string' ? e : (e && e.toString ? e.toString() : 'unknown error'));\n\n// 2) error an Aggregator senden\nnode.send({\n  topic: 'report',\n  payload: { type: 'error', category, message },\n  job: msg.job\n});\n\n// 3) pending-Counter dekrementieren (falls zuvor ++ passiert ist)\nconst key = `pending:${msg.job?.id || 'none'}:${category}`;\nlet n = flow.get(key) || 0;\nif (n > 0) {\n  n = n - 1;\n  flow.set(key, n);\n}\n\n// 4) Wenn nichts mehr pending → doneCat, damit Aggregator abschließen kann\nif (n === 0 && msg.job && msg.job.id) {\n  node.send({\n    topic: 'report',\n    payload: { type: 'doneCat', category },\n    job: msg.job\n  });\n}\n\nreturn null;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 780,
+        "wires": [
+            [
+                "97dbf2e19dec5ed0"
+            ]
+        ]
+    },
+    {
+        "id": "34ab116ea9fc7b9a",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "7152f8cea3400281",
+        "name": "Counter ++ (bulk)",
+        "func": "const cat = msg.category || \"unknown\";\nconst key = `pending:${msg.job?.id || 'none'}:${cat}`;\nflow.set(key, (flow.get(key) || 0) + 1);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1950,
+        "y": 700,
+        "wires": [
+            [
+                "d59e642b1764df76"
+            ]
+        ]
+    },
+    {
+        "id": "97dbf2e19dec5ed0",
+        "type": "link out",
+        "z": "24039523dcf573b0",
+        "g": "7152f8cea3400281",
+        "name": "REPORT OUT",
+        "mode": "link",
+        "links": [
+            "958a9bcb116f0244"
+        ],
+        "x": 885,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "15ed22f12517848f",
+        "type": "function",
+        "z": "24039523dcf573b0",
+        "g": "7152f8cea3400281",
+        "name": "Start CAT",
+        "func": "// Plug-In Settings Start (Outputs: 2)\n// Out1 = passthrough, Out2 = startCat / error\ntry {\n    // Grunddaten / Kategorie\n    const { PathPTUser } = msg.payload || {};\n    msg.category = \"pluginsettings\";\n\n    // (Optional) hier weiterhin den Basis-Pfad setzen:\n    msg.payload = msg.payload || {};\n    msg.payload.PluginPath = `${PathPTUser}/Plug-In Settings`;\n\n    // startCat nur 1× pro Job/Kategorie senden\n    let report = null;\n    const jobId = msg.job?.id || \"none\";\n    const key = `startcat:${jobId}:${msg.category}`;\n    if (!flow.get(key) && msg.job && msg.job.id) {\n        flow.set(key, true);\n        report = {\n            topic: \"report\",\n            payload: { type: \"startCat\", category: msg.category },\n            job: msg.job\n        };\n    }\n\n    // Out1: normal weiter in deinen Scan/Stats-Flow\n    // Out2: startCat (oder null, wenn schon gesendet)\n    return [msg, report];\n\n} catch (err) {\n    // Fehler direkt reporten (Out2)\n    return [null, {\n        topic: \"report\",\n        payload: { type: \"error\", category: \"pluginsettings\", message: err.message },\n        job: msg.job\n    }];\n}\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 700,
+        "wires": [
+            [
+                "801fc15ef3777ecb"
+            ],
+            [
+                "97dbf2e19dec5ed0"
+            ]
+        ],
+        "outputLabels": [
+            "",
+            "REPORT IN"
+        ]
+    },
+    {
+        "id": "46d02e8955535559",
+        "type": "fs-ops-access",
+        "z": "24039523dcf573b0",
+        "g": "7152f8cea3400281",
+        "name": "Zielpfad existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "pluginsettingDest",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 2270,
+        "y": 760,
+        "wires": [
+            [
+                "1c85a7b73c4d0534"
+            ],
+            [
+                "5438f780f5fc4fff"
+            ]
+        ]
+    },
+    {
+        "id": "5438f780f5fc4fff",
+        "type": "fs-ops-mkdir",
+        "z": "24039523dcf573b0",
+        "g": "7152f8cea3400281",
+        "name": "Ordner anlegen",
+        "path": "",
+        "pathType": "str",
+        "dirname": "pluginsettingDest",
+        "dirnameType": "msg",
+        "recursive": true,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 2480,
+        "y": 780,
+        "wires": [
+            [
+                "1c85a7b73c4d0534"
+            ]
+        ]
+    },
+    {
+        "id": "3a65d89c850f97fd",
+        "type": "fs-ops-access",
+        "z": "24039523dcf573b0",
+        "g": "7152f8cea3400281",
+        "name": "",
+        "path": "",
+        "pathType": "str",
+        "filename": "payload.userDir",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 1590,
+        "y": 740,
+        "wires": [
+            [
+                "717547741be93b38"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "8b5cc652c67109bc",
+        "type": "fs-ops-access",
+        "z": "24039523dcf573b0",
+        "g": "aba0adf3e81a1c0b",
+        "name": "Zielpfad existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "destFolder",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 2050,
+        "y": 940,
+        "wires": [
+            [
+                "3c1e6a6d7b1b2c44"
+            ],
+            [
+                "f7a0dd6dcd042919"
+            ]
+        ]
+    },
+    {
+        "id": "f7a0dd6dcd042919",
+        "type": "fs-ops-mkdir",
+        "z": "24039523dcf573b0",
+        "g": "aba0adf3e81a1c0b",
+        "name": "Ordner anlegen",
+        "path": "",
+        "pathType": "str",
+        "dirname": "destFolder",
+        "dirnameType": "msg",
+        "recursive": true,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 2260,
+        "y": 960,
+        "wires": [
+            [
+                "3c1e6a6d7b1b2c44"
+            ]
+        ]
+    },
+    {
+        "id": "49e52f42aa4489e3",
+        "type": "fs-ops-access",
+        "z": "24039523dcf573b0",
+        "g": "aba0adf3e81a1c0b",
+        "name": "Quick Pfad existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "quickPresets.destpath",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 1520,
+        "y": 980,
+        "wires": [
+            [
+                "5a8d0f1b3e2c4d66"
+            ],
+            [
+                "5d719dadc9ded89c"
+            ]
+        ]
+    },
+    {
+        "id": "5d719dadc9ded89c",
+        "type": "fs-ops-mkdir",
+        "z": "24039523dcf573b0",
+        "g": "aba0adf3e81a1c0b",
+        "name": "Ordner anlegen",
+        "path": "",
+        "pathType": "str",
+        "dirname": "quickPresets.destpath",
+        "dirnameType": "msg",
+        "recursive": true,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 1800,
+        "y": 960,
         "wires": [
             [
                 "5a8d0f1b3e2c4d66"
             ]
         ]
-    },
-    {
-        "id": "cf3f2af48b63a6a5",
-        "type": "debug",
-        "z": "24039523dcf573b0",
-        "name": "debug 14",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1350,
-        "y": 120,
-        "wires": []
     },
     {
         "id": "report_init_job",

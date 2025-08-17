@@ -6,6 +6,7 @@
       <div class="content-scroll flex-grow-1 overflow-auto pa-4">
         <v-tabs v-model="tab" class="mb-4">
           <v-tab value="prod">Produktionsbuch</v-tab>
+          <v-tab value="mitarbeiter">Mitarbeiter</v-tab>
           <v-tab value="schema">Namensschema</v-tab>
           <v-tab value="paths">Pfade</v-tab>
           <v-tab value="pwd">Passwort</v-tab>
@@ -14,6 +15,9 @@
         <v-window v-model="tab">
           <v-window-item value="prod">
             <KonfigProduktionsbuch ref="pbRef" />
+          </v-window-item>
+          <v-window-item value="mitarbeiter">
+            <KonfigMitarbeiter ref="mitarbeiterRef" />
           </v-window-item>
           <v-window-item value="schema">
             <KonfigNamensschema ref="schemaRef" />
@@ -70,12 +74,14 @@
 <script setup>
 import { ref, computed, nextTick, onMounted } from 'vue'
 import KonfigProduktionsbuch from '@/components/KonfigProduktionsbuch.vue'
+import KonfigMitarbeiter from '@/components/KonfigMitarbeiter.vue'
 import KonfigPfade from '@/components/KonfigPfade.vue'
 import KonfigPasswort from '@/components/KonfigPasswort.vue'
 import KonfigNamensschema from '@/components/KonfigNamensschema.vue'
 
 const API = import.meta.env.VITE_API_BASE || '/api'
 const pbRef = ref(null)
+const mitarbeiterRef = ref(null)
 const pfadeRef = ref(null)
 const pwRef = ref(null)
 const schemaRef = ref(null)
@@ -88,6 +94,9 @@ async function onSave() {
 
   // Prüfen, ob Produktionsbuch Änderungen hat
   if (pbRef.value?.isDirty()) dirtySomething = true
+
+  // Prüfen, ob Mitarbeiter Änderungen hat
+  if (mitarbeiterRef.value?.isDirty()) dirtySomething = true
 
   // Prüfen, ob Pfade Änderungen haben
   if (pfadeRef.value?.isDirty()) dirtySomething = true
@@ -140,6 +149,17 @@ async function onSave() {
       await pfadeRef.value.resetToServer()
     }
 
+    // Mitarbeiter speichern (jetzt mit POST /api/user)
+    if (mitarbeiterRef.value?.isDirty()) {
+      const snap = mitarbeiterRef.value.getSnapshotForSave()
+      const res = await fetch(`${API}/user`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(snap)
+      })
+      if (!res.ok) throw new Error(await res.text())
+      await mitarbeiterRef.value.resetToServer()
+    }
     // Passwort
     if (pwRef.value?.isDirty()) {
       await pwRef.value.saveToServer()

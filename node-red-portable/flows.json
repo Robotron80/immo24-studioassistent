@@ -24,12 +24,25 @@
         "env": []
     },
     {
-        "id": "aa20e869f3621f0d",
+        "id": "tab_login_api",
         "type": "tab",
-        "label": "Flow 1",
+        "label": "Login API",
         "disabled": false,
-        "info": "",
-        "env": []
+        "info": ""
+    },
+    {
+        "id": "tab_user_main",
+        "type": "tab",
+        "label": "API /api/user",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "tab_user_worker",
+        "type": "tab",
+        "label": "Worker /api/user",
+        "disabled": false,
+        "info": ""
     },
     {
         "id": "0e1923748c0d505b",
@@ -50,21 +63,16 @@
             "a101d0e8677d1f77",
             "76182b64e9b2d9a8",
             "3e3926b522449b96",
-            "28748a6ed884e72a",
-            "3f759076853c1377",
-            "bccb17f9aaafa790",
-            "b912b7f2e8b5d87b",
             "c327d6b8c52ff001",
             "ae748b2fe00cc633",
             "a56e7a1f4e0144f2",
-            "e017b3a006d31550",
             "2c322a0a469a0476",
             "2f1651475a302004"
         ],
         "x": 354,
         "y": 979,
         "w": 2012,
-        "h": 662
+        "h": 548
     },
     {
         "id": "2ae494e9447c2087",
@@ -652,6 +660,36 @@
         "h": 182
     },
     {
+        "id": "7152f8cea3400281",
+        "type": "group",
+        "z": "24039523dcf573b0",
+        "name": "Plug-In Settings",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "801fc15ef3777ecb",
+            "f9ae2e0d8b851b95",
+            "27d01ea6c29f13b3",
+            "717547741be93b38",
+            "88826b980a9a9e60",
+            "d59e642b1764df76",
+            "1c85a7b73c4d0534",
+            "321d3cfaf3ad264f",
+            "c122ef2968a5229e",
+            "34ab116ea9fc7b9a",
+            "97dbf2e19dec5ed0",
+            "15ed22f12517848f",
+            "46d02e8955535559",
+            "5438f780f5fc4fff",
+            "3a65d89c850f97fd"
+        ],
+        "x": 474,
+        "y": 619,
+        "w": 2172,
+        "h": 202
+    },
+    {
         "id": "a101d0e8677d1f77",
         "type": "group",
         "z": "dc0d981398a42d88",
@@ -683,15 +721,12 @@
             "6c3939e79075838a",
             "f31c04d58dac383f",
             "5e2fd2d2411c3bed",
-            "20b5c1a5c4dbe03d",
-            "8764a0809a22eac6",
-            "9d4559557bd0d310",
-            "d3e099edf050f646"
+            "20b5c1a5c4dbe03d"
         ],
         "x": 414,
-        "y": 1119,
-        "w": 1912,
-        "h": 382
+        "y": 1159,
+        "w": 1872,
+        "h": 342
     },
     {
         "id": "e05512e54561bc65",
@@ -898,36 +933,6 @@
         "y": 579,
         "w": 1192,
         "h": 282
-    },
-    {
-        "id": "7152f8cea3400281",
-        "type": "group",
-        "z": "24039523dcf573b0",
-        "name": "Plug-In Settings",
-        "style": {
-            "label": true
-        },
-        "nodes": [
-            "801fc15ef3777ecb",
-            "f9ae2e0d8b851b95",
-            "27d01ea6c29f13b3",
-            "717547741be93b38",
-            "88826b980a9a9e60",
-            "d59e642b1764df76",
-            "1c85a7b73c4d0534",
-            "321d3cfaf3ad264f",
-            "c122ef2968a5229e",
-            "34ab116ea9fc7b9a",
-            "97dbf2e19dec5ed0",
-            "15ed22f12517848f",
-            "46d02e8955535559",
-            "5438f780f5fc4fff",
-            "3a65d89c850f97fd"
-        ],
-        "x": 474,
-        "y": 619,
-        "w": 2172,
-        "h": 202
     },
     {
         "id": "826de81a1d3da833",
@@ -1316,23 +1321,6 @@
         "type": "websocket-listener",
         "path": "/ws/activeUser",
         "wholemsg": "false"
-    },
-    {
-        "id": "3862b933a243ba55",
-        "type": "ui-control",
-        "z": "dc0d981398a42d88",
-        "name": "",
-        "ui": "826de81a1d3da833",
-        "events": "all",
-        "x": 200,
-        "y": 500,
-        "wires": [
-            [
-                "032a562dc99f4af8",
-                "7e2571b409d5d436",
-                "12b3b8916db0a005"
-            ]
-        ]
     },
     {
         "id": "f4b0c144d2c6afc9",
@@ -2897,103 +2885,6 @@
         ]
     },
     {
-        "id": "28748a6ed884e72a",
-        "type": "ui-button",
-        "z": "dc0d981398a42d88",
-        "g": "0e1923748c0d505b",
-        "group": "f925aada115de858",
-        "name": "Abmelden",
-        "label": "Abmelden",
-        "order": 3,
-        "width": 2,
-        "height": "1",
-        "emulateClick": false,
-        "tooltip": "",
-        "color": "",
-        "bgcolor": "",
-        "className": "",
-        "icon": "",
-        "iconPosition": "left",
-        "payload": "",
-        "payloadType": "str",
-        "topic": "topic",
-        "topicType": "msg",
-        "buttonColor": "red",
-        "textColor": "",
-        "iconColor": "",
-        "enableClick": true,
-        "enablePointerdown": false,
-        "pointerdownPayload": "",
-        "pointerdownPayloadType": "str",
-        "enablePointerup": false,
-        "pointerupPayload": "",
-        "pointerupPayloadType": "str",
-        "x": 530,
-        "y": 1600,
-        "wires": [
-            [
-                "3f759076853c1377"
-            ]
-        ]
-    },
-    {
-        "id": "3f759076853c1377",
-        "type": "function",
-        "z": "dc0d981398a42d88",
-        "g": "0e1923748c0d505b",
-        "name": "Wipe User",
-        "func": "// Globale Variable löschen (reset)\nglobal.set(\"activeUser\", undefined);\n\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 710,
-        "y": 1600,
-        "wires": [
-            [
-                "bccb17f9aaafa790"
-            ]
-        ]
-    },
-    {
-        "id": "bccb17f9aaafa790",
-        "type": "function",
-        "z": "dc0d981398a42d88",
-        "g": "0e1923748c0d505b",
-        "name": "[UI] Logout Page",
-        "func": "msg.payload = {\n    page: 'Anmelden',\n    pages: {\n        enable: ['Anmelden'],\n        disable: ['Projektanlage', 'Pro Tools', 'Konfiguration']\n    }\n};\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 910,
-        "y": 1600,
-        "wires": [
-            [
-                "b912b7f2e8b5d87b",
-                "3e3926b522449b96"
-            ]
-        ]
-    },
-    {
-        "id": "b912b7f2e8b5d87b",
-        "type": "ui-control",
-        "z": "dc0d981398a42d88",
-        "g": "0e1923748c0d505b",
-        "name": "",
-        "ui": "826de81a1d3da833",
-        "events": "all",
-        "x": 1100,
-        "y": 1600,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "43f8678fc93a7979",
         "type": "ui-button",
         "z": "dc0d981398a42d88",
@@ -3084,9 +2975,7 @@
         "x": 1020,
         "y": 1740,
         "wires": [
-            [
-                "b912b7f2e8b5d87b"
-            ]
+            []
         ]
     },
     {
@@ -3215,9 +3104,7 @@
         "x": 1120,
         "y": 1800,
         "wires": [
-            [
-                "b912b7f2e8b5d87b"
-            ]
+            []
         ]
     },
     {
@@ -4670,31 +4557,8 @@
         "y": 1260,
         "wires": [
             [
-                "4befd131b88b6f45",
-                "8764a0809a22eac6",
-                "9d4559557bd0d310",
-                "d3e099edf050f646"
+                "4befd131b88b6f45"
             ]
-        ]
-    },
-    {
-        "id": "8764a0809a22eac6",
-        "type": "fs-ops-mkdir",
-        "z": "dc0d981398a42d88",
-        "g": "a101d0e8677d1f77",
-        "name": "template-Verzeichnis anlegen",
-        "path": "directory",
-        "pathType": "msg",
-        "dirname": "templates",
-        "dirnameType": "str",
-        "recursive": false,
-        "mode": "755",
-        "fullpath": "directory",
-        "fullpathType": "msg",
-        "x": 2150,
-        "y": 1240,
-        "wires": [
-            []
         ]
     },
     {
@@ -4750,32 +4614,13 @@
         ]
     },
     {
-        "id": "e017b3a006d31550",
-        "type": "link in",
-        "z": "dc0d981398a42d88",
-        "g": "0e1923748c0d505b",
-        "name": "Logout",
-        "links": [
-            "0bc5460d1e11cf09"
-        ],
-        "x": 585,
-        "y": 1560,
-        "wires": [
-            [
-                "3f759076853c1377"
-            ]
-        ]
-    },
-    {
         "id": "0bc5460d1e11cf09",
         "type": "link out",
         "z": "dc0d981398a42d88",
         "d": true,
         "name": "Logout",
         "mode": "link",
-        "links": [
-            "e017b3a006d31550"
-        ],
+        "links": [],
         "x": 665,
         "y": 2720,
         "wires": []
@@ -4806,46 +4651,6 @@
             [
                 "ae748b2fe00cc633"
             ]
-        ]
-    },
-    {
-        "id": "9d4559557bd0d310",
-        "type": "fs-ops-mkdir",
-        "z": "dc0d981398a42d88",
-        "g": "a101d0e8677d1f77",
-        "name": "trackpresets-Verzeichnis anlegen",
-        "path": "directory",
-        "pathType": "msg",
-        "dirname": "trackpresets",
-        "dirnameType": "str",
-        "recursive": false,
-        "mode": "755",
-        "fullpath": "directory",
-        "fullpathType": "msg",
-        "x": 2160,
-        "y": 1200,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "d3e099edf050f646",
-        "type": "fs-ops-mkdir",
-        "z": "dc0d981398a42d88",
-        "g": "a101d0e8677d1f77",
-        "name": "fadepresets-Verzeichnis anlegen",
-        "path": "directory",
-        "pathType": "msg",
-        "dirname": "fadepresets",
-        "dirnameType": "str",
-        "recursive": false,
-        "mode": "755",
-        "fullpath": "directory",
-        "fullpathType": "msg",
-        "x": 2150,
-        "y": 1160,
-        "wires": [
-            []
         ]
     },
     {
@@ -5787,23 +5592,6 @@
         "wires": []
     },
     {
-        "id": "5a6c0d60f2b278f3",
-        "type": "http in",
-        "z": "dc0d981398a42d88",
-        "name": "POST /api/user",
-        "url": "/api/user",
-        "method": "post",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 2520,
-        "y": 1220,
-        "wires": [
-            [
-                "0429d8b08e8463f2"
-            ]
-        ]
-    },
-    {
         "id": "0429d8b08e8463f2",
         "type": "change",
         "z": "dc0d981398a42d88",
@@ -5884,126 +5672,6 @@
         "headers": {},
         "x": 3020,
         "y": 1280,
-        "wires": []
-    },
-    {
-        "id": "0da6504fca3cf778",
-        "type": "http in",
-        "z": "dc0d981398a42d88",
-        "name": "GET /api/user",
-        "url": "/api/user",
-        "method": "get",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 2510,
-        "y": 1360,
-        "wires": [
-            [
-                "d9b297f31f9dc13b"
-            ]
-        ]
-    },
-    {
-        "id": "d9b297f31f9dc13b",
-        "type": "fs-ops-dir",
-        "z": "dc0d981398a42d88",
-        "name": "MA-Ordner lesen",
-        "path": "PathMitarbeiter",
-        "pathType": "global",
-        "filter": "",
-        "filterType": "str",
-        "dir": "payload",
-        "dirType": "msg",
-        "x": 2730,
-        "y": 1360,
-        "wires": [
-            [
-                "3096787e353c556d"
-            ]
-        ]
-    },
-    {
-        "id": "3096787e353c556d",
-        "type": "function",
-        "z": "dc0d981398a42d88",
-        "name": "Unsichtbare filtern",
-        "func": "if(!Array.isArray(msg.payload)) msg.payload=[];\nmsg.payload = msg.payload.filter(n => typeof n === 'string' && !n.startsWith('.'));\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 2970,
-        "y": 1360,
-        "wires": [
-            [
-                "c2655f75caf7e0fd"
-            ]
-        ]
-    },
-    {
-        "id": "c2655f75caf7e0fd",
-        "type": "function",
-        "z": "dc0d981398a42d88",
-        "name": "zu Pfaden konvertieren",
-        "func": "const base = global.get('PathMitarbeiter') || '';\nmsg.payload = (msg.payload || []).map(n => base + '/' + n);\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 3230,
-        "y": 1360,
-        "wires": [
-            [
-                "70eb62bc8ea71410"
-            ]
-        ]
-    },
-    {
-        "id": "70eb62bc8ea71410",
-        "type": "fs-ops-stats",
-        "z": "dc0d981398a42d88",
-        "name": "",
-        "path": "",
-        "pathType": "str",
-        "filename": "payload",
-        "filenameType": "msg",
-        "stats": "stats",
-        "sizeType": "msg",
-        "x": 3450,
-        "y": 1360,
-        "wires": [
-            [
-                "185f5c9f3eac71ee"
-            ]
-        ]
-    },
-    {
-        "id": "185f5c9f3eac71ee",
-        "type": "function",
-        "z": "dc0d981398a42d88",
-        "name": "Nur Ordnernamen (Array)",
-        "func": "const pfade = msg.payload || [];\nconst stats = msg.stats || [];\nconst out = [];\nfor (let i = 0; i < pfade.length; i++) {\n  const s = stats[i];\n  let isDir = false;\n  if (s) {\n    if (typeof s.isDirectory === 'function') {\n      isDir = s.isDirectory();\n    } else if (typeof s.mode === 'number') {\n      isDir = (s.mode & 0o170000) === 0o040000;\n    }\n  }\n  if (isDir) {\n    const teile = pfade[i].split(/[\\\\/]/);\n    const name = teile[teile.length - 1];\n    if (name && !name.startsWith('.')) {\n      out.push(name);\n    }\n  }\n}\nmsg.payload = out;\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 3690,
-        "y": 1360,
-        "wires": [
-            [
-                "62b9723e77cfaae0"
-            ]
-        ]
-    },
-    {
-        "id": "62b9723e77cfaae0",
-        "type": "http response",
-        "z": "dc0d981398a42d88",
-        "name": "200 JSON",
-        "statusCode": "200",
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "x": 3910,
-        "y": 1360,
         "wires": []
     },
     {
@@ -6098,6 +5766,796 @@
         "statusType": "auto",
         "x": 240,
         "y": 1340,
+        "wires": []
+    },
+    {
+        "id": "b39896ec151883db",
+        "type": "fs-ops-access",
+        "z": "dc0d981398a42d88",
+        "name": "Kürzel-File prüfen",
+        "path": "",
+        "pathType": "str",
+        "filename": "PathKuerzel",
+        "filenameType": "msg",
+        "read": true,
+        "write": false,
+        "throwerror": false,
+        "x": 2710,
+        "y": 1420,
+        "wires": [
+            [
+                "dae0fd073aefd226"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "dae0fd073aefd226",
+        "type": "file in",
+        "z": "dc0d981398a42d88",
+        "name": "immo24-user.json lesen",
+        "filename": "PathKuerzel",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 2950,
+        "y": 1420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3606cd78175f49ab",
+        "type": "inject",
+        "z": "dc0d981398a42d88",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 2550,
+        "y": 1460,
+        "wires": [
+            [
+                "read_ma_dir"
+            ]
+        ]
+    },
+    {
+        "id": "read_ma_dir",
+        "type": "fs-ops-dir",
+        "z": "dc0d981398a42d88",
+        "name": "MA-Ordner lesen",
+        "path": "PathMitarbeiter",
+        "pathType": "global",
+        "filter": "",
+        "filterType": "str",
+        "dir": "payload",
+        "dirType": "msg",
+        "x": 3190,
+        "y": 1560,
+        "wires": [
+            [
+                "filter_hidden"
+            ]
+        ]
+    },
+    {
+        "id": "filter_hidden",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "Unsichtbare filtern",
+        "func": "if(!Array.isArray(msg.payload)) msg.payload=[];\nmsg.payload = msg.payload.filter(n => typeof n === 'string' && !n.startsWith('.'));\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 3390,
+        "y": 1560,
+        "wires": [
+            [
+                "to_full_paths"
+            ]
+        ]
+    },
+    {
+        "id": "to_full_paths",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "zu Pfaden konvertieren",
+        "func": "const base = global.get('PathMitarbeiter') || '';\nmsg.payload = (msg.payload || []).map(n => base + '/' + n);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 3610,
+        "y": 1560,
+        "wires": [
+            [
+                "stats_paths"
+            ]
+        ]
+    },
+    {
+        "id": "stats_paths",
+        "type": "fs-ops-stats",
+        "z": "dc0d981398a42d88",
+        "name": "Statistiken (Array)",
+        "path": "",
+        "pathType": "str",
+        "filename": "payload",
+        "filenameType": "msg",
+        "stats": "stats",
+        "sizeType": "msg",
+        "x": 3830,
+        "y": 1560,
+        "wires": [
+            [
+                "only_directory_names"
+            ]
+        ]
+    },
+    {
+        "id": "only_directory_names",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "Nur Ordnernamen (Array)",
+        "func": "const pfade = msg.payload || [];\nconst stats = msg.stats || [];\nconst out = [];\nfor (let i = 0; i < pfade.length; i++) {\n  const s = stats[i];\n  let isDir = false;\n  if (s) {\n    if (typeof s.isDirectory === 'function') {\n      isDir = s.isDirectory();\n    } else if (typeof s.mode === 'number') {\n      isDir = (s.mode & 0o170000) === 0o040000;\n    }\n  }\n  if (isDir) {\n    const teile = pfade[i].split(/[\\\\/]/);\n    const name = teile[teile.length - 1];\n    if (name && !name.startsWith('.')) out.push(name);\n  }\n}\nmsg.payload = out;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 4050,
+        "y": 1560,
+        "wires": [
+            [
+                "split_per_user"
+            ]
+        ]
+    },
+    {
+        "id": "split_per_user",
+        "type": "split",
+        "z": "dc0d981398a42d88",
+        "name": "pro Ordner",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 2990,
+        "y": 1620,
+        "wires": [
+            [
+                "build_user_json_path"
+            ]
+        ]
+    },
+    {
+        "id": "build_user_json_path",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "Pfad zu immo24/immo24-user.json",
+        "func": "const PathMitarbeiter = global.get('PathMitarbeiter') || '';\nconst userName = msg.payload; // einzelner Ordnername\nmsg.userName = userName;\nmsg.filename = `${PathMitarbeiter}/${userName}/immo24/immo24-user.json`;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 3220,
+        "y": 1620,
+        "wires": [
+            [
+                "check_exists"
+            ]
+        ]
+    },
+    {
+        "id": "check_exists",
+        "type": "fs-ops-access",
+        "z": "dc0d981398a42d88",
+        "name": "Datei vorhanden?",
+        "path": "",
+        "pathType": "str",
+        "filename": "filename",
+        "filenameType": "msg",
+        "read": true,
+        "write": false,
+        "throwerror": false,
+        "x": 3470,
+        "y": 1620,
+        "wires": [
+            [
+                "file_in_json"
+            ],
+            [
+                "mark_empty"
+            ]
+        ]
+    },
+    {
+        "id": "file_in_json",
+        "type": "file in",
+        "z": "dc0d981398a42d88",
+        "name": "JSON lesen",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 3670,
+        "y": 1620,
+        "wires": [
+            [
+                "extract_kuerzel"
+            ]
+        ]
+    },
+    {
+        "id": "mark_empty",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "leer markieren",
+        "func": "msg.payload = null;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 3680,
+        "y": 1660,
+        "wires": [
+            [
+                "join_back"
+            ]
+        ]
+    },
+    {
+        "id": "join_back",
+        "type": "join",
+        "z": "dc0d981398a42d88",
+        "name": "Array sammeln",
+        "mode": "auto",
+        "build": "array",
+        "property": "payload",
+        "propertyType": "msg",
+        "useparts": true,
+        "x": 3880,
+        "y": 1660,
+        "wires": [
+            [
+                "filter_nulls_sort"
+            ]
+        ]
+    },
+    {
+        "id": "filter_nulls_sort",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "Nulls entfernen + sortieren",
+        "func": "// Erwartet msg.payload = Array aus Objekten oder nulls\n// Format: { name: \"<ordnername>\", kuerzel: \"<string>\" }\n\n// Nulls entfernen\nlet arr = Array.isArray(msg.payload)\n    ? msg.payload.filter(v => v && typeof v === 'object')\n    : [];\n\n// Sortieren nach 'name'\narr.sort((a, b) => String(a.name).localeCompare(String(b.name), 'de'));\n\n// sauberes msg zurückgeben\nmsg.payload = arr;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 4100,
+        "y": 1660,
+        "wires": [
+            [
+                "0e752b1a10a0f407",
+                "n_return"
+            ]
+        ]
+    },
+    {
+        "id": "0e752b1a10a0f407",
+        "type": "debug",
+        "z": "dc0d981398a42d88",
+        "name": "debug 16",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 4240,
+        "y": 1720,
+        "wires": []
+    },
+    {
+        "id": "extract_kuerzel",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "Kürzel extrahieren (nie droppen)",
+        "func": "// Erwartet msg.payload = String-Inhalt der Datei (vom file in / utf8)\n// msg.userName = Name des User-Ordners\n// Gibt { name: <username>, kuerzel: <string> } oder null zurück\n\nlet text = (msg.payload || \"\").trim();\n\nif (!text) {\n  msg.payload = null;   // leer → kein Eintrag\n} else {\n  msg.payload = { name: msg.userName, kuerzel: text };\n}\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 3890,
+        "y": 1620,
+        "wires": [
+            [
+                "join_back"
+            ]
+        ]
+    },
+    {
+        "id": "f5e0f6d97d4bf184",
+        "type": "http in",
+        "z": "dc0d981398a42d88",
+        "name": "GET /api/user",
+        "url": "/api/user",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 2990,
+        "y": 1760,
+        "wires": [
+            [
+                "d46d40672dee4b34"
+            ]
+        ]
+    },
+    {
+        "id": "d46d40672dee4b34",
+        "type": "link call",
+        "z": "dc0d981398a42d88",
+        "name": "Scan-Flow aufrufen",
+        "links": [
+            "f3e2c2d834082ab2"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 3190,
+        "y": 1760,
+        "wires": [
+            [
+                "c19b623fcc500c5b"
+            ]
+        ]
+    },
+    {
+        "id": "c19b623fcc500c5b",
+        "type": "http response",
+        "z": "dc0d981398a42d88",
+        "name": "200 JSON",
+        "statusCode": "200",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 3410,
+        "y": 1760,
+        "wires": []
+    },
+    {
+        "id": "n_return",
+        "type": "link out",
+        "z": "dc0d981398a42d88",
+        "name": "Return an Caller",
+        "mode": "return",
+        "links": [],
+        "x": 4285,
+        "y": 1660,
+        "wires": []
+    },
+    {
+        "id": "f3e2c2d834082ab2",
+        "type": "link in",
+        "z": "dc0d981398a42d88",
+        "name": "Scan-Flow Eingang",
+        "links": [],
+        "x": 3035,
+        "y": 1560,
+        "wires": [
+            [
+                "read_ma_dir"
+            ]
+        ]
+    },
+    {
+        "id": "8806e98ff9e91037",
+        "type": "http in",
+        "z": "dc0d981398a42d88",
+        "name": "POST /api/login",
+        "url": "/api/login",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 2520,
+        "y": 1220,
+        "wires": [
+            [
+                "0429d8b08e8463f2"
+            ]
+        ]
+    },
+    {
+        "id": "user_http_in",
+        "type": "http in",
+        "z": "dc0d981398a42d88",
+        "name": "POST /api/user",
+        "url": "/api/user",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 2530,
+        "y": 1020,
+        "wires": [
+            [
+                "user_call_worker",
+                "c3eb8604590cad9d"
+            ]
+        ]
+    },
+    {
+        "id": "user_call_worker",
+        "type": "link call",
+        "z": "dc0d981398a42d88",
+        "name": "run user worker",
+        "links": [
+            "user_link_in"
+        ],
+        "timeout": "120",
+        "x": 2900,
+        "y": 1020,
+        "wires": [
+            [
+                "user_http_200",
+                "a6777d4781e75d3d"
+            ]
+        ]
+    },
+    {
+        "id": "user_http_200",
+        "type": "http response",
+        "z": "dc0d981398a42d88",
+        "name": "HTTP 200",
+        "statusCode": "",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "x": 3080,
+        "y": 1020,
+        "wires": []
+    },
+    {
+        "id": "user_link_in",
+        "type": "link in",
+        "z": "dc0d981398a42d88",
+        "name": "Worker In",
+        "links": [],
+        "x": 2685,
+        "y": 1080,
+        "wires": [
+            [
+                "user_validate_bulk"
+            ]
+        ]
+    },
+    {
+        "id": "user_validate_bulk",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "validate payload",
+        "func": "const p = msg.payload || {};\nconst list = Array.isArray(p.mitarbeiter) ? p.mitarbeiter : [];\nif (!Array.isArray(list) || list.length === 0) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'mitarbeiter array required' };\n    return msg;\n}\nconst base = global.get('PathMitarbeiter') || '';\nmsg.base = base;\nmsg.payload = list.map(x => ({ name: String(x?.name ?? ''), kuerzel: String(x?.kuerzel ?? '') }));\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2885,
+        "y": 1080,
+        "wires": [
+            [
+                "user_split",
+                "e339fdade55c3a6f"
+            ]
+        ]
+    },
+    {
+        "id": "user_split",
+        "type": "split",
+        "z": "dc0d981398a42d88",
+        "name": "per user",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 3065,
+        "y": 1080,
+        "wires": [
+            [
+                "user_build_paths",
+                "e339fdade55c3a6f"
+            ]
+        ]
+    },
+    {
+        "id": "user_build_paths",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "build paths",
+        "func": "const base = msg.base || '';\nconst name = msg.payload.name;\nconst kuerzel = msg.payload.kuerzel;\nif (!name) { msg.payload = { name, action: 'skipped:name-missing' }; return msg; }\nmsg.user = { name, kuerzel };\nmsg.paths = {\n  userDir: `${base}/${name}`,\n  metaDir: `${base}/${name}/immo24`,\n  metaFile: `${base}/${name}/immo24/immo24-user.json`\n};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 3225,
+        "y": 1080,
+        "wires": [
+            [
+                "user_access_userdir"
+            ]
+        ]
+    },
+    {
+        "id": "user_access_userdir",
+        "type": "fs-ops-access",
+        "z": "dc0d981398a42d88",
+        "name": "userDir exists?",
+        "path": "",
+        "pathType": "str",
+        "filename": "paths.userDir",
+        "filenameType": "msg",
+        "read": true,
+        "write": false,
+        "throwerror": false,
+        "x": 3425,
+        "y": 1080,
+        "wires": [
+            [
+                "user_access_metadir"
+            ],
+            [
+                "user_mkdir_userdir"
+            ]
+        ]
+    },
+    {
+        "id": "user_mkdir_userdir",
+        "type": "fs-ops-mkdir",
+        "z": "dc0d981398a42d88",
+        "name": "mkdir userDir",
+        "path": "",
+        "pathType": "str",
+        "dirname": "paths.userDir",
+        "dirnameType": "msg",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "dir",
+        "fullpathType": "msg",
+        "x": 3620,
+        "y": 1100,
+        "wires": [
+            [
+                "user_access_metadir"
+            ]
+        ]
+    },
+    {
+        "id": "user_access_metadir",
+        "type": "fs-ops-access",
+        "z": "dc0d981398a42d88",
+        "name": "metaDir exists?",
+        "path": "",
+        "pathType": "str",
+        "filename": "paths.metaDir",
+        "filenameType": "msg",
+        "read": true,
+        "write": false,
+        "throwerror": false,
+        "x": 3825,
+        "y": 1080,
+        "wires": [
+            [
+                "user_set_file_payload"
+            ],
+            [
+                "user_mkdir_metadir",
+                "3e7a88e641e2554e"
+            ]
+        ]
+    },
+    {
+        "id": "user_mkdir_metadir",
+        "type": "fs-ops-mkdir",
+        "z": "dc0d981398a42d88",
+        "name": "mkdir metaDir",
+        "path": "",
+        "pathType": "str",
+        "dirname": "paths.metaDir",
+        "dirnameType": "msg",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "dir",
+        "fullpathType": "msg",
+        "x": 4180,
+        "y": 1120,
+        "wires": [
+            [
+                "user_set_file_payload"
+            ]
+        ]
+    },
+    {
+        "id": "user_set_file_payload",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "payload/filename setzen",
+        "func": "msg.filename = msg.paths.metaFile;\nmsg.payload = msg.user.kuerzel; // exakt wie geliefert\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 4190,
+        "y": 980,
+        "wires": [
+            [
+                "user_write_file"
+            ]
+        ]
+    },
+    {
+        "id": "user_write_file",
+        "type": "file",
+        "z": "dc0d981398a42d88",
+        "name": "write immo24-user.json",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 4415,
+        "y": 1080,
+        "wires": [
+            [
+                "user_result_written"
+            ]
+        ]
+    },
+    {
+        "id": "user_result_written",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "result entry",
+        "func": "msg.payload = { name: msg.user.name, action: 'written' };\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 4605,
+        "y": 1080,
+        "wires": [
+            [
+                "user_join"
+            ]
+        ]
+    },
+    {
+        "id": "user_join",
+        "type": "join",
+        "z": "dc0d981398a42d88",
+        "name": "collect results",
+        "mode": "auto",
+        "build": "array",
+        "property": "payload",
+        "propertyType": "msg",
+        "x": 4775,
+        "y": 1080,
+        "wires": [
+            [
+                "user_summary"
+            ]
+        ]
+    },
+    {
+        "id": "user_summary",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "200 summary",
+        "func": "const arr = Array.isArray(msg.payload) ? msg.payload : [];\nmsg.statusCode = 200;\nmsg.payload = { ok: true, results: arr, count: arr.length };\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 4955,
+        "y": 1080,
+        "wires": [
+            [
+                "user_link_out"
+            ]
+        ]
+    },
+    {
+        "id": "user_link_out",
+        "type": "link out",
+        "z": "dc0d981398a42d88",
+        "name": "Worker Return",
+        "mode": "return",
+        "links": [],
+        "x": 5135,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "c3eb8604590cad9d",
+        "type": "debug",
+        "z": "dc0d981398a42d88",
+        "name": "debug 13",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2870,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "a6777d4781e75d3d",
+        "type": "debug",
+        "z": "dc0d981398a42d88",
+        "name": "debug 14",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3080,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "e339fdade55c3a6f",
+        "type": "debug",
+        "z": "dc0d981398a42d88",
+        "name": "db",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3160,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "3e7a88e641e2554e",
+        "type": "debug",
+        "z": "dc0d981398a42d88",
+        "name": "debug 15",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 4080,
+        "y": 1240,
         "wires": []
     },
     {
@@ -13691,196 +14149,6 @@
         "wires": [
             [
                 "5a8d0f1b3e2c4d66"
-            ]
-        ]
-    },
-    {
-        "id": "report_init_job",
-        "type": "function",
-        "z": "aa20e869f3621f0d",
-        "name": "Init Job",
-        "func": "// Erzeugt Job-ID, speichert HTTP res Handle\nconst id = Date.now().toString(36) + Math.random().toString(36).slice(2,8);\nmsg.job = { id, started: new Date().toISOString() };\nflow.set(\"job:\"+id+\":res\", msg.res);\n// optional: Endpunkt merken\nmsg.replyTo = \"/api/protools/presets\";\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "x": 340,
-        "y": 920,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "report_link_in",
-        "type": "link in",
-        "z": "aa20e869f3621f0d",
-        "name": "REPORT IN",
-        "links": [
-            "report_link_out"
-        ],
-        "x": 370,
-        "y": 1000,
-        "wires": [
-            [
-                "report_aggregate"
-            ]
-        ]
-    },
-    {
-        "id": "report_link_out",
-        "type": "link out",
-        "z": "aa20e869f3621f0d",
-        "name": "REPORT OUT",
-        "mode": "link",
-        "links": [
-            "report_link_in"
-        ],
-        "x": 1515,
-        "y": 1180,
-        "wires": []
-    },
-    {
-        "id": "report_copied",
-        "type": "function",
-        "z": "aa20e869f3621f0d",
-        "name": "Report COPIED",
-        "func": "// Sende einen 'copied'-Event an den Aggregator\nfunction inferCategory(m){\n  if (m.templateDest) return \"templates\";\n  if (m.trackpresetDest) return \"trackPresets\";\n  if (m.pluginsettingDest) return \"pluginSettings\";\n  if (m.fadeDest) return \"fadePresets\";\n  if (m.clipeffectDest) return \"clipEffects\";\n  if (m.memorylocationDest) return \"memoryLocation\";\n  if (m.trackdataDest) return \"trackDataRecall\";\n  if (m.kbshortcutDest) return \"keyboardShortcuts\";\n  if (m.destFolder && /Fade Presets/.test(m.destFolder||'')) return \"fadePresets\";\n  return m.category || m.__category || \"unknown\";\n}\n\nconst category = inferCategory(msg);\nconst file = msg.fileName || msg.files || (msg.quickPresets && msg.quickPresets.destname) || undefined;\n\nnode.send({\n  topic: \"report\",\n  payload: { type: \"item\", status: \"copied\", category, file },\n  job: msg.job\n});\nreturn null;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 1350,
-        "y": 1140,
-        "wires": [
-            [
-                "report_link_out"
-            ]
-        ]
-    },
-    {
-        "id": "report_skipped",
-        "type": "function",
-        "z": "aa20e869f3621f0d",
-        "name": "Report SKIPPED",
-        "func": "// Für fehlende Quick Presets oder bewusst übersprungene Dateien\nfunction inferCategory(m){\n  if (m.templateDest) return \"templates\";\n  if (m.trackpresetDest) return \"trackPresets\";\n  if (m.pluginsettingDest) return \"pluginSettings\";\n  if (m.fadeDest) return \"fadePresets\";\n  if (m.clipeffectDest) return \"clipEffects\";\n  if (m.memorylocationDest) return \"memoryLocation\";\n  if (m.trackdataDest) return \"trackDataRecall\";\n  if (m.kbshortcutDest) return \"keyboardShortcuts\";\n  if (m.destFolder && /Fade Presets/.test(m.destFolder||'')) return \"fadePresets\";\n  return m.category || m.__category || \"unknown\";\n}\n\nconst category = inferCategory(msg);\nconst file = msg.fileName || msg.files || (msg.quickPresets && msg.quickPresets.destname) || undefined;\n\nnode.send({\n  topic: \"report\",\n  payload: { type: \"item\", status: \"skipped\", reason: \"not_found\", category, file },\n  job: msg.job\n});\nreturn null;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 1350,
-        "y": 1180,
-        "wires": [
-            [
-                "report_link_out"
-            ]
-        ]
-    },
-    {
-        "id": "report_error",
-        "type": "function",
-        "z": "aa20e869f3621f0d",
-        "name": "Report ERROR",
-        "func": "// Catch-Handler → Fehler melden\nconst err = msg.error || {};\nconst category = msg.category || msg.__category || (err.source && err.source.name) || \"unknown\";\nconst file = msg.fileName || err.file || undefined;\n\nnode.send({\n  topic: \"report\",\n  payload: { type: \"item\", status: \"error\", category, file, message: err.message },\n  job: msg.job\n});\nreturn null;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 1350,
-        "y": 1220,
-        "wires": [
-            [
-                "report_link_out"
-            ]
-        ]
-    },
-    {
-        "id": "report_done",
-        "type": "function",
-        "z": "aa20e869f3621f0d",
-        "name": "Report DONE (Branch)",
-        "func": "// Am Ende eines Branches genau einmal senden\nconst category = msg.category || msg.__category || \"unknown\";\nnode.send({\n  topic: \"report\",\n  payload: { type: \"done\", category },\n  job: msg.job\n});\nreturn null;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 1360,
-        "y": 1260,
-        "wires": [
-            [
-                "report_link_out"
-            ]
-        ]
-    },
-    {
-        "id": "report_aggregate",
-        "type": "function",
-        "z": "aa20e869f3621f0d",
-        "name": "Aggregator",
-        "func": "// Aggregiert alle Reports pro Job-ID\nconst key = \"job:\" + (msg.job?.id || \"none\");\nlet state = flow.get(key) || { counts:{}, done:{}, started: msg.job?.started || new Date().toISOString() };\n\nfunction bump(cat, field){\n  state.counts[cat] = state.counts[cat] || {copied:0, skipped:0, error:0};\n  state.counts[cat][field] += 1;\n}\n\nif (msg.topic === \"report\" && msg.payload?.type === \"item\") {\n  const cat = msg.payload.category || \"unknown\";\n  const st = msg.payload.status;\n  if (st === \"copied\") bump(cat, \"copied\");\n  if (st === \"skipped\") bump(cat, \"skipped\");\n  if (st === \"error\")   bump(cat, \"error\");\n}\n\nif (msg.topic === \"report\" && msg.payload?.type === \"done\") {\n  const cat = msg.payload.category || \"unknown\";\n  state.done[cat] = true;\n}\n\nflow.set(key, state);\nmsg.aggregated = state;\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 560,
-        "y": 1000,
-        "wires": [
-            [
-                "report_throttle"
-            ]
-        ]
-    },
-    {
-        "id": "report_throttle",
-        "type": "delay",
-        "z": "aa20e869f3621f0d",
-        "name": "Throttle (merge bursts)",
-        "pauseType": "rate",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "0.5",
-        "rateUnits": "second",
-        "randomFirst": "0",
-        "randomLast": "0",
-        "randomUnits": "seconds",
-        "drop": true,
-        "outputs": 1,
-        "x": 780,
-        "y": 1000,
-        "wires": [
-            [
-                "report_finalize"
-            ]
-        ]
-    },
-    {
-        "id": "report_finalize",
-        "type": "function",
-        "z": "aa20e869f3621f0d",
-        "name": "Finalize → HTTP response",
-        "func": "// Baut finale Antwort und sendet sie an den HTTP response\nconst key = \"job:\" + (msg.job?.id || \"none\");\nconst st = msg.aggregated || flow.get(key) || {counts:{}, done:{}};\n\nlet totalCopied=0, totalSkipped=0, totalError=0;\nconst details = Object.entries(st.counts).map(([cat,c])=>{\n  totalCopied  += c.copied||0;\n  totalSkipped += c.skipped||0;\n  totalError   += c.error||0;\n  const status = c.error>0 ? \"error\" : ((c.copied||0)+(c.skipped||0)>0 ? \"ok\" : \"idle\");\n  const note   = (c.skipped>0 && c.error===0) ? \"partial (some items missing)\" : undefined;\n  return { category: cat, copied: c.copied||0, skipped: c.skipped||0, error: c.error||0, status, note };\n});\n\nconst overall = totalError>0 ? \"error\" : ((totalCopied+totalSkipped)>0 ? \"ok\" : \"idle\");\n\n// HTTP res wiederherstellen\nconst res = flow.get(key+\":res\");\nmsg.res = res;\nmsg.statusCode = (overall === \"error\") ? 207 : 200; // 207 für Teil-/Fehler möglich\nmsg.payload = {\n  jobId: msg.job?.id,\n  started: st.started,\n  finished: new Date().toISOString(),\n  overall,\n  totals: { copied: totalCopied, skipped: totalSkipped, error: totalError },\n  details\n};\n\n// Cleanup\nflow.set(key, null);\nflow.set(key+\":res\", null);\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 1030,
-        "y": 1000,
-        "wires": [
-            [
-                "report_http_out"
-            ]
-        ]
-    },
-    {
-        "id": "report_http_out",
-        "type": "http response",
-        "z": "aa20e869f3621f0d",
-        "name": "HTTP 200/207",
-        "statusCode": "",
-        "headers": {},
-        "x": 1280,
-        "y": 1000,
-        "wires": []
-    },
-    {
-        "id": "report_catch",
-        "type": "catch",
-        "z": "aa20e869f3621f0d",
-        "name": "Catch all Copy errors",
-        "scope": null,
-        "uncaught": false,
-        "x": 1120,
-        "y": 1220,
-        "wires": [
-            [
-                "report_error"
             ]
         ]
     }

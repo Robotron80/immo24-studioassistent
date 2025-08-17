@@ -3,61 +3,82 @@
     <v-card-text>
       <v-row class="gap-4">
         <v-col cols="12" md="6">
-          <v-text-field
-            v-model="staged.PathMitarbeiter"
-            label="Pfad Mitarbeiter"
-            density="comfortable"
-            append-inner-icon="mdi-folder"
-            @click:append-inner="browseInto('PathMitarbeiter', 'Pfad Mitarbeiter auswählen')"
-          />
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="2" md="6">
-          <v-text-field
-            v-model="staged.PathProduktionen"
-            label="Pfad Produktionen"
-            density="comfortable"
-            append-inner-icon="mdi-folder"
-            @click:append-inner="browseInto('PathProduktionen', 'Pfad Produktionen auswählen')"
-          />
-          <v-button @click="browseInto('PathProduktionen', 'Pfad Produktionen auswählen')">Durchsuchen</v-button>
-          <v-col>
-            <v-button @click="browseInto('PathProduktionen', 'Pfad Produktionen auswählen')">Durchsuchen</v-button>
-          </v-col>
+          <div style="display: flex; gap: 8px;">
+            <v-text-field
+              v-model="staged.PathMitarbeiter"
+              label="Pfad Mitarbeiter"
+              density="comfortable"
+            />
+            <v-btn
+              @click="browseInto('PathMitarbeiter', 'Pfad Mitarbeiter auswählen')"
+              color="primary"
+              variant="outlined"
+            >
+              Durchsuchen
+            </v-btn>
+          </div>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12" md="6">
-          <v-text-field
-            v-model="staged.PathStammdaten"
-            label="Pfad Stammdaten"
-            density="comfortable"
-            append-inner-icon="mdi-folder"
-            @click:append-inner="browseInto('PathStammdaten', 'Pfad Stammdaten auswählen')"
-          />
+          <div style="display: flex; gap: 8px;">
+            <v-text-field
+              v-model="staged.PathProduktionen"
+              label="Pfad Produktionen"
+              density="comfortable"
+            />
+            <v-btn
+              @click="browseInto('PathProduktionen', 'Pfad Produktionen auswählen')"
+              color="primary"
+              variant="outlined"
+            >
+              Durchsuchen
+            </v-btn>
+          </div>
         </v-col>
       </v-row>
-      <v-row> 
+      <v-row>
         <v-col cols="12" md="6">
-          <v-text-field
-            v-model="staged.PathPTUser"
-            label="Pfad Pro Tools User"
-            density="comfortable"
-            append-inner-icon="mdi-folder"
-            @click:append-inner="browseInto('PathPTUser', 'Pfad Pro Tools User auswählen')"
-          />
+          <div style="display: flex; gap: 8px;">
+            <v-text-field
+              v-model="staged.PathStammdaten"
+              label="Pfad Stammdaten"
+              density="comfortable"
+            />
+            <v-btn
+              @click="browseInto('PathStammdaten', 'Pfad Stammdaten auswählen')"
+              color="primary"
+              variant="outlined"
+            >
+              Durchsuchen
+            </v-btn>
+          </div>
         </v-col>
-
       </v-row>
-
+      <v-row>
+        <v-col cols="12" md="6">
+          <div style="display: flex; gap: 8px;">
+            <v-text-field
+              v-model="staged.PathPTUser"
+              label="Pfad Pro Tools User"
+              density="comfortable"
+            />
+            <v-btn
+              @click="browseInto('PathPTUser', 'Pfad Pro Tools User auswählen')"
+              color="primary"
+              variant="outlined"
+            >
+              Durchsuchen
+            </v-btn>
+          </div>
+        </v-col>
+      </v-row>
       <v-alert v-if="error" type="error" class="mt-4">
         {{ error }}
       </v-alert>
     </v-card-text>
   </v-card>
 </template>
-
 
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'

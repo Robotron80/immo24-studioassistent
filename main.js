@@ -37,8 +37,17 @@ function getUsersFromNodeRed() {
         let data = ''
         res.on('data', c => (data += c))
         res.on('end', () => {
-          try { const json = JSON.parse(data); resolve(Array.isArray(json) ? json : []) }
-          catch { resolve([]) }
+          try {
+            const arr = JSON.parse(data)
+            // Direkt ein Array von Objekten [{name, kuerzel}, ...]
+            if (Array.isArray(arr)) {
+              resolve(arr.map(u => u.name))
+            } else {
+              resolve([])
+            }
+          } catch {
+            resolve([])
+          }
         })
       }
     )
@@ -52,7 +61,7 @@ function postActiveUserToNodeRed(user) {
     const payload = Buffer.from(JSON.stringify({ user }))
     const req = http.request(
       {
-        host: '127.0.0.1', port: 1880, path: '/api/user', method: 'POST',
+        host: '127.0.0.1', port: 1880, path: '/api/login', method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Content-Length': payload.length },
         agent: keepAliveAgent
       },
@@ -325,7 +334,7 @@ app.whenReady().then(async () => {
   registerIpc()
 
   const ready = await waitForNodeRedReady({
-    path_: '/api/user',
+    path_: '/api/user', // <--- richtig!
     timeoutMs: 12000,
     perRequestTimeout: 1500,
     minDelay: 120,

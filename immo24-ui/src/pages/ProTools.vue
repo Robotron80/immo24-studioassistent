@@ -68,6 +68,18 @@
     </div>
 
     <v-snackbar v-model="snack.open" timeout="2000">{{ snack.text }}</v-snackbar>
+
+    <!-- Bestätigungs-Dialog -->
+    <v-dialog v-model="confirm.open" max-width="400">
+      <v-card>
+        <v-card-title class="text-h6">{{ confirm.title }}</v-card-title>
+        <v-card-text>{{ confirm.text }}</v-card-text>
+        <v-card-actions class="justify-end">
+          <v-btn variant="text" @click="confirmResolve(false)">Abbrechen</v-btn>
+          <v-btn color="primary" @click="confirmResolve(true)">OK</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -100,9 +112,21 @@ const anySelected = computed(() =>
 )
 
 const snack = reactive({ open: false, text: '', color: 'success' })
+const confirm = reactive({
+  open: false,
+  title: '',
+  text: '',
+  cb: null
+})
 
-function onRecallAll() { sendAction('recall') }
-function onStoreAll() { sendAction('store') }
+async function onRecallAll() {
+  const ok = await showConfirm('Recall ausführen?', 'Die ausgewählten Presets werden vom Server auf das lokale System. Vorhandene Dateien werden überschrieben.')
+  if (ok) sendAction('recall')
+}
+async function onStoreAll() {
+  const ok = await showConfirm('Store ausführen?', 'Die ausgewählten Presets werden vom lokalen System auf den Server übertragen. Vorhandene Dateien werden überschrieben.')
+  if (ok) sendAction('store')
+}
 
 async function sendAction(action) {
   const payload = {
@@ -146,5 +170,16 @@ async function sendAction(action) {
     snack.text = 'Fehler: ' + (e.message || 'Aktion fehlgeschlagen')
     snack.open = true
   }
+}
+
+function showConfirm(title, text) {
+  confirm.title = title
+  confirm.text = text
+  confirm.open = true
+  return new Promise(resolve => confirm.cb = resolve)
+}
+function confirmResolve(val) {
+  confirm.open = false
+  confirm.cb?.(val)
 }
 </script>

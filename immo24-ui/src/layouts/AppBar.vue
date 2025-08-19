@@ -12,6 +12,7 @@
     >
       <v-tab :value="'/projektanlage'" :to="{ path: '/projektanlage' }">Projektanlage</v-tab>
       <v-tab :value="'/protools'" :to="{ path: '/protools' }">Pro Tools</v-tab>
+      <v-tab :value="'/projektneu'" :to="{ path: '/projektneu' }">Projektanlage Neu</v-tab>
     </v-tabs>
 
     <v-spacer />

@@ -24,27 +24,6 @@
         "env": []
     },
     {
-        "id": "tab_login_api",
-        "type": "tab",
-        "label": "Login API",
-        "disabled": false,
-        "info": ""
-    },
-    {
-        "id": "tab_user_main",
-        "type": "tab",
-        "label": "API /api/user",
-        "disabled": false,
-        "info": ""
-    },
-    {
-        "id": "tab_user_worker",
-        "type": "tab",
-        "label": "Worker /api/user",
-        "disabled": false,
-        "info": ""
-    },
-    {
         "id": "0e1923748c0d505b",
         "type": "group",
         "z": "dc0d981398a42d88",
@@ -144,11 +123,63 @@
             "2874bd00f08fcb06",
             "4f79fc09a4a552d8",
             "c6bbd2b9b2d5d462",
-            "4b0349befccb3ec9"
+            "4b0349befccb3ec9",
+            "8cee036585de868d",
+            "34ee69129c1b22ad",
+            "661ca0a214d23709",
+            "dfc751f1cfa33eb0",
+            "ee7ff191a9a7f443",
+            "0e9745b173232fff",
+            "8575f3a928ec16d0",
+            "81ef1eb5a3a09963",
+            "e935076a3828598c",
+            "2d158907a57c26be",
+            "4818429074295ab3",
+            "c7fde03f62ea3b70",
+            "05e5fdd94df7b7bd",
+            "633ee666d0372b4a",
+            "a3e6e753e7da154a",
+            "c78b5a04db212d15",
+            "0abec049230e8050",
+            "7f5814610e2a962c",
+            "77ce6b84f5164169",
+            "01126a8ba1003c45",
+            "2c4c6dd681a78d6f",
+            "cbd4b2374e8ece8c",
+            "ffb2513c207b93a3",
+            "127abf21c624e0b9",
+            "ebe504b9e94f9764",
+            "718c3a97b38bac7e",
+            "877d8704d63b6ee6",
+            "c6dc78cceccb9c8a",
+            "27d38792047a9532",
+            "d8da94aa8852d67d",
+            "9cc61715182b07a8",
+            "4279662d8d88bdf0",
+            "2c4f70f4a6289187",
+            "61b1608e270cc12d",
+            "abd1cf7e4f067631",
+            "605e9a8d2d3c6c8c",
+            "dd57165581257aeb",
+            "a5a3951e8f2823f8",
+            "fbb6ec95041698fe",
+            "933f0fe5e7e09279",
+            "e8736d157d609b90",
+            "9f3e8a3cee4b82c9",
+            "0c6c16a88bc1c68d",
+            "f22b8ed470951aea",
+            "7cc39adde9111007",
+            "57201dbb7508a62a",
+            "51698881574feb7a",
+            "a67516d0726c79a5",
+            "3614c2f7d73121a1",
+            "ec624be2856aa377",
+            "c0863219dbe21040",
+            "64decafa7632304f"
         ],
         "x": 118,
         "y": 73,
-        "w": 2554,
+        "w": 3408,
         "h": 1015.5
     },
     {
@@ -202,44 +233,17 @@
             "label": true
         },
         "nodes": [
-            "b41e02a9f041aa19",
             "33ba96310cfdeb2a",
             "865166a918f8dd7f",
             "a4d41af963187fb7",
-            "2ce41bb4bd723b67",
             "41a1604a42cf8a96",
             "2fe371eb71de6440",
-            "a67a2cab1a358d44",
             "d2ddab99473b3656",
             "027af555cc7c1332",
             "7d54c183a3c2f73a",
-            "f10c3bfa8109cdd0",
-            "7080ca0422762589",
-            "18e8a335ef97da21",
-            "9106241422db912a",
-            "f5cd7bb31098eaad",
-            "7b6fc7ec6990e925",
-            "ae55601a9da0c911",
-            "2fd60a7350f47fb3",
-            "dadf337fb5b73a92",
-            "0d985a15d4a4a95c",
-            "4f7262abea362c2d",
-            "2a3513798f605e53",
-            "4cb0d9e7dd76739c",
-            "f4601d95bfebf9a0",
-            "9d4854382e8cb59d",
-            "2c1e3dd3e61d04e7",
-            "d6cf07277be27381",
-            "12c6eb058a6b1e99",
-            "44ed24d9f345abc2",
-            "2beb850f85c03577",
-            "72c8c1490dfeb838",
-            "9ba181b908f39390",
-            "62ba854e72cdf8dd",
             "14f500b7b1de838f",
             "a762fc9288921434",
             "4a19a26eb247bcfb",
-            "125ab90468385839",
             "5d8cb4ae2aa3f2ec",
             "373f7b1408a8d8ef",
             "0972a4a5dd6d6322",
@@ -327,18 +331,6 @@
             "label": true
         },
         "nodes": [
-            "43f8678fc93a7979",
-            "2066cdf85f239a3b",
-            "f94793cbe28403ca",
-            "f3266bc13293c407",
-            "e37094d01af90df8",
-            "f632d3bb48fd947b",
-            "156d30c8b310449b",
-            "abdc1aacf5aa4023",
-            "57ddd026fc96906a",
-            "26c73fb1b34dac58",
-            "19241936d8672013",
-            "a6880e826ba5ad1a",
             "f33bbf72b9b63711",
             "99a7ae697d4f679c",
             "5159326f0de47168",
@@ -354,36 +346,9 @@
             "62d75ac90e54201e"
         ],
         "x": 354,
-        "y": 1619,
-        "w": 2452,
+        "y": 1559,
+        "w": 1352,
         "h": 322
-    },
-    {
-        "id": "e921cd24dc377898",
-        "type": "group",
-        "z": "dc0d981398a42d88",
-        "name": "Admin PW ändern",
-        "style": {
-            "label": true
-        },
-        "nodes": [
-            "ddfa72e7c2a450f1",
-            "7dcbe53e138eae81",
-            "0cba90869c49877d",
-            "2a95aa185a76b98c",
-            "949bd568fbe25dd8",
-            "edce9ff476f82012",
-            "d3eff10aac35c35a",
-            "26c09c93e79682b4",
-            "2497faf4fd47531d",
-            "774b28f42b4107b4",
-            "b378f51a10d2e003",
-            "bfdda9999aa1ec1c"
-        ],
-        "x": 354,
-        "y": 1899,
-        "w": 1572,
-        "h": 202
     },
     {
         "id": "b26115dc10ade7b1",
@@ -1187,76 +1152,6 @@
         "width": 6,
         "height": 1,
         "order": 2,
-        "showTitle": true,
-        "className": "",
-        "visible": "true",
-        "disabled": "false",
-        "groupType": "default"
-    },
-    {
-        "id": "c32759b3efc667c0",
-        "type": "ui-group",
-        "name": "Produktionsbuch",
-        "page": "2d80b438009ca3d3",
-        "width": "12",
-        "height": 1,
-        "order": 1,
-        "showTitle": true,
-        "className": "",
-        "visible": "true",
-        "disabled": "false",
-        "groupType": "default"
-    },
-    {
-        "id": "9acf74bc666bb115",
-        "type": "ui-group",
-        "name": "Neuer Kunde",
-        "page": "2d80b438009ca3d3",
-        "width": 6,
-        "height": 1,
-        "order": 6,
-        "showTitle": true,
-        "className": "",
-        "visible": "true",
-        "disabled": "false",
-        "groupType": "dialog"
-    },
-    {
-        "id": "1706fadffdc2c0e4",
-        "type": "ui-group",
-        "name": "Neuer Datensatz",
-        "page": "2d80b438009ca3d3",
-        "width": 6,
-        "height": 1,
-        "order": 5,
-        "showTitle": true,
-        "className": "",
-        "visible": "true",
-        "disabled": "false",
-        "groupType": "dialog"
-    },
-    {
-        "id": "d702d7caf5852d18",
-        "type": "ui-group",
-        "name": "Passwort eingeben",
-        "page": "e1391360d2dcd740",
-        "width": 6,
-        "height": 1,
-        "order": 5,
-        "showTitle": true,
-        "className": "",
-        "visible": "true",
-        "disabled": "false",
-        "groupType": "dialog"
-    },
-    {
-        "id": "63c9d128cce7d8b0",
-        "type": "ui-group",
-        "name": "Passwort",
-        "page": "2d80b438009ca3d3",
-        "width": 6,
-        "height": 1,
-        "order": 4,
         "showTitle": true,
         "className": "",
         "visible": "true",
@@ -2885,257 +2780,6 @@
         ]
     },
     {
-        "id": "43f8678fc93a7979",
-        "type": "ui-button",
-        "z": "dc0d981398a42d88",
-        "g": "02b0fe64050de273",
-        "group": "f925aada115de858",
-        "name": "Konfiguration",
-        "label": "Konfiguration",
-        "order": 2,
-        "width": 2,
-        "height": "1",
-        "emulateClick": false,
-        "tooltip": "",
-        "color": "",
-        "bgcolor": "",
-        "className": "",
-        "icon": "lock",
-        "iconPosition": "left",
-        "payload": "",
-        "payloadType": "str",
-        "topic": "topic",
-        "topicType": "msg",
-        "buttonColor": "",
-        "textColor": "",
-        "iconColor": "",
-        "enableClick": true,
-        "enablePointerdown": false,
-        "pointerdownPayload": "",
-        "pointerdownPayloadType": "str",
-        "enablePointerup": false,
-        "pointerupPayload": "",
-        "pointerupPayloadType": "str",
-        "x": 520,
-        "y": 1740,
-        "wires": [
-            [
-                "f94793cbe28403ca"
-            ]
-        ]
-    },
-    {
-        "id": "2066cdf85f239a3b",
-        "type": "ui-text-input",
-        "z": "dc0d981398a42d88",
-        "g": "02b0fe64050de273",
-        "group": "d702d7caf5852d18",
-        "name": "Passwort",
-        "label": "Passwort",
-        "order": 1,
-        "width": 0,
-        "height": 0,
-        "topic": "topic",
-        "topicType": "msg",
-        "mode": "password",
-        "tooltip": "",
-        "delay": 300,
-        "passthru": false,
-        "sendOnDelay": false,
-        "sendOnBlur": false,
-        "sendOnEnter": true,
-        "className": "",
-        "clearable": false,
-        "sendOnClear": false,
-        "icon": "",
-        "iconPosition": "left",
-        "iconInnerPosition": "inside",
-        "x": 660,
-        "y": 1800,
-        "wires": [
-            [
-                "f632d3bb48fd947b",
-                "26c73fb1b34dac58"
-            ]
-        ]
-    },
-    {
-        "id": "f94793cbe28403ca",
-        "type": "function",
-        "z": "dc0d981398a42d88",
-        "g": "02b0fe64050de273",
-        "name": "[UI] PW-Dialog einblenden",
-        "func": "msg.payload = {\n    groups: {\n        show: ['Passwort eingeben']\n    }\n}\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1020,
-        "y": 1740,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "f3266bc13293c407",
-        "type": "file in",
-        "z": "dc0d981398a42d88",
-        "g": "02b0fe64050de273",
-        "name": "adminpw.json lesen",
-        "filename": "${IMMO24_USERDATA}/adminpw.json",
-        "filenameType": "env",
-        "format": "utf8",
-        "chunk": false,
-        "sendError": false,
-        "encoding": "none",
-        "allProps": false,
-        "x": 790,
-        "y": 1700,
-        "wires": [
-            [
-                "e37094d01af90df8"
-            ]
-        ]
-    },
-    {
-        "id": "e37094d01af90df8",
-        "type": "function",
-        "z": "dc0d981398a42d88",
-        "g": "02b0fe64050de273",
-        "name": "Global initialisieren",
-        "func": "global.set('adminPW', msg.payload.trim());\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1010,
-        "y": 1700,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "f632d3bb48fd947b",
-        "type": "function",
-        "z": "dc0d981398a42d88",
-        "g": "02b0fe64050de273",
-        "name": "Passwort-Check",
-        "func": "let userEingabe = msg.payload; // Annahme: kommt direkt vom Textfeld\nlet adminPW = global.get(\"adminPW\"); // im Global-Kontext gespeichert\n\nif (userEingabe === adminPW) {\n    msg.payload = \"FREIGABE\"; // oder beliebiger Befehl\n    return [msg, null];       // Output 1 = OK, Output 2 = Fehler\n} else {\n    msg.payload = \"FALSCH\";\n    return [null, msg];\n}\n",
-        "outputs": 2,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 870,
-        "y": 1800,
-        "wires": [
-            [
-                "57ddd026fc96906a"
-            ],
-            [
-                "abdc1aacf5aa4023"
-            ]
-        ]
-    },
-    {
-        "id": "156d30c8b310449b",
-        "type": "ui-notification",
-        "z": "dc0d981398a42d88",
-        "g": "02b0fe64050de273",
-        "ui": "826de81a1d3da833",
-        "position": "center center",
-        "colorDefault": false,
-        "color": "#ff2600",
-        "displayTime": "",
-        "showCountdown": true,
-        "outputs": 1,
-        "allowDismiss": true,
-        "dismissText": "Close",
-        "allowConfirm": false,
-        "confirmText": "Confirm",
-        "raw": false,
-        "className": "",
-        "name": "Fehlermeldung ausgeben",
-        "x": 1310,
-        "y": 1840,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "abdc1aacf5aa4023",
-        "type": "function",
-        "z": "dc0d981398a42d88",
-        "g": "02b0fe64050de273",
-        "name": "Meldung Text",
-        "func": "msg.payload = \"Falsches Passwort!\";\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1080,
-        "y": 1840,
-        "wires": [
-            [
-                "156d30c8b310449b"
-            ]
-        ]
-    },
-    {
-        "id": "57ddd026fc96906a",
-        "type": "function",
-        "z": "dc0d981398a42d88",
-        "g": "02b0fe64050de273",
-        "name": "[UI] Konfig-Page weiterleiten",
-        "func": "msg.payload = {\n    page: 'Konfiguration',  // Seite zu der gewechselt werden soll\n    pages: {\n        enable: ['Konfiguration'],       // Diese Seite wird aktiviert (sichtbar)\n    }\n};\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1120,
-        "y": 1800,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "26c73fb1b34dac58",
-        "type": "change",
-        "z": "dc0d981398a42d88",
-        "g": "02b0fe64050de273",
-        "name": "Clear PW",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "",
-                "tot": "str"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 500,
-        "y": 1800,
-        "wires": [
-            [
-                "2066cdf85f239a3b"
-            ]
-        ]
-    },
-    {
         "id": "67a76ef6609ed0cf",
         "type": "function",
         "z": "dc0d981398a42d88",
@@ -3191,343 +2835,6 @@
         "wires": [
             [
                 "fa26e2f162763260"
-            ]
-        ]
-    },
-    {
-        "id": "ddfa72e7c2a450f1",
-        "type": "ui-text-input",
-        "z": "dc0d981398a42d88",
-        "g": "e921cd24dc377898",
-        "group": "63c9d128cce7d8b0",
-        "name": "Neues Passwort",
-        "label": "Neues Passwort",
-        "order": 2,
-        "width": 0,
-        "height": 0,
-        "topic": "topic",
-        "topicType": "msg",
-        "mode": "password",
-        "tooltip": "",
-        "delay": 300,
-        "passthru": true,
-        "sendOnDelay": false,
-        "sendOnBlur": true,
-        "sendOnEnter": true,
-        "className": "",
-        "clearable": false,
-        "sendOnClear": false,
-        "icon": "",
-        "iconPosition": "left",
-        "iconInnerPosition": "inside",
-        "x": 600,
-        "y": 1940,
-        "wires": [
-            [
-                "949bd568fbe25dd8"
-            ]
-        ]
-    },
-    {
-        "id": "7dcbe53e138eae81",
-        "type": "ui-text-input",
-        "z": "dc0d981398a42d88",
-        "g": "e921cd24dc377898",
-        "group": "63c9d128cce7d8b0",
-        "name": "Neues Passwort wiederholen",
-        "label": "Neues Passwort wiederholen",
-        "order": 1,
-        "width": 0,
-        "height": 0,
-        "topic": "topic",
-        "topicType": "msg",
-        "mode": "password",
-        "tooltip": "",
-        "delay": 300,
-        "passthru": true,
-        "sendOnDelay": false,
-        "sendOnBlur": true,
-        "sendOnEnter": true,
-        "className": "",
-        "clearable": false,
-        "sendOnClear": false,
-        "icon": "",
-        "iconPosition": "left",
-        "iconInnerPosition": "inside",
-        "x": 640,
-        "y": 1980,
-        "wires": [
-            [
-                "edce9ff476f82012"
-            ]
-        ]
-    },
-    {
-        "id": "0cba90869c49877d",
-        "type": "ui-button",
-        "z": "dc0d981398a42d88",
-        "g": "e921cd24dc377898",
-        "group": "63c9d128cce7d8b0",
-        "name": "Passwort ändern",
-        "label": "Passwort ändern",
-        "order": 3,
-        "width": "1",
-        "height": "1",
-        "emulateClick": false,
-        "tooltip": "",
-        "color": "",
-        "bgcolor": "",
-        "className": "",
-        "icon": "",
-        "iconPosition": "left",
-        "payload": "",
-        "payloadType": "str",
-        "topic": "topic",
-        "topicType": "msg",
-        "buttonColor": "",
-        "textColor": "",
-        "iconColor": "",
-        "enableClick": true,
-        "enablePointerdown": false,
-        "pointerdownPayload": "",
-        "pointerdownPayloadType": "str",
-        "enablePointerup": false,
-        "pointerupPayload": "",
-        "pointerupPayloadType": "str",
-        "x": 610,
-        "y": 2040,
-        "wires": [
-            [
-                "2497faf4fd47531d"
-            ]
-        ]
-    },
-    {
-        "id": "2a95aa185a76b98c",
-        "type": "function",
-        "z": "dc0d981398a42d88",
-        "g": "e921cd24dc377898",
-        "name": "Passwort-Check",
-        "func": "const newPw = flow.get('newPassword');\nconst repeatPw = flow.get('repeatPassword');\n\nif (!newPw || !repeatPw) {\n    return [null, { payload: \"Bitte beide Felder ausfüllen!\" }];\n}\n\nif (newPw !== repeatPw) {\n    return [null, { payload: \"Passwörter stimmen nicht überein!\" }];\n}\n\n// Alles ok, weiter zum Speichern\nmsg.payload = newPw; // Das neue Passwort als Payload für Speichern\nreturn [msg, null];\n",
-        "outputs": 2,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1090,
-        "y": 2040,
-        "wires": [
-            [
-                "774b28f42b4107b4"
-            ],
-            [
-                "d3eff10aac35c35a"
-            ]
-        ],
-        "outputLabels": [
-            "PW speichern",
-            "Fehler"
-        ]
-    },
-    {
-        "id": "949bd568fbe25dd8",
-        "type": "change",
-        "z": "dc0d981398a42d88",
-        "g": "e921cd24dc377898",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "newPassword",
-                "pt": "flow",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 930,
-        "y": 1940,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "edce9ff476f82012",
-        "type": "change",
-        "z": "dc0d981398a42d88",
-        "g": "e921cd24dc377898",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "repeatPassword",
-                "pt": "flow",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 940,
-        "y": 1980,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "d3eff10aac35c35a",
-        "type": "ui-notification",
-        "z": "dc0d981398a42d88",
-        "g": "e921cd24dc377898",
-        "ui": "826de81a1d3da833",
-        "position": "center center",
-        "colorDefault": false,
-        "color": "#ff2600",
-        "displayTime": "",
-        "showCountdown": true,
-        "outputs": 1,
-        "allowDismiss": true,
-        "dismissText": "Close",
-        "allowConfirm": false,
-        "confirmText": "Confirm",
-        "raw": false,
-        "className": "",
-        "name": "Fehlermeldung ausgeben",
-        "x": 1330,
-        "y": 2060,
-        "wires": [
-            [
-                "26c09c93e79682b4"
-            ]
-        ]
-    },
-    {
-        "id": "26c09c93e79682b4",
-        "type": "change",
-        "z": "dc0d981398a42d88",
-        "g": "e921cd24dc377898",
-        "name": "Clear PW",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "",
-                "tot": "str"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 440,
-        "y": 1960,
-        "wires": [
-            [
-                "ddfa72e7c2a450f1",
-                "7dcbe53e138eae81"
-            ]
-        ]
-    },
-    {
-        "id": "2497faf4fd47531d",
-        "type": "delay",
-        "z": "dc0d981398a42d88",
-        "g": "e921cd24dc377898",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "100",
-        "timeoutUnits": "milliseconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 840,
-        "y": 2040,
-        "wires": [
-            [
-                "2a95aa185a76b98c"
-            ]
-        ]
-    },
-    {
-        "id": "774b28f42b4107b4",
-        "type": "file",
-        "z": "dc0d981398a42d88",
-        "g": "e921cd24dc377898",
-        "name": "adminpw.json schreiben",
-        "filename": "${IMMO24_USERDATA}/adminpw.json",
-        "filenameType": "env",
-        "appendNewline": false,
-        "createDir": false,
-        "overwriteFile": "true",
-        "encoding": "none",
-        "x": 1590,
-        "y": 2020,
-        "wires": [
-            [
-                "26c09c93e79682b4",
-                "bfdda9999aa1ec1c"
-            ]
-        ]
-    },
-    {
-        "id": "b378f51a10d2e003",
-        "type": "ui-notification",
-        "z": "dc0d981398a42d88",
-        "g": "e921cd24dc377898",
-        "ui": "826de81a1d3da833",
-        "position": "center center",
-        "colorDefault": true,
-        "color": "#ff2600",
-        "displayTime": "",
-        "showCountdown": true,
-        "outputs": 1,
-        "allowDismiss": true,
-        "dismissText": "Close",
-        "allowConfirm": false,
-        "confirmText": "Confirm",
-        "raw": false,
-        "className": "",
-        "name": "Meldung ausgeben",
-        "x": 1810,
-        "y": 1960,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "bfdda9999aa1ec1c",
-        "type": "function",
-        "z": "dc0d981398a42d88",
-        "g": "e921cd24dc377898",
-        "name": "Meldung Text",
-        "func": "msg.payload = \"Passwort erfolgreich geändert!\";\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1620,
-        "y": 1960,
-        "wires": [
-            [
-                "b378f51a10d2e003"
             ]
         ]
     },
@@ -3971,23 +3278,6 @@
         ]
     },
     {
-        "id": "19241936d8672013",
-        "type": "link in",
-        "z": "dc0d981398a42d88",
-        "g": "02b0fe64050de273",
-        "name": "START",
-        "links": [
-            "bb49eb64a95fd55b"
-        ],
-        "x": 395,
-        "y": 1700,
-        "wires": [
-            [
-                "f3266bc13293c407"
-            ]
-        ]
-    },
-    {
         "id": "bb49eb64a95fd55b",
         "type": "link out",
         "z": "dc0d981398a42d88",
@@ -4306,36 +3596,6 @@
         "y": 1020,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "a6880e826ba5ad1a",
-        "type": "inject",
-        "z": "dc0d981398a42d88",
-        "g": "02b0fe64050de273",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 720,
-        "y": 1760,
-        "wires": [
-            [
-                "f94793cbe28403ca"
-            ]
         ]
     },
     {
@@ -4756,8 +4016,8 @@
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
-        "x": 1600,
-        "y": 1680,
+        "x": 500,
+        "y": 1620,
         "wires": [
             [
                 "86241f78f6249423",
@@ -4778,8 +4038,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2550,
-        "y": 1660,
+        "x": 1450,
+        "y": 1600,
         "wires": [
             [
                 "5159326f0de47168"
@@ -4794,8 +4054,8 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 2730,
-        "y": 1660,
+        "x": 1630,
+        "y": 1600,
         "wires": []
     },
     {
@@ -4811,8 +4071,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1820,
-        "y": 1740,
+        "x": 720,
+        "y": 1680,
         "wires": []
     },
     {
@@ -5194,8 +4454,8 @@
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 2320,
-        "y": 1660,
+        "x": 1220,
+        "y": 1600,
         "wires": [
             [
                 "99a7ae697d4f679c"
@@ -5215,8 +4475,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2060,
-        "y": 1680,
+        "x": 960,
+        "y": 1620,
         "wires": [
             [
                 "b31d7e3c8e683585"
@@ -5236,8 +4496,8 @@
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
-        "x": 1570,
-        "y": 1840,
+        "x": 470,
+        "y": 1780,
         "wires": [
             [
                 "adminpw_validate"
@@ -5253,8 +4513,8 @@
         "func": "const body = (typeof msg.payload === 'object' && msg.payload) ? msg.payload : {};\nconst newPassword = (body.newPassword ?? '').toString();\nconst repeatPassword = (body.repeatPassword ?? '').toString();\n\nif (!newPassword || !repeatPassword) {\n  msg.statusCode = 400;\n  msg.payload = { ok:false, error:'missing_fields' };\n  return [null, msg];\n}\nif (newPassword !== repeatPassword) {\n  msg.statusCode = 422;\n  msg.payload = { ok:false, error:'password_mismatch' };\n  return [null, msg];\n}\n// ok → für File-Node String vorbereiten\nmsg.payload = JSON.stringify({ password: newPassword }, null, 2);\nreturn [msg, null];",
         "outputs": 2,
         "noerr": 0,
-        "x": 1970,
-        "y": 1840,
+        "x": 870,
+        "y": 1780,
         "wires": [
             [
                 "adminpw_write",
@@ -5278,8 +4538,8 @@
         "createDir": true,
         "overwriteFile": "true",
         "encoding": "utf8",
-        "x": 2270,
-        "y": 1840,
+        "x": 1170,
+        "y": 1780,
         "wires": [
             [
                 "adminpw_ok"
@@ -5295,8 +4555,8 @@
         "func": "msg.statusCode = 200;\nmsg.payload = { ok: true };\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 2500,
-        "y": 1840,
+        "x": 1400,
+        "y": 1780,
         "wires": [
             [
                 "adminpw_out"
@@ -5311,8 +4571,8 @@
         "name": "error response",
         "statusCode": "",
         "headers": {},
-        "x": 2200,
-        "y": 1900,
+        "x": 1100,
+        "y": 1840,
         "wires": []
     },
     {
@@ -5323,8 +4583,8 @@
         "name": "response",
         "statusCode": "",
         "headers": {},
-        "x": 2660,
-        "y": 1840,
+        "x": 1560,
+        "y": 1780,
         "wires": []
     },
     {
@@ -5341,8 +4601,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 2260,
-        "y": 1760,
+        "x": 1160,
+        "y": 1700,
         "wires": []
     },
     {
@@ -5767,45 +5027,6 @@
         "x": 240,
         "y": 1340,
         "wires": []
-    },
-    {
-        "id": "b39896ec151883db",
-        "type": "fs-ops-access",
-        "z": "dc0d981398a42d88",
-        "name": "Kürzel-File prüfen",
-        "path": "",
-        "pathType": "str",
-        "filename": "PathKuerzel",
-        "filenameType": "msg",
-        "read": true,
-        "write": false,
-        "throwerror": false,
-        "x": 2710,
-        "y": 1420,
-        "wires": [
-            [
-                "dae0fd073aefd226"
-            ],
-            []
-        ]
-    },
-    {
-        "id": "dae0fd073aefd226",
-        "type": "file in",
-        "z": "dc0d981398a42d88",
-        "name": "immo24-user.json lesen",
-        "filename": "PathKuerzel",
-        "filenameType": "msg",
-        "format": "utf8",
-        "chunk": false,
-        "sendError": false,
-        "encoding": "none",
-        "allProps": false,
-        "x": 2950,
-        "y": 1420,
-        "wires": [
-            []
-        ]
     },
     {
         "id": "3606cd78175f49ab",
@@ -6336,7 +5557,7 @@
         "name": "mkdir userDir",
         "path": "",
         "pathType": "str",
-        "dirname": "payload.name",
+        "dirname": "paths.userDir",
         "dirnameType": "msg",
         "recursive": false,
         "mode": "755",
@@ -6381,11 +5602,11 @@
         "name": "mkdir metaDir",
         "path": "",
         "pathType": "str",
-        "dirname": "",
+        "dirname": "paths.metaDir",
         "dirnameType": "msg",
         "recursive": false,
         "mode": "755",
-        "fullpath": "",
+        "fullpath": "dir",
         "fullpathType": "msg",
         "x": 4180,
         "y": 1120,
@@ -8655,61 +7876,6 @@
         ]
     },
     {
-        "id": "b41e02a9f041aa19",
-        "type": "ui-table",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "group": "c32759b3efc667c0",
-        "name": "Kundenliste",
-        "label": "",
-        "order": 2,
-        "width": "0",
-        "height": "0",
-        "maxrows": "",
-        "passthru": false,
-        "autocols": false,
-        "showSearch": false,
-        "deselect": false,
-        "selectionType": "click",
-        "columns": [
-            {
-                "title": "Kunde",
-                "key": "kunde",
-                "keyType": "key",
-                "type": "text",
-                "width": "",
-                "align": "start"
-            },
-            {
-                "title": "Unterordner",
-                "key": "ordner_anzahl",
-                "keyType": "key",
-                "type": "text",
-                "width": "",
-                "align": "start"
-            },
-            {
-                "title": "",
-                "key": "🗑",
-                "keyType": "str",
-                "type": "button",
-                "width": "10",
-                "align": "start"
-            }
-        ],
-        "mobileBreakpoint": "sm",
-        "mobileBreakpointType": "defaults",
-        "action": "replace",
-        "x": 370,
-        "y": 1960,
-        "wires": [
-            [
-                "7080ca0422762589",
-                "d6cf07277be27381"
-            ]
-        ]
-    },
-    {
         "id": "33ba96310cfdeb2a",
         "type": "file in",
         "z": "b1c585f0d25b86fd",
@@ -8764,51 +7930,7 @@
         "x": 910,
         "y": 1860,
         "wires": [
-            [
-                "b41e02a9f041aa19"
-            ]
-        ]
-    },
-    {
-        "id": "2ce41bb4bd723b67",
-        "type": "ui-form",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "name": "Neukunden Formular",
-        "group": "9acf74bc666bb115",
-        "label": "",
-        "order": 1,
-        "width": 0,
-        "height": 0,
-        "options": [
-            {
-                "label": "Kunde",
-                "key": "kunde",
-                "type": "text",
-                "required": true,
-                "rows": null
-            }
-        ],
-        "formValue": {
-            "kunde": ""
-        },
-        "payload": "",
-        "submit": "Anlegen",
-        "cancel": "",
-        "resetOnSubmit": true,
-        "topic": "topic",
-        "topicType": "msg",
-        "splitLayout": "",
-        "className": "",
-        "passthru": false,
-        "dropdownOptions": [],
-        "x": 400,
-        "y": 2300,
-        "wires": [
-            [
-                "41a1604a42cf8a96",
-                "f4601d95bfebf9a0"
-            ]
+            []
         ]
     },
     {
@@ -8824,15 +7946,14 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 990,
-        "y": 2320,
+        "x": 610,
+        "y": 2480,
         "wires": [
             [
                 "4a19a26eb247bcfb",
                 "5d8cb4ae2aa3f2ec"
             ],
             [
-                "a67a2cab1a358d44",
                 "9c53f64fe3de877c"
             ]
         ],
@@ -8861,33 +7982,6 @@
         ]
     },
     {
-        "id": "a67a2cab1a358d44",
-        "type": "ui-notification",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "ui": "826de81a1d3da833",
-        "position": "center center",
-        "colorDefault": true,
-        "color": "#000000",
-        "displayTime": "",
-        "showCountdown": true,
-        "outputs": 1,
-        "allowDismiss": true,
-        "dismissText": "Close",
-        "allowConfirm": false,
-        "confirmText": "Confirm",
-        "raw": false,
-        "className": "",
-        "name": "Fehlermeldung ausgeben",
-        "x": 1470,
-        "y": 2020,
-        "wires": [
-            [
-                "027af555cc7c1332"
-            ]
-        ]
-    },
-    {
         "id": "d2ddab99473b3656",
         "type": "file",
         "z": "b1c585f0d25b86fd",
@@ -8899,8 +7993,8 @@
         "createDir": false,
         "overwriteFile": "true",
         "encoding": "utf8",
-        "x": 1530,
-        "y": 1980,
+        "x": 1270,
+        "y": 2480,
         "wires": [
             [
                 "027af555cc7c1332",
@@ -8919,7 +8013,7 @@
             "7d54c183a3c2f73a"
         ],
         "x": 1715,
-        "y": 2000,
+        "y": 2020,
         "wires": []
     },
     {
@@ -8936,636 +8030,6 @@
         "wires": [
             [
                 "14f500b7b1de838f"
-            ]
-        ]
-    },
-    {
-        "id": "f10c3bfa8109cdd0",
-        "type": "ui-table",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "group": "c32759b3efc667c0",
-        "name": "Ordnerliste",
-        "label": "",
-        "order": 4,
-        "width": "0",
-        "height": "0",
-        "maxrows": "",
-        "passthru": false,
-        "autocols": false,
-        "showSearch": false,
-        "deselect": true,
-        "selectionType": "none",
-        "columns": [
-            {
-                "title": "Name",
-                "key": "name",
-                "keyType": "key",
-                "type": "text",
-                "width": "",
-                "align": "start"
-            },
-            {
-                "title": "Label",
-                "key": "label",
-                "keyType": "key",
-                "type": "text",
-                "width": "",
-                "align": "start"
-            },
-            {
-                "title": "Produktionsstufe",
-                "key": "ist_Produktionsstufe",
-                "keyType": "key",
-                "type": "tickcross",
-                "width": "",
-                "align": "start"
-            },
-            {
-                "title": "",
-                "key": "✏️",
-                "keyType": "str",
-                "type": "button",
-                "width": "10",
-                "align": "end"
-            },
-            {
-                "title": "",
-                "key": "🗑️",
-                "keyType": "str",
-                "type": "button",
-                "width": "10",
-                "align": "end"
-            }
-        ],
-        "mobileBreakpoint": "sm",
-        "mobileBreakpointType": "defaults",
-        "action": "replace",
-        "x": 370,
-        "y": 2040,
-        "wires": [
-            [
-                "ae55601a9da0c911"
-            ]
-        ]
-    },
-    {
-        "id": "7080ca0422762589",
-        "type": "function",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "name": "Aktuellen Kunden & Ordner setzen",
-        "func": "// Kundenliste aus flow holen (oder global)\nlet kunden = flow.get(\"kundenStammdaten\") || [];\nlet gewaehlterKunde = msg.payload.kunde; // z.B. \"SuperVision\"\n\n// Kundenobjekt suchen\nlet kundeObj = kunden.find(k => k.kunde === gewaehlterKunde);\n\nif (kundeObj && Array.isArray(kundeObj.ordner)) {\n    msg.payload = kundeObj.ordner; // vollständige Ordnerliste für die Tabelle!\n    flow.set(\"currentKunde\", kundeObj); // optional, für spätere Aktionen\n} else {\n    msg.payload = []; // falls nichts gefunden\n}\n\nflow.set('selectedKunde', gewaehlterKunde);\n\n\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 640,
-        "y": 1960,
-        "wires": [
-            [
-                "f10c3bfa8109cdd0"
-            ]
-        ]
-    },
-    {
-        "id": "18e8a335ef97da21",
-        "type": "ui-form",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "name": "Ordner Datensatz",
-        "group": "1706fadffdc2c0e4",
-        "label": "",
-        "order": 1,
-        "width": 0,
-        "height": 0,
-        "options": [
-            {
-                "label": "Name",
-                "key": "name",
-                "type": "text",
-                "required": true,
-                "rows": null
-            },
-            {
-                "label": "Label",
-                "key": "label",
-                "type": "text",
-                "required": true,
-                "rows": null
-            },
-            {
-                "label": "Produktionsstufe",
-                "key": "ist_Produktionsstufe",
-                "type": "checkbox",
-                "required": true,
-                "rows": null
-            }
-        ],
-        "formValue": {
-            "name": "",
-            "label": "",
-            "ist_Produktionsstufe": false
-        },
-        "payload": "",
-        "submit": "Speichern",
-        "cancel": "",
-        "resetOnSubmit": true,
-        "topic": "topic",
-        "topicType": "msg",
-        "splitLayout": false,
-        "className": "",
-        "passthru": false,
-        "dropdownOptions": [],
-        "x": 390,
-        "y": 2160,
-        "wires": [
-            [
-                "4f7262abea362c2d",
-                "9106241422db912a"
-            ]
-        ]
-    },
-    {
-        "id": "9106241422db912a",
-        "type": "function",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "name": "Datensatz bearbeiten",
-        "func": "let kunden = flow.get('kundenStammdaten') || [];\nlet selectedKunde = flow.get('selectedKunde') || \"\";\nlet altName = flow.get('bearbeiteAltName'); // Vorher im Flow gesetzt (Bearbeiten) oder undefined/null (Neuanlage)\nlet neuerOrdner = msg.payload;\n\nlet kunde = kunden.find(k => k.kunde === selectedKunde);\nif (!kunde || !Array.isArray(kunde.ordner)) {\n    node.error(\"Kunde oder Ordnerliste nicht gefunden!\");\n    return null;\n}\n\n// --- NEU: Unterscheidung Neu/Bearbeiten ---\nif (!altName) {\n    // NEUANLAGE\n    // Prüfe, ob der Name schon existiert\n    if (kunde.ordner.some(o => o.name.toLowerCase().trim() === neuerOrdner.name.toLowerCase().trim())) {\n        msg.payload = \"Ordnername existiert bereits!\";\n        msg.topic = \"error\";\n        return [null, msg];\n    }\n    kunde.ordner.push(neuerOrdner);\n    flow.set('kundenStammdaten', kunden);\n    msg.payload = JSON.stringify(kunden, null, 2);\n    msg.topic = \"ok\";\n    return [msg, null];\n} else {\n    // BEARBEITEN\n    // Prüfe auf doppelten Namen (außer der aktuelle ist derselbe wie vorher)\n    let nameVorhanden = kunde.ordner.findIndex(o =>\n        o.name.toLowerCase().trim() === neuerOrdner.name.toLowerCase().trim()\n    );\n    let idxAlt = kunde.ordner.findIndex(o =>\n        o.name.toLowerCase().trim() === altName.toLowerCase().trim()\n    );\n    if (nameVorhanden >= 0 && nameVorhanden !== idxAlt) {\n        msg.payload = \"Ordnername existiert bereits!\";\n        msg.topic = \"error\";\n        return [null, msg];\n    }\n\n    // Ordner ersetzen\n    if (idxAlt >= 0) {\n        kunde.ordner[idxAlt] = neuerOrdner;\n        flow.set('kundenStammdaten', kunden);\n        msg.payload = JSON.stringify(kunden, null, 2);\n        msg.topic = \"ok\";\n        flow.set('bearbeiteAltName', null); // Aufräumen\n        return [msg, null];\n    } else {\n        node.error(\"Alter Ordnername nicht gefunden!\");\n        return null;\n    }\n}\n",
-        "outputs": 2,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 620,
-        "y": 2180,
-        "wires": [
-            [
-                "4a19a26eb247bcfb"
-            ],
-            [
-                "a67a2cab1a358d44"
-            ]
-        ]
-    },
-    {
-        "id": "f5cd7bb31098eaad",
-        "type": "function",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "name": "Loeschen",
-        "func": "let kunden = flow.get('kundenStammdaten') || [];\nlet selectedKunde = flow.get('selectedKunde') || \"\";\n\n// Info zur Zeile kommt oft als msg.payload, z.B. { name: \"03_Sounddesign\", ... }\nlet zuLoeschen = msg.payload;\n\n// Kunde suchen\nlet kunde = kunden.find(k => k.kunde === selectedKunde);\nif (!kunde || !Array.isArray(kunde.ordner)) return null;\n\n// Ordner mit gleichem Namen rausfiltern (case-insensitive)\nkunde.ordner = kunde.ordner.filter(o =>\n    o.name.toLowerCase().trim() !== zuLoeschen.name.toLowerCase().trim()\n);\n\n// Speichern & Rückgabe\nflow.set('kundenStammdaten', kunden);\nmsg.datensatz = JSON.stringify(kunden, null, 2);\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 780,
-        "y": 2020,
-        "wires": [
-            [
-                "72c8c1490dfeb838"
-            ]
-        ]
-    },
-    {
-        "id": "7b6fc7ec6990e925",
-        "type": "function",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "name": "Neu / Bearbeiten",
-        "func": "// 1. Werte für Bearbeiten im Flow-Kontext speichern (damit sie nach dem Dialog öffnen noch da sind)\nflow.set('editFormValue', {\n    name: msg.payload.name,\n    label: msg.payload.label,\n    ist_Produktionsstufe: msg.payload.ist_Produktionsstufe\n});\n// Optional: alten Namen merken, falls du das beim Speichern brauchst\nflow.set('bearbeiteAltName', msg.payload.name);\n\n\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 790,
-        "y": 2060,
-        "wires": [
-            [
-                "2fd60a7350f47fb3",
-                "0d985a15d4a4a95c"
-            ]
-        ]
-    },
-    {
-        "id": "ae55601a9da0c911",
-        "type": "function",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "name": "Button Selector",
-        "func": "// Action kann \"button_click\" sein, column ist entweder \"🗑️\" (Papierkorb) oder \"✏️\" (Stift)\n\nif (msg.action !== \"button_click\") {\n    return null; // Nur reagieren, wenn ein Button geklickt wurde\n}\n\nif (msg.column === \"🗑️\") {\n    // An Output 1: Löschen-Logik\n    return [msg, null];\n}\nif (msg.column === \"✏️\") {\n    // An Output 2: Bearbeiten-Logik\n    return [null, msg];\n}\n\n// Falls kein bekannter Button: nichts machen\nreturn null;\n",
-        "outputs": 2,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 580,
-        "y": 2040,
-        "wires": [
-            [
-                "f5cd7bb31098eaad"
-            ],
-            [
-                "7b6fc7ec6990e925"
-            ]
-        ]
-    },
-    {
-        "id": "2fd60a7350f47fb3",
-        "type": "function",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "name": "[UI] Bearbeiten-Dialog einblenden",
-        "func": "msg.payload = {\n    groups: {\n        show: ['Neuer Datensatz']\n    }\n}\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1440,
-        "y": 2120,
-        "wires": [
-            [
-                "dadf337fb5b73a92"
-            ]
-        ]
-    },
-    {
-        "id": "dadf337fb5b73a92",
-        "type": "ui-control",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "name": "",
-        "ui": "826de81a1d3da833",
-        "events": "all",
-        "x": 1680,
-        "y": 2180,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "0d985a15d4a4a95c",
-        "type": "function",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "name": "Werte ans Formular schicken",
-        "func": "msg.payload = flow.get('editFormValue');\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1040,
-        "y": 2060,
-        "wires": [
-            [
-                "18e8a335ef97da21"
-            ]
-        ]
-    },
-    {
-        "id": "4f7262abea362c2d",
-        "type": "function",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "name": "[UI] Bearbeiten-Dialog ausblenden",
-        "func": "msg.payload = {\n    groups: {\n        hide: ['Neuer Datensatz']\n    }\n}\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1440,
-        "y": 2160,
-        "wires": [
-            [
-                "dadf337fb5b73a92"
-            ]
-        ]
-    },
-    {
-        "id": "2a3513798f605e53",
-        "type": "function",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "name": "[UI] Neukunden-Dialog einblenden",
-        "func": "msg.payload = {\n    groups: {\n        show: ['Neuer Kunde']\n    }\n}\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1440,
-        "y": 2200,
-        "wires": [
-            [
-                "dadf337fb5b73a92"
-            ]
-        ]
-    },
-    {
-        "id": "4cb0d9e7dd76739c",
-        "type": "ui-button",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "group": "c32759b3efc667c0",
-        "name": "Neuer Kunde",
-        "label": "Neuer Kunde",
-        "order": 3,
-        "width": "2",
-        "height": "1",
-        "emulateClick": false,
-        "tooltip": "",
-        "color": "",
-        "bgcolor": "",
-        "className": "",
-        "icon": "",
-        "iconPosition": "left",
-        "payload": "",
-        "payloadType": "str",
-        "topic": "topic",
-        "topicType": "msg",
-        "buttonColor": "",
-        "textColor": "",
-        "iconColor": "",
-        "enableClick": true,
-        "enablePointerdown": false,
-        "pointerdownPayload": "",
-        "pointerdownPayloadType": "str",
-        "enablePointerup": false,
-        "pointerupPayload": "",
-        "pointerupPayloadType": "str",
-        "x": 370,
-        "y": 2240,
-        "wires": [
-            [
-                "2a3513798f605e53"
-            ]
-        ]
-    },
-    {
-        "id": "f4601d95bfebf9a0",
-        "type": "function",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "name": "[UI] Neukunden-Dialog ausblenden",
-        "func": "msg.payload = {\n    groups: {\n        hide: ['Neuer Kunde']\n    }\n}\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1440,
-        "y": 2240,
-        "wires": [
-            [
-                "dadf337fb5b73a92"
-            ]
-        ]
-    },
-    {
-        "id": "9d4854382e8cb59d",
-        "type": "function",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "name": "Refresh",
-        "func": "let kunde = flow.get('selectedKunde');\nif (!kunde) return null;\n\nmsg.payload = { kunde: kunde }; // wie beim Row-Click!\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 500,
-        "y": 1880,
-        "wires": [
-            [
-                "7080ca0422762589"
-            ]
-        ]
-    },
-    {
-        "id": "2c1e3dd3e61d04e7",
-        "type": "delay",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "name": "",
-        "pauseType": "delay",
-        "timeout": "30",
-        "timeoutUnits": "milliseconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": false,
-        "outputs": 1,
-        "x": 330,
-        "y": 1880,
-        "wires": [
-            [
-                "9d4854382e8cb59d"
-            ]
-        ]
-    },
-    {
-        "id": "d6cf07277be27381",
-        "type": "function",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "name": "Kunde Loeschen",
-        "func": "// Prüfe, ob es ein Button-Click auf die Spalte \"🗑\" war\nif (msg.action === \"button_click\" && msg.column === \"🗑\") {\n    // Kunden aus flow holen\n    let kunden = flow.get('kundenStammdaten') || [];\n    let zuLoeschen = msg.payload.kunde;\n\n    // Kunden filtern\n    kunden = kunden.filter(k => k.kunde !== zuLoeschen);\n    flow.set('kundenStammdaten', kunden);\n\n    // Optional: Selektion zurücksetzen\n    flow.set('selectedKunde', null);\n\n    // JSON für Datei\n    msg.datensatz = JSON.stringify(kunden, null, 2);\n\n    return msg;\n}\n\n// Kein passender Button-Klick: Node tut nichts\nreturn null;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 950,
-        "y": 1960,
-        "wires": [
-            [
-                "2beb850f85c03577"
-            ]
-        ]
-    },
-    {
-        "id": "12c6eb058a6b1e99",
-        "type": "ui-button",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "group": "c32759b3efc667c0",
-        "name": "Neuer Ordner",
-        "label": "Neuer Ordner",
-        "order": 5,
-        "width": "2",
-        "height": "1",
-        "emulateClick": false,
-        "tooltip": "",
-        "color": "",
-        "bgcolor": "",
-        "className": "",
-        "icon": "",
-        "iconPosition": "left",
-        "payload": "",
-        "payloadType": "str",
-        "topic": "topic",
-        "topicType": "msg",
-        "buttonColor": "",
-        "textColor": "",
-        "iconColor": "",
-        "enableClick": true,
-        "enablePointerdown": false,
-        "pointerdownPayload": "",
-        "pointerdownPayloadType": "str",
-        "enablePointerup": false,
-        "pointerupPayload": "",
-        "pointerupPayloadType": "str",
-        "x": 380,
-        "y": 2100,
-        "wires": [
-            [
-                "7b6fc7ec6990e925"
-            ]
-        ]
-    },
-    {
-        "id": "44ed24d9f345abc2",
-        "type": "ui-notification",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "ui": "826de81a1d3da833",
-        "position": "center center",
-        "colorDefault": true,
-        "color": "#000000",
-        "displayTime": "",
-        "showCountdown": true,
-        "outputs": 1,
-        "allowDismiss": true,
-        "dismissText": "Abbrechen",
-        "allowConfirm": true,
-        "confirmText": "Löschen",
-        "raw": false,
-        "className": "",
-        "name": "Löschen bestätigen",
-        "x": 1510,
-        "y": 1820,
-        "wires": [
-            [
-                "9ba181b908f39390"
-            ]
-        ]
-    },
-    {
-        "id": "2beb850f85c03577",
-        "type": "function",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "name": "Meldung Kunde Löschen",
-        "func": "msg.payload = \"Soll der Kunde wirklich gelöscht werden?\";\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1270,
-        "y": 1800,
-        "wires": [
-            [
-                "44ed24d9f345abc2"
-            ]
-        ]
-    },
-    {
-        "id": "72c8c1490dfeb838",
-        "type": "function",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "name": "Meldung Ordner Löschen",
-        "func": "msg.payload = \"Soll der Ordner wirklich gelöscht werden?\";\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1270,
-        "y": 1840,
-        "wires": [
-            [
-                "44ed24d9f345abc2"
-            ]
-        ]
-    },
-    {
-        "id": "9ba181b908f39390",
-        "type": "switch",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "name": "Löschen geklickt",
-        "property": "payload",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "confirm_clicked",
-                "vt": "str"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 1,
-        "x": 1530,
-        "y": 1860,
-        "wires": [
-            [
-                "62ba854e72cdf8dd"
-            ]
-        ]
-    },
-    {
-        "id": "62ba854e72cdf8dd",
-        "type": "change",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "datensatz",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1530,
-        "y": 1900,
-        "wires": [
-            [
-                "4a19a26eb247bcfb"
             ]
         ]
     },
@@ -9607,8 +8071,7 @@
         "y": 1780,
         "wires": [
             [
-                "33ba96310cfdeb2a",
-                "2c1e3dd3e61d04e7"
+                "33ba96310cfdeb2a"
             ]
         ]
     },
@@ -9642,37 +8105,12 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1530,
-        "y": 1940,
+        "x": 950,
+        "y": 2480,
         "wires": [
             [
                 "d2ddab99473b3656"
             ]
-        ]
-    },
-    {
-        "id": "125ab90468385839",
-        "type": "ui-template",
-        "z": "b1c585f0d25b86fd",
-        "g": "b38df26cbb8bb4b3",
-        "group": "c32759b3efc667c0",
-        "page": "",
-        "ui": "",
-        "name": "Text Produktionsbuch",
-        "order": 1,
-        "width": 0,
-        "height": 0,
-        "head": "",
-        "format": "<div style=\"font-size:1.09em; line-height:1.6;\">\n    <strong style=\"font-size:1.18em;\">Kunden-Stammdaten</strong><br>\n    <span>Hier können die Kunden-Stammdaten für das Produktionsbuch angelegt und bearbeitet werden.</span><br>\n</div>",
-        "storeOutMessages": true,
-        "passthru": true,
-        "resendOnRefresh": true,
-        "templateScope": "local",
-        "className": "",
-        "x": 240,
-        "y": 2280,
-        "wires": [
-            []
         ]
     },
     {
@@ -9998,8 +8436,8 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 1710,
-        "y": 2440,
+        "x": 1750,
+        "y": 2460,
         "wires": []
     },
     {
@@ -11059,6 +9497,1056 @@
         "x": 1750,
         "y": 2980,
         "wires": []
+    },
+    {
+        "id": "8cee036585de868d",
+        "type": "http in",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "url": "/api/projektanlage/templates",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 1700,
+        "y": 360,
+        "wires": [
+            [
+                "34ee69129c1b22ad"
+            ]
+        ]
+    },
+    {
+        "id": "34ee69129c1b22ad",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "Template Pfad setzen",
+        "func": "let PathMitarbeiter = global.get('PathMitarbeiter');\nlet activeUser = global.get('activeUser');\nmsg.dir = `${PathMitarbeiter}/${activeUser}/immo24/templates/`;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1980,
+        "y": 360,
+        "wires": [
+            [
+                "661ca0a214d23709"
+            ]
+        ]
+    },
+    {
+        "id": "661ca0a214d23709",
+        "type": "fs-ops-dir",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "Templates lesen",
+        "path": "dir",
+        "pathType": "msg",
+        "filter": "*.ptxt",
+        "filterType": "str",
+        "dir": "payload",
+        "dirType": "msg",
+        "x": 2180,
+        "y": 360,
+        "wires": [
+            [
+                "dfc751f1cfa33eb0"
+            ]
+        ]
+    },
+    {
+        "id": "dfc751f1cfa33eb0",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "Array filtern",
+        "func": "msg.options = msg.payload.map(e => ({ label: e, value: e }));\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2350,
+        "y": 360,
+        "wires": [
+            [
+                "ee7ff191a9a7f443"
+            ]
+        ]
+    },
+    {
+        "id": "ee7ff191a9a7f443",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 2490,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "0e9745b173232fff",
+        "type": "http in",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "url": "/api/projektanlage/projekte",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 1690,
+        "y": 620,
+        "wires": [
+            [
+                "a3e6e753e7da154a"
+            ]
+        ]
+    },
+    {
+        "id": "8575f3a928ec16d0",
+        "type": "http in",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "url": "/api/projektanlage/launchpt",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 1700,
+        "y": 800,
+        "wires": [
+            [
+                "e935076a3828598c"
+            ]
+        ]
+    },
+    {
+        "id": "e935076a3828598c",
+        "type": "OS",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "x": 1910,
+        "y": 800,
+        "wires": [
+            [
+                "4818429074295ab3"
+            ]
+        ]
+    },
+    {
+        "id": "2d158907a57c26be",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "Befehle je nach OS",
+        "func": "let fullPath = msg.templateDest + '/' + msg.filename;\nif (msg.payload.platform === \"win32\") {\n    fullPath = fullPath.replace(/\\//g, \"\\\\\");\n    msg.command = 'start \"\" \"' + fullPath + '\"';\n} else if (msg.payload.platform === \"darwin\") {\n    msg.command = 'open \"' + fullPath + '\"';\n} else {\n    msg.command = \"echo OS nicht unterstützt\";\n}\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2290,
+        "y": 800,
+        "wires": [
+            [
+                "81ef1eb5a3a09963"
+            ]
+        ]
+    },
+    {
+        "id": "81ef1eb5a3a09963",
+        "type": "exec",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "command": "",
+        "addpay": "command",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "Pro Tools öffnen",
+        "x": 2490,
+        "y": 800,
+        "wires": [
+            [],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "4818429074295ab3",
+        "type": "delay",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 2080,
+        "y": 800,
+        "wires": [
+            [
+                "2d158907a57c26be"
+            ]
+        ]
+    },
+    {
+        "id": "c7fde03f62ea3b70",
+        "type": "http in",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "url": "/api/projektanlage/resolve-existing",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 1720,
+        "y": 760,
+        "wires": [
+            [
+                "05e5fdd94df7b7bd"
+            ]
+        ]
+    },
+    {
+        "id": "05e5fdd94df7b7bd",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "Resolve",
+        "func": "const b = msg.req.body || {};\nconst fehlende = [];\n['kunde', 'datum', 'projektname', 'moid', 'stufe'].forEach(k => { if (!b[k]) fehlende.push(k) });\nif (fehlende.length) { msg.statusCode = 400; msg.payload = { error: 'missing', fields: fehlende }; return msg; }\n\nfunction n(s) { return String(s || '').normalize('NFC') }\n\nconst PathProduktionen = global.get('PathProduktionen') || '';\nconst schema = n(global.get('projektordnerSchema') || '');\nconst root = `${PathProduktionen}/${b.kunde}`;\n\nconst fs = require('fs');\nlet ordnerListe = [];\ntry { ordnerListe = fs.readdirSync(root).filter(nm => !nm.startsWith('.')).map(n) } catch { }\nconst values = { datum: n(b.datum), projektname: n(b.projektname), moid: n(b.moid), kunde: n(b.kunde) };\n\nlet pattern = schema\n    .replace(/{{benutzer}}/g, '.+')\n    .replace(/{{(\\w+)}}/g, (_, k) => values[k] ? values[k].replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&') : '.*');\n\npattern = '^' + pattern.replace(/ /g, '\\\\s+') + '$';\nconst re = new RegExp(pattern);\n\nconst gefunden = ordnerListe.find(name => re.test(name));\nif (!gefunden) { msg.statusCode = 404; msg.payload = { error: 'not_found' }; return msg; }\n\nconst zielPfad = `${root}/${gefunden}`;\nmsg.payload = {\n    ok: true,\n    zielPfad,\n    templateDest: `${zielPfad}/${b.stufe}`\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1980,
+        "y": 760,
+        "wires": [
+            [
+                "633ee666d0372b4a"
+            ]
+        ]
+    },
+    {
+        "id": "633ee666d0372b4a",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 2130,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "a3e6e753e7da154a",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "Pflichtfelder + Vorbereitung",
+        "func": "const b = msg.req.body || {};\nconst fehlende = [];\n['kunde', 'datum', 'moid', 'projektname', 'stufe', 'template'].forEach(k => { if (!b[k]) fehlende.push(k) });\nif (fehlende.length) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'missing fields', fields: fehlende };\n    return [null, msg];\n}\n\n// Globals\nconst PathProduktionen = global.get('PathProduktionen') || '';\nconst PathMitarbeiter = global.get('PathMitarbeiter') || '';\nconst activeUser = global.get('activeUser') || '';\nconst projektordnerSchema = global.get('projektordnerSchema') || '';\nconst kundenStammdaten = global.get('kundenStammdaten') || [];\nmsg.sessionSchema = global.get('sessionSchema') || '{{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}';\n\n// Ordnername aus Schema\nconst values = {\n    datum: b.datum, projektname: b.projektname, moid: b.moid,\n    benutzer: (global.get('activeUserKuerzel') || ''), kunde: b.kunde\n};\nconst projektOrdner = projektordnerSchema.replace(/{{(\\w+)}}/g, (_, k) => values[k] || '');\nconst zielPfad = `${PathProduktionen}/${b.kunde}/${projektOrdner}`;\n\n// Unterordner + StufeLabel\nconst kundeObj = (kundenStammdaten || []).find(k => k.kunde === b.kunde) || {};\nconst unterordner = Array.isArray(kundeObj.ordner) ? kundeObj.ordner : [];\nconst stufeObj = unterordner.find(o => o.name === b.stufe);\nconst stufeLabel = stufeObj ? stufeObj.label : b.stufe;\n\n// Template-Pfade\nmsg.templateSource = `${PathMitarbeiter}/${activeUser}/immo24/templates/${b.template}`;\nmsg.templateDest = `${zielPfad}/${b.stufe}`;\n\n// persist for next nodes\nmsg.data = { ...b, stufeLabel, zielPfad, unterordner };\nmsg.filename = `${zielPfad}/immo24-proj.json`;\nmsg.payload = zielPfad; // for fs-ops-access\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1960,
+        "y": 620,
+        "wires": [
+            [
+                "c78b5a04db212d15"
+            ],
+            [
+                "77ce6b84f5164169"
+            ]
+        ],
+        "outputLabels": [
+            "access",
+            "error"
+        ]
+    },
+    {
+        "id": "c78b5a04db212d15",
+        "type": "fs-ops-access",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "Duplikate prüfen",
+        "path": "",
+        "pathType": "str",
+        "filename": "payload",
+        "filenameType": "msg",
+        "read": true,
+        "write": false,
+        "throwerror": false,
+        "x": 2190,
+        "y": 600,
+        "wires": [
+            [
+                "0abec049230e8050"
+            ],
+            [
+                "7f5814610e2a962c"
+            ]
+        ]
+    },
+    {
+        "id": "0abec049230e8050",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "Dupl. error",
+        "func": "msg.statusCode = 409;\nmsg.payload = { error: \"project exists\", zielPfad: msg.payload };\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2370,
+        "y": 580,
+        "wires": [
+            [
+                "2c4c6dd681a78d6f"
+            ]
+        ]
+    },
+    {
+        "id": "7f5814610e2a962c",
+        "type": "fs-ops-mkdir",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "Projektordner anlegen",
+        "path": "",
+        "pathType": "str",
+        "dirname": "data.zielPfad",
+        "dirnameType": "msg",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 2400,
+        "y": 620,
+        "wires": [
+            [
+                "01126a8ba1003c45"
+            ]
+        ]
+    },
+    {
+        "id": "77ce6b84f5164169",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 2150,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "01126a8ba1003c45",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "JSON formatieren",
+        "func": "const d = msg.data;\nmsg.filename = `${d.zielPfad}/immo24-proj.json`;\nmsg.payload = JSON.stringify({\n    erstellt_am: d.datum,\n    kunde: d.kunde,\n    projektname: d.projektname,\n    mo_id: d.moid,\n    user: global.get('activeUser')\n}, null, 2);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2610,
+        "y": 620,
+        "wires": [
+            [
+                "cbd4b2374e8ece8c"
+            ]
+        ]
+    },
+    {
+        "id": "2c4c6dd681a78d6f",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 2510,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "cbd4b2374e8ece8c",
+        "type": "file",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "immo24-proj.json schreiben",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 1720,
+        "y": 680,
+        "wires": [
+            [
+                "ffb2513c207b93a3"
+            ]
+        ]
+    },
+    {
+        "id": "ffb2513c207b93a3",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "Unterordner anlegen",
+        "func": "const d = msg.data;\nmsg.payload = (d.unterordner || []).map(o => `${d.zielPfad}/${o.name}`);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1960,
+        "y": 680,
+        "wires": [
+            [
+                "127abf21c624e0b9"
+            ]
+        ]
+    },
+    {
+        "id": "127abf21c624e0b9",
+        "type": "split",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "payload",
+        "x": 2130,
+        "y": 680,
+        "wires": [
+            [
+                "ebe504b9e94f9764"
+            ]
+        ]
+    },
+    {
+        "id": "ebe504b9e94f9764",
+        "type": "fs-ops-mkdir",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "Unterordner anlegen",
+        "path": "",
+        "pathType": "str",
+        "dirname": "payload",
+        "dirnameType": "msg",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 2300,
+        "y": 680,
+        "wires": [
+            [
+                "718c3a97b38bac7e"
+            ]
+        ]
+    },
+    {
+        "id": "718c3a97b38bac7e",
+        "type": "join",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "mode": "auto",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "useparts": false,
+        "accumulate": true,
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 2470,
+        "y": 680,
+        "wires": [
+            [
+                "877d8704d63b6ee6"
+            ]
+        ]
+    },
+    {
+        "id": "877d8704d63b6ee6",
+        "type": "fs-ops-dir",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "Session-Files auflisten",
+        "path": "templateDest",
+        "pathType": "msg",
+        "filter": "*.ptx",
+        "filterType": "str",
+        "dir": "payload",
+        "dirType": "msg",
+        "x": 2640,
+        "y": 680,
+        "wires": [
+            [
+                "c6dc78cceccb9c8a"
+            ]
+        ]
+    },
+    {
+        "id": "c6dc78cceccb9c8a",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "Nummerierung",
+        "func": "function normalize(s) { return (s || '').normalize('NFC') }\nconst files = (msg.payload || []).map(normalize);\nconst d = msg.data;\nconst values = {\n    datum: normalize(d.datum),\n    projektname: normalize(d.projektname),\n    moid: normalize(d.moid),\n    benutzer: normalize(global.get('activeUserKuerzel') || ''),\n    kunde: normalize(d.kunde),\n    produktionsstufe: normalize(d.stufeLabel)\n};\nlet base = normalize(msg.sessionSchema || '{{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}');\n\n// Regex für alles außer {{version}}\nlet rePattern = base\n    .replace(/\\./g, '\\\\.') // Punkte escapen\n    .replace(/{{version}}/g, \"v(\\\\d+)\")\n    .replace(/{{(\\w+)}}/g, (_, k) => {\n        if (k === 'version') return '';\n        const val = values[k];\n        return val ? val.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&') : '.*';\n    });\n\nconst re = new RegExp('^' + rePattern + '\\\\.ptx$');\nlet maxV = 0;\nfiles.forEach(f => { const m = re.exec(f); if (m && m[1]) { const v = parseInt(m[1], 10); if (v > maxV) maxV = v; } });\nconst nextV = maxV + 1;\n\nvalues.version = `v${nextV}`;\nlet filename = base.replace(/{{(\\w+)}}/g, (_, k) => values[k] || '');\nfilename = filename.replace(/\\.[^.]+$/, '') + '.ptx';\n\nmsg.filename = filename;                // nur Name\nmsg.destFull = `${msg.templateDest}/${filename}`; // voller Zielpfad\nmsg.sourcePath = msg.templateSource;    // Quelle\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1680,
+        "y": 720,
+        "wires": [
+            [
+                "27d38792047a9532"
+            ]
+        ]
+    },
+    {
+        "id": "27d38792047a9532",
+        "type": "fs-ops-copy",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "sourcePath": "",
+        "sourcePathType": "str",
+        "sourceFilename": "sourcePath",
+        "sourceFilenameType": "msg",
+        "destPath": "templateDest",
+        "destPathType": "msg",
+        "destFilename": "filename",
+        "destFilenameType": "msg",
+        "link": false,
+        "overwrite": false,
+        "x": 1840,
+        "y": 720,
+        "wires": [
+            [
+                "d8da94aa8852d67d"
+            ]
+        ]
+    },
+    {
+        "id": "d8da94aa8852d67d",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "okOut",
+        "func": "msg.payload = {\n    ok: true,\n    zielPfad: msg.data.zielPfad,\n    templateDest: msg.templateDest,\n    filename: msg.filename\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1970,
+        "y": 720,
+        "wires": [
+            [
+                "9cc61715182b07a8"
+            ]
+        ]
+    },
+    {
+        "id": "9cc61715182b07a8",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 2090,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "4279662d8d88bdf0",
+        "type": "http in",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "url": "/api/projektanlage/projekte",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 1690,
+        "y": 460,
+        "wires": [
+            [
+                "2c4f70f4a6289187"
+            ]
+        ]
+    },
+    {
+        "id": "2c4f70f4a6289187",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "root",
+        "func": "const kunde = (msg.req.query.kunde || '').trim();\nif (!kunde) { msg.statusCode = 400; msg.payload = { error: \"kunde required\" }; return [null, msg]; }\nconst base = global.get('PathProduktionen') || '';\nmsg.root = `${base}/${kunde}`;\nmsg.payload = msg.root;\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1830,
+        "y": 500,
+        "wires": [
+            [
+                "a67516d0726c79a5"
+            ],
+            [
+                "51698881574feb7a"
+            ]
+        ],
+        "outputLabels": [
+            "ok",
+            "error"
+        ]
+    },
+    {
+        "id": "61b1608e270cc12d",
+        "type": "split",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "payload",
+        "x": 2110,
+        "y": 480,
+        "wires": [
+            [
+                "abd1cf7e4f067631"
+            ]
+        ]
+    },
+    {
+        "id": "abd1cf7e4f067631",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "enrichPath",
+        "func": "msg.projektRoot = msg.root;\nmsg.payload = { name: msg.payload, path: `${msg.root}/${msg.payload}` };\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2250,
+        "y": 480,
+        "wires": [
+            [
+                "64decafa7632304f"
+            ]
+        ]
+    },
+    {
+        "id": "605e9a8d2d3c6c8c",
+        "type": "fs-ops-access",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "path": "",
+        "pathType": "str",
+        "filename": "filename",
+        "filenameType": "msg",
+        "read": true,
+        "write": false,
+        "throwerror": false,
+        "x": 2770,
+        "y": 520,
+        "wires": [
+            [
+                "dd57165581257aeb"
+            ],
+            [
+                "fbb6ec95041698fe"
+            ]
+        ]
+    },
+    {
+        "id": "dd57165581257aeb",
+        "type": "file in",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 2900,
+        "y": 460,
+        "wires": [
+            [
+                "a5a3951e8f2823f8"
+            ]
+        ]
+    },
+    {
+        "id": "a5a3951e8f2823f8",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "parseRow",
+        "func": "try {\n    const data = JSON.parse(msg.payload);\n    msg.payload = {\n        date: data.erstellt_am,\n        projektname: data.projektname,\n        moid: data.mo_id,\n        user: data.user\n    };\n    return msg;\n} catch (e) { return null; }",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 3050,
+        "y": 460,
+        "wires": [
+            [
+                "fbb6ec95041698fe"
+            ]
+        ]
+    },
+    {
+        "id": "fbb6ec95041698fe",
+        "type": "join",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "mode": "auto",
+        "build": "array",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "useparts": false,
+        "accumulate": false,
+        "timeout": "0.25",
+        "count": "",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 3190,
+        "y": 460,
+        "wires": [
+            [
+                "933f0fe5e7e09279"
+            ]
+        ]
+    },
+    {
+        "id": "933f0fe5e7e09279",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "filterValid",
+        "func": "let arr = Array.isArray(msg.payload) ? msg.payload : [];\narr = arr.filter(x => x && !x.skip && x.date && x.projektname && x.moid && x.user);\nmsg.payload = arr;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 3320,
+        "y": 460,
+        "wires": [
+            [
+                "e8736d157d609b90"
+            ]
+        ]
+    },
+    {
+        "id": "e8736d157d609b90",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 3450,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "9f3e8a3cee4b82c9",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "func": "let arr = [];\ntry { arr = JSON.parse(msg.payload) } catch { arr = [] }\nconst out = arr.map(k => ({\n    label: k.kunde,\n    value: k.kunde,\n    stufen: (k.ordner || [])\n        .filter(o => o.ist_Produktionsstufe)\n        .map(o => ({ label: o.label, value: o.name }))\n}));\nmsg.payload = out;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2480,
+        "y": 400,
+        "wires": [
+            [
+                "57201dbb7508a62a"
+            ]
+        ]
+    },
+    {
+        "id": "0c6c16a88bc1c68d",
+        "type": "http in",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "url": "/api/projektanlage/kunden",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 1690,
+        "y": 400,
+        "wires": [
+            [
+                "f22b8ed470951aea"
+            ]
+        ]
+    },
+    {
+        "id": "f22b8ed470951aea",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "Stammdaten-Pfad setzen",
+        "func": "msg.filename = global.get('PathStammdaten') + '/kunden_stammdaten.json';\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1970,
+        "y": 400,
+        "wires": [
+            [
+                "7cc39adde9111007"
+            ]
+        ]
+    },
+    {
+        "id": "7cc39adde9111007",
+        "type": "file in",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 2180,
+        "y": 400,
+        "wires": [
+            [
+                "9f3e8a3cee4b82c9"
+            ]
+        ]
+    },
+    {
+        "id": "57201dbb7508a62a",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 2630,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "51698881574feb7a",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1970,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "a67516d0726c79a5",
+        "type": "fs-ops-dir",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "path": "payload",
+        "pathType": "msg",
+        "filter": "*",
+        "filterType": "str",
+        "dir": "payload",
+        "dirType": "msg",
+        "x": 1980,
+        "y": 480,
+        "wires": [
+            [
+                "61b1608e270cc12d"
+            ]
+        ]
+    },
+    {
+        "id": "3614c2f7d73121a1",
+        "type": "inject",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1650,
+        "y": 520,
+        "wires": [
+            [
+                "2c4f70f4a6289187"
+            ]
+        ]
+    },
+    {
+        "id": "ec624be2856aa377",
+        "type": "debug",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "debug 17",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2400,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "c0863219dbe21040",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "nach Ordnern filtern",
+        "func": "// Hier brauchst du kein require!\n// Du bekommst von fs-ops-stats das Ergebnis in msg.stats\nif (msg.stats && msg.stats.isDirectory()) {\n    // wenn Ordner → Datei immo24-proj.json prüfen\n    msg.filename = msg.payload.path + \"/immo24-proj.json\";\n    return msg;\n}\n// Kein Ordner → trotzdem weiterreichen, damit join alle parts bekommt\nmsg.payload = { skip: true };\nreturn msg;",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2580,
+        "y": 480,
+        "wires": [
+            [
+                "605e9a8d2d3c6c8c"
+            ],
+            []
+        ],
+        "outputLabels": [
+            "Ordner",
+            "Skip"
+        ]
+    },
+    {
+        "id": "64decafa7632304f",
+        "type": "fs-ops-stats",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "path": "",
+        "pathType": "str",
+        "filename": "payload.path",
+        "filenameType": "msg",
+        "stats": "stats",
+        "sizeType": "msg",
+        "x": 2400,
+        "y": 480,
+        "wires": [
+            [
+                "ec624be2856aa377",
+                "c0863219dbe21040"
+            ]
+        ]
     },
     {
         "id": "pt_status_in",

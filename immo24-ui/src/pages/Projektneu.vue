@@ -45,7 +45,9 @@
               <v-col cols="12">
                 <v-text-field
                   v-model="form.moid"
-                  label="Mo-ID" :disabled="isVorhanden"
+                  label="Mo-ID" 
+                  :disabled ="isVorhanden"
+                  maxlength="4"
                   prepend-inner-icon="mdi-identifier"
                   variant="outlined" density="comfortable"
                 />
@@ -103,15 +105,18 @@
       </v-col>
 
       <!-- Card 3: Tabelle (rechts) -->
-      <v-col cols="12" md="6">
+      <v-col cols="12" md="6" v-if="isVorhanden">
         <v-card class="card h-100" elevation="2">
           <v-card-text>
-            <v-text-field
-              v-model="search"
-              placeholder="Search"
-              prepend-inner-icon="mdi-magnify"
-              variant="outlined" density="comfortable" class="mb-3"
-            />
+            <div class="d-flex align-center justify-space-between mb-3">
+              <v-text-field
+                v-model="search"
+                placeholder="Search"
+                prepend-inner-icon="mdi-magnify"
+                variant="outlined" density="comfortable" style="max-width: 320px;"
+              />
+              <v-btn icon="mdi-refresh" @click="refreshRows" :loading="loading.rows" variant="text" aria-label="Tabelle aktualisieren" />
+            </div>
             <v-data-table
               :items="filteredRows"
               :headers="headers"
@@ -119,7 +124,21 @@
               density="comfortable"
               hide-default-footer
               class="rounded-lg"
+              item-key="moid"
             >
+              <template #item="{ item }">
+                <tr
+                  class="v-data-table__tr v-data-table__tr--hover"
+                  :class="{ 'selected-row': selectedRow === item.moid }"
+                  @click="onRowClick(item)"
+                  style="cursor:pointer"
+                >
+                  <td>{{ item.date }}</td>
+                  <td>{{ item.projektname }}</td>
+                  <td>{{ item.moid }}</td>
+                  <td>{{ item.user }}</td>
+                </tr>
+              </template>
               <template #no-data>
                 <div class="text-body-2 text-medium-emphasis py-8">No data available</div>
               </template>
@@ -132,6 +151,19 @@
     <v-snackbar v-model="snack.show" :color="snack.color" timeout="3500">
       {{ snack.text }}
     </v-snackbar>
+
+    <v-dialog v-model="openDialog" max-width="400">
+      <v-card>
+        <v-card-title class="text-h6">Projekt öffnen?</v-card-title>
+        <v-card-text>
+          <div>Möchtest du das neue Projekt jetzt öffnen?</div>
+        </v-card-text>
+        <v-card-actions class="justify-end">
+          <v-btn variant="text" @click="openDialog = false">Schließen</v-btn>
+          <v-btn color="primary" @click="launchProject">Öffnen</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -177,15 +209,61 @@ function toast(msg, color='primary'){ Object.assign(snack, {show:true, text:msg,
 // Events
 function onKundeChange(k){ store.selectKunde(k) }
 async function onCreateClick(){
-  try {
-    await store.createOrResolve()
-    toast('Fertig.', 'success')
-  } catch(e) {
-    toast(e.message || String(e), 'error')
-  }
+    try {
+      const res = await store.createOrResolve()
+      toast('Fertig.', 'success')
+      // Prüfe, ob ein neues Projekt angelegt wurde und Daten zum Öffnen vorhanden sind
+      if (res?.templateDest && res?.filename) {
+        lastCreatedProject.value = { fullPath: `${res.templateDest}/${res.filename}` }
+        openDialog.value = true
+      }
+    } catch(e) {
+      toast(e.message || String(e), 'error')
+    }
 }
+async function launchProject() {
+    openDialog.value = false
+    try {
+      await fetch(`${API}/projektanlage/launchpt`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ fullPath: lastCreatedProject.value.fullPath })
+      })
+    } catch(e) {
+      toast('Projekt konnte nicht geöffnet werden.', 'error')
+    }
+  }
+
+
+
 function resetForm(){ store.resetForm() }
+const selectedRow = ref(null)
+
+function onRowClick(row) {
+  selectedRow.value = row.moid // oder ein anderes eindeutiges Feld
+  form.value.datum = row.date
+  form.value.projektname = row.projektname
+  form.value.moid = row.moid
+  // ggf. weitere Felder ergänzen
+}
+function refreshRows() {
+  store.selectKunde(form.value.kunde)
+}
 
 // Init
 onMounted(() => store.init())
+
+const openDialog = ref(false)
+const lastCreatedProject = ref(null)
 </script>
+
+<style scoped>
+.v-data-table__tr--hover:hover {
+  background: #e3f2fd !important;
+  transition: background 0.15s;
+}
+
+.selected-row {
+  background: #bbdefb !important;
+}
+</style>

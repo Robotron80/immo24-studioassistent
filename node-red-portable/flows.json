@@ -170,12 +170,13 @@
             "f22b8ed470951aea",
             "7cc39adde9111007",
             "57201dbb7508a62a",
-            "51698881574feb7a",
             "a67516d0726c79a5",
-            "3614c2f7d73121a1",
-            "ec624be2856aa377",
             "c0863219dbe21040",
-            "64decafa7632304f"
+            "64decafa7632304f",
+            "cebcd4845d9d6748",
+            "7a7d5e17a1be6a03",
+            "a4a7ae5f35e05547",
+            "376377fa89cdbcbb"
         ],
         "x": 118,
         "y": 73,
@@ -3285,7 +3286,6 @@
         "name": "START",
         "mode": "link",
         "links": [
-            "19241936d8672013",
             "1a15ac24124bdf48",
             "9994f906d9c27dc4",
             "c327d6b8c52ff001",
@@ -4865,11 +4865,12 @@
                 "tot": "msg"
             }
         ],
-        "x": 3020,
+        "x": 2900,
         "y": 1220,
         "wires": [
             [
-                "2b57da8d419bc3d5"
+                "fcd7dba42c404850",
+                "8390ee9561338474"
             ]
         ]
     },
@@ -4880,7 +4881,7 @@
         "name": "200 OK",
         "statusCode": "200",
         "headers": {},
-        "x": 3240,
+        "x": 3700,
         "y": 1220,
         "wires": []
     },
@@ -4894,7 +4895,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 2520,
-        "y": 1280,
+        "y": 1320,
         "wires": [
             [
                 "89f32ddc71725f1e"
@@ -4916,7 +4917,7 @@
             }
         ],
         "x": 2810,
-        "y": 1280,
+        "y": 1320,
         "wires": [
             [
                 "cd81f2a98454698b"
@@ -4931,7 +4932,7 @@
         "statusCode": "200",
         "headers": {},
         "x": 3020,
-        "y": 1280,
+        "y": 1320,
         "wires": []
     },
     {
@@ -5778,6 +5779,83 @@
         "x": 4080,
         "y": 1240,
         "wires": []
+    },
+    {
+        "id": "fcd7dba42c404850",
+        "type": "debug",
+        "z": "dc0d981398a42d88",
+        "name": "debug 17",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2680,
+        "y": 1260,
+        "wires": []
+    },
+    {
+        "id": "8390ee9561338474",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "Kürzel-Pfad festlegen",
+        "func": "let activeUser = msg.payload.user;\nlet PathMitarbeiter = global.get('PathMitarbeiter') || '';\nmsg.PathKuerzel = `${PathMitarbeiter}/${activeUser}/immo24/immo24-user.json`;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 3180,
+        "y": 1280,
+        "wires": [
+            [
+                "43a6b27bbab6ec19"
+            ]
+        ]
+    },
+    {
+        "id": "43a6b27bbab6ec19",
+        "type": "file in",
+        "z": "dc0d981398a42d88",
+        "name": "immo24-user.json lesen",
+        "filename": "PathKuerzel",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 3410,
+        "y": 1280,
+        "wires": [
+            [
+                "9c3289d28ae4abde"
+            ]
+        ]
+    },
+    {
+        "id": "9c3289d28ae4abde",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "setze global.activeUserKuerzel",
+        "func": "global.set('activeUserKuerzel', msg.payload.trim());\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 3670,
+        "y": 1280,
+        "wires": [
+            [
+                "2b57da8d419bc3d5"
+            ]
+        ]
     },
     {
         "id": "886fa3dff40f66c4",
@@ -9622,7 +9700,8 @@
         "y": 800,
         "wires": [
             [
-                "e935076a3828598c"
+                "e935076a3828598c",
+                "376377fa89cdbcbb"
             ]
         ]
     },
@@ -9765,7 +9844,7 @@
         "z": "b1c585f0d25b86fd",
         "g": "c0de7eb24d59090d",
         "name": "Pflichtfelder + Vorbereitung",
-        "func": "const b = msg.req.body || {};\nconst fehlende = [];\n['kunde', 'datum', 'moid', 'projektname', 'stufe', 'template'].forEach(k => { if (!b[k]) fehlende.push(k) });\nif (fehlende.length) {\n    msg.statusCode = 400;\n    msg.payload = { error: 'missing fields', fields: fehlende };\n    return [null, msg];\n}\n\n// Globals\nconst PathProduktionen = global.get('PathProduktionen') || '';\nconst PathMitarbeiter = global.get('PathMitarbeiter') || '';\nconst activeUser = global.get('activeUser') || '';\nconst projektordnerSchema = global.get('projektordnerSchema') || '';\nconst kundenStammdaten = global.get('kundenStammdaten') || [];\nmsg.sessionSchema = global.get('sessionSchema') || '{{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}';\n\n// Ordnername aus Schema\nconst values = {\n    datum: b.datum, projektname: b.projektname, moid: b.moid,\n    benutzer: (global.get('activeUserKuerzel') || ''), kunde: b.kunde\n};\nconst projektOrdner = projektordnerSchema.replace(/{{(\\w+)}}/g, (_, k) => values[k] || '');\nconst zielPfad = `${PathProduktionen}/${b.kunde}/${projektOrdner}`;\n\n// Unterordner + StufeLabel\nconst kundeObj = (kundenStammdaten || []).find(k => k.kunde === b.kunde) || {};\nconst unterordner = Array.isArray(kundeObj.ordner) ? kundeObj.ordner : [];\nconst stufeObj = unterordner.find(o => o.name === b.stufe);\nconst stufeLabel = stufeObj ? stufeObj.label : b.stufe;\n\n// Template-Pfade\nmsg.templateSource = `${PathMitarbeiter}/${activeUser}/immo24/templates/${b.template}`;\nmsg.templateDest = `${zielPfad}/${b.stufe}`;\n\n// persist for next nodes\nmsg.data = { ...b, stufeLabel, zielPfad, unterordner };\nmsg.filename = `${zielPfad}/immo24-proj.json`;\nmsg.payload = zielPfad; // for fs-ops-access\nreturn [msg, null];",
+        "func": "// Body sicher holen: bevorzugt msg.payload, Fallback req.body\nconst b = (msg.payload && typeof msg.payload === \"object\")\n    ? msg.payload\n    : (msg.req && msg.req.body) || {};\n\nconst fehlende = [];\n[\"kunde\", \"datum\", \"moid\", \"projektname\", \"stufe\", \"template\"].forEach(k => { if (!b[k]) fehlende.push(k); });\nif (fehlende.length) {\n    msg.statusCode = 400;\n    msg.payload = { error: \"missing fields\", fields: fehlende };\n    return [null, msg];\n}\n\n// Globals\nconst PathProduktionen = global.get(\"PathProduktionen\") || \"\";\nconst PathMitarbeiter = global.get(\"PathMitarbeiter\") || \"\";\nconst activeUser = global.get(\"activeUser\") || \"\";\nconst projektordnerSchema = global.get(\"projektordnerSchema\") || \"\";\nconst kundenStammdaten = global.get(\"kundenStammdaten\") || [];\nmsg.sessionSchema = global.get(\"sessionSchema\") || \"{{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}\";\n\n// Ordnername aus Schema\nconst values = {\n    datum: b.datum, projektname: b.projektname, moid: b.moid,\n    benutzer: (global.get(\"activeUserKuerzel\") || \"\"), kunde: b.kunde\n};\nconst projektOrdner = projektordnerSchema.replace(/{{(\\w+)}}/g, (_, k) => values[k] || \"\");\nconst zielPfad = `${PathProduktionen}/${b.kunde}/${projektOrdner}`;\n\n// Unterordner & Label\nconst kundeObj = (kundenStammdaten || []).find(k => k.kunde === b.kunde) || {};\nconst unterordner = Array.isArray(kundeObj.ordner) ? kundeObj.ordner : [];\nconst stufeObj = unterordner.find(o => o.name === b.stufe);\nconst stufeLabel = stufeObj ? stufeObj.label : b.stufe;\n\n// Template-Pfade\nmsg.templateSource = `${PathMitarbeiter}/${activeUser}/immo24/templates/${b.template}`;\nmsg.templateDest = `${zielPfad}/${b.stufe}`;\n\n// persist\nmsg.data = { ...b, stufeLabel, zielPfad, unterordner };\nmsg.filename = `${zielPfad}/immo24-proj.json`;\nmsg.payload = zielPfad; // für fs-ops-access\nreturn [msg, null];\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -9910,7 +9989,7 @@
         "appendNewline": true,
         "createDir": false,
         "overwriteFile": "true",
-        "encoding": "none",
+        "encoding": "utf8",
         "x": 1720,
         "y": 680,
         "wires": [
@@ -10095,7 +10174,8 @@
         "y": 720,
         "wires": [
             [
-                "9cc61715182b07a8"
+                "9cc61715182b07a8",
+                "a4a7ae5f35e05547"
             ]
         ]
     },
@@ -10122,7 +10202,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 1690,
-        "y": 460,
+        "y": 440,
         "wires": [
             [
                 "2c4f70f4a6289187"
@@ -10135,21 +10215,21 @@
         "z": "b1c585f0d25b86fd",
         "g": "c0de7eb24d59090d",
         "name": "root",
-        "func": "const kunde = (msg.req.query.kunde || '').trim();\nif (!kunde) { msg.statusCode = 400; msg.payload = { error: \"kunde required\" }; return [null, msg]; }\nconst base = global.get('PathProduktionen') || '';\nmsg.root = `${base}/${kunde}`;\nmsg.payload = msg.root;\nreturn [msg, null];",
+        "func": "// Nur echte HTTP-Requests verarbeiten\nif (!msg.req || !msg.res) {\n    // z.B. Messages vom Inject-Node -> ignorieren\n    return null;\n}\n\nconst kunde = (msg.req.query?.kunde || '').trim();\nif (!kunde) {\n    msg.statusCode = 400;\n    msg.payload = { error: \"kunde required\" };\n    return [null, msg]; // → HTTP Response (Fehler)\n}\n\n// Pfad bauen\nconst base = global.get('PathProduktionen') || '';\nmsg.root = `${base}/${kunde}`;\nmsg.payload = msg.root;\n\n// Vorsorglich CORS/Cache-Header setzen (optional, hilft gegen Zwischen-Caches)\nmsg.headers = {\n    'Cache-Control': 'no-store',\n    'Content-Type': 'application/json; charset=utf-8'\n};\n\nreturn [msg, null]; // → weiter\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1830,
-        "y": 500,
+        "x": 1870,
+        "y": 520,
         "wires": [
             [
                 "a67516d0726c79a5"
             ],
             [
-                "51698881574feb7a"
+                "e8736d157d609b90"
             ]
         ],
         "outputLabels": [
@@ -10170,8 +10250,8 @@
         "stream": false,
         "addname": "",
         "property": "payload",
-        "x": 2110,
-        "y": 480,
+        "x": 2190,
+        "y": 460,
         "wires": [
             [
                 "abd1cf7e4f067631"
@@ -10191,8 +10271,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2250,
-        "y": 480,
+        "x": 2330,
+        "y": 460,
         "wires": [
             [
                 "64decafa7632304f"
@@ -10212,13 +10292,15 @@
         "read": true,
         "write": false,
         "throwerror": false,
-        "x": 2770,
-        "y": 520,
+        "x": 2750,
+        "y": 540,
         "wires": [
             [
                 "dd57165581257aeb"
             ],
-            []
+            [
+                "7a7d5e17a1be6a03"
+            ]
         ]
     },
     {
@@ -10235,7 +10317,7 @@
         "encoding": "none",
         "allProps": false,
         "x": 2900,
-        "y": 460,
+        "y": 440,
         "wires": [
             [
                 "a5a3951e8f2823f8"
@@ -10248,7 +10330,7 @@
         "z": "b1c585f0d25b86fd",
         "g": "c0de7eb24d59090d",
         "name": "parseRow",
-        "func": "try {\n    const data = JSON.parse(msg.payload);\n    msg.payload = {\n        date: data.erstellt_am,\n        projektname: data.projektname,\n        moid: data.mo_id,\n        user: data.user\n    };\n    return msg;\n} catch (e) { return null; }",
+        "func": "try {\n    const data = JSON.parse(msg.payload);\n    msg.payload = {\n        date: data.erstellt_am,\n        projektname: data.projektname,\n        moid: data.mo_id,\n        user: data.user\n    };\n    return msg;\n} catch (e) {\n    // Dummy durchreichen, msg-Objekt beibehalten (req/res/parts bleiben erhalten)\n    msg.payload = { skip: true };\n    return msg;\n}\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -10256,7 +10338,7 @@
         "finalize": "",
         "libs": [],
         "x": 3050,
-        "y": 460,
+        "y": 440,
         "wires": [
             [
                 "fbb6ec95041698fe"
@@ -10278,15 +10360,15 @@
         "joinerType": "str",
         "useparts": false,
         "accumulate": false,
-        "timeout": "0.25",
+        "timeout": "",
         "count": "",
         "reduceRight": false,
         "reduceExp": "",
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 3190,
-        "y": 460,
+        "x": 3310,
+        "y": 320,
         "wires": [
             [
                 "933f0fe5e7e09279"
@@ -10307,7 +10389,7 @@
         "finalize": "",
         "libs": [],
         "x": 3320,
-        "y": 460,
+        "y": 440,
         "wires": [
             [
                 "e8736d157d609b90"
@@ -10323,7 +10405,7 @@
         "statusCode": "",
         "headers": {},
         "x": 3450,
-        "y": 460,
+        "y": 440,
         "wires": []
     },
     {
@@ -10332,7 +10414,7 @@
         "z": "b1c585f0d25b86fd",
         "g": "c0de7eb24d59090d",
         "name": "",
-        "func": "let arr = [];\ntry { arr = JSON.parse(msg.payload) } catch { arr = [] }\nconst out = arr.map(k => ({\n    label: k.kunde,\n    value: k.kunde,\n    stufen: (k.ordner || [])\n        .filter(o => o.ist_Produktionsstufe)\n        .map(o => ({ label: o.label, value: o.name }))\n}));\nmsg.payload = out;\nreturn msg;",
+        "func": "let arr = [];\ntry { arr = JSON.parse(msg.payload) } catch { arr = [] }\n\nglobal.set(\"kundenStammdaten\", arr);\nconst out = arr.map(k => ({\n    label: k.kunde,\n    value: k.kunde,\n    stufen: (k.ordner || [])\n        .filter(o => o.ist_Produktionsstufe)\n        .map(o => ({ label: o.label, value: o.name }))\n}));\nmsg.payload = out;\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -10420,18 +10502,6 @@
         "wires": []
     },
     {
-        "id": "51698881574feb7a",
-        "type": "http response",
-        "z": "b1c585f0d25b86fd",
-        "g": "c0de7eb24d59090d",
-        "name": "",
-        "statusCode": "",
-        "headers": {},
-        "x": 1970,
-        "y": 520,
-        "wires": []
-    },
-    {
         "id": "a67516d0726c79a5",
         "type": "fs-ops-dir",
         "z": "b1c585f0d25b86fd",
@@ -10444,60 +10514,12 @@
         "dir": "payload",
         "dirType": "msg",
         "x": 1980,
-        "y": 480,
+        "y": 460,
         "wires": [
             [
-                "61b1608e270cc12d"
+                "cebcd4845d9d6748"
             ]
         ]
-    },
-    {
-        "id": "3614c2f7d73121a1",
-        "type": "inject",
-        "z": "b1c585f0d25b86fd",
-        "g": "c0de7eb24d59090d",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 1650,
-        "y": 520,
-        "wires": [
-            [
-                "2c4f70f4a6289187"
-            ]
-        ]
-    },
-    {
-        "id": "ec624be2856aa377",
-        "type": "debug",
-        "z": "b1c585f0d25b86fd",
-        "g": "c0de7eb24d59090d",
-        "name": "debug 17",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 2400,
-        "y": 540,
-        "wires": []
     },
     {
         "id": "c0863219dbe21040",
@@ -10505,15 +10527,15 @@
         "z": "b1c585f0d25b86fd",
         "g": "c0de7eb24d59090d",
         "name": "nach Ordnern filtern",
-        "func": "// Hier brauchst du kein require!\n// Du bekommst von fs-ops-stats das Ergebnis in msg.stats\nif (msg.stats && msg.stats.isDirectory()) {\n    // wenn Ordner → Datei immo24-proj.json prüfen\n    msg.filename = msg.payload.path + \"/immo24-proj.json\";\n    return msg;\n}\n// Kein Ordner → trotzdem weiterreichen, damit join alle parts bekommt\nmsg.payload = { skip: true };\nreturn msg;",
+        "func": "if (msg.stats && msg.stats.isDirectory()) {\n    msg.filename = msg.payload.path + \"/immo24-proj.json\";\n    return [msg, null];              // Ordner → weiter\n}\n\n// Kein Ordner → Dummy, aber req/res/parts erhalten!\nconst dummy = { ...msg, payload: { skip: true } };\nreturn [null, dummy];              // direkt zum join\n",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2580,
-        "y": 480,
+        "x": 2660,
+        "y": 460,
         "wires": [
             [
                 "605e9a8d2d3c6c8c"
@@ -10539,14 +10561,98 @@
         "filenameType": "msg",
         "stats": "stats",
         "sizeType": "msg",
-        "x": 2400,
-        "y": 480,
+        "x": 2480,
+        "y": 460,
         "wires": [
             [
-                "ec624be2856aa377",
                 "c0863219dbe21040"
             ]
         ]
+    },
+    {
+        "id": "cebcd4845d9d6748",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "Leerer Ordner Check",
+        "func": "// msg.payload ist das Array aus fs-ops-dir\nconst arr = Array.isArray(msg.payload) ? msg.payload : [];\nif (arr.length === 0) {\n    // gleiche msg behalten → req/res bleibt erhalten\n    msg.statusCode = 200;\n    msg.payload = [];\n    return [null, msg];     // Out2 → http response\n}\nreturn [msg, null];       // Out1 → split\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2160,
+        "y": 500,
+        "wires": [
+            [
+                "61b1608e270cc12d"
+            ],
+            [
+                "e8736d157d609b90"
+            ]
+        ],
+        "outputLabels": [
+            "nein",
+            "leer"
+        ]
+    },
+    {
+        "id": "7a7d5e17a1be6a03",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "keine immo24-proj.json",
+        "func": "// Datei existiert NICHT -> Dummy an Join, aber msg beibehalten!\nconst dummy = { ...msg, payload: { skip: true } };\nreturn dummy;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 3030,
+        "y": 520,
+        "wires": [
+            [
+                "fbb6ec95041698fe"
+            ]
+        ]
+    },
+    {
+        "id": "a4a7ae5f35e05547",
+        "type": "debug",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "TEST",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2380,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "376377fa89cdbcbb",
+        "type": "debug",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "TEST 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2450,
+        "y": 900,
+        "wires": []
     },
     {
         "id": "pt_status_in",

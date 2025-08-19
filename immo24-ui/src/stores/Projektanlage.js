@@ -93,27 +93,20 @@ export const useProjektanlage = defineStore('Projektanlage', {
       this.loading.create = true
       try {
         if (this.form.vorhanden === 'neu') {
-          const res = await getJSON(`${API}/projects`, {
+          const res = await getJSON(`${API}/projektanlage/projekte`, {
             method: 'POST',
             headers: { 'Content-Type':'application/json' },
             body: JSON.stringify(this.form),
           })
-          if (res?.templateDest && res?.filename) {
-            try {
-              await getJSON(`${API}/os/open`, {
-                method:'POST',
-                headers:{'Content-Type':'application/json'},
-                body: JSON.stringify({ fullPath: `${res.templateDest}/${res.filename}` })
-              })
-            } catch {}
-          }
+          return res // Gib die Daten zurück!
         } else {
-          const resolved = await getJSON(`${API}/projects/resolve-existing`, {
+          const resolved = await getJSON(`${API}/projektanlage/resolve-existing`, {
             method: 'POST',
             headers: { 'Content-Type':'application/json' },
             body: JSON.stringify(this.form),
           })
           if (!resolved?.templateDest) throw new Error('Kein passender Projektordner gefunden!')
+          return resolved
         }
         await this.loadRows(this.form.kunde)
       } finally {
@@ -128,4 +121,7 @@ export const useProjektanlage = defineStore('Projektanlage', {
       this.stufen = []
     },
   },
+
 })
+
+

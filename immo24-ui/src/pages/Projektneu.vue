@@ -108,12 +108,16 @@
       <v-col cols="12" md="6" v-if="isVorhanden">
         <v-card class="card h-100" elevation="2">
           <v-card-text>
-            <div class="d-flex align-center justify-space-between mb-3">
+            <!-- Suchleiste volle Breite, kompakt -->
+            <div class="d-flex align-center mb-3" style="gap: 8px;">
               <v-text-field
                 v-model="search"
                 placeholder="Search"
                 prepend-inner-icon="mdi-magnify"
-                variant="outlined" density="comfortable" style="max-width: 320px;"
+                variant="outlined"
+                density="compact"
+                class="flex-grow-1"
+                style="min-width:0;"
               />
               <v-btn icon="mdi-refresh" @click="refreshRows" :loading="loading.rows" variant="text" aria-label="Tabelle aktualisieren" />
             </div>
@@ -122,9 +126,10 @@
               :headers="headers"
               :loading="loading.rows"
               density="comfortable"
-              hide-default-footer
               class="rounded-lg"
               item-key="moid"
+              :items-per-page="5"
+              show-current-page
             >
               <template #item="{ item }">
                 <tr
@@ -156,7 +161,7 @@
       <v-card>
         <v-card-title class="text-h6">Projekt öffnen?</v-card-title>
         <v-card-text>
-          <div>Möchtest du das neue Projekt jetzt öffnen?</div>
+          <div v-if="lastCreatedProject?.fullPath"> {{ lastCreatedProject.fullPath.split('/').pop() }}</div>
         </v-card-text>
         <v-card-actions class="justify-end">
           <v-btn variant="text" @click="openDialog = false">Schließen</v-btn>
@@ -172,6 +177,7 @@
 import { computed, ref, onMounted, reactive } from 'vue'
 import { useProjektanlage } from '@/stores/Projektanlage'
 
+const API = import.meta.env.VITE_API_BASE || '/api'
 const store = useProjektanlage()
 
 // Bindings
@@ -207,32 +213,38 @@ const snack = reactive({ show:false, text:'', color:'primary' })
 function toast(msg, color='primary'){ Object.assign(snack, {show:true, text:msg, color}) }
 
 // Events
-function onKundeChange(k){ store.selectKunde(k) }
+function onKundeChange(k) {
+  store.selectKunde(k)
+  form.value.stufe = '' // Feld immer leeren!
+}
 async function onCreateClick(){
-    try {
-      const res = await store.createOrResolve()
-      toast('Fertig.', 'success')
-      // Prüfe, ob ein neues Projekt angelegt wurde und Daten zum Öffnen vorhanden sind
-      if (res?.templateDest && res?.filename) {
-        lastCreatedProject.value = { fullPath: `${res.templateDest}/${res.filename}` }
-        openDialog.value = true
-      }
-    } catch(e) {
-      toast(e.message || String(e), 'error')
+  try {
+    const res = await store.createOrResolve()
+    toast(`Fertig.`, 'success')
+    if (res?.templateDest && res?.filename) {
+      lastCreatedProject.value = { fullPath: `${res.templateDest}/${res.filename}` }
+      openDialog.value = true
     }
+  } catch(e) {
+    toast(e.message || String(e), 'error')
+  }
 }
 async function launchProject() {
-    openDialog.value = false
-    try {
-      await fetch(`${API}/projektanlage/launchpt`, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ fullPath: lastCreatedProject.value.fullPath })
-      })
-    } catch(e) {
-      toast('Projekt konnte nicht geöffnet werden.', 'error')
+  openDialog.value = false
+  try {
+    const res = await fetch(`${API}/projektanlage/launchpt`, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ fullPath: lastCreatedProject.value.fullPath })
+    })
+    if (!res.ok) {
+      const msg = await res.text()
+      toast('Projekt konnte nicht geöffnet werden: ' + msg, 'error')
     }
+  } catch(e) {
+    toast('Projekt konnte nicht geöffnet werden: ' + (e.message || String(e)), 'error')
   }
+}
 
 
 
@@ -240,10 +252,11 @@ function resetForm(){ store.resetForm() }
 const selectedRow = ref(null)
 
 function onRowClick(row) {
-  selectedRow.value = row.moid // oder ein anderes eindeutiges Feld
+  selectedRow.value = row.moid
   form.value.datum = row.date
   form.value.projektname = row.projektname
   form.value.moid = row.moid
+  form.value.stufe = (typeof row.stufe === 'string' && row.stufe) ? row.stufe : ''
   // ggf. weitere Felder ergänzen
 }
 function refreshRows() {

@@ -135,9 +135,6 @@
             "e935076a3828598c",
             "2d158907a57c26be",
             "4818429074295ab3",
-            "c7fde03f62ea3b70",
-            "05e5fdd94df7b7bd",
-            "633ee666d0372b4a",
             "a3e6e753e7da154a",
             "c78b5a04db212d15",
             "0abec049230e8050",
@@ -175,13 +172,24 @@
             "64decafa7632304f",
             "cebcd4845d9d6748",
             "7a7d5e17a1be6a03",
-            "a4a7ae5f35e05547",
-            "376377fa89cdbcbb"
+            "c5f797797c362139",
+            "e9250cebfa9ce5d5",
+            "3f7d5d69b6d6b6aa",
+            "7a3b6a3f2d3a4f4a",
+            "d8b76a1c8a1b5a68",
+            "f5a0f2d807b2d9b3",
+            "9b0b4ee13f1c7a66",
+            "aa4ab0a8b0f7a4c4",
+            "7a6d1f0a2c1a6a24",
+            "f2a7ef76d8ce9c11",
+            "a0b08bb7a4c1e5b2",
+            "c9d5a8b3e2a9a311",
+            "633ee666d0372b4a"
         ],
         "x": 118,
         "y": 73,
         "w": 3408,
-        "h": 1015.5
+        "h": 1048
     },
     {
         "id": "90a1257292e52c0c",
@@ -9700,8 +9708,7 @@
         "y": 800,
         "wires": [
             [
-                "e935076a3828598c",
-                "376377fa89cdbcbb"
+                "c5f797797c362139"
             ]
         ]
     },
@@ -9711,7 +9718,7 @@
         "z": "b1c585f0d25b86fd",
         "g": "c0de7eb24d59090d",
         "name": "",
-        "x": 1910,
+        "x": 2090,
         "y": 800,
         "wires": [
             [
@@ -9725,14 +9732,14 @@
         "z": "b1c585f0d25b86fd",
         "g": "c0de7eb24d59090d",
         "name": "Befehle je nach OS",
-        "func": "let fullPath = msg.templateDest + '/' + msg.filename;\nif (msg.payload.platform === \"win32\") {\n    fullPath = fullPath.replace(/\\//g, \"\\\\\");\n    msg.command = 'start \"\" \"' + fullPath + '\"';\n} else if (msg.payload.platform === \"darwin\") {\n    msg.command = 'open \"' + fullPath + '\"';\n} else {\n    msg.command = \"echo OS nicht unterstützt\";\n}\nreturn msg;\n",
+        "func": "let fullPath = msg.filename;\nif (msg.payload.platform === \"win32\") {\n    fullPath = fullPath.replace(/\\//g, \"\\\\\");\n    msg.command = 'start \"\" \"' + fullPath + '\"';\n} else if (msg.payload.platform === \"darwin\") {\n    msg.command = 'open \"' + fullPath + '\"';\n} else {\n    msg.command = \"echo OS nicht unterstützt\";\n}\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2290,
+        "x": 2470,
         "y": 800,
         "wires": [
             [
@@ -9753,10 +9760,12 @@
         "winHide": false,
         "oldrc": false,
         "name": "Pro Tools öffnen",
-        "x": 2490,
+        "x": 2670,
         "y": 800,
         "wires": [
-            [],
+            [
+                "e9250cebfa9ce5d5"
+            ],
             [],
             []
         ]
@@ -9779,64 +9788,13 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 2080,
+        "x": 2260,
         "y": 800,
         "wires": [
             [
                 "2d158907a57c26be"
             ]
         ]
-    },
-    {
-        "id": "c7fde03f62ea3b70",
-        "type": "http in",
-        "z": "b1c585f0d25b86fd",
-        "g": "c0de7eb24d59090d",
-        "name": "",
-        "url": "/api/projektanlage/resolve-existing",
-        "method": "post",
-        "upload": false,
-        "swaggerDoc": "",
-        "x": 1720,
-        "y": 760,
-        "wires": [
-            [
-                "05e5fdd94df7b7bd"
-            ]
-        ]
-    },
-    {
-        "id": "05e5fdd94df7b7bd",
-        "type": "function",
-        "z": "b1c585f0d25b86fd",
-        "g": "c0de7eb24d59090d",
-        "name": "Resolve",
-        "func": "const b = msg.req.body || {};\nconst fehlende = [];\n['kunde', 'datum', 'projektname', 'moid', 'stufe'].forEach(k => { if (!b[k]) fehlende.push(k) });\nif (fehlende.length) { msg.statusCode = 400; msg.payload = { error: 'missing', fields: fehlende }; return msg; }\n\nfunction n(s) { return String(s || '').normalize('NFC') }\n\nconst PathProduktionen = global.get('PathProduktionen') || '';\nconst schema = n(global.get('projektordnerSchema') || '');\nconst root = `${PathProduktionen}/${b.kunde}`;\n\nconst fs = require('fs');\nlet ordnerListe = [];\ntry { ordnerListe = fs.readdirSync(root).filter(nm => !nm.startsWith('.')).map(n) } catch { }\nconst values = { datum: n(b.datum), projektname: n(b.projektname), moid: n(b.moid), kunde: n(b.kunde) };\n\nlet pattern = schema\n    .replace(/{{benutzer}}/g, '.+')\n    .replace(/{{(\\w+)}}/g, (_, k) => values[k] ? values[k].replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&') : '.*');\n\npattern = '^' + pattern.replace(/ /g, '\\\\s+') + '$';\nconst re = new RegExp(pattern);\n\nconst gefunden = ordnerListe.find(name => re.test(name));\nif (!gefunden) { msg.statusCode = 404; msg.payload = { error: 'not_found' }; return msg; }\n\nconst zielPfad = `${root}/${gefunden}`;\nmsg.payload = {\n    ok: true,\n    zielPfad,\n    templateDest: `${zielPfad}/${b.stufe}`\n};\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1980,
-        "y": 760,
-        "wires": [
-            [
-                "633ee666d0372b4a"
-            ]
-        ]
-    },
-    {
-        "id": "633ee666d0372b4a",
-        "type": "http response",
-        "z": "b1c585f0d25b86fd",
-        "g": "c0de7eb24d59090d",
-        "name": "",
-        "statusCode": "",
-        "headers": {},
-        "x": 2130,
-        "y": 760,
-        "wires": []
     },
     {
         "id": "a3e6e753e7da154a",
@@ -10174,8 +10132,7 @@
         "y": 720,
         "wires": [
             [
-                "9cc61715182b07a8",
-                "a4a7ae5f35e05547"
+                "9cc61715182b07a8"
             ]
         ]
     },
@@ -10619,39 +10576,269 @@
         ]
     },
     {
-        "id": "a4a7ae5f35e05547",
-        "type": "debug",
+        "id": "c5f797797c362139",
+        "type": "change",
         "z": "b1c585f0d25b86fd",
         "g": "c0de7eb24d59090d",
-        "name": "TEST",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 2380,
-        "y": 980,
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.fullPath",
+                "pt": "msg",
+                "to": "filename",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1970,
+        "y": 860,
+        "wires": [
+            [
+                "e935076a3828598c"
+            ]
+        ]
+    },
+    {
+        "id": "e9250cebfa9ce5d5",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 2870,
+        "y": 780,
         "wires": []
     },
     {
-        "id": "376377fa89cdbcbb",
-        "type": "debug",
+        "id": "3f7d5d69b6d6b6aa",
+        "type": "http in",
         "z": "b1c585f0d25b86fd",
         "g": "c0de7eb24d59090d",
-        "name": "TEST 2",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 2450,
-        "y": 900,
+        "name": "",
+        "url": "/api/projektanlage/resolve-existing",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 1700,
+        "y": 1020,
+        "wires": [
+            [
+                "7a3b6a3f2d3a4f4a"
+            ]
+        ]
+    },
+    {
+        "id": "7a3b6a3f2d3a4f4a",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "Validate + Prepare",
+        "func": "// Body holen\nconst b = (msg.payload && typeof msg.payload === 'object') ? msg.payload : (msg.req && msg.req.body) || {};\nconst need = ['kunde','datum','projektname','moid','stufe','template'];\nconst fehlende = need.filter(k => !b[k]);\nif (fehlende.length) {\n  msg.statusCode = 400;\n  msg.payload = { error: 'missing', fields: fehlende };\n  return [null, msg];\n}\n\n// Globals\nconst PathProduktionen = global.get('PathProduktionen') || '';\nconst PathMitarbeiter  = global.get('PathMitarbeiter')  || '';\nconst activeUser       = global.get('activeUser')       || '';\nconst projektordnerSchema = global.get('projektordnerSchema') || '';\nconst sessionSchema    = global.get('sessionSchema')    || '{{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}';\nconst activeUserKuerzel= global.get('activeUserKuerzel')|| '';\n\n// Nutzwerte & Root\nmsg.data = { ...b };\nmsg.paths = {\n  root: `${PathProduktionen}/${b.kunde}`,\n  templateSource: `${PathMitarbeiter}/${activeUser}/immo24/templates/${b.template}`\n};\n\n// Für später\nmsg.sessionSchema = sessionSchema;\nmsg.schema = projektordnerSchema;\n\n// Response-Header (optional)\nmsg.headers = { 'Cache-Control': 'no-store', 'Content-Type': 'application/json; charset=utf-8' };\n\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1960,
+        "y": 1020,
+        "wires": [
+            [
+                "f5a0f2d807b2d9b3"
+            ],
+            [
+                "d8b76a1c8a1b5a68"
+            ]
+        ],
+        "outputLabels": [
+            "ok",
+            "error"
+        ]
+    },
+    {
+        "id": "d8b76a1c8a1b5a68",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 2160,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "f5a0f2d807b2d9b3",
+        "type": "fs-ops-dir",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "Ordner unter Kunde lesen",
+        "path": "paths.root",
+        "pathType": "msg",
+        "filter": "*",
+        "filterType": "str",
+        "dir": "payload",
+        "dirType": "msg",
+        "x": 2200,
+        "y": 1020,
+        "wires": [
+            [
+                "9b0b4ee13f1c7a66"
+            ]
+        ]
+    },
+    {
+        "id": "9b0b4ee13f1c7a66",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "Projektordner per Schema finden",
+        "func": "function n(s){ return String(s||'').normalize('NFC'); }\nconst entries = Array.isArray(msg.payload) ? msg.payload : [];\nconst { projektname, moid, kunde, datum, stufe } = msg.data;\nconst schema = n(msg.schema||'');\n\n// Regex aus Schema bauen\nconst values = { datum:n(datum), projektname:n(projektname), moid:n(moid), kunde:n(kunde) };\nlet pat = schema\n  .replace(/{{benutzer}}/g, '.+')\n  .replace(/{{(\\w+)}}/g, (_,k) => values[k] ? values[k].replace(/[.*+?^${}()|[\\]\\\\]/g,'\\\\$&') : '.*');\npat = '^' + pat.replace(/ /g,'\\\\s+') + '$';\nconst re = new RegExp(pat);\n\n// versteckte raus, normalisieren, matchen\nconst list = entries.filter(x => x && !String(x).startsWith('.')).map(n);\nconst gefunden = list.find(name => re.test(name));\nif (!gefunden){\n  msg.statusCode = 404;\n  msg.payload = { error: 'not_found' };\n  return [null, msg];\n}\n\nmsg.paths.zielPfad = `${msg.paths.root}/${gefunden}`;\nmsg.paths.templateDest = `${msg.paths.zielPfad}/${stufe}`;\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2460,
+        "y": 1020,
+        "wires": [
+            [
+                "aa4ab0a8b0f7a4c4"
+            ],
+            [
+                "d8b76a1c8a1b5a68"
+            ]
+        ],
+        "outputLabels": [
+            "match",
+            "404"
+        ]
+    },
+    {
+        "id": "aa4ab0a8b0f7a4c4",
+        "type": "fs-ops-mkdir",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "Stufenordner anlegen (idempotent)",
+        "path": "",
+        "pathType": "str",
+        "dirname": "paths.templateDest",
+        "dirnameType": "msg",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "payload",
+        "fullpathType": "msg",
+        "x": 2750,
+        "y": 1020,
+        "wires": [
+            [
+                "7a6d1f0a2c1a6a24"
+            ]
+        ]
+    },
+    {
+        "id": "7a6d1f0a2c1a6a24",
+        "type": "fs-ops-dir",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "PTX im Stufenordner",
+        "path": "paths.templateDest",
+        "pathType": "msg",
+        "filter": "*.ptx",
+        "filterType": "str",
+        "dir": "payload",
+        "dirType": "msg",
+        "x": 1720,
+        "y": 1080,
+        "wires": [
+            [
+                "f2a7ef76d8ce9c11"
+            ]
+        ]
+    },
+    {
+        "id": "f2a7ef76d8ce9c11",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "Nummerierung + Dateiname",
+        "func": "function n(s){ return String(s||'').normalize('NFC'); }\nconst files = (msg.payload||[]).map(n);\nconst d = msg.data;\nconst values = {\n  datum: n(d.datum),\n  projektname: n(d.projektname),\n  moid: n(d.moid),\n  benutzer: n(global.get('activeUserKuerzel')||''),\n  kunde: n(d.kunde),\n  produktionsstufe: n(d.stufe)\n};\nlet base = n(msg.sessionSchema||'{{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}');\n\nlet rePattern = base\n  .replace(/\\./g,'\\\\.')\n  .replace(/{{version}}/g,'v(\\\\d+)')\n  .replace(/{{(\\w+)}}/g,(_,k)=>{ if(k==='version') return ''; const v=values[k]; return v ? v.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\\\$&') : '.*'; });\nconst re = new RegExp('^'+rePattern+'\\\\.ptx$');\nlet maxV = 0;\nfor(const f of files){ const m = re.exec(f); if(m && m[1]){ const v = parseInt(m[1],10); if(v>maxV) maxV=v; } }\nconst nextV = maxV + 1;\nvalues.version = `v${nextV}`;\nlet filename = base.replace(/{{(\\w+)}}/g,(_,k)=> values[k] || '');\nfilename = filename.replace(/\\.[^.]+$/, '') + '.ptx';\n\nmsg.filename = filename;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1970,
+        "y": 1080,
+        "wires": [
+            [
+                "a0b08bb7a4c1e5b2"
+            ]
+        ]
+    },
+    {
+        "id": "a0b08bb7a4c1e5b2",
+        "type": "fs-ops-copy",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "Template → neue PTX",
+        "sourcePath": "",
+        "sourcePathType": "str",
+        "sourceFilename": "paths.templateSource",
+        "sourceFilenameType": "msg",
+        "destPath": "paths.templateDest",
+        "destPathType": "msg",
+        "destFilename": "filename",
+        "destFilenameType": "msg",
+        "link": false,
+        "overwrite": false,
+        "x": 2200,
+        "y": 1080,
+        "wires": [
+            [
+                "c9d5a8b3e2a9a311"
+            ]
+        ]
+    },
+    {
+        "id": "c9d5a8b3e2a9a311",
+        "type": "function",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "OK Response",
+        "func": "msg.payload = {\n  ok: true,\n  zielPfad: msg.paths.zielPfad,\n  templateDest: msg.paths.templateDest,\n  filename: msg.filename\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2370,
+        "y": 1080,
+        "wires": [
+            [
+                "633ee666d0372b4a"
+            ]
+        ]
+    },
+    {
+        "id": "633ee666d0372b4a",
+        "type": "http response",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 2520,
+        "y": 1080,
         "wires": []
     },
     {

@@ -10,10 +10,10 @@ async function getJSON(url, options) {
 
 export const useProjektanlage = defineStore('Projektanlage', {
   state: () => ({
-    kunden: [],          // [{label,value, stufen?:[]}]
-    templates: [],       // [{label,value}]
-    rows: [],            // Tabelle
-    stufen: [],          // abhängig von ausgewähltem Kunden
+    kunden: [],
+    templates: [],
+    rows: [],
+    stufen: [],
     form: {
       kunde: '',
       vorhanden: 'neu',
@@ -25,10 +25,26 @@ export const useProjektanlage = defineStore('Projektanlage', {
     },
     loading: { kunden:false, templates:false, rows:false, stufen:false, create:false },
     error: null,
+    activeUser: null, // <--- hinzugefügt
   }),
 
   actions: {
+    async fetchActiveUser() {
+      try {
+        const res = await fetch(`${API_BASE}/activeUser`)
+        if (res.ok) {
+          const text = await res.text()
+          activeUser.value = text.trim() || null
+        } else {
+          activeUser.value = null
+        }
+      } catch {
+        activeUser.value = null
+      }
+    },
+
     async init() {
+      await this.fetchActiveUser() // <--- zuerst den User holen
       await Promise.all([this.loadKunden(), this.loadTemplates()])
     },
 

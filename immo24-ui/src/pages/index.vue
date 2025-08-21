@@ -1,7 +1,6 @@
 <template>
-  <v-app>
-    <router-view />
-  </v-app>
+<!-- <v-app><router-view /></v-app> -->  
+  
 </template>
 
 <script setup>
@@ -19,14 +18,6 @@ onMounted(() => {
   if (route.path !== DEFAULT_TAB_PATH) {
     router.replace(DEFAULT_TAB_PATH)
   }
-
-  // Falls die AppBar via WebSocket aktiven User meldet:
-  window.addEventListener('immo24:activeUser', () => {
-    if (route.path !== DEFAULT_TAB_PATH) {
-      router.replace(DEFAULT_TAB_PATH)
-    }
-  })
-
   // Falls Logout-Event aus AppBar kommt:
   window.addEventListener('immo24:logout', () => {
     router.replace(DEFAULT_TAB_PATH)

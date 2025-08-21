@@ -147,7 +147,7 @@ function createWindow() {
       nodeIntegration: false,
       contextIsolation: true,
       webviewTag: true,
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, 'preload.js')
     }
   })
   // WICHTIG: KEIN loadURL/loadFile hier – erst nach Node‑RED‑Ready
@@ -337,9 +337,13 @@ app.whenReady().then(async () => {
     })
     clearTimeout(splashTimer)
     if (splashWindow && !splashWindow.isDestroyed()) splashWindow.close()
-    const isDev = !app.isPackaged || process.env.NODE_ENV === 'development' || process.env.ELECTRON_START_URL
-    if (isDev) await mainWindow.loadURL(process.env.ELECTRON_START_URL || 'http://localhost:3000')
-    else await mainWindow.loadFile(path.join(__dirname, 'immo24-ui', 'dist', 'index.html'))
+    const isDev = process.env.NODE_ENV === 'development' || process.env.ELECTRON_START_URL
+    if (isDev) {
+      await mainWindow.loadURL(process.env.ELECTRON_START_URL || 'http://localhost:3000')
+    } else {
+      console.log('Lade Datei:', path.join(__dirname, 'immo24-ui', 'dist', 'index.html'))
+      await mainWindow.loadFile(path.join(__dirname, 'immo24-ui', 'dist', 'index.html'))
+    }
     const pw = createUserPickerWindow()
     const users = ready ? (await getUsersFromNodeRed()) : []
     console.log('Userliste für Picker:', users) // <--- Logging einfügen

@@ -85,8 +85,7 @@ export default defineConfig({
       '/dashboard': {
         target: 'http://127.0.0.1:1880',
         changeOrigin: true,
-        ws: true,
-      },
+            },
 
       // Backend REST (läuft auf :1880)
       '/api': {
@@ -98,8 +97,7 @@ export default defineConfig({
       '/ws': {
         target: 'ws://127.0.0.1:1880',
         changeOrigin: true,
-        ws: true,
-      },
+            },
 
     },
   },

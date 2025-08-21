@@ -174,28 +174,20 @@ async function hideMainWindowRobust(win, maxWaitMs = 900) {
 
 /* ─────────────── Zentraler Flow: Fenster weg + Picker ──────────────── */
 async function openPickerFlow({ doLogout = true } = {}) {
-  // 1) Prefs schließen (sonst ziehen sie das Main ggf. hoch)
   if (prefWin && !prefWin.isDestroyed()) { prefWin.close(); prefWin = null }
-
-  // 2) Main-Fenster robust verstecken
   if (mainWindow && !mainWindow.isDestroyed()) {
     await hideMainWindowRobust(mainWindow)
   }
-
-  // 3) Logout *parallel* (UI nicht blockieren)
-  if (doLogout) postLogoutToNodeRed(1200).catch(() => {})
-
-  // 4) Picker öffnen / fokussieren
+  if (doLogout) {
+    try { await postLogoutToNodeRed(1200) } catch (e) { console.error('Logout-Fehler:', e) }
+  }
   if (!pickerWin || pickerWin.isDestroyed()) pickerWin = createUserPickerWindow()
   else { pickerWin.show(); pickerWin.focus() }
-
-  // 5) Userliste laden und an Picker senden
   const users = await getUsersFromNodeRed()
   const sendUsers = () => { try { pickerWin.webContents.send('users', users) } catch {} }
   pickerWin.webContents.isLoading()
     ? pickerWin.webContents.once('did-finish-load', sendUsers)
     : sendUsers()
-
   return { ok: true }
 }
 
@@ -330,42 +322,42 @@ Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 
 /* ───────────────────────── App Lifecycle ───────────────────────────── */
 app.whenReady().then(async () => {
-  ensureUserJsonFiles()
-
-  // Splash nur zeigen, wenn Start > 250ms dauert (vermeidet „Blinken“)
-  const splashTimer = setTimeout(() => createSplashWindow(), 250)
-
-  startNodeRED()
-  createWindow()
-  registerIpc()
-
-  const ready = await waitForNodeRedReady({
-    path_: '/api/user', // <--- richtig!
-    timeoutMs: 12000,
-    perRequestTimeout: 1500,
-    minDelay: 120,
-    maxDelay: 600
-  })
-
-  clearTimeout(splashTimer)
-  if (splashWindow && !splashWindow.isDestroyed()) splashWindow.close()
-
-  // App erst jetzt laden (verhindert Hintergrund-Requests vor Ready)
-  const isDev = !app.isPackaged || process.env.NODE_ENV === 'development' || process.env.ELECTRON_START_URL
-  if (isDev) await mainWindow.loadURL(process.env.ELECTRON_START_URL || 'http://localhost:3000')
-  else await mainWindow.loadFile(path.join(__dirname, 'immo24-ui', 'dist', 'index.html'))
-
-  // Direkt Picker öffnen, Users ggf. leer nachreichen
-  const pw = createUserPickerWindow()
-  const users = ready ? (await getUsersFromNodeRed()) : []
-  pw.webContents.once('did-finish-load', () => pw.webContents.send('users', users))
-
-  if (!ready) {
-    ;(async () => {
-      const ok = await waitForNodeRedReady({ timeoutMs: 15000 })
-      if (!ok || !pickerWin || pickerWin.isDestroyed()) return
-      try { pickerWin.webContents.send('users', await getUsersFromNodeRed()) } catch {}
-    })()
+  try {
+    ensureUserJsonFiles()
+    const splashTimer = setTimeout(() => createSplashWindow(), 250)
+    startNodeRED()
+    createWindow()
+    registerIpc()
+    const ready = await waitForNodeRedReady({
+      path_: '/api/user',
+      timeoutMs: 12000,
+      perRequestTimeout: 1500,
+      minDelay: 120,
+      maxDelay: 600
+    })
+    clearTimeout(splashTimer)
+    if (splashWindow && !splashWindow.isDestroyed()) splashWindow.close()
+    const isDev = !app.isPackaged || process.env.NODE_ENV === 'development' || process.env.ELECTRON_START_URL
+    if (isDev) await mainWindow.loadURL(process.env.ELECTRON_START_URL || 'http://localhost:3000')
+    else await mainWindow.loadFile(path.join(__dirname, 'immo24-ui', 'dist', 'index.html'))
+    const pw = createUserPickerWindow()
+    const users = ready ? (await getUsersFromNodeRed()) : []
+    console.log('Userliste für Picker:', users) // <--- Logging einfügen
+    pw.webContents.once('did-finish-load', () => pw.webContents.send('users', users))
+    if (!ready) {
+      ;(async () => {
+        try {
+          const ok = await waitForNodeRedReady({ timeoutMs: 15000 })
+          if (!ok || !pickerWin || pickerWin.isDestroyed()) return
+          try { pickerWin.webContents.send('users', await getUsersFromNodeRed()) } catch {}
+        } catch (e) {
+          console.error('Fehler beim Node-RED-Ready-Wait:', e)
+        }
+      })()
+    }
+  } catch (err) {
+    console.error('Fehler beim App-Start:', err)
+    app.quit()
   }
 })
 

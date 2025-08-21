@@ -280,8 +280,14 @@ function createPreferencesWindow() {
   prefWin.setMenu(null)
 
   const isDev = !!process.env.ELECTRON_START_URL
-  if (isDev) prefWin.loadURL(process.env.ELECTRON_START_URL + '/konfiguration')
-  else prefWin.loadFile(path.join(__dirname, 'immo24-ui', 'dist', 'index.html'))
+  if (isDev) {
+    prefWin.loadURL(process.env.ELECTRON_START_URL + '/konfiguration')
+  } else {
+    prefWin.loadFile(path.join(__dirname, 'immo24-ui', 'dist', 'index.html'))
+    prefWin.webContents.once('did-finish-load', () => {
+      prefWin.webContents.executeJavaScript("window.location.hash = '#/konfiguration'")
+    })
+  }
 
   prefWin.once('ready-to-show', () => prefWin.show())
   prefWin.on('closed', () => { prefWin = null })

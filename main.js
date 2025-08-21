@@ -203,10 +203,14 @@ async function openPickerFlow({ doLogout = true } = {}) {
 // Picker bestätigt Auswahl → aktiven User an Renderer, Picker schließen, Main zeigen
 ipcMain.on('user-picked', async (_evt, user) => {
   await postActiveUserToNodeRed(user)
-  if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send('active-user', user)
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.webContents.send('active-user', user)
+    mainWindow.webContents.reload()
+    mainWindow.show()
+    mainWindow.focus()
+  }
   if (pickerWin && !pickerWin.isDestroyed()) { pickerWin.close(); pickerWin = null }
   if (splashWindow && !splashWindow.isDestroyed()) { splashWindow.close(); splashWindow = null }
-  if (mainWindow && !mainWindow.isDestroyed()) mainWindow.show()
 })
 
 // Picker „Beenden“ → ganze App schließen

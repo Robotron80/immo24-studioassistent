@@ -182,4 +182,40 @@ function confirmResolve(val) {
   confirm.open = false
   confirm.cb?.(val)
 }
+
+onMounted(() => {
+  pollTimer = setInterval(async () => {
+    try {
+      const res = await fetch(`${API}/protools/status`)
+      isOnline.value = res.ok && (await res.json()).online
+    } catch {
+      isOnline.value = false
+    }
+  }, POLL_MS)
+})
+
+onBeforeUnmount(() => {
+  if (pollTimer) clearInterval(pollTimer)
+})
 </script>
+
+<style scoped>
+.status-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 6px;
+  background: #bbb;
+  border: 1px solid #888;
+  vertical-align: middle;
+}
+.status-dot.online {
+  background: #43a047; /* grün */
+  border-color: #388e3c;
+}
+.status-dot.offline {
+  background: #e53935; /* rot */
+  border-color: #b71c1c;
+}
+</style>

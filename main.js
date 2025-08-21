@@ -226,7 +226,10 @@ ipcMain.handle('renderer-hide-and-pick', async (_evt, args) => {
 function startNodeRED() {
   const nodeRedDir = path.join(__dirname, 'node-red-portable')
   const redJs = path.join(nodeRedDir, 'node_modules', 'node-red', 'red.js')
-  const nodeBinary = process.execPath // interne node.js
+  let nodeBinary
+  if (process.platform === 'win32') nodeBinary = path.join(__dirname, 'bin', 'node.exe')
+  else if (process.platform === 'darwin') nodeBinary = path.join(__dirname, 'bin', process.arch === 'arm64' ? 'node-arm64' : 'node-x64')
+  else nodeBinary = path.join(__dirname, 'bin', 'node')
 
   if (!fs.existsSync(nodeBinary) || !fs.existsSync(redJs)) { app.quit(); return }
 
@@ -238,7 +241,7 @@ function startNodeRED() {
   nodeRedProcess = spawn(nodeBinary, [redJs, '-u', nodeRedDir, '--port', '1880'], {
     cwd: nodeRedDir,
     stdio: ['ignore', 'pipe', 'pipe'],
-    env: { ...process.env, IMMO24_USERDATA: basePath, APP_VERSION: app.getVersion() }
+    env: { ...process.env, ELECTRON_RUN_AS_NODE: '1', IMMO24_USERDATA: basePath, APP_VERSION: app.getVersion() }
   })
 
   let firstOut = true

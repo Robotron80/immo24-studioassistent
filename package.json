@@ -1,10 +1,10 @@
 {
   "name": "immo24-studioassistent",
-  "version": "0.1.0-beta",
+  "version": "0.2.0-beta",
   "main": "main.js",
-  "description": "Electron-Shell für Node-RED Studioassistent",
+  "description": "Applikation zur Unterstützung im vernetzten Studio-Alltag mit Avid Pro Tools",
   "author": "Philipp Menzel",
-  "license": "ISC",
+  "license": "",
   "scripts": {
     "start": "electron .",
     "dist": "electron-builder"
@@ -17,7 +17,8 @@
       "assets/**",
       "bin/**",
       "package.json",
-      "node-red-portable/**"
+      "node-red-portable/**",
+      "immo24-ui/dist/**"
     ],
     "directories": {
       "buildResources": "assets"

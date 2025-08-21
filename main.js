@@ -226,15 +226,14 @@ ipcMain.handle('renderer-hide-and-pick', async (_evt, args) => {
 function startNodeRED() {
   const nodeRedDir = path.join(__dirname, 'node-red-portable')
   const redJs = path.join(nodeRedDir, 'node_modules', 'node-red', 'red.js')
-  let nodeBinary
-  if (process.platform === 'win32') nodeBinary = path.join(__dirname, 'bin', 'node.exe')
-  else if (process.platform === 'darwin') nodeBinary = path.join(__dirname, 'bin', process.arch === 'arm64' ? 'node-arm64' : 'node-x64')
-  else nodeBinary = path.join(__dirname, 'bin', 'node')
+  const nodeBinary = process.execPath // interne node.js
 
   if (!fs.existsSync(nodeBinary) || !fs.existsSync(redJs)) { app.quit(); return }
 
   const basePath = app.getPath('userData')
   fs.writeFileSync(path.join(basePath, 'AppBasePath.json'), JSON.stringify({ AppBasePath: basePath }, null, 2))
+
+  console.log('Starte Node-RED mit:', nodeBinary, redJs)
 
   nodeRedProcess = spawn(nodeBinary, [redJs, '-u', nodeRedDir, '--port', '1880'], {
     cwd: nodeRedDir,

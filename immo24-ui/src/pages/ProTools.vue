@@ -87,7 +87,7 @@
 import { reactive, ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
 const API = import.meta.env.VITE_API_BASE || '/api'
-const POLL_MS = 3000
+const POLL_MS = 5000
 const isOnline = ref(false)
 let pollTimer = null
 

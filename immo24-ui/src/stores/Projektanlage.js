@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 
-const API = import.meta.env.VITE_API_BASE || '/api'
+const API =
+  import.meta.env.VITE_API_BASE
 
 async function getJSON(url, options) {
   const r = await fetch(url, options)
@@ -25,44 +26,44 @@ export const useProjektanlage = defineStore('Projektanlage', {
     },
     loading: { kunden:false, templates:false, rows:false, stufen:false, create:false },
     error: null,
-    activeUser: null, // <--- hinzugefügt
+    activeUser: null,
   }),
 
   actions: {
     async fetchActiveUser() {
       try {
-        const res = await fetch(`${API_BASE}/activeUser`)
+        const res = await fetch(`${API}/activeUser`)
         if (res.ok) {
           const text = await res.text()
-          activeUser.value = text.trim() || null
+          this.activeUser = (text || '').trim() || null
         } else {
-          activeUser.value = null
+          this.activeUser = null
         }
       } catch {
-        activeUser.value = null
+        this.activeUser = null
       }
     },
 
     async init() {
-      await this.fetchActiveUser() // <--- zuerst den User holen
-      await Promise.all([this.loadKunden(), this.loadTemplates()])
+      try { await this.fetchActiveUser() } catch {}
+      await Promise.allSettled([ this.loadKunden(), this.loadTemplates() ])
     },
 
     async loadKunden() {
-    this.loading.kunden = true
-    try {
+      this.loading.kunden = true
+      try {
         const raw = await getJSON(`${API}/projektanlage/kunden`)
         this.kunden = (Array.isArray(raw) ? raw : []).map(k => ({
-        label: String(k.label ?? ''),
-        value: String(k.value ?? ''),
-        stufen: Array.isArray(k.stufen) ? k.stufen.map(s => ({
+          label: String(k.label ?? ''),
+          value: String(k.value ?? ''),
+          stufen: Array.isArray(k.stufen) ? k.stufen.map(s => ({
             label: String(s.label ?? ''),
             value: String(s.value ?? ''),
-        })) : []
+          })) : []
         }))
-    } finally {
+      } finally {
         this.loading.kunden = false
-    }
+      }
     },
 
     async loadTemplates() {
@@ -106,25 +107,35 @@ export const useProjektanlage = defineStore('Projektanlage', {
       const fehlende = this.validateRequired()
       if (fehlende.length) throw new Error(`Bitte ausfüllen: ${fehlende.join(', ')}`)
 
+      const stufeValue = this.form.stufe
+      const stufeLabel =
+        this.stufen.find(s => s.value === stufeValue)?.label
+        || (stufeValue || '').replace(/^\d+_/, '').replace(/_/g, ' ').trim()
+
+      const { kunde, vorhanden, projektname, moid, datum, template, stufe } = this.form
+      const payload = { kunde, vorhanden, projektname, moid, datum, template, stufe, stufeLabel }
+
       this.loading.create = true
       try {
+        const headers = { 'Content-Type': 'application/json' }
         if (this.form.vorhanden === 'neu') {
           const res = await getJSON(`${API}/projektanlage/projekte`, {
             method: 'POST',
-            headers: { 'Content-Type':'application/json' },
-            body: JSON.stringify(this.form),
+            headers,
+            body: JSON.stringify(payload),
           })
-          return res // Gib die Daten zurück!
+          await this.loadRows(this.form.kunde)
+          return res
         } else {
           const resolved = await getJSON(`${API}/projektanlage/resolve-existing`, {
             method: 'POST',
-            headers: { 'Content-Type':'application/json' },
-            body: JSON.stringify(this.form),
+            headers,
+            body: JSON.stringify(payload),
           })
           if (!resolved?.templateDest) throw new Error('Kein passender Projektordner gefunden!')
+          await this.loadRows(this.form.kunde)
           return resolved
         }
-        await this.loadRows(this.form.kunde)
       } finally {
         this.loading.create = false
       }
@@ -137,7 +148,6 @@ export const useProjektanlage = defineStore('Projektanlage', {
       this.stufen = []
     },
   },
-
 })
 
 

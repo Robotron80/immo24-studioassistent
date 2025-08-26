@@ -30,8 +30,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
    * @returns {() => void} unsubscribe
    */
   onActiveUser: (cb) => {
-    const handler = (_e, user) => { try { cb(user) } catch {} }
-    return on('active-user', handler)
+    const handler = (_e, user) => cb?.(user)
+    ipcRenderer.on('active-user', handler)
+    return () => ipcRenderer.off('active-user', handler)
   },
 
   /**

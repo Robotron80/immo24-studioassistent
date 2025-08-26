@@ -196,10 +196,13 @@ async function openPickerFlow({ doLogout = true } = {}) {
 ipcMain.on('user-picked', async (_evt, user) => {
   await postActiveUserToNodeRed(user)
   if (mainWindow && !mainWindow.isDestroyed()) {
-    mainWindow.webContents.send('active-user', user)
-    mainWindow.webContents.reload()
+    // Event NACH dem Reload feuern
+    mainWindow.webContents.once('did-finish-load', () => {
+      try { mainWindow.webContents.send('active-user', user) } catch {}
+    })
     mainWindow.show()
     mainWindow.focus()
+    mainWindow.webContents.reload()
   }
   if (pickerWin && !pickerWin.isDestroyed()) { pickerWin.close(); pickerWin = null }
   if (splashWindow && !splashWindow.isDestroyed()) { splashWindow.close(); splashWindow = null }
@@ -368,6 +371,12 @@ app.whenReady().then(async () => {
   } catch (err) {
     console.error('Fehler beim App-Start:', err)
     app.quit()
+  }
+})
+
+app.on('before-quit', () => {
+  if (nodeRedProcess) {
+    try { nodeRedProcess.kill() } catch {}
   }
 })
 

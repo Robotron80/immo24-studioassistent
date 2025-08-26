@@ -16,14 +16,25 @@ import { createApp } from 'vue'
 // Pinia
 import { createPinia } from 'pinia'
 
+// Stores
+import { useProjektanlage } from '@/stores/Projektanlage'
+
 // Styles
 import 'unfonts.css'
 
 const app = createApp(App)
+const pinia = createPinia()
+app.use(pinia)
+// nach createPinia: Store holen
+const projektanlage = useProjektanlage(pinia)
+
+// Electron-Event → Store updaten
+window.electronAPI?.onActiveUser?.((user) => {
+  projektanlage.activeUser = user || null
+})
+
+// Fallback beim Start: vom Backend lesen (z.B. nach Reload)
+projektanlage.fetchActiveUser?.().catch(() => {})
 
 registerPlugins(app)
-
-app.use(createPinia())
-
-
 app.mount('#app')

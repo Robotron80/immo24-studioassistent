@@ -115,7 +115,9 @@
             "a0b08bb7a4c1e5b2",
             "c9d5a8b3e2a9a311",
             "633ee666d0372b4a",
-            "4ccb8d901b44f6a9"
+            "4ccb8d901b44f6a9",
+            "44f3fe83f095ee36",
+            "76c08641cd4aa7eb"
         ],
         "x": 94,
         "y": 299,
@@ -565,9 +567,9 @@
             "f3f4b4a22f8d1111"
         ],
         "x": 268,
-        "y": 393,
+        "y": 373,
         "w": 1244,
-        "h": 334
+        "h": 354
     },
     {
         "id": "f3f4b4a22f8d1111",
@@ -591,12 +593,14 @@
             "7bbbd4653db740f1",
             "77a939fd00b2c94a",
             "5fa35bb78c259faa",
-            "2729b38d7e8e8fb5"
+            "2729b38d7e8e8fb5",
+            "33f7fe6611787ae1",
+            "9b631353bfbaea2d"
         ],
         "x": 294,
-        "y": 419,
+        "y": 399,
         "w": 1192,
-        "h": 282
+        "h": 302
     },
     {
         "id": "826de81a1d3da833",
@@ -635,7 +639,8 @@
         "wires": [
             [
                 "paths_get_setfile",
-                "bff0fd592f6ebf74"
+                "bff0fd592f6ebf74",
+                "7bbbd4653db740f1"
             ]
         ]
     },
@@ -1472,7 +1477,8 @@
         "y": 460,
         "wires": [
             [
-                "9f7b5d6ac2d1115"
+                "33f7fe6611787ae1",
+                "9b631353bfbaea2d"
             ]
         ]
     },
@@ -1485,13 +1491,10 @@
         "func": "const obj = (typeof msg.payload === 'object' && msg.payload) ? msg.payload : {};\nconst data = {\n  projektordnerSchema: (obj.projektordnerSchema ?? '').toString(),\n  sessionSchema: (obj.sessionSchema ?? '').toString()\n};\nmsg.payload = { data, version: String(Date.now()) };\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 1060,
+        "x": 1080,
         "y": 460,
         "wires": [
-            [
-                "c3e4d5f6a7b1116",
-                "77a939fd00b2c94a"
-            ]
+            []
         ]
     },
     {
@@ -2702,6 +2705,45 @@
         "statusType": "auto",
         "x": 560,
         "y": 1600,
+        "wires": []
+    },
+    {
+        "id": "33f7fe6611787ae1",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "g": "f3f4b4a22f8d1111",
+        "name": "Globals setzen + Antwort",
+        "func": "\nlet ver = global.get('scheme_version');\nif (!ver) { ver = String(Date.now()); global.set('scheme_version', ver); }\nconst data = typeof msg.payload === 'object' && msg.payload ? msg.payload : {};\nif (data.projektordnerSchema !== undefined) global.set('projektordnerSchema', data.projektordnerSchema);\nif (data.sessionSchema !== undefined) global.set('sessionSchema', data.sessionSchema);\nmsg.payload = { data, version: ver };\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1090,
+        "y": 500,
+        "wires": [
+            [
+                "c3e4d5f6a7b1116",
+                "77a939fd00b2c94a"
+            ]
+        ]
+    },
+    {
+        "id": "9b631353bfbaea2d",
+        "type": "debug",
+        "z": "dc0d981398a42d88",
+        "g": "f3f4b4a22f8d1111",
+        "name": "debug 22",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 970,
+        "y": 440,
         "wires": []
     },
     {
@@ -4200,7 +4242,8 @@
         "y": 640,
         "wires": [
             [
-                "a3e6e753e7da154a"
+                "a3e6e753e7da154a",
+                "44f3fe83f095ee36"
             ]
         ]
     },
@@ -4351,7 +4394,8 @@
         "y": 620,
         "wires": [
             [
-                "0abec049230e8050"
+                "0abec049230e8050",
+                "76c08641cd4aa7eb"
             ],
             [
                 "7f5814610e2a962c"
@@ -5444,6 +5488,42 @@
         "statusType": "auto",
         "x": 930,
         "y": 340,
+        "wires": []
+    },
+    {
+        "id": "44f3fe83f095ee36",
+        "type": "debug",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "debug 18",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 480,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "76c08641cd4aa7eb",
+        "type": "debug",
+        "z": "b1c585f0d25b86fd",
+        "g": "c0de7eb24d59090d",
+        "name": "debug 19",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 580,
         "wires": []
     },
     {

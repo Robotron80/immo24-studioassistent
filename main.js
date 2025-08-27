@@ -122,7 +122,7 @@ async function waitForNodeRedReady({
 function createUserPickerWindow() {
   if (pickerWin && !pickerWin.isDestroyed()) return pickerWin
   pickerWin = new BrowserWindow({
-    width: 420, height: 300, resizable: false, frame: false, show: true, alwaysOnTop: true,
+    width: 420, height: 300, resizable: false, frame: false, show: true, alwaysOnTop: false, movable: true,
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false }
   })
   pickerWin.loadFile(path.join(__dirname, 'assets', 'login.html'))
@@ -132,7 +132,7 @@ function createUserPickerWindow() {
 function createSplashWindow() {
   splashWindow = new BrowserWindow({
     width: 420, height: 300, resizable: false, frame: false, transparent: false,
-    alwaysOnTop: true, center: true, show: true, movable: true,
+    alwaysOnTop: true, center: true, show: true, movable: false,
     webPreferences: { nodeIntegration: false, contextIsolation: true }
   })
   splashWindow.loadFile(path.join(__dirname, 'assets', 'loading.html'))
@@ -338,7 +338,7 @@ app.whenReady().then(async () => {
     createWindow()
     registerIpc()
     const ready = await waitForNodeRedReady({
-      path_: '/api/user',
+      path_: '/api/initialize',
       timeoutMs: 12000,
       perRequestTimeout: 1500,
       minDelay: 120,

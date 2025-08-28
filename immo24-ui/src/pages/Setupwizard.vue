@@ -296,9 +296,35 @@ async function nextFromPaths() {
     toast('Bitte alle vier Pfade setzen.', 'warning')
     return
   }
+  // 1. Version aus /initialize holen
+  let rInit = await fetch(`${API}/initialize`)
+  let initData = await rInit.json()
+  let version = initData?.initialize?.paths_version || "0"
+
+  // 2. Pfade speichern mit Version
+  let r = await fetch(`${API}/paths`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ data: { ...paths }, version }),
+  })
+  if (r.status === 409) {
+    const err = await r.json()
+    version = err.currentVersion
+    // Retry mit aktueller Version
+    r = await fetch(`${API}/paths`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data: { ...paths }, version }),
+    })
+  }
+  if (!r.ok) {
+    toast(`Pfade speichern fehlgeschlagen: ${r.status} ${r.statusText}`, 'error')
+    return
+  }
+  // 3. Werte laden
+  await loadFromInitialize()
   next()
 }
-
 async function finish() {
   if (!step2Ok.value) { toast('Bitte alle vier Pfade setzen.', 'warning'); step.value = 2; return }
   if (!step3Ok.value) { toast('Namensschema unvollständig.', 'warning'); step.value = 3; return }

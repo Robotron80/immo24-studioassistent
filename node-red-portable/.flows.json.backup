@@ -215,7 +215,8 @@
             "705afdec990a3871",
             "5c8690ba50b87591",
             "8055c903fea756b0",
-            "e89d4e8f592e634e"
+            "e89d4e8f592e634e",
+            "64d953056613dd6d"
         ],
         "x": 94,
         "y": 1179,
@@ -273,12 +274,13 @@
             "5a5f66625a036f4a",
             "4e271e5a331103cd",
             "f4c3bb4c6e71df25",
-            "4a2faaf2bb595bf3"
+            "4a2faaf2bb595bf3",
+            "a515b6f1464dda60"
         ],
-        "x": 94,
-        "y": 2199,
+        "x": 134,
+        "y": 2039,
         "w": 1232,
-        "h": 402
+        "h": 442
     },
     {
         "id": "21da7a611532cde9",
@@ -594,7 +596,6 @@
             "c0a1ea6d1b9a1112",
             "0c2bb7a2a83a1113",
             "f5d8c9a8a2a1114",
-            "9f7b5d6ac2d1115",
             "c3e4d5f6a7b1116",
             "2a9c0d1e2f311117",
             "8e7d6c5b4a311119",
@@ -1266,21 +1267,6 @@
             [
                 "33f7fe6611787ae1"
             ]
-        ]
-    },
-    {
-        "id": "9f7b5d6ac2d1115",
-        "type": "function",
-        "z": "dc0d981398a42d88",
-        "g": "f3f4b4a22f8d1111",
-        "name": "Wrap {data, version}",
-        "func": "const obj = (typeof msg.payload === 'object' && msg.payload) ? msg.payload : {};\nconst data = {\n  projektordnerSchema: (obj.projektordnerSchema ?? '').toString(),\n  sessionSchema: (obj.sessionSchema ?? '').toString()\n};\nmsg.payload = { data, version: String(Date.now()) };\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 1080,
-        "y": 460,
-        "wires": [
-            []
         ]
     },
     {
@@ -2083,8 +2069,7 @@
                 "user_set_file_payload"
             ],
             [
-                "user_mkdir_metadir",
-                "3e7a88e641e2554e"
+                "user_mkdir_metadir"
             ]
         ]
     },
@@ -2254,23 +2239,6 @@
         "statusType": "auto",
         "x": 780,
         "y": 1320,
-        "wires": []
-    },
-    {
-        "id": "3e7a88e641e2554e",
-        "type": "debug",
-        "z": "dc0d981398a42d88",
-        "name": "debug 15",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1700,
-        "y": 1420,
         "wires": []
     },
     {
@@ -2506,11 +2474,12 @@
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 200,
-        "y": 2240,
+        "x": 240,
+        "y": 2120,
         "wires": [
             [
-                "ebeea6be6cb9b938"
+                "ebeea6be6cb9b938",
+                "a515b6f1464dda60"
             ]
         ]
     },
@@ -2531,8 +2500,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 610,
-        "y": 2240,
+        "x": 650,
+        "y": 2120,
         "wires": [
             [
                 "4ec4cdc014b0d31d"
@@ -2556,8 +2525,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 600,
-        "y": 2300,
+        "x": 640,
+        "y": 2180,
         "wires": [
             [
                 "4ec4cdc014b0d31d"
@@ -2584,8 +2553,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 420,
-        "y": 2240,
+        "x": 460,
+        "y": 2120,
         "wires": [
             [
                 "6a27ae8fea9bdc6a"
@@ -2612,8 +2581,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 420,
-        "y": 2300,
+        "x": 460,
+        "y": 2180,
         "wires": [
             [
                 "1eeaaef0f33ed4f4"
@@ -2642,8 +2611,8 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 810,
-        "y": 2260,
+        "x": 850,
+        "y": 2140,
         "wires": [
             [
                 "1af6fe3437f78dcc"
@@ -2656,15 +2625,15 @@
         "z": "dc0d981398a42d88",
         "g": "b72a4f67de28cc65",
         "name": "Globals setzen, Finalize",
-        "func": "// payload: { schema: {...}|{data:{...}}, user: [...] }\nconst all = msg.payload || {};\nlet schema = all.schema || {};\nconst user = all.user || {};\n\n// schema normalisieren\nschema = (schema && typeof schema === \"object\" && schema.data) ? schema.data : schema;\n\n// Schema ok?\nconst schemaOK = !!(schema && (schema.sessionSchema || schema.projektordnerSchema));\n\n// === Schema-Globals setzen ===\nconst set = (k, v) => { try { global.set(k, v, \"file\"); } catch { global.set(k, v); } };\n\nif (schema.sessionSchema) set(\"sessionSchema\", schema.sessionSchema);\nif (schema.projektordnerSchema) set(\"projektordnerSchema\", schema.projektordnerSchema);\n\n// (Paths sind vorher schon gesetzt worden und müssen hier nicht mehr angefasst werden)\n\n// User-Handling: optional, falls du später einen activeUser o.ä. ableiten willst\nif (Array.isArray(user)) {\n    // z.B. global.set(\"users\", user);\n}\n\n// === Initialize-Status ===\nconst initialize = {\n    paths_json_present: true,   // Path-Check + Globals wurden ja vorher gemacht\n    required_keys_ok: true,\n    schema_ok: schemaOK,\n    dirs_exist: null,\n    missingKeys: [],\n    emptyKeys: [],\n    notFoundDirs: null\n};\n\nconst ready = initialize.required_keys_ok && initialize.schema_ok;\n\nset(\"configReady\", ready);\nset(\"configReadyAt\", Date.now());\n\nmsg.statusCode = ready ? 200 : 503;\nmsg.payload = { ready, initialize };\nreturn msg;",
+        "func": "// payload kommt vom join: { schema: {...}|{data:{...}}, user: [...] }\n// Außerdem haben wir vorher msg.paths gesetzt (Check path.json → Set Path Globals & Fan-out).\n// Falls msg.paths unterwegs verloren geht, rekonstruieren wir sie aus den Global-Variablen.\n\nconst all = msg.payload || {};\nlet schemaIn = all.schema || {};\nconst user = all.user || [];\n\n// Schema-Objekt normalisieren (API liefert teils {data:{...}})\nconst schema = (schemaIn && typeof schemaIn === \"object\" && schemaIn.data) ? schemaIn.data : schemaIn;\n\n// Schema-Felder extrahieren (Strings, ggf. \"\")\nconst schemaOut = {\n    sessionSchema: typeof schema?.sessionSchema === \"string\" ? schema.sessionSchema : \"\",\n    projektordnerSchema: typeof schema?.projektordnerSchema === \"string\" ? schema.projektordnerSchema : \"\"\n};\n\n// Paths aus msg.paths ODER aus den globalen Variablen zusammensetzen\nconst fromGlobals = {\n    PathProduktionen: global.get(\"PathProduktionen\") || \"\",\n    PathMitarbeiter: global.get(\"PathMitarbeiter\") || \"\",\n    PathStammdaten: global.get(\"PathStammdaten\") || \"\",\n    PathPTUser: global.get(\"PathPTUser\") || \"\"\n};\nconst paths = (msg.paths && typeof msg.paths === \"object\") ? msg.paths : fromGlobals;\n\n// Minimal-Validierung: Schema ist \"ok\", wenn mind. eines der beiden Strings gesetzt ist\nconst schemaOK = !!(schemaOut.sessionSchema || schemaOut.projektordnerSchema);\n\n// Initialize-Infos (du kannst das nach Bedarf erweitern)\nconst initialize = {\n    paths_json_present: true,    // path.json wurde gelesen/geprüft\n    required_keys_ok: true,      // wurde vorher bereits validiert\n    schema_ok: schemaOK,\n    dirs_exist: null,\n    missingKeys: [],\n    emptyKeys: [],\n    notFoundDirs: null\n};\n\n// Ready-Flag (hier sehr simpel: required_keys_ok && schema_ok)\nconst ready = initialize.required_keys_ok && initialize.schema_ok;\n\n// Globale Flags setzen\ntry { global.set(\"configReady\", ready, \"file\"); } catch { global.set(\"configReady\", ready); }\ntry { global.set(\"configReadyAt\", Date.now(), \"file\"); } catch { global.set(\"configReadyAt\", Date.now()); }\n\n// HTTP-Status\nmsg.statusCode = ready ? 200 : 503;\n\n// Finale Antwort: jetzt MIT paths und schema\nmsg.payload = {\n    ready,\n    initialize,\n    paths,          // <- gewünschtes Objekt mit allen Pfaden\n    schema: schemaOut  // <- gewünschtes Objekt mit beiden Schema-Strings\n};\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1010,
-        "y": 2240,
+        "x": 1050,
+        "y": 2120,
         "wires": [
             [
                 "2fc4bc4b36a77762",
@@ -2680,8 +2649,8 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 1250,
-        "y": 2240,
+        "x": 1290,
+        "y": 2120,
         "wires": []
     },
     {
@@ -2698,8 +2667,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1150,
-        "y": 2340,
+        "x": 1190,
+        "y": 2220,
         "wires": []
     },
     {
@@ -2751,8 +2720,8 @@
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 480,
-        "y": 2420,
+        "x": 520,
+        "y": 2300,
         "wires": [
             [
                 "5a5f66625a036f4a",
@@ -2773,8 +2742,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 330,
-        "y": 2420,
+        "x": 370,
+        "y": 2300,
         "wires": [
             [
                 "8ffdeb5ec184be18"
@@ -2794,8 +2763,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 700,
-        "y": 2420,
+        "x": 740,
+        "y": 2300,
         "wires": [
             [
                 "4a2faaf2bb595bf3"
@@ -2823,8 +2792,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 630,
-        "y": 2560,
+        "x": 670,
+        "y": 2440,
         "wires": []
     },
     {
@@ -2841,8 +2810,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 840,
-        "y": 2460,
+        "x": 880,
+        "y": 2340,
         "wires": []
     },
     {
@@ -2858,8 +2827,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 920,
-        "y": 2360,
+        "x": 960,
+        "y": 2240,
         "wires": [
             [
                 "fc6026e01f804123",
@@ -2992,27 +2961,9 @@
         "y": 1340,
         "wires": [
             [
-                "613c2af5cbb54e96",
                 "d19d095c4432355f"
             ]
         ]
-    },
-    {
-        "id": "613c2af5cbb54e96",
-        "type": "debug",
-        "z": "dc0d981398a42d88",
-        "name": "debug 22",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 2290,
-        "y": 1420,
-        "wires": []
     },
     {
         "id": "d19d095c4432355f",
@@ -3035,6 +2986,23 @@
         ]
     },
     {
+        "id": "a515b6f1464dda60",
+        "type": "debug",
+        "z": "dc0d981398a42d88",
+        "g": "b72a4f67de28cc65",
+        "name": "debug 15",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 440,
+        "y": 2080,
+        "wires": []
+    },
+    {
         "id": "41a1604a42cf8a96",
         "type": "function",
         "z": "b1c585f0d25b86fd",
@@ -3052,7 +3020,8 @@
         "wires": [
             [
                 "4a19a26eb247bcfb",
-                "5d8cb4ae2aa3f2ec"
+                "5d8cb4ae2aa3f2ec",
+                "64d953056613dd6d"
             ],
             [
                 "9c53f64fe3de877c"
@@ -5888,6 +5857,24 @@
         "statusType": "auto",
         "x": 1210,
         "y": 940,
+        "wires": []
+    },
+    {
+        "id": "64d953056613dd6d",
+        "type": "debug",
+        "z": "b1c585f0d25b86fd",
+        "g": "b38df26cbb8bb4b3",
+        "name": "debug 22",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 770,
+        "y": 1220,
         "wires": []
     },
     {

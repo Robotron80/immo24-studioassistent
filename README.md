@@ -35,15 +35,17 @@ oder per Tastenkürzel: **CMD+,** (macOS) / **STRG+,** (Windows).
 - Hier werden die Kunden-Stammdaten angelegt. Ein Kunde entspricht einem Unterverzeichnis im Ordner `Produktionen`.
 - Projekte erhalten automatisch Unterordner wie z. B.:  
 
-01_Material
-02_Dialogschnitt
-03_Sounddesign
-04_Foleys
-10_Mischung
-99_Deliveries
+`01_Material`
+`02_Dialogschnitt`
+`03_Sounddesign`
+`04_Foleys`
+`10_Mischung`
+`99_Deliveries`
 
-- Unterordner-Eigenschaften: **Name**, **Label**, **Produktionsstufe**.  
-- Produktionsstufen sind Ordner, in denen Pro Tools Sessions angelegt werden.  
+- Unterordner-Eigenschaften: **Name**, **Label**, **Produktionsstufe**.
+    - Name: Der Name des Ordners im Dateiverzeichnis
+    - Label: Der Name des Ordners in der immo24 Oberfläche und ggf. je nach Schema in Dateinamen
+    - Produktionsstufen sind Ordner, in denen Pro Tools Sessions angelegt werden.  
 - Jeder Kunde kann eine individuelle Struktur haben.
 
 ![Screenshot Produktionsbuch](./docs/screenshots/produktionsbuch.png)

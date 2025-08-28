@@ -126,7 +126,7 @@
         "x": 94,
         "y": 299,
         "w": 2012,
-        "h": 842
+        "h": 862
     },
     {
         "id": "b38df26cbb8bb4b3",
@@ -584,9 +584,9 @@
             "f3f4b4a22f8d1111"
         ],
         "x": 268,
-        "y": 393,
+        "y": 313,
         "w": 1244,
-        "h": 314
+        "h": 394
     },
     {
         "id": "f3f4b4a22f8d1111",
@@ -610,12 +610,14 @@
             "77a939fd00b2c94a",
             "5fa35bb78c259faa",
             "33f7fe6611787ae1",
-            "d41eafd247985d0d"
+            "d41eafd247985d0d",
+            "d175cfb607786b7e",
+            "fe31e8b393d01de7"
         ],
         "x": 294,
-        "y": 419,
+        "y": 339,
         "w": 1192,
-        "h": 262
+        "h": 342
     },
     {
         "id": "f33bbf72b9b63711",
@@ -1249,8 +1251,8 @@
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 830,
-        "y": 520,
+        "x": 850,
+        "y": 540,
         "wires": [
             [
                 "f5d8c9a8a2a1114"
@@ -1372,18 +1374,18 @@
         "z": "dc0d981398a42d88",
         "g": "f3f4b4a22f8d1111",
         "name": "schemes.json Verzeichnis",
-        "func": "msg.filename = global.get('PathStammdaten') + \"/schemes.json\";\nreturn msg;\n",
+        "func": "// Pfad sicher zusammensetzen\nconst base = (global.get('PathStammdaten') || '').replace(/[\\\\/]+$/, '');\nmsg.filename = base + '/schemes.json';\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 610,
+        "x": 570,
         "y": 500,
         "wires": [
             [
-                "0c2bb7a2a83a1113"
+                "d175cfb607786b7e"
             ]
         ]
     },
@@ -2630,7 +2632,7 @@
         "z": "dc0d981398a42d88",
         "g": "b72a4f67de28cc65",
         "name": "Globals setzen, Finalize",
-        "func": "// payload kommt vom join: { schema: {...}|{data:{...}}, user: [...] }\n// Außerdem haben wir vorher msg.paths gesetzt (Check path.json → Set Path Globals & Fan-out).\n// Falls msg.paths unterwegs verloren geht, rekonstruieren wir sie aus den Global-Variablen.\n\nconst all = msg.payload || {};\nlet schemaIn = all.schema || {};\nconst user = all.user || [];\n\n// Schema-Objekt normalisieren (API liefert teils {data:{...}})\nconst schema = (schemaIn && typeof schemaIn === \"object\" && schemaIn.data) ? schemaIn.data : schemaIn;\n\n// Schema-Felder extrahieren (Strings, ggf. \"\")\nconst schemaOut = {\n    sessionSchema: typeof schema?.sessionSchema === \"string\" ? schema.sessionSchema : \"\",\n    projektordnerSchema: typeof schema?.projektordnerSchema === \"string\" ? schema.projektordnerSchema : \"\"\n};\n\n// Paths aus msg.paths ODER aus den globalen Variablen zusammensetzen\nconst fromGlobals = {\n    PathProduktionen: global.get(\"PathProduktionen\") || \"\",\n    PathMitarbeiter: global.get(\"PathMitarbeiter\") || \"\",\n    PathStammdaten: global.get(\"PathStammdaten\") || \"\",\n    PathPTUser: global.get(\"PathPTUser\") || \"\"\n};\nconst paths = (msg.paths && typeof msg.paths === \"object\") ? msg.paths : fromGlobals;\n\n// Minimal-Validierung: Schema ist \"ok\", wenn mind. eines der beiden Strings gesetzt ist\nconst schemaOK = !!(schemaOut.sessionSchema || schemaOut.projektordnerSchema);\n\n// Initialize-Infos (du kannst das nach Bedarf erweitern)\nconst initialize = {\n    paths_json_present: true,    // path.json wurde gelesen/geprüft\n    required_keys_ok: true,      // wurde vorher bereits validiert\n    schema_ok: schemaOK,\n    dirs_exist: null,\n    missingKeys: [],\n    emptyKeys: [],\n    notFoundDirs: null\n};\n\n// Ready-Flag (hier sehr simpel: required_keys_ok && schema_ok)\nconst ready = initialize.required_keys_ok && initialize.schema_ok;\n\n// Globale Flags setzen\ntry { global.set(\"configReady\", ready, \"file\"); } catch { global.set(\"configReady\", ready); }\ntry { global.set(\"configReadyAt\", Date.now(), \"file\"); } catch { global.set(\"configReadyAt\", Date.now()); }\n\n// HTTP-Status\nmsg.statusCode = ready ? 200 : 503;\n\n// Finale Antwort: jetzt MIT paths und schema\nmsg.payload = {\n    ready,\n    initialize,\n    paths,          // <- gewünschtes Objekt mit allen Pfaden\n    schema: schemaOut  // <- gewünschtes Objekt mit beiden Schema-Strings\n};\n\nreturn msg;\n",
+        "func": "// payload vom join: { schema: <obj/ {data:{...}} oder {initialize:{...}} >, user: [...] }\n// ggf. msg.paths aus \"Check path.json\" → \"Set Path Globals & Fan-out\"\n\nconst all = msg.payload || {};\nlet schemaIn = all.schema || {};\nconst user = all.user || [];\n\n// Bestehendes initialize (vom Schema-Endpoint oder Check path) übernehmen\nconst upstreamInit =\n    (schemaIn && typeof schemaIn === \"object\" && schemaIn.initialize && typeof schemaIn.initialize === \"object\")\n        ? schemaIn.initialize\n        : {};\n\n// Schema normalisieren (falls {data:{...}})\nconst schemaObj = (schemaIn && typeof schemaIn === \"object\" && schemaIn.data)\n    ? schemaIn.data\n    : schemaIn;\n\n// Schema-Felder extrahieren als Strings\nconst schemaOut = {\n    sessionSchema: typeof schemaObj?.sessionSchema === \"string\" ? schemaObj.sessionSchema : \"\",\n    projektordnerSchema: typeof schemaObj?.projektordnerSchema === \"string\" ? schemaObj.projektordnerSchema : \"\"\n};\n\n// Paths aus msg.paths ODER aus Globals\nconst fromGlobals = {\n    PathProduktionen: global.get(\"PathProduktionen\") || \"\",\n    PathMitarbeiter: global.get(\"PathMitarbeiter\") || \"\",\n    PathStammdaten: global.get(\"PathStammdaten\") || \"\",\n    PathPTUser: global.get(\"PathPTUser\") || \"\"\n};\nconst paths = (msg.paths && typeof msg.paths === \"object\") ? msg.paths : fromGlobals;\n\n// Eigene Bewertung (nur für Felder, die wir beisteuern)\nconst schemaOK = !!(schemaOut.sessionSchema || schemaOut.projektordnerSchema);\n\n// Initialize zusammenführen – vorhandene Felder aus upstreamInit werden respektiert\nconst initialize = {\n    // Falls upstream etwas gesetzt hat, übernehmen; sonst sinnvolle Defaults\n    paths_json_present: upstreamInit.paths_json_present ?? true,\n    required_keys_ok: upstreamInit.required_keys_ok ?? true,\n\n    // Unser aktueller Stand zum Schema\n    schema_ok: upstreamInit.schema_ok ?? schemaOK,\n\n    // Weitere Felder durchreichen, wenn vorhanden\n    dirs_exist: upstreamInit.dirs_exist ?? null,\n    missingKeys: Array.isArray(upstreamInit.missingKeys) ? upstreamInit.missingKeys : [],\n    emptyKeys: Array.isArray(upstreamInit.emptyKeys) ? upstreamInit.emptyKeys : [],\n    notFoundDirs: upstreamInit.notFoundDirs ?? null,\n\n    // needsUserAction: bleibt true, sobald irgendein Schritt das verlangt\n    needsUserAction: !!upstreamInit.needsUserAction\n};\n\n// === Vorgabe: ready immer true ===\nconst ready = true;\n\n// Globale Flags setzen\ntry { global.set(\"configReady\", ready, \"file\"); } catch { global.set(\"configReady\", ready); }\ntry { global.set(\"configReadyAt\", Date.now(), \"file\"); } catch { global.set(\"configReadyAt\", Date.now()); }\n\n// HTTP-Status immer 200\nmsg.statusCode = 200;\n\n// Antwort zusammensetzen: ready, initialize, paths, schema\nmsg.payload = {\n    ready,\n    initialize,\n    paths,\n    schema: schemaOut\n};\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2672,7 +2674,7 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1190,
+        "x": 1260,
         "y": 2220,
         "wires": []
     },
@@ -3006,6 +3008,51 @@
         "x": 440,
         "y": 2080,
         "wires": []
+    },
+    {
+        "id": "d175cfb607786b7e",
+        "type": "fs-ops-access",
+        "z": "dc0d981398a42d88",
+        "g": "f3f4b4a22f8d1111",
+        "name": "schemes.json vorhanden?",
+        "path": "",
+        "pathType": "str",
+        "filename": "filename",
+        "filenameType": "msg",
+        "read": true,
+        "write": false,
+        "throwerror": false,
+        "x": 740,
+        "y": 380,
+        "wires": [
+            [
+                "0c2bb7a2a83a1113"
+            ],
+            [
+                "fe31e8b393d01de7"
+            ]
+        ]
+    },
+    {
+        "id": "fe31e8b393d01de7",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "g": "f3f4b4a22f8d1111",
+        "name": "Schema fehlt",
+        "func": "// schema fehlt → sofortige Fehlerantwort\nmsg.statusCode = 404;\nmsg.payload = {\n    data: {},\n    version: null,\n    initialize: {\n        paths_json_present: true,   // Pfade waren da\n        required_keys_ok: true,     // Pfade ok\n        schema_ok: false,           // aber kein Schema\n        dirs_exist: null,\n        missingKeys: [],\n        emptyKeys: [],\n        notFoundDirs: null,\n        needsUserAction: true       // <--- wichtig\n    }\n};\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 400,
+        "wires": [
+            [
+                "c3e4d5f6a7b1116"
+            ]
+        ]
     },
     {
         "id": "41a1604a42cf8a96",
@@ -5593,7 +5640,7 @@
         "mode": "755",
         "fullpath": "payload",
         "fullpathType": "msg",
-        "x": 1330,
+        "x": 1380,
         "y": 1040,
         "wires": [
             [
@@ -5627,15 +5674,15 @@
         "z": "b1c585f0d25b86fd",
         "g": "c0de7eb24d59090d",
         "name": "Nummerierung + Dateiname",
-        "func": "function n(s){ return String(s||'').normalize('NFC'); }\nconst files = (msg.payload||[]).map(n);\nconst d = msg.data;\nconst values = {\n  datum: n(d.datum),\n  projektname: n(d.projektname),\n  moid: n(d.moid),\n  benutzer: n(global.get('activeUserKuerzel')||''),\n  kunde: n(d.kunde),\n  produktionsstufe: n(d.stufe)\n};\nlet base = n(msg.sessionSchema||'{{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}');\n\nlet rePattern = base\n  .replace(/\\./g,'\\\\.')\n  .replace(/{{version}}/g,'v(\\\\d+)')\n  .replace(/{{(\\w+)}}/g,(_,k)=>{ if(k==='version') return ''; const v=values[k]; return v ? v.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\\\$&') : '.*'; });\nconst re = new RegExp('^'+rePattern+'\\\\.ptx$');\nlet maxV = 0;\nfor(const f of files){ const m = re.exec(f); if(m && m[1]){ const v = parseInt(m[1],10); if(v>maxV) maxV=v; } }\nconst nextV = maxV + 1;\nvalues.version = `v${nextV}`;\nlet filename = base.replace(/{{(\\w+)}}/g,(_,k)=> values[k] || '');\nfilename = filename.replace(/\\.[^.]+$/, '') + '.ptx';\n\nmsg.filename = filename;\nreturn msg;",
+        "func": "function n(s) { return String(s || '').normalize('NFC'); }\n\nconst files = (msg.payload || []).map(n);\nconst d = msg.data || {};\n\n// heutiges Datum YYYY-MM-DD\nconst now = new Date();\nconst datumHeute = now.toISOString().slice(0, 10);\n\n// Platzhalter-Werte\nconst values = {\n  datum: datumHeute,\n  projektname: n(d.projektname),\n  moid: n(d.moid),\n  benutzer: n(global.get('activeUserKuerzel') || ''),\n  kunde: n(d.kunde),\n  produktionsstufe: n(d.stufeLabel)\n};\n\n// Template (falls none gesetzt): inkl. datum & version\nlet base = n(msg.sessionSchema || '{{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{datum}} {{version}}');\n\n// Regex bauen: Version capturen; Datum & Benutzer ignorieren (beliebig)\nlet rePattern = base\n  .replace(/\\./g, '\\\\.')\n  .replace(/{{version}}/g, 'v(\\\\d+)')\n  .replace(/{{(\\w+)}}/g, (_, k) => {\n    if (k === 'version') return '';\n    if (k === 'datum' || k === 'benutzer') return '.*'; // <— beide egal bei Suche\n    const v = values[k];\n    return v ? v.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&') : '.*';\n  });\n\nconst re = new RegExp('^' + rePattern + '\\\\.ptx$');\n\n// höchste vorhandene Version über ALLE Daten/Benutzer finden\nlet maxV = 0;\nfor (const f of files) {\n  const m = re.exec(f);\n  if (m && m[1]) {\n    const v = parseInt(m[1], 10);\n    if (!Number.isNaN(v) && v > maxV) maxV = v;\n  }\n}\n\n// nächste Version und finalen Dateinamen setzen\nconst nextV = maxV + 1;\nvalues.version = `v${nextV}`;\n\nlet filename = base.replace(/{{(\\w+)}}/g, (_, k) => values[k] || '');\nfilename = filename.replace(/\\.[^.]+$/, '') + '.ptx';\n\nmsg.filename = filename;\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 550,
-        "y": 1100,
+        "x": 560,
+        "y": 1120,
         "wires": [
             [
                 "a0b08bb7a4c1e5b2"
@@ -5658,7 +5705,7 @@
         "destFilenameType": "msg",
         "link": false,
         "overwrite": false,
-        "x": 780,
+        "x": 800,
         "y": 1100,
         "wires": [
             [
@@ -5679,7 +5726,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 950,
+        "x": 1020,
         "y": 1100,
         "wires": [
             [
@@ -5695,7 +5742,7 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 1100,
+        "x": 1190,
         "y": 1100,
         "wires": []
     },

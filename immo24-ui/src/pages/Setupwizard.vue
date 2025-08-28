@@ -146,6 +146,15 @@
                 persistent-hint
                 class="mb-2"
               />
+              <!-- Fehlermeldung direkt unter dem Textfeld -->
+              <v-alert
+                v-if="schema.sessionSchema && !schema.sessionSchema.includes('{{version}}')"
+                type="error"
+                class="mt-2"
+              >
+                Das Session-Schema muss
+                <span class="chip">&#123;&#123;version&#125;&#125;</span> enthalten!
+              </v-alert>
               <div class="preview-box mt-2">
                 <span class="text-caption text-medium-emphasis">Vorschau:</span>
                 <code>{{ previewSession }}</code>
@@ -155,7 +164,11 @@
             <div class="d-flex ga-2 mt-4">
               <v-btn variant="text" @click="prev">Zurück</v-btn>
               <v-spacer />
-              <v-btn color="primary" :disabled="!step3Ok" @click="next">Weiter</v-btn>
+              <v-btn
+                color="primary"
+                :disabled="!step3Ok || !schema.sessionSchema.includes('{{version}}')"
+                @click="next"
+              >Weiter</v-btn>
             </div>
           </v-card>
         </v-stepper-window-item>

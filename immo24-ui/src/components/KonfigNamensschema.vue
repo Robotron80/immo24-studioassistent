@@ -1,6 +1,18 @@
 <template>
   <v-card flat>
     <v-card-text>
+      <!-- Fehlermeldung ganz oben -->
+      <v-alert
+        v-if="!sessionSchemaValid && staged.sessionSchema"
+        type="error"
+        class="mb-4"
+      >
+        Das Session-Schema muss
+        <span class="chip">&#123;&#123;version&#125;&#125;</span> enthalten!
+      </v-alert>
+      <v-alert v-if="error" type="error" class="mb-4">{{ error }}</v-alert>
+
+      <!-- Projektordner-Schema Card -->
       <v-card class="pa-4 mb-4 shadow-card" variant="text">
         <div class="schema-title mb-2">Projektordner-Schema</div>
         <div class="mb-2 param-label">Verfügbare Parameter</div>
@@ -27,6 +39,7 @@
         </div>
       </v-card>
 
+      <!-- Session-Schema Card -->
       <v-card class="pa-4 mb-4 shadow-card" variant="text">
         <div class="schema-title mb-2">Session-Schema</div>
         <div class="mb-2 param-label">Verfügbare Parameter</div>
@@ -52,8 +65,6 @@
           <code>{{ previewSession }}</code>
         </div>
       </v-card>
-
-      <v-alert v-if="error" type="error" class="mt-4">{{ error }}</v-alert>
     </v-card-text>
   </v-card>
 </template>
@@ -149,7 +160,8 @@ defineExpose({
     schema: { ...staged },
     version: original.value.version
   }),
-  resetToServer: async () => { await loadSnapshot() }
+  resetToServer: async () => { await loadSnapshot() },
+  isSessionSchemaValid: () => sessionSchemaValid.value
 })
 
 const projektordnerPlaceholders = [
@@ -159,6 +171,10 @@ const sessionPlaceholders = [
   '{{benutzer}}', '{{datum}}', '{{projektname}}', '{{moid}}',
   '{{kunde}}', '{{produktionsstufe}}', '{{version}}'
 ]
+
+const sessionSchemaValid = computed(() =>
+  staged.sessionSchema.includes('{{version}}')
+)
 </script>
 
 <style scoped>

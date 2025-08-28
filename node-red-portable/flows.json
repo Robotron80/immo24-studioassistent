@@ -259,11 +259,6 @@
             "label": true
         },
         "nodes": [
-            "67a76ef6609ed0cf",
-            "625e6b2914f18b76",
-            "ebe08a20f29e269e",
-            "fa26e2f162763260",
-            "9e9531cb7b3cf674",
             "3b713c4d8d94fa33",
             "6a27ae8fea9bdc6a",
             "1eeaaef0f33ed4f4",
@@ -283,7 +278,7 @@
         "x": 94,
         "y": 2199,
         "w": 1232,
-        "h": 622
+        "h": 402
     },
     {
         "id": "21da7a611532cde9",
@@ -615,112 +610,6 @@
         "y": 419,
         "w": 1192,
         "h": 262
-    },
-    {
-        "id": "67a76ef6609ed0cf",
-        "type": "function",
-        "z": "dc0d981398a42d88",
-        "g": "b72a4f67de28cc65",
-        "name": "PathStammdaten abfragen",
-        "func": "msg.payload = global.get('PathStammdaten');\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 520,
-        "y": 2700,
-        "wires": [
-            [
-                "625e6b2914f18b76"
-            ]
-        ]
-    },
-    {
-        "id": "625e6b2914f18b76",
-        "type": "fs-ops-dir",
-        "z": "dc0d981398a42d88",
-        "g": "b72a4f67de28cc65",
-        "name": "Ordner abfragen",
-        "path": "payload",
-        "pathType": "msg",
-        "filter": "*",
-        "filterType": "str",
-        "dir": "files",
-        "dirType": "msg",
-        "x": 760,
-        "y": 2700,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "ebe08a20f29e269e",
-        "type": "catch",
-        "z": "dc0d981398a42d88",
-        "g": "b72a4f67de28cc65",
-        "name": "Kein Ordner gefunden",
-        "scope": [
-            "625e6b2914f18b76"
-        ],
-        "uncaught": false,
-        "x": 780,
-        "y": 2740,
-        "wires": [
-            [
-                "fa26e2f162763260"
-            ]
-        ]
-    },
-    {
-        "id": "fa26e2f162763260",
-        "type": "function",
-        "z": "dc0d981398a42d88",
-        "g": "b72a4f67de28cc65",
-        "name": "[UI] Ersteinrichtung-Dialog einblenden",
-        "func": "msg.payload = {\n    groups: {\n        show: ['Ersteinrichtung']\n    }\n}\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1130,
-        "y": 2740,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "9e9531cb7b3cf674",
-        "type": "inject",
-        "z": "dc0d981398a42d88",
-        "g": "b72a4f67de28cc65",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 880,
-        "y": 2780,
-        "wires": [
-            [
-                "fa26e2f162763260"
-            ]
-        ]
     },
     {
         "id": "f33bbf72b9b63711",
@@ -2194,8 +2083,7 @@
                 "user_set_file_payload"
             ],
             [
-                "user_mkdir_metadir",
-                "3e7a88e641e2554e"
+                "user_mkdir_metadir"
             ]
         ]
     },
@@ -2216,7 +2104,8 @@
         "y": 1300,
         "wires": [
             [
-                "user_set_file_payload"
+                "user_set_file_payload",
+                "bc1ffe6287832c9d"
             ]
         ]
     },
@@ -2364,23 +2253,6 @@
         "statusType": "auto",
         "x": 780,
         "y": 1320,
-        "wires": []
-    },
-    {
-        "id": "3e7a88e641e2554e",
-        "type": "debug",
-        "z": "dc0d981398a42d88",
-        "name": "debug 15",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1700,
-        "y": 1420,
         "wires": []
     },
     {
@@ -3045,6 +2917,85 @@
         "outputLabels": [
             "Ok",
             "Abbruch"
+        ]
+    },
+    {
+        "id": "140efcfa08a31ad0",
+        "type": "fs-ops-mkdir",
+        "z": "dc0d981398a42d88",
+        "name": "Pro Tools Ordner anlegen",
+        "path": "dir",
+        "pathType": "msg",
+        "dirname": "payload",
+        "dirnameType": "msg",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 2610,
+        "y": 1340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bc1ffe6287832c9d",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "PT Modul aktiv?",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2000,
+        "y": 1340,
+        "wires": [
+            [
+                "c130d42e5749a6f1"
+            ]
+        ]
+    },
+    {
+        "id": "c130d42e5749a6f1",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "Ordnerliste",
+        "func": "\nmsg.payload = [\n    \"anna\",\n    \"bruno\",\n    \"carmen\"\n];\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2190,
+        "y": 1340,
+        "wires": [
+            [
+                "d19d095c4432355f"
+            ]
+        ]
+    },
+    {
+        "id": "d19d095c4432355f",
+        "type": "split",
+        "z": "dc0d981398a42d88",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "payload",
+        "x": 2370,
+        "y": 1340,
+        "wires": [
+            [
+                "140efcfa08a31ad0"
+            ]
         ]
     },
     {

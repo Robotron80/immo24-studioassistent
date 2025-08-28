@@ -384,6 +384,29 @@ const template = [
       { type: 'separator' }, { role: 'quit' }
     ]
   }]),
+{
+    label: 'Bearbeiten',
+    submenu: [
+      { role: 'undo' },
+      { role: 'redo' },
+      { type: 'separator' },
+      { role: 'cut' },
+      { role: 'copy' },
+      { role: 'paste' },
+      ...(isMac ? [
+        { role: 'pasteAndMatchStyle' },
+        { role: 'delete' },
+        { role: 'selectAll' },
+        { type: 'separator' },
+        { label: 'Sprachausgabe', submenu: [{ role: 'startSpeaking' }, { role: 'stopSpeaking' }] }
+      ] : [
+        { role: 'delete' },
+        { type: 'separator' },
+        { role: 'selectAll' }
+      ])
+    ]
+  }
+
 /*  {
     label: 'Ansicht',
     submenu: [
@@ -392,6 +415,8 @@ const template = [
       { type: 'separator' }, { role: 'togglefullscreen' }
     ]
   } */
+
+
 ] 
 Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 

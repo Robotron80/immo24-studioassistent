@@ -158,6 +158,5 @@ Der **immo24 Studioassistent** steht unter der
 - Betrieb als Service löst ebenfalls Offenlegungspflicht aus  
 
 👉 Drittanbieter-Lizenzen: siehe [LICENSES/](./LICENSES)  
-👉 Marken: siehe [TRADEMARKS.md](./TRADEMARKS.md)
 
 ---

@@ -62,7 +62,7 @@ Restlicher Ordner bleibt frei für Backups & Testprojekte.
 - Projekte & Sessions folgen einem festen **Namensschema**.
     - Als Projektordner wird der Ordner bezeichnet, in dem alle Unterordner, Sessions, etc. liegen.
     - Die Session ist die *.ptx-Datei mit der Pro Tools Session.
-- Variablen + Freitext kombinierbar, Vorschau zeigt Beispielausgabe.  
+- Variablen + Freitext kombinierbar, Vorschau zeigt Beispielausgabe. Das Session-Schema muss die Version beinhalten.
 - **Achtung:** Das Namensschema sollte nicht im laufenden Betrieb geändert werden, da nach einer Änderung vorhandene Projekte nicht mehr über immo24 Studioassistent bearbeitet werden können.
 
 ![Screenshot Namensschema](./docs/screenshots/namensschema.png)

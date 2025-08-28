@@ -4,7 +4,10 @@
   "main": "main.js",
   "description": "Applikation zur Dateiorganisation auf vernetzten Avid Pro Tools Systemen",
   "author": "Philipp Menzel",
-  "license": "",
+  "license": "AGPL-3.0-only",
+  "repository": { "type": "git", "url": "https://github.com/Robotron80/immo24-studioassistent.git" },
+  "homepage": "https://github.com/Robotron80/immo24-studioassistent",
+  "bugs": { "url": "https://github.com/Robotron80/immo24-studioassistent/issues" },
   "scripts": {
     "start": "electron .",
     "dist": "electron-builder"
@@ -21,6 +24,25 @@
       "node-red-portable/**",
       "immo24-ui/dist/**"
     ],
+   "win": {
+      "target": [ "nsis" ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "license": "assets/license.txt"
+    },
+    "mac": {
+      "target": [ "dmg" ],
+      "category": "public.app-category.productivity"
+    },
+    "dmg": {
+      "iconSize": 128
+    },
+
     "directories": {
       "buildResources": "assets"
     },

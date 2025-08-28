@@ -19,11 +19,11 @@
         <!-- Schritt 1: Willkommen -->
         <v-stepper-window-item :value="1">
           <v-card class="pa-6" variant="flat">
-            <p class="text-body-1">
+            <p class="text-body-1 mb-4">
               Willkommen beim immo24 Studioassistent. Das Programm wird das erste Mal gestartet und benötigt einige grundlegende Einstellungen.
             </p>
-            <p class="text-body-2">
-              Diese können später in der Konfiguration angepasst werden. Gespeichert wird erst am Ende mit „Fertig“.
+            <p class="text-body-1">
+              Diese können später in der Konfiguration angepasst werden.
             </p>
             <div class="d-flex ga-2 mt-4">
               <v-spacer />
@@ -35,48 +35,62 @@
         <!-- Schritt 2: Pfade -->
         <v-stepper-window-item :value="2">
           <v-card class="pa-4" variant="flat">
-            <p>
+            <div class="text-body-1">
               Bitte die Pfade für Mitarbeiter-, Produktionen- und Stammdatenverzeichnis festlegen.
-              Anschließend den Pfad für das Pro Tools User-Verzeichnis.
-            </p>
-            <v-row dense>
-              <v-col cols="12" md="6">
-                <v-text-field v-model="paths.PathMitarbeiter" label="Pfad: Mitarbeiter" clearable>
-                  <template #append>
-                    <v-btn color="primary" variant="outlined" @click="pick('Pfad: Mitarbeiter','PathMitarbeiter')">
-                      Durchsuchen
-                    </v-btn>
-                  </template>
-                </v-text-field>
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-text-field v-model="paths.PathProduktionen" label="Pfad: Produktionen" clearable>
-                  <template #append>
-                    <v-btn color="primary" variant="outlined" @click="pick('Pfad: Produktionen','PathProduktionen')">
-                      Durchsuchen
-                    </v-btn>
-                  </template>
-                </v-text-field>
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-text-field v-model="paths.PathStammdaten" label="Pfad: Stammdaten" clearable>
-                  <template #append>
-                    <v-btn color="primary" variant="outlined" @click="pick('Pfad: Stammdaten','PathStammdaten')">
-                      Durchsuchen
-                    </v-btn>
-                  </template>
-                </v-text-field>
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-text-field v-model="paths.PathPTUser" label="Pfad: Pro Tools User" clearable>
-                  <template #append>
-                    <v-btn color="primary" variant="outlined" @click="pick('Pfad: Pro Tools User','PathPTUser')">
-                      Durchsuchen
-                    </v-btn>
-                  </template>
-                </v-text-field>
-              </v-col>
-            </v-row>
+            </div>
+            <div class="text-body-1 mb-4">
+              Anschließend den Pfad des Pro Tools User-Verzeichnis angeben.
+            </div>
+            <div>
+              <v-text-field
+                v-model="paths.PathMitarbeiter"
+                label="Pfad: Mitarbeiter"
+                clearable
+                class="mb-3"
+              >
+                <template #append>
+                  <v-btn color="primary" variant="outlined" @click="pick('Pfad: Mitarbeiter','PathMitarbeiter')">
+                    Durchsuchen
+                  </v-btn>
+                </template>
+              </v-text-field>
+              <v-text-field
+                v-model="paths.PathProduktionen"
+                label="Pfad: Produktionen"
+                clearable
+                class="mb-3"
+              >
+                <template #append>
+                  <v-btn color="primary" variant="outlined" @click="pick('Pfad: Produktionen','PathProduktionen')">
+                    Durchsuchen
+                  </v-btn>
+                </template>
+              </v-text-field>
+              <v-text-field
+                v-model="paths.PathStammdaten"
+                label="Pfad: Stammdaten"
+                clearable
+                class="mb-3"
+              >
+                <template #append>
+                  <v-btn color="primary" variant="outlined" @click="pick('Pfad: Stammdaten','PathStammdaten')">
+                    Durchsuchen
+                  </v-btn>
+                </template>
+              </v-text-field>
+              <v-text-field
+                v-model="paths.PathPTUser"
+                label="Pfad: Pro Tools User"
+                clearable
+                class="mb-3"
+              >
+                <template #append>
+                  <v-btn color="primary" variant="outlined" @click="pick('Pfad: Pro Tools User','PathPTUser')">
+                    Durchsuchen
+                  </v-btn>
+                </template>
+              </v-text-field>
+            </div>
             <div class="d-flex ga-2 mt-4">
               <v-btn variant="text" @click="prev">Zurück</v-btn>
               <v-spacer />
@@ -88,23 +102,57 @@
         <!-- Schritt 3: Namensschema -->
         <v-stepper-window-item :value="3">
           <v-card class="pa-4" variant="flat">
-            <p class="text-body-2 mb-4">
-              Bitte festlegen, wie die Projektordner und Session-Files benannt werden sollen. Folgende Parameter stehen zur Verfügung:
-              <span v-pre>{{benutzer}}, {{datum}}, {{projektname}}, {{moid}}, {{kunde}}, {{produktionsstufe}}, {{version}}</span>
-            </p>
-            <v-text-field
-              v-model="schema.projektordnerSchema"
-              label="Projektordner-Schema"
-              hint="z.B. {{benutzer}} {{datum}} {{projektname}} {{moid}}"
-              persistent-hint
-            />
-            <v-text-field
-              v-model="schema.sessionSchema"
-              label="Session-Schema"
-              hint="z.B. {{projektname}} {{moid}} {{benutzer}} {{kunde}} {{produktionsstufe}} {{version}}"
-              persistent-hint
-            />
-            <div class="d-flex ga-2 mt-2">
+            <div class="text-body-1 mb-6">
+              Bitte festlegen, wie die Projektordner und Session-Files benannt werden sollen.
+            </div>
+
+            <v-card class="pa-4 mb-4 shadow-card" variant="text">
+              <div class="schema-title mb-2">Projektordner-Schema</div>
+              <div class="mb-2 param-label">Verfügbare Parameter</div>
+              <div class="mb-3" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <span
+                  v-for="ph in projektordnerPlaceholders"
+                  :key="ph"
+                  class="chip"
+                >{{ ph }}</span>
+              </div>
+              <v-text-field
+                v-model="schema.projektordnerSchema"
+                label="Projektordner-Schema"
+                hint="z.B. {{datum}} {{projektname}} {{moid}} {{benutzer}}"
+                persistent-hint
+                class="mb-2"
+              />
+              <div class="preview-box mt-2">
+                <span class="text-caption text-medium-emphasis">Vorschau:</span>
+                <code>{{ previewProjektordner }}</code>
+              </div>
+            </v-card>
+
+            <v-card class="pa-4 mb-4 shadow-card" variant="text">
+              <div class="schema-title mb-2">Session-Schema</div>
+              <div class="mb-2 param-label">Verfügbare Parameter</div>
+              <div class="mb-3" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <span
+                  v-for="ph in sessionPlaceholders"
+                  :key="ph"
+                  class="chip"
+                >{{ ph }}</span>
+              </div>
+              <v-text-field
+                v-model="schema.sessionSchema"
+                label="Session-Schema"
+                hint="z.B. {{projektname}} {{produktionsstufe}} {{benutzer}} {{version}}"
+                persistent-hint
+                class="mb-2"
+              />
+              <div class="preview-box mt-2">
+                <span class="text-caption text-medium-emphasis">Vorschau:</span>
+                <code>{{ previewSession }}</code>
+              </div>
+            </v-card>
+
+            <div class="d-flex ga-2 mt-4">
               <v-btn variant="text" @click="prev">Zurück</v-btn>
               <v-spacer />
               <v-btn color="primary" :disabled="!step3Ok" @click="next">Weiter</v-btn>
@@ -115,31 +163,29 @@
         <!-- Schritt 4: Passwort -->
         <v-stepper-window-item :value="4">
           <v-card class="pa-4" variant="flat">
-            <p class="text-body-2 mb-4">
+            <div class="text-body-1 mb-6">
               Bitte ein Passwort für das Konfigurations-Menü vergeben.
-            </p>
-            <v-row dense>
-              <v-col cols="12" md="6">
-                <v-text-field
-                  v-model="password"
-                  :type="showPw ? 'text' : 'password'"
-                  label="Passwort"
-                  :append-inner-icon="showPw ? 'mdi-eye-off' : 'mdi-eye'"
-                  @click:append-inner="showPw = !showPw"
-                />
-              </v-col>
-              <v-col cols="12" md="6">
-                <v-text-field
-                  v-model="password2"
-                  :type="showPw2 ? 'text' : 'password'"
-                  label="Passwort wiederholen"
-                  :append-inner-icon="showPw2 ? 'mdi-eye-off' : 'mdi-eye'"
-                  @click:append-inner="showPw2 = !showPw2"
-                  :error="!!password2 && password2 !== password"
-                  :error-messages="password2 && password2 !== password ? ['Passwörter stimmen nicht überein.'] : []"
-                />
-              </v-col>
-            </v-row>
+            </div>
+            <div>
+              <v-text-field
+                v-model="password"
+                :type="showPw ? 'text' : 'password'"
+                label="Passwort"
+                :append-inner-icon="showPw ? 'mdi-eye-off' : 'mdi-eye'"
+                @click:append-inner="showPw = !showPw"
+                class="mb-3"
+              />
+              <v-text-field
+                v-model="password2"
+                :type="showPw2 ? 'text' : 'password'"
+                label="Passwort wiederholen"
+                :append-inner-icon="showPw2 ? 'mdi-eye-off' : 'mdi-eye'"
+                @click:append-inner="showPw2 = !showPw2"
+                :error="!!password2 && password2 !== password"
+                :error-messages="password2 && password2 !== password ? ['Passwörter stimmen nicht überein.'] : []"
+                class="mb-3"
+              />
+            </div>
             <div class="d-flex ga-2 mt-2">
               <v-btn variant="text" @click="prev">Zurück</v-btn>
               <v-spacer />
@@ -151,7 +197,7 @@
         <!-- Schritt 5: Fertigstellen -->
         <v-stepper-window-item :value="5">
           <v-card class="pa-4" variant="flat">
-            <p class="text-body-2">
+            <p class="text-body-1 mb-4">
               Alles bereit. Mit „Fertig“ werden die Einstellungen gespeichert. Danach prüft immo24 die
               Konfiguration und startet mit der Benutzerwahl.
             </p>
@@ -314,6 +360,11 @@ async function finish() {
     }
 
     toast('Konfiguration gespeichert.')
+
+    // InitWindow schließen
+    await window.electronAPI?.closeInitWindow?.()
+
+    // Picker öffnen
     await window.electronAPI?.hideAndOpenPicker?.({ doLogout: true })
   } catch (e) {
     toast(String(e), 'error')
@@ -322,5 +373,92 @@ async function finish() {
   }
 }
 
+const demoValues = {
+  datum: '1997-01-23',
+  projektname: 'Faszination Falten',
+  moid: 'O4BZ',
+  benutzer: 'PL',
+  kunde: 'SuperVision',
+  produktionsstufe: 'Foleys',
+  version: 'v3'
+}
+
+function renderPreview(schemaStr = '') {
+  return schemaStr.replace(/\{\{(\w+)\}\}/g, (_m, key) => demoValues[key] ?? '')
+}
+
+const previewProjektordner = computed(() => renderPreview(schema.projektordnerSchema))
+const previewSession       = computed(() => renderPreview(schema.sessionSchema))
+
 onMounted(loadFromInitialize)
+
+const projektordnerPlaceholders = [
+  '{{benutzer}}', '{{datum}}', '{{projektname}}', '{{moid}}',
+  '{{kunde}}'
+]
+const sessionPlaceholders = [
+  '{{benutzer}}', '{{datum}}', '{{projektname}}', '{{moid}}',
+  '{{kunde}}', '{{produktionsstufe}}', '{{version}}'
+]
 </script>
+
+<style>
+code {
+  background: #f4f6f8;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.chip {
+  display: inline-block;
+  padding: 2px 8px;
+  margin: 2px 0;
+  background: #f5f5f5;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 16px;
+  font-size: 0.95em;
+  font-weight: 500;
+  user-select: none;
+}
+
+.preview-box {
+  background: #f4f6f8;
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-top: 4px;
+  display: inline-block;
+}
+
+.setup-title {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 2rem;
+}
+
+.schema-title {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #444;
+}
+
+.param-label {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: #666;
+}
+
+.shadow-card {
+  box-shadow: 0 2px 8px 0 rgba(60,60,60,0.07);
+  border-radius: 10px;
+  border: none;
+}
+
+.text-body-1 {
+  font-size: 1.08rem;
+  font-weight: 300;
+  color: #222;
+  margin-bottom: 1.5rem;
+}
+</style>

@@ -267,7 +267,6 @@
             "3b713c4d8d94fa33",
             "6a27ae8fea9bdc6a",
             "1eeaaef0f33ed4f4",
-            "24054f78ac7af9e9",
             "fc6026e01f804123",
             "b4b472d919c6e077",
             "4ec4cdc014b0d31d",
@@ -278,12 +277,13 @@
             "ebeea6be6cb9b938",
             "5a5f66625a036f4a",
             "4e271e5a331103cd",
-            "f4c3bb4c6e71df25"
+            "f4c3bb4c6e71df25",
+            "4a2faaf2bb595bf3"
         ],
         "x": 94,
-        "y": 2139,
+        "y": 2199,
         "w": 1232,
-        "h": 682
+        "h": 622
     },
     {
         "id": "21da7a611532cde9",
@@ -1651,8 +1651,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 170,
-        "y": 1640,
+        "x": 660,
+        "y": 1680,
         "wires": [
             [
                 "read_ma_dir"
@@ -1674,8 +1674,7 @@
         "y": 1740,
         "wires": [
             [
-                "filter_hidden",
-                "a00b24b7cb276495"
+                "filter_hidden"
             ]
         ]
     },
@@ -1707,7 +1706,7 @@
         "y": 1740,
         "wires": [
             [
-                "stats_paths"
+                "a600bfcbde775fb5"
             ]
         ]
     },
@@ -1722,8 +1721,8 @@
         "filenameType": "msg",
         "stats": "stats",
         "sizeType": "msg",
-        "x": 1450,
-        "y": 1740,
+        "x": 1530,
+        "y": 1680,
         "wires": [
             [
                 "only_directory_names"
@@ -1742,7 +1741,7 @@
         "y": 1740,
         "wires": [
             [
-                "split_per_user"
+                "1d9ac50e6b60b757"
             ]
         ]
     },
@@ -1952,7 +1951,8 @@
         "y": 1940,
         "wires": [
             [
-                "c19b623fcc500c5b"
+                "c19b623fcc500c5b",
+                "a00b24b7cb276495"
             ]
         ]
     },
@@ -2546,8 +2546,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 750,
-        "y": 1660,
+        "x": 760,
+        "y": 2000,
         "wires": []
     },
     {
@@ -2563,8 +2563,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1090,
-        "y": 1620,
+        "x": 980,
+        "y": 1700,
         "wires": []
     },
     {
@@ -2675,41 +2675,6 @@
         ]
     },
     {
-        "id": "24054f78ac7af9e9",
-        "type": "change",
-        "z": "dc0d981398a42d88",
-        "g": "b72a4f67de28cc65",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "topic",
-                "pt": "msg",
-                "to": "paths",
-                "tot": "str"
-            },
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "paths",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 430,
-        "y": 2180,
-        "wires": [
-            [
-                "4ec4cdc014b0d31d"
-            ]
-        ]
-    },
-    {
         "id": "fc6026e01f804123",
         "type": "change",
         "z": "dc0d981398a42d88",
@@ -2781,14 +2746,14 @@
         "useparts": false,
         "accumulate": false,
         "timeout": "",
-        "count": "3",
+        "count": "2",
         "reduceRight": false,
         "reduceExp": "",
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
         "x": 810,
-        "y": 2240,
+        "y": 2260,
         "wires": [
             [
                 "1af6fe3437f78dcc"
@@ -2800,15 +2765,15 @@
         "type": "function",
         "z": "dc0d981398a42d88",
         "g": "b72a4f67de28cc65",
-        "name": "Globals setzen, Path Check",
-        "func": "// payload: { paths: {...}, schema: {...}|{data:{...}}, user: [...] }\nconst all = msg.payload || {};\nlet paths = all.paths || {};\nlet schema = all.schema || {};\nconst user = all.user || {};\n\n// schema normalisieren\nschema = (schema && typeof schema === \"object\" && schema.data) ? schema.data : schema;\n\n// schema ok?\nconst schemaOK = !!(schema && (schema.sessionSchema || schema.projektordnerSchema));\n\n// Globals setzen\nconst set = (k, v) => { try { global.set(k, v, \"file\"); } catch { global.set(k, v); } };\n\nif (schema.sessionSchema) set(\"sessionSchema\", schema.sessionSchema);\nif (schema.projektordnerSchema) set(\"projektordnerSchema\", schema.projektordnerSchema);\n\nif (paths.PathProduktionen) set(\"PathProduktionen\", paths.PathProduktionen);\nif (paths.PathMitarbeiter) set(\"PathMitarbeiter\", paths.PathMitarbeiter);\nif (paths.PathStammdaten) set(\"PathStammdaten\", paths.PathStammdaten);\nif (paths.PathPTUser) set(\"PathPTUser\", paths.PathPTUser);\n\n// Ready (paths waren bereits ok)\nconst initialize = {\n    paths_json_present: true,\n    required_keys_ok: true,\n    schema_ok: !!schemaOK,\n    dirs_exist: null,\n    missingKeys: [],\n    emptyKeys: [],\n    notFoundDirs: null\n};\nconst ready = initialize.required_keys_ok && initialize.schema_ok;\n\nset(\"configReady\", ready);\nset(\"configReadyAt\", Date.now());\n\nmsg.statusCode = ready ? 200 : 503;\nmsg.payload = { ready, initialize };\nreturn msg;",
+        "name": "Globals setzen, Finalize",
+        "func": "// payload: { schema: {...}|{data:{...}}, user: [...] }\nconst all = msg.payload || {};\nlet schema = all.schema || {};\nconst user = all.user || {};\n\n// schema normalisieren\nschema = (schema && typeof schema === \"object\" && schema.data) ? schema.data : schema;\n\n// Schema ok?\nconst schemaOK = !!(schema && (schema.sessionSchema || schema.projektordnerSchema));\n\n// === Schema-Globals setzen ===\nconst set = (k, v) => { try { global.set(k, v, \"file\"); } catch { global.set(k, v); } };\n\nif (schema.sessionSchema) set(\"sessionSchema\", schema.sessionSchema);\nif (schema.projektordnerSchema) set(\"projektordnerSchema\", schema.projektordnerSchema);\n\n// (Paths sind vorher schon gesetzt worden und müssen hier nicht mehr angefasst werden)\n\n// User-Handling: optional, falls du später einen activeUser o.ä. ableiten willst\nif (Array.isArray(user)) {\n    // z.B. global.set(\"users\", user);\n}\n\n// === Initialize-Status ===\nconst initialize = {\n    paths_json_present: true,   // Path-Check + Globals wurden ja vorher gemacht\n    required_keys_ok: true,\n    schema_ok: schemaOK,\n    dirs_exist: null,\n    missingKeys: [],\n    emptyKeys: [],\n    notFoundDirs: null\n};\n\nconst ready = initialize.required_keys_ok && initialize.schema_ok;\n\nset(\"configReady\", ready);\nset(\"configReadyAt\", Date.now());\n\nmsg.statusCode = ready ? 200 : 503;\nmsg.payload = { ready, initialize };\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1020,
+        "x": 1010,
         "y": 2240,
         "wires": [
             [
@@ -2943,9 +2908,7 @@
         "y": 2420,
         "wires": [
             [
-                "b4b472d919c6e077",
-                "fc6026e01f804123",
-                "24054f78ac7af9e9"
+                "4a2faaf2bb595bf3"
             ],
             [
                 "2fc4bc4b36a77762",
@@ -2991,6 +2954,98 @@
         "x": 840,
         "y": 2460,
         "wires": []
+    },
+    {
+        "id": "4a2faaf2bb595bf3",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "g": "b72a4f67de28cc65",
+        "name": "Set Path Globals & Fan-out",
+        "func": "// Erwartet: msg.paths = validiertes, normalisiertes Paths-Objekt (aus \"Check path.json\")\n// Wirkung: setzt die Global-Variablen synchron, dann gleicher msg weiter\n\nconst paths = msg.paths || {};\nconst set = (k, v) => { try { global.set(k, v, \"file\"); } catch { global.set(k, v); } };\n\n// Nur setzen, was existiert\nif (paths.PathProduktionen) set(\"PathProduktionen\", paths.PathProduktionen);\nif (paths.PathMitarbeiter) set(\"PathMitarbeiter\", paths.PathMitarbeiter);\nif (paths.PathStammdaten) set(\"PathStammdaten\", paths.PathStammdaten);\nif (paths.PathPTUser) set(\"PathPTUser\", paths.PathPTUser);\n\n// Optional hilfreiche Flags/Logs\nset(\"configReady\", false); // noch nicht fertig – Schema fehlt ja noch\nset(\"configReadyAt\", Date.now());\n\n// WICHTIG: denselben msg weitergeben (HTTP-Kopplung erhalten)\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 2360,
+        "wires": [
+            [
+                "fc6026e01f804123",
+                "b4b472d919c6e077"
+            ]
+        ]
+    },
+    {
+        "id": "98f42045e6274a6b",
+        "type": "debug",
+        "z": "dc0d981398a42d88",
+        "name": "debug 12",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2220,
+        "y": 1700,
+        "wires": []
+    },
+    {
+        "id": "1d9ac50e6b60b757",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "Leer Abbruch",
+        "func": "// Out1 = normal weiter (es gibt Ordner)\n// Out2 = sofort [] zurück (keine Ordner)\nif (!Array.isArray(msg.payload) || msg.payload.length === 0) {\n    return [null, { payload: [] }];\n}\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1920,
+        "y": 1740,
+        "wires": [
+            [
+                "split_per_user"
+            ],
+            [
+                "n_return"
+            ]
+        ],
+        "outputLabels": [
+            "Ok",
+            "Abbruch"
+        ]
+    },
+    {
+        "id": "a600bfcbde775fb5",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "Leer Abbruch",
+        "func": "// Out1 = normal weiter (nicht leer)\n// Out2 = sofort [] zurück (leer) – WICHTIG: dasselbe msg weiterreichen!\nif (!Array.isArray(msg.payload) || msg.payload.length === 0) {\n    msg.payload = [];\n    return [null, msg];   // <— nicht { payload: [] }, sondern dasselbe msg!\n}\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1280,
+        "y": 1640,
+        "wires": [
+            [
+                "stats_paths"
+            ],
+            [
+                "n_return"
+            ]
+        ],
+        "outputLabels": [
+            "Ok",
+            "Abbruch"
+        ]
     },
     {
         "id": "41a1604a42cf8a96",

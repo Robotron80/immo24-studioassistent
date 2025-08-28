@@ -159,6 +159,7 @@ async function onSave() {
       })
       if (!res.ok) throw new Error(await res.text())
       await mitarbeiterRef.value.resetToServer()
+      await window.electronAPI?.refreshUsers?.() // User-Liste in main aktualisieren
     }
     // Passwort
     if (pwRef.value?.isDirty()) {

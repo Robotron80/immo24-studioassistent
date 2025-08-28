@@ -1651,8 +1651,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 170,
-        "y": 1640,
+        "x": 660,
+        "y": 1680,
         "wires": [
             [
                 "read_ma_dir"
@@ -1674,8 +1674,7 @@
         "y": 1740,
         "wires": [
             [
-                "filter_hidden",
-                "a00b24b7cb276495"
+                "filter_hidden"
             ]
         ]
     },
@@ -1707,7 +1706,7 @@
         "y": 1740,
         "wires": [
             [
-                "stats_paths"
+                "a600bfcbde775fb5"
             ]
         ]
     },
@@ -1722,8 +1721,8 @@
         "filenameType": "msg",
         "stats": "stats",
         "sizeType": "msg",
-        "x": 1450,
-        "y": 1740,
+        "x": 1530,
+        "y": 1680,
         "wires": [
             [
                 "only_directory_names"
@@ -1742,7 +1741,7 @@
         "y": 1740,
         "wires": [
             [
-                "split_per_user"
+                "1d9ac50e6b60b757"
             ]
         ]
     },
@@ -1952,7 +1951,8 @@
         "y": 1940,
         "wires": [
             [
-                "c19b623fcc500c5b"
+                "c19b623fcc500c5b",
+                "a00b24b7cb276495"
             ]
         ]
     },
@@ -2546,8 +2546,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 750,
-        "y": 1660,
+        "x": 760,
+        "y": 2000,
         "wires": []
     },
     {
@@ -2563,8 +2563,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1090,
-        "y": 1620,
+        "x": 980,
+        "y": 1700,
         "wires": []
     },
     {
@@ -2975,6 +2975,76 @@
                 "fc6026e01f804123",
                 "b4b472d919c6e077"
             ]
+        ]
+    },
+    {
+        "id": "98f42045e6274a6b",
+        "type": "debug",
+        "z": "dc0d981398a42d88",
+        "name": "debug 12",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2220,
+        "y": 1700,
+        "wires": []
+    },
+    {
+        "id": "1d9ac50e6b60b757",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "Leer Abbruch",
+        "func": "// Out1 = normal weiter (es gibt Ordner)\n// Out2 = sofort [] zurück (keine Ordner) – gleiches msg behalten!\nif (!Array.isArray(msg.payload) || msg.payload.length === 0) {\n    msg.payload = [];\n    return [null, msg];   // <— gleiches msg!\n}\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1920,
+        "y": 1740,
+        "wires": [
+            [
+                "split_per_user"
+            ],
+            [
+                "n_return"
+            ]
+        ],
+        "outputLabels": [
+            "Ok",
+            "Abbruch"
+        ]
+    },
+    {
+        "id": "a600bfcbde775fb5",
+        "type": "function",
+        "z": "dc0d981398a42d88",
+        "name": "Leer Abbruch",
+        "func": "// Out1 = normal weiter (nicht leer)\n// Out2 = sofort [] zurück (leer) – WICHTIG: dasselbe msg weiterreichen!\nif (!Array.isArray(msg.payload) || msg.payload.length === 0) {\n    msg.payload = [];\n    return [null, msg];   // <— nicht { payload: [] }, sondern dasselbe msg!\n}\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1280,
+        "y": 1640,
+        "wires": [
+            [
+                "stats_paths"
+            ],
+            [
+                "n_return"
+            ]
+        ],
+        "outputLabels": [
+            "Ok",
+            "Abbruch"
         ]
     },
     {

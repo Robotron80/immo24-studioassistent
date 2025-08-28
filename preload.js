@@ -35,6 +35,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     return () => ipcRenderer.off('active-user', handler)
   },
 
+  refreshUsers: () => ipcRenderer.invoke('refresh-users'),
+
   /**
    * Fenster verstecken + (optional) Logout + Picker öffnen
    * @param {{doLogout?: boolean}} [opts]
@@ -42,6 +44,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
    */
   hideAndOpenPicker: (opts) =>
     ipcRenderer.invoke('renderer-hide-and-pick', opts || { doLogout: true }),
+
+  /**
+   * Initialisierungsfenster schließen
+   */
+  closeInitWindow: () => ipcRenderer.invoke('close-init-window'),
 })
 
 /**

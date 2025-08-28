@@ -12,6 +12,8 @@ let mainWindow
 let prefWin = null
 let splashWindow
 let pickerWin = null
+let initWin = null
+let initWindowClosedByApp = false // <--- NEU
 
 // Reuse TCP-Verbindungen für alle HTTP-Calls zu Node-RED
 const keepAliveAgent = new http.Agent({ keepAlive: true })
@@ -236,6 +238,25 @@ ipcMain.handle('renderer-hide-and-pick', async (_evt, args) => {
   catch (e) { return { ok: false, error: String(e) } }
 })
 
+// IPC-Handler für das programmatische Schließen:
+ipcMain.handle('close-init-window', () => {
+  if (initWin && !initWin.isDestroyed()) {
+    initWindowClosedByApp = true // <--- Setzen!
+    initWin.close()
+    initWin = null
+    return true
+  }
+  return false
+})
+
+ipcMain.handle('refresh-users', async () => {
+  const users = await getUsersFromNodeRed()
+  if (pickerWin && !pickerWin.isDestroyed()) {
+    pickerWin.webContents.send('users', users)
+  }
+  return users
+})
+
 /* ───────────────────────── Node‑RED Start ───────────────────────────── */
 function startNodeRED() {
   const nodeRedDir = path.join(__dirname, 'node-red-portable')
@@ -316,7 +337,7 @@ function createPreferencesWindow() {
 }
 
 function createInitWindow() {
-  const initWin = new BrowserWindow({
+  initWin = new BrowserWindow({
     width: 900,
     height: 800,
     resizable: true,
@@ -334,8 +355,13 @@ function createInitWindow() {
     initWin.webContents.executeJavaScript("window.location.hash = '#/Setupwizard'")
   })
   initWin.once('ready-to-show', () => initWin.show())
-  initWin.on('closed', () => app.quit())
-
+  initWin.on('closed', () => {
+    if (!initWindowClosedByApp) {
+      app.quit() // Nur wenn der Benutzer das Fenster schließt!
+    }
+    initWin = null
+    initWindowClosedByApp = false // Reset für nächsten Start
+  })
   return initWin
 }
 /* ───────────────────────────── Menü ────────────────────────────────── */

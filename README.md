@@ -34,7 +34,6 @@ oder per Tastenkürzel: **CMD+,** (macOS) / **STRG+,** (Windows).
 ### Produktionsbuch
 - Hier werden die Kunden-Stammdaten angelegt. Ein Kunde entspricht einem Unterverzeichnis im Ordner `Produktionen`.
 - Projekte erhalten automatisch Unterordner wie z. B.:  
-
 `01_Material`
 `02_Dialogschnitt`
 `03_Sounddesign`
@@ -52,17 +51,19 @@ oder per Tastenkürzel: **CMD+,** (macOS) / **STRG+,** (Windows).
 
 ### Mitarbeiter
 - Mitarbeiter = Unterverzeichnis im Ordner `Mitarbeiter`.  
-- Jeder Mitarbeiter hat ein **Kürzel**, das bei Projekterstellung in Dateinamen verwendet wird.  
+- Jeder Mitarbeiter hat ein **Kürzel**, das bei Projekterstellung in Dateinamen verwendet werden kann.  
 - Im Unterordner `immo24` werden alle projektrelevanten Daten gespeichert:  
-- Kürzel (`immo24-user.json`)  
-- Pro Tools Templates  
-- Plug-In Settings  
-- Restlicher Ordner bleibt frei für Backups & Testprojekte.
+    - Kürzel (`immo24-user.json`)  
+    - Pro Tools Templates  
+    - Plug-In Settings
+Restlicher Ordner bleibt frei für Backups & Testprojekte.
 
 ### Namensschema
-- Projekte & Sessions folgen einem festen **Namensschema**.  
+- Projekte & Sessions folgen einem festen **Namensschema**.
+    - Als Projektordner wird der Ordner bezeichnet, in dem alle Unterordner, Sessions, etc. liegen.
+    - Die Session ist die *.ptx-Datei mit der Pro Tools Session.
 - Variablen + Freitext kombinierbar, Vorschau zeigt Beispielausgabe.  
-- **Achtung:** Änderungen im laufenden Betrieb können bestehende Projekte unbrauchbar machen!
+- **Achtung:** Das Namensschema sollte nicht im laufenden Betrieb geändert werden, da nach einer Änderung vorhandene Projekte nicht mehr über immo24 Studioassistent bearbeitet werden können.
 
 ![Screenshot Namensschema](./docs/screenshots/namensschema.png)
 
@@ -70,7 +71,7 @@ oder per Tastenkürzel: **CMD+,** (macOS) / **STRG+,** (Windows).
 - **Mitarbeiter** → siehe *Mitarbeiter*  
 - **Produktionen** → siehe *Produktionsbuch*  
 - **Stammdaten** → Namensschema & Kundendaten (z. B. auf Netzlaufwerk für gemeinsame Nutzung)  
-- **Pro Tools User** → typischerweise `/Users/<username>/Documents/Pro Tools` (macOS)
+- **Pro Tools User** → typischerweise `/Users/<username>/Documents/Pro Tools` (macOS) oder `C:/Users/<username>/Documents/Pro Tools` (Windows)
 
 ### Passwort
 - Änderung des Passworts für das Konfigurationsmenü.
@@ -85,7 +86,7 @@ Nach Auswahl → „Anmelden“.
 
 ---
 
-### Modul: Projektanlage
+### Modul Projektanlage
 
 Über das Eingabeformular können Projekte und Sessions angelegt werden.  
 Unterschieden wird zwischen **Neuem Projekt** und **Vorhandenem Projekt**.
@@ -94,13 +95,13 @@ Unterschieden wird zwischen **Neuem Projekt** und **Vorhandenem Projekt**.
 Formularfelder:
 - **Kunde** → aus Konfiguration  
 - **Datum** → Standard = aktuelles Datum  
-- **Mo-ID** → eindeutige vierstellige ID  
-- **Projektname** → Klarname/Arbeitstitel  
-- **Produktionsstufe** → legt Session-Ordner fest  
+- **Mo-ID** → Medienorganisations-ID, eindeutige vierstellige ID  
+- **Projektname** → Arbeitstitel/Klarname  
+- **Produktionsstufe** → Unterordner, in dem die Pro Tools Session angelegt wird. Verfügbare Stufen werden im Konfigurations-Menü angelegt.  
 - **Template** → Vorlagen aus `Mitarbeiter/<Name>/immo24/templates/*.ptxt`  
 
 Aktionen:
-- **Projekt anlegen** → erstellt Ordner, Unterordner, Session + Metadatei `immo24-proj.json`  
+- **Projekt anlegen** → erstellt Ordner, Unterordner, Session + Metadatei `immo24-proj.json`. Bei Bedarf kann das Projekt direkt geöffnet werden.
 - **Zurücksetzen** → Formular löschen  
 
 ![Screenshot Neues Projekt](./docs/screenshots/projekt_neu.png)

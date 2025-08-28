@@ -4,6 +4,7 @@ const path = require('path')
 const { spawn } = require('child_process')
 const http = require('http')
 const fs = require('fs')
+const { init } = require('node-red')
 
 /* ────────────────────────────── Globals ────────────────────────────── */
 let nodeRedProcess
@@ -14,6 +15,25 @@ let pickerWin = null
 
 // Reuse TCP-Verbindungen für alle HTTP-Calls zu Node-RED
 const keepAliveAgent = new http.Agent({ keepAlive: true })
+
+async function fetchInitializeStatus(timeoutMs = 3000) {
+  return new Promise((resolve) => {
+    const req = http.request(
+      { host: '127.0.0.1', port: 1880, path: '/api/initialize', method: 'GET', agent: keepAliveAgent },
+      (res) => {
+        let body = ''
+        res.setEncoding('utf8')
+        res.on('data', c => (body += c))
+        res.on('end', () => {
+          try { resolve(JSON.parse(body)) } catch { resolve({ ok: res.statusCode >= 200 && res.statusCode < 400 }) }
+        })
+      }
+    )
+    req.setTimeout(timeoutMs, () => { try { req.destroy(new Error('timeout')) } catch {} })
+    req.on('error', () => resolve({ ok: false }))
+    req.end()
+  })
+}
 
 /* ───────────────────────── Setup: User-Dateien ─────────────────────── */
 function ensureUserJsonFiles() {
@@ -89,26 +109,25 @@ function postLogoutToNodeRed(timeoutMs = 1200) {
 async function waitForNodeRedReady({
   host = '127.0.0.1',
   port = 1880,
-  path_ = '/api/user',
-  timeoutMs = 12000,      // harte Obergrenze
+  path_ = '/api/initialize',
+  method = 'GET',           // vorher: HEAD
+  timeoutMs = 12000,
   perRequestTimeout = 1500,
   minDelay = 120,
   maxDelay = 600,
-  useAgent = false        // HEAD ohne Keep‑Alive vermeidet hängende Sockets
+  useAgent = false
 } = {}) {
   const start = Date.now()
   let delay = minDelay
-
   const tryOnce = () => new Promise((resolve) => {
     const req = http.request(
-      { host, port, path: path_, method: 'HEAD', agent: useAgent ? keepAliveAgent : undefined },
+      { host, port, path: path_, method, agent: useAgent ? keepAliveAgent : undefined },
       (res) => { res.resume(); resolve(res.statusCode >= 200 && res.statusCode < 400) }
     )
     req.setTimeout(perRequestTimeout, () => { try { req.destroy(new Error('probe timeout')) } catch {} })
     req.on('error', () => resolve(false))
     req.end()
   })
-
   if (await tryOnce()) return true
   while (Date.now() - start < timeoutMs) {
     await new Promise(r => setTimeout(r, delay))
@@ -296,6 +315,29 @@ function createPreferencesWindow() {
   prefWin.on('closed', () => { prefWin = null })
 }
 
+function createInitWindow() {
+  const initWin = new BrowserWindow({
+    width: 900,
+    height: 800,
+    resizable: true,
+    frame: true,
+    show: true,
+    webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: false,
+      preload: path.join(__dirname, 'preload.js')
+    }
+  })
+
+  initWin.loadFile(path.join(__dirname, 'immo24-ui', 'dist', 'index.html'))
+  initWin.webContents.once('did-finish-load', () => {
+    initWin.webContents.executeJavaScript("window.location.hash = '#/Setupwizard'")
+  })
+  initWin.once('ready-to-show', () => initWin.show())
+  initWin.on('closed', () => app.quit())
+
+  return initWin
+}
 /* ───────────────────────────── Menü ────────────────────────────────── */
 const isMac = process.platform === 'darwin'
 const template = [
@@ -307,8 +349,6 @@ const template = [
       { type: 'separator' },
       { role: 'hide' }, { role: 'hideOthers' }, { role: 'unhide' },
       { type: 'separator' },
-      { label: 'Abmelden', click: () => openPickerFlow({ doLogout: false }) },
-      { type: 'separator' },
       { role: 'quit' }
     ]
   }] : [{
@@ -318,15 +358,15 @@ const template = [
       { type: 'separator' }, { role: 'quit' }
     ]
   }]),
-  {
+/*  {
     label: 'Ansicht',
     submenu: [
       { role: 'reload' }, { role: 'forceReload' }, { role: 'toggleDevTools' },
       { type: 'separator' }, { role: 'resetZoom' }, { role: 'zoomIn' }, { role: 'zoomOut' },
       { type: 'separator' }, { role: 'togglefullscreen' }
     ]
-  }
-]
+  } */
+] 
 Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 
 /* ───────────────────────── App Lifecycle ───────────────────────────── */
@@ -337,36 +377,45 @@ app.whenReady().then(async () => {
     startNodeRED()
     createWindow()
     registerIpc()
-    const ready = await waitForNodeRedReady({
-      path_: '/api/initialize',
-      timeoutMs: 12000,
-      perRequestTimeout: 1500,
-      minDelay: 120,
-      maxDelay: 600
-    })
+
+    // Poll /api/initialize bis ready:true oder Timeout
+    const timeoutMs = 12000
+    const pollDelay = 400
+    let init = null
+    let start = Date.now()
+    while (Date.now() - start < timeoutMs) {
+      init = await fetchInitializeStatus()
+      if (init?.ready === true) break
+      await new Promise(r => setTimeout(r, pollDelay))
+    }
     clearTimeout(splashTimer)
     if (splashWindow && !splashWindow.isDestroyed()) splashWindow.close()
+
+    if (!init || init?.ready !== true) {
+      // Node-RED ist nicht bereit, App beenden oder Fehler anzeigen
+      console.error('Node-RED nicht bereit nach Timeout.')
+      app.quit()
+      return
+    }
+
+    // UI laden
     const isDev = process.env.NODE_ENV === 'development' || process.env.ELECTRON_START_URL
     if (isDev) {
       await mainWindow.loadURL(process.env.ELECTRON_START_URL || 'http://localhost:3000')
     } else {
-      console.log('Lade Datei:', path.join(__dirname, 'immo24-ui', 'dist', 'index.html'))
       await mainWindow.loadFile(path.join(__dirname, 'immo24-ui', 'dist', 'index.html'))
     }
-    const pw = createUserPickerWindow()
-    const users = ready ? (await getUsersFromNodeRed()) : []
-    console.log('Userliste für Picker:', users) // <--- Logging einfügen
-    pw.webContents.once('did-finish-load', () => pw.webContents.send('users', users))
-    if (!ready) {
-      ;(async () => {
-        try {
-          const ok = await waitForNodeRedReady({ timeoutMs: 15000 })
-          if (!ok || !pickerWin || pickerWin.isDestroyed()) return
-          try { pickerWin.webContents.send('users', await getUsersFromNodeRed()) } catch {}
-        } catch (e) {
-          console.error('Fehler beim Node-RED-Ready-Wait:', e)
-        }
-      })()
+
+    // Jetzt auswerten: needsUserAction
+    if (init?.initialize?.needsUserAction) {
+      createInitWindow()
+      return
+    } else {
+      // User-Picker öffnen
+      const usersFromInit = Array.isArray(init?.user) ? init.user.map(u => u.name) : null
+      const users = usersFromInit || (await getUsersFromNodeRed())
+      const pw = createUserPickerWindow()
+      pw.webContents.once('did-finish-load', () => pw.webContents.send('users', users))
     }
   } catch (err) {
     console.error('Fehler beim App-Start:', err)

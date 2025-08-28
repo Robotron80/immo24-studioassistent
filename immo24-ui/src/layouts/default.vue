@@ -30,7 +30,7 @@ import AppFooter from '@/components/AppFooter.vue'
 const route = useRoute()
 
 // Routen ohne AppBar/Footer
-const HIDE_CHROME = new Set(['/konfiguration'])
+const HIDE_CHROME = new Set(['/konfiguration', '/Setupwizard'])
 
 const showChrome = computed(() => !HIDE_CHROME.has(route.path))
 </script>

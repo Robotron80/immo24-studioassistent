@@ -32,7 +32,7 @@ oder per Tastenkürzel: **CMD+,** (macOS) / **STRG+,** (Windows).
 > Die Konfiguration ist durch ein Passwort geschützt – Änderungen sollten mit Bedacht vorgenommen werden.
 
 ### Produktionsbuch
-- Kunden-Stammdaten anlegen (jeder Kunde = Unterverzeichnis im Ordner `Produktionen`).  
+- Hier werden die Kunden-Stammdaten angelegt. Ein Kunde entspricht einem Unterverzeichnis im Ordner `Produktionen`.
 - Projekte erhalten automatisch Unterordner wie z. B.:  
 
 01_Material

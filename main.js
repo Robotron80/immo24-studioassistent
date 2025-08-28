@@ -1,4 +1,13 @@
-// main.js
+/**
+ * immo24 Studioassistent - Electron Main Process
+ * ------------------------------------------------
+ * - Startet Node-RED als Backend
+ * - Verwaltet alle Fenster (Main, Picker, Setup, Splash, Preferences)
+ * - IPC-Kommunikation mit Renderer
+ * - User-Datenverwaltung
+ * - Menü & App-Lifecycle
+ */
+
 const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron')
 const path = require('path')
 const { spawn } = require('child_process')
@@ -7,17 +16,38 @@ const fs = require('fs')
 const { init } = require('node-red')
 
 /* ────────────────────────────── Globals ────────────────────────────── */
+// Fenster-Referenzen
 let nodeRedProcess
 let mainWindow
 let prefWin = null
 let splashWindow
 let pickerWin = null
 let initWin = null
-let initWindowClosedByApp = false // <--- NEU
+let initWindowClosedByApp = false // Flag: SetupWizard-Fenster per App geschlossen?
 
-// Reuse TCP-Verbindungen für alle HTTP-Calls zu Node-RED
+// HTTP Agent für Node-RED API
 const keepAliveAgent = new http.Agent({ keepAlive: true })
 
+/* ────────────────────────────── User-Daten ─────────────────────────── */
+/**
+ * Kopiert die User-Konfigurationsdateien ins User-Verzeichnis, falls sie fehlen.
+ */
+function ensureUserJsonFiles() {
+  const basePath = app.getPath('userData')
+  const srcDir = path.join(__dirname, 'assets')
+  for (const file of ['path.json', 'adminpw.json']) {
+    const dest = path.join(basePath, file)
+    if (!fs.existsSync(dest)) {
+      const src = path.join(srcDir, file)
+      fs.existsSync(src) ? fs.copyFileSync(src, dest) : fs.writeFileSync(dest, '{}')
+    }
+  }
+}
+
+/* ─────────────────────── Node‑RED: HTTP‑Helpers ────────────────────── */
+/**
+ * Holt den Initialisierungsstatus von Node-RED.
+ */
 async function fetchInitializeStatus(timeoutMs = 3000) {
   return new Promise((resolve) => {
     const req = http.request(
@@ -37,20 +67,9 @@ async function fetchInitializeStatus(timeoutMs = 3000) {
   })
 }
 
-/* ───────────────────────── Setup: User-Dateien ─────────────────────── */
-function ensureUserJsonFiles() {
-  const basePath = app.getPath('userData')
-  const srcDir = path.join(__dirname, 'assets')
-  for (const file of ['path.json', 'adminpw.json']) {
-    const dest = path.join(basePath, file)
-    if (!fs.existsSync(dest)) {
-      const src = path.join(srcDir, file)
-      fs.existsSync(src) ? fs.copyFileSync(src, dest) : fs.writeFileSync(dest, '{}')
-    }
-  }
-}
-
-/* ─────────────────────── Node‑RED: HTTP‑Helpers ────────────────────── */
+/**
+ * Holt die Mitarbeiter-Liste von Node-RED.
+ */
 function getUsersFromNodeRed() {
   return new Promise((resolve) => {
     const req = http.request(
@@ -61,7 +80,6 @@ function getUsersFromNodeRed() {
         res.on('end', () => {
           try {
             const arr = JSON.parse(data)
-            // Direkt ein Array von Objekten [{name, kuerzel}, ...]
             if (Array.isArray(arr)) {
               resolve(arr.map(u => u.name))
             } else {
@@ -78,6 +96,9 @@ function getUsersFromNodeRed() {
   })
 }
 
+/**
+ * Setzt den aktiven User in Node-RED.
+ */
 function postActiveUserToNodeRed(user) {
   return new Promise((resolve) => {
     const payload = Buffer.from(JSON.stringify({ user }))
@@ -94,7 +115,9 @@ function postActiveUserToNodeRed(user) {
   })
 }
 
-// schneller, fehlertoleranter Logout (non-blocking verwendbar)
+/**
+ * Logout in Node-RED (schnell, fehlertolerant).
+ */
 function postLogoutToNodeRed(timeoutMs = 1200) {
   return new Promise((resolve) => {
     const req = http.request(
@@ -108,11 +131,14 @@ function postLogoutToNodeRed(timeoutMs = 1200) {
 }
 
 /* ───────────── Ready‑Check: HEAD‑Ping mit Backoff & Timeout ─────────── */
+/**
+ * Wartet bis Node-RED bereit ist (Polling mit Backoff).
+ */
 async function waitForNodeRedReady({
   host = '127.0.0.1',
   port = 1880,
   path_ = '/api/initialize',
-  method = 'GET',           // vorher: HEAD
+  method = 'GET',
   timeoutMs = 12000,
   perRequestTimeout = 1500,
   minDelay = 120,
@@ -140,6 +166,9 @@ async function waitForNodeRedReady({
 }
 
 /* ───────────────────────────── Fenster ─────────────────────────────── */
+/**
+ * Erstellt das User-Picker-Fenster.
+ */
 function createUserPickerWindow() {
   if (pickerWin && !pickerWin.isDestroyed()) return pickerWin
   pickerWin = new BrowserWindow({
@@ -150,6 +179,9 @@ function createUserPickerWindow() {
   return pickerWin
 }
 
+/**
+ * Erstellt das Splash-Fenster (Ladeanzeige).
+ */
 function createSplashWindow() {
   splashWindow = new BrowserWindow({
     width: 420, height: 300, resizable: false, frame: false, transparent: false,
@@ -159,6 +191,9 @@ function createSplashWindow() {
   splashWindow.loadFile(path.join(__dirname, 'assets', 'loading.html'))
 }
 
+/**
+ * Erstellt das Hauptfenster (wird erst nach Login gezeigt).
+ */
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200, height: 900, useContentSize: true,
@@ -174,7 +209,9 @@ function createWindow() {
   // WICHTIG: KEIN loadURL/loadFile hier – erst nach Node‑RED‑Ready
 }
 
-// zuverlässig verstecken (behandelt Fullscreen/Kiosk etc.)
+/**
+ * Versteckt das Hauptfenster robust (auch bei Fullscreen/Kiosk).
+ */
 async function hideMainWindowRobust(win, maxWaitMs = 900) {
   if (!win || win.isDestroyed()) return
   try { win.setFullScreen(false) } catch {}
@@ -193,7 +230,10 @@ async function hideMainWindowRobust(win, maxWaitMs = 900) {
   if (win.isVisible()) { try { win.minimize() } catch {} }
 }
 
-/* ─────────────── Zentraler Flow: Fenster weg + Picker ──────────────── */
+/**
+ * Öffnet den User-Picker und versteckt andere Fenster.
+ * Holt immer die aktuelle Mitarbeiter-Liste.
+ */
 async function openPickerFlow({ doLogout = true } = {}) {
   if (prefWin && !prefWin.isDestroyed()) { prefWin.close(); prefWin = null }
   if (mainWindow && !mainWindow.isDestroyed()) {
@@ -212,98 +252,13 @@ async function openPickerFlow({ doLogout = true } = {}) {
   return { ok: true }
 }
 
-/* ───────────────────────────── IPC ──────────────────────────────────── */
-// Picker bestätigt Auswahl → aktiven User an Renderer, Picker schließen, Main zeigen
-ipcMain.on('user-picked', async (_evt, user) => {
-  await postActiveUserToNodeRed(user)
-  if (mainWindow && !mainWindow.isDestroyed()) {
-    // Event NACH dem Reload feuern
-    mainWindow.webContents.once('did-finish-load', () => {
-      try { mainWindow.webContents.send('active-user', user) } catch {}
-    })
-    mainWindow.show()
-    mainWindow.focus()
-    mainWindow.webContents.reload()
-  }
-  if (pickerWin && !pickerWin.isDestroyed()) { pickerWin.close(); pickerWin = null }
-  if (splashWindow && !splashWindow.isDestroyed()) { splashWindow.close(); splashWindow = null }
-})
-
-// Picker „Beenden“ → ganze App schließen
-ipcMain.on('app-quit', () => { app.quit() })
-
-// Renderer will: Fenster verstecken + (optional) Logout + Picker öffnen
-ipcMain.handle('renderer-hide-and-pick', async (_evt, args) => {
-  try { return await openPickerFlow(args || { doLogout: true }) }
-  catch (e) { return { ok: false, error: String(e) } }
-})
-
-// IPC-Handler für das programmatische Schließen:
-ipcMain.handle('close-init-window', () => {
-  if (initWin && !initWin.isDestroyed()) {
-    initWindowClosedByApp = true // <--- Setzen!
-    initWin.close()
-    initWin = null
-    return true
-  }
-  return false
-})
-
-ipcMain.handle('refresh-users', async () => {
-  const users = await getUsersFromNodeRed()
-  if (pickerWin && !pickerWin.isDestroyed()) {
-    pickerWin.webContents.send('users', users)
-  }
-  return users
-})
-
-/* ───────────────────────── Node‑RED Start ───────────────────────────── */
-function startNodeRED() {
-  const nodeRedDir = path.join(__dirname, 'node-red-portable')
-  const redJs = path.join(nodeRedDir, 'node_modules', 'node-red', 'red.js')
-  let nodeBinary
-  if (process.platform === 'win32') nodeBinary = path.join(__dirname, 'bin', 'node.exe')
-  else if (process.platform === 'darwin') nodeBinary = path.join(__dirname, 'bin', process.arch === 'arm64' ? 'node-arm64' : 'node-x64')
-  else nodeBinary = path.join(__dirname, 'bin', 'node')
-
-  if (!fs.existsSync(nodeBinary) || !fs.existsSync(redJs)) { app.quit(); return }
-
-  const basePath = app.getPath('userData')
-  fs.writeFileSync(path.join(basePath, 'AppBasePath.json'), JSON.stringify({ AppBasePath: basePath }, null, 2))
-
-  console.log('Starte Node-RED mit:', nodeBinary, redJs)
-
-  nodeRedProcess = spawn(nodeBinary, [redJs, '-u', nodeRedDir, '--port', '1880'], {
-    cwd: nodeRedDir,
-    stdio: ['ignore', 'pipe', 'pipe'],
-    env: { ...process.env, ELECTRON_RUN_AS_NODE: '1', IMMO24_USERDATA: basePath, APP_VERSION: app.getVersion() }
-  })
-
-  let firstOut = true
-  nodeRedProcess.stdout.on('data', d => { if (firstOut) { console.log(`[Node-RED] ${String(d)}`.trim()); firstOut = false } })
-  nodeRedProcess.stderr.on('data', d => console.error(`[Node-RED ERROR] ${String(d)}`.trim()))
-  nodeRedProcess.on('error', err => console.error('[Node-RED SPAWN ERROR]', err))
-  nodeRedProcess.on('exit', (code, signal) => console.log(`[Node-RED EXIT] code: ${code}, signal: ${signal}`))
-}
-
-/* ─────────────── Sonstige IPC (Ordnerauswahl/Prefs) ──────────────── */
-function registerIpc() {
-  ipcMain.removeHandler('pick-folder')
-  ipcMain.handle('pick-folder', async (evt, args = {}) => {
-    const { title, defaultPath } = args || {}
-    const win = BrowserWindow.fromWebContents(evt.sender)
-    const result = await dialog.showOpenDialog(win || undefined, {
-      title: title || 'Ordner auswählen',
-      defaultPath: defaultPath || undefined,
-      properties: ['openDirectory', 'createDirectory'],
-      buttonLabel: 'Auswählen',
-    })
-    return (!result.canceled && Array.isArray(result.filePaths) && result.filePaths[0]) ? result.filePaths[0] : null
-  })
-}
-
+/**
+ * Erstellt das Konfigurations-Fenster.
+ * Schließt den Picker, falls offen.
+ */
 function createPreferencesWindow() {
   if (prefWin && !prefWin.isDestroyed()) { prefWin.focus(); return }
+  if (pickerWin && !pickerWin.isDestroyed()) { pickerWin.close(); pickerWin = null }
 
   const parent =
     (pickerWin && !pickerWin.isDestroyed() && pickerWin.isVisible()) ? pickerWin :
@@ -336,6 +291,10 @@ function createPreferencesWindow() {
   prefWin.on('closed', () => { prefWin = null })
 }
 
+/**
+ * Erstellt das SetupWizard-Fenster (Initialisierung).
+ * Beendet die App, wenn der User das Fenster schließt.
+ */
 function createInitWindow() {
   initWin = new BrowserWindow({
     width: 900,
@@ -364,7 +323,108 @@ function createInitWindow() {
   })
   return initWin
 }
+
+/* ───────────────────────────── IPC-Handler ─────────────────────────── */
+/**
+ * IPC-Kommunikation zwischen Renderer und Main.
+ */
+
+// User im Picker ausgewählt → Main-Fenster zeigen
+ipcMain.on('user-picked', async (_evt, user) => {
+  await postActiveUserToNodeRed(user)
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.webContents.once('did-finish-load', () => {
+      try { mainWindow.webContents.send('active-user', user) } catch {}
+    })
+    mainWindow.show()
+    mainWindow.focus()
+    mainWindow.webContents.reload()
+  }
+  if (pickerWin && !pickerWin.isDestroyed()) { pickerWin.close(); pickerWin = null }
+  if (splashWindow && !splashWindow.isDestroyed()) { splashWindow.close(); splashWindow = null }
+})
+
+// Picker „Beenden“ → ganze App schließen
+ipcMain.on('app-quit', () => { app.quit() })
+
+// Fenster verstecken + Picker öffnen (z.B. nach Logout)
+ipcMain.handle('renderer-hide-and-pick', async (_evt, args) => {
+  try { return await openPickerFlow(args || { doLogout: true }) }
+  catch (e) { return { ok: false, error: String(e) } }
+})
+
+// SetupWizard-Fenster programmatisch schließen
+ipcMain.handle('close-init-window', () => {
+  if (initWin && !initWin.isDestroyed()) {
+    initWindowClosedByApp = true
+    initWin.close()
+    initWin = null
+    return true
+  }
+  return false
+})
+
+// Mitarbeiter-Liste neu laden und an Picker senden
+ipcMain.handle('refresh-users', async () => {
+  const users = await getUsersFromNodeRed()
+  if (pickerWin && !pickerWin.isDestroyed()) {
+    pickerWin.webContents.send('users', users)
+  }
+  return users
+})
+
+// Ordnerauswahl-Dialog
+function registerIpc() {
+  ipcMain.removeHandler('pick-folder')
+  ipcMain.handle('pick-folder', async (evt, args = {}) => {
+    const { title, defaultPath } = args || {}
+    const win = BrowserWindow.fromWebContents(evt.sender)
+    const result = await dialog.showOpenDialog(win || undefined, {
+      title: title || 'Ordner auswählen',
+      defaultPath: defaultPath || undefined,
+      properties: ['openDirectory', 'createDirectory'],
+      buttonLabel: 'Auswählen',
+    })
+    return (!result.canceled && Array.isArray(result.filePaths) && result.filePaths[0]) ? result.filePaths[0] : null
+  })
+}
+
+/* ───────────────────────── Node‑RED Start ───────────────────────────── */
+/**
+ * Startet Node-RED als separaten Prozess.
+ */
+function startNodeRED() {
+  const nodeRedDir = path.join(__dirname, 'node-red-portable')
+  const redJs = path.join(nodeRedDir, 'node_modules', 'node-red', 'red.js')
+  let nodeBinary
+  if (process.platform === 'win32') nodeBinary = path.join(__dirname, 'bin', 'node.exe')
+  else if (process.platform === 'darwin') nodeBinary = path.join(__dirname, 'bin', process.arch === 'arm64' ? 'node-arm64' : 'node-x64')
+  else nodeBinary = path.join(__dirname, 'bin', 'node')
+
+  if (!fs.existsSync(nodeBinary) || !fs.existsSync(redJs)) { app.quit(); return }
+
+  const basePath = app.getPath('userData')
+  fs.writeFileSync(path.join(basePath, 'AppBasePath.json'), JSON.stringify({ AppBasePath: basePath }, null, 2))
+
+  console.log('Starte Node-RED mit:', nodeBinary, redJs)
+
+  nodeRedProcess = spawn(nodeBinary, [redJs, '-u', nodeRedDir, '--port', '1880'], {
+    cwd: nodeRedDir,
+    stdio: ['ignore', 'pipe', 'pipe'],
+    env: { ...process.env, ELECTRON_RUN_AS_NODE: '1', IMMO24_USERDATA: basePath, APP_VERSION: app.getVersion() }
+  })
+
+  let firstOut = true
+  nodeRedProcess.stdout.on('data', d => { if (firstOut) { console.log(`[Node-RED] ${String(d)}`.trim()); firstOut = false } })
+  nodeRedProcess.stderr.on('data', d => console.error(`[Node-RED ERROR] ${String(d)}`.trim()))
+  nodeRedProcess.on('error', err => console.error('[Node-RED SPAWN ERROR]', err))
+  nodeRedProcess.on('exit', (code, signal) => console.log(`[Node-RED EXIT] code: ${code}, signal: ${signal}`))
+}
+
 /* ───────────────────────────── Menü ────────────────────────────────── */
+/**
+ * Erstellt das App-Menü inkl. Bearbeiten-Funktionen (Copy/Paste etc.).
+ */
 const isMac = process.platform === 'darwin'
 const template = [
   ...(isMac ? [{
@@ -384,7 +444,7 @@ const template = [
       { type: 'separator' }, { role: 'quit' }
     ]
   }]),
-{
+  {
     label: 'Bearbeiten',
     submenu: [
       { role: 'undo' },
@@ -406,21 +466,13 @@ const template = [
       ])
     ]
   }
-
-/*  {
-    label: 'Ansicht',
-    submenu: [
-      { role: 'reload' }, { role: 'forceReload' }, { role: 'toggleDevTools' },
-      { type: 'separator' }, { role: 'resetZoom' }, { role: 'zoomIn' }, { role: 'zoomOut' },
-      { type: 'separator' }, { role: 'togglefullscreen' }
-    ]
-  } */
-
-
-] 
+]
 Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 
 /* ───────────────────────── App Lifecycle ───────────────────────────── */
+/**
+ * Startet die App, zeigt Splash, wartet auf Node-RED, öffnet SetupWizard oder Picker.
+ */
 app.whenReady().then(async () => {
   try {
     ensureUserJsonFiles()
@@ -457,7 +509,7 @@ app.whenReady().then(async () => {
       await mainWindow.loadFile(path.join(__dirname, 'immo24-ui', 'dist', 'index.html'))
     }
 
-    // Jetzt auswerten: needsUserAction
+    // SetupWizard oder Picker öffnen
     if (init?.initialize?.needsUserAction) {
       createInitWindow()
       return
@@ -474,6 +526,7 @@ app.whenReady().then(async () => {
   }
 })
 
+// Node-RED Prozess beenden beim App-Exit
 app.on('before-quit', () => {
   if (nodeRedProcess) {
     try { nodeRedProcess.kill() } catch {}

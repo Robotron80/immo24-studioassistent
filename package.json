@@ -5,9 +5,14 @@
   "description": "Applikation zur Dateiorganisation auf vernetzten Avid Pro Tools Systemen",
   "author": "Philipp Menzel",
   "license": "AGPL-3.0-only",
-  "repository": { "type": "git", "url": "https://github.com/Robotron80/immo24-studioassistent.git" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Robotron80/immo24-studioassistent.git"
+  },
   "homepage": "https://github.com/Robotron80/immo24-studioassistent",
-  "bugs": { "url": "https://github.com/Robotron80/immo24-studioassistent/issues" },
+  "bugs": {
+    "url": "https://github.com/Robotron80/immo24-studioassistent/issues"
+  },
   "scripts": {
     "start": "electron .",
     "dist": "electron-builder"
@@ -19,13 +24,13 @@
       "main.js",
       "preload.js",
       "assets/**",
-      "bin/**",
       "package.json",
-      "node-red-portable/**",
       "immo24-ui/dist/**"
     ],
-   "win": {
-      "target": [ "nsis" ]
+    "win": {
+      "target": [
+        "nsis"
+      ]
     },
     "nsis": {
       "oneClick": false,
@@ -36,13 +41,14 @@
       "license": "assets/license.txt"
     },
     "mac": {
-      "target": [ "dmg" ],
+      "target": [
+        "dmg"
+      ],
       "category": "public.app-category.productivity"
     },
     "dmg": {
       "iconSize": 128
     },
-
     "directories": {
       "buildResources": "assets"
     },
@@ -55,6 +61,11 @@
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
+    "express": "4.21.2",
+    "node-red": "^4.1.0",
+    "node-red-contrib-fs-extra": "^1.0.1",
+    "node-red-contrib-fs-ops": "^1.6.0",
+    "node-red-contrib-os": "^0.2.1",
     "vuetify": "^3.9.3"
   }
 }

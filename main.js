@@ -10,9 +10,14 @@
 
 const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron')
 const path = require('path')
-const { spawn } = require('child_process')
 const http = require('http')
 const fs = require('fs')
+const express = require('express')
+const RED = require('node-red')
+
+// Einheitlich für alle internen HTTP-Calls:
+const NODE_RED_HOST = '127.0.0.1'
+const NODE_RED_PORT = 59593
 
 /* ────────────────────────────── Globals ────────────────────────────── */
 // Fenster-Referenzen
@@ -50,7 +55,7 @@ function ensureUserJsonFiles() {
 async function fetchInitializeStatus(timeoutMs = 3000) {
   return new Promise((resolve) => {
     const req = http.request(
-      { host: '127.0.0.1', port: 1880, path: '/api/initialize', method: 'GET', agent: keepAliveAgent },
+      { host: NODE_RED_HOST, port: NODE_RED_PORT, path: '/api/initialize', method: 'GET', agent: keepAliveAgent },
       (res) => {
         let body = ''
         res.setEncoding('utf8')
@@ -66,13 +71,27 @@ async function fetchInitializeStatus(timeoutMs = 3000) {
   })
 }
 
+function copyRecursiveSync(src, dest) {
+  if (!fs.existsSync(src)) return
+  const stat = fs.statSync(src)
+  if (stat.isDirectory()) {
+    fs.mkdirSync(dest, { recursive: true })
+    for (const entry of fs.readdirSync(src)) {
+      copyRecursiveSync(path.join(src, entry), path.join(dest, entry))
+    }
+  } else {
+    fs.mkdirSync(path.dirname(dest), { recursive: true })
+    fs.copyFileSync(src, dest)
+  }
+}
+
 /**
  * Holt die Mitarbeiter-Liste von Node-RED.
  */
 function getUsersFromNodeRed() {
   return new Promise((resolve) => {
     const req = http.request(
-      { host: '127.0.0.1', port: 1880, path: '/api/user', method: 'GET', agent: keepAliveAgent },
+      { host: NODE_RED_HOST, port: NODE_RED_PORT, path: '/api/user', method: 'GET', agent: keepAliveAgent },
       (res) => {
         let data = ''
         res.on('data', c => (data += c))
@@ -103,7 +122,7 @@ function postActiveUserToNodeRed(user) {
     const payload = Buffer.from(JSON.stringify({ user }))
     const req = http.request(
       {
-        host: '127.0.0.1', port: 1880, path: '/api/login', method: 'POST',
+        host: NODE_RED_HOST, port: NODE_RED_PORT, path: '/api/login', method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Content-Length': payload.length },
         agent: keepAliveAgent
       },
@@ -120,7 +139,7 @@ function postActiveUserToNodeRed(user) {
 function postLogoutToNodeRed(timeoutMs = 1200) {
   return new Promise((resolve) => {
     const req = http.request(
-      { host: '127.0.0.1', port: 1880, path: '/api/logout', method: 'POST', agent: keepAliveAgent },
+      { host: NODE_RED_HOST, port: NODE_RED_PORT, path: '/api/logout', method: 'POST', agent: keepAliveAgent },
       (res) => { res.resume(); resolve(res.statusCode >= 200 && res.statusCode < 300) }
     )
     req.setTimeout(timeoutMs, () => { try { req.destroy(new Error('logout timeout')) } catch {} })
@@ -134,8 +153,8 @@ function postLogoutToNodeRed(timeoutMs = 1200) {
  * Wartet bis Node-RED bereit ist (Polling mit Backoff).
  */
 async function waitForNodeRedReady({
-  host = '127.0.0.1',
-  port = 1880,
+  host = NODE_RED_HOST,
+  port = NODE_RED_PORT,
   path_ = '/api/initialize',
   method = 'GET',
   timeoutMs = 12000,
@@ -172,7 +191,7 @@ function createUserPickerWindow() {
   if (pickerWin && !pickerWin.isDestroyed()) return pickerWin
   pickerWin = new BrowserWindow({
     width: 420, height: 300, resizable: false, frame: false, show: true, alwaysOnTop: false, movable: true,
-    webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false }
+    webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false, sandbox: true }
   })
   pickerWin.loadFile(path.join(__dirname, 'assets', 'login.html'))
   return pickerWin
@@ -185,7 +204,7 @@ function createSplashWindow() {
   splashWindow = new BrowserWindow({
     width: 420, height: 300, resizable: false, frame: false, transparent: false,
     alwaysOnTop: true, center: true, show: true, movable: false,
-    webPreferences: { nodeIntegration: false, contextIsolation: true }
+    webPreferences: { nodeIntegration: false, contextIsolation: true, sandbox: true }
   })
   splashWindow.loadFile(path.join(__dirname, 'assets', 'loading.html'))
 }
@@ -202,7 +221,8 @@ function createWindow() {
       nodeIntegration: false,
       contextIsolation: true,
       webviewTag: true,
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+      sandbox: true
     }
   })
   // WICHTIG: KEIN loadURL/loadFile hier – erst nach Node‑RED‑Ready
@@ -304,7 +324,8 @@ function createInitWindow() {
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+      sandbox: true
     }
   })
 
@@ -392,34 +413,71 @@ function registerIpc() {
 /**
  * Startet Node-RED als separaten Prozess.
  */
-function startNodeRED() {
-  const nodeRedDir = path.join(__dirname, 'node-red-portable')
-  const redJs = path.join(nodeRedDir, 'node_modules', 'node-red', 'red.js')
-  let nodeBinary
-  if (process.platform === 'win32') nodeBinary = path.join(__dirname, 'bin', 'node.exe')
-  else if (process.platform === 'darwin') nodeBinary = path.join(__dirname, 'bin', process.arch === 'arm64' ? 'node-arm64' : 'node-x64')
-  else nodeBinary = path.join(__dirname, 'bin', 'node')
+let redApp, redServer
+let redStarted = false
 
-  if (!fs.existsSync(nodeBinary) || !fs.existsSync(redJs)) { app.quit(); return }
+async function startNodeRED() {
+  // 1) Zielordner (schreibbar) vorbereiten
+  const userDir = path.join(app.getPath('userData'), 'node-red')
+  fs.mkdirSync(userDir, { recursive: true })
 
-  const basePath = app.getPath('userData')
-  fs.writeFileSync(path.join(basePath, 'AppBasePath.json'), JSON.stringify({ AppBasePath: basePath }, null, 2))
+  // 2) Defaults beim ersten Start rüberkopieren (optional)
+  const defaultsDir =
+    process.resourcesPath
+      ? path.join(process.resourcesPath, 'assets', 'node-red')
+      : path.join(__dirname, 'assets', 'node-red')
+  const flowsPath = path.join(userDir, 'flows.json')
+  if (!fs.existsSync(flowsPath) && fs.existsSync(defaultsDir)) {
+    copyRecursiveSync(defaultsDir, userDir)
+  }
 
-  console.log('Starte Node-RED mit:', nodeBinary, redJs)
+  // 3) Express + HTTP-Server
+  redApp = express()
+  redServer = http.createServer(redApp)
 
-  nodeRedProcess = spawn(nodeBinary, [redJs, '-u', nodeRedDir, '--port', '1880'], {
-    cwd: nodeRedDir,
-    stdio: ['ignore', 'pipe', 'pipe'],
-    env: { ...process.env, ELECTRON_RUN_AS_NODE: '1', IMMO24_USERDATA: basePath, APP_VERSION: app.getVersion() }
+  // 4) Node-RED Settings (inline, da embedded)
+  const settings = {
+    httpAdminRoot: '/red',   // Editor unter /red
+    userDir,                 // wo flows.json, lib, credentials liegen
+    flowFile: 'flows.json',
+    // Logging gerne schlank halten
+    logging: { console: { level: 'info' } },
+    functionGlobalContext: { /* globals, libs etc. */ },
+    // Tipp: In Produktion Admin-Auth setzen:
+    // adminAuth: {
+    //   type: 'credentials',
+    //   users: [{
+    //     username: 'admin',
+    //     password: '$2b$08$...bcrypt-hash...', // via node-red-admin hash-pw
+    //     permissions: '*'
+    //   }]
+    // }
+    contextStorage: {
+    default: { module: 'memory' }
+    }
+
+    
+  }
+
+  process.env.IMMO24_USERDATA ||= app.getPath('userData');
+
+  // 5) Node-RED initialisieren & Mountpoints setzen
+  await RED.init(redServer, settings)             // init mit Server & Settings
+  redApp.use(settings.httpAdminRoot, RED.httpAdmin)
+  redApp.use(RED.httpNode)
+
+  // 6) Server starten
+  await new Promise((resolve, reject) => {
+    redServer.listen(NODE_RED_PORT, NODE_RED_HOST, (err) => {
+      if (err) reject(err); else resolve()
+    })
   })
 
-  let firstOut = true
-  nodeRedProcess.stdout.on('data', d => { if (firstOut) { console.log(`[Node-RED] ${String(d)}`.trim()); firstOut = false } })
-  nodeRedProcess.stderr.on('data', d => console.error(`[Node-RED ERROR] ${String(d)}`.trim()))
-  nodeRedProcess.on('error', err => console.error('[Node-RED SPAWN ERROR]', err))
-  nodeRedProcess.on('exit', (code, signal) => console.log(`[Node-RED EXIT] code: ${code}, signal: ${signal}`))
+  // 7) Node-RED Runtime starten
+  await RED.start()
+  redStarted = true
+  console.log(`Node-RED läuft: http://${NODE_RED_HOST}:${NODE_RED_PORT}${settings.httpAdminRoot}`)
 }
-
 /* ───────────────────────────── Menü ────────────────────────────────── */
 /**
  * Erstellt das App-Menü inkl. Bearbeiten-Funktionen (Copy/Paste etc.).
@@ -526,13 +584,13 @@ app.whenReady().then(async () => {
 })
 
 // Node-RED Prozess beenden beim App-Exit
-app.on('before-quit', () => {
-  if (nodeRedProcess) {
-    try { nodeRedProcess.kill() } catch {}
+app.on('before-quit', async () => {
+  try {
+    if (redStarted) {
+      await RED.stop()                // Runtime stoppen
+      await new Promise(r => redServer?.close(() => r()))
+    }
+  } catch (e) {
+    console.error('Fehler beim Stoppen von Node-RED:', e)
   }
-})
-
-app.on('window-all-closed', () => {
-  if (nodeRedProcess) nodeRedProcess.kill()
-  app.quit()
 })

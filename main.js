@@ -72,17 +72,34 @@ async function fetchInitializeStatus(timeoutMs = 3000) {
 }
 
 function copyRecursiveSync(src, dest) {
-  if (!fs.existsSync(src)) return
-  const stat = fs.statSync(src)
-  if (stat.isDirectory()) {
-    fs.mkdirSync(dest, { recursive: true })
-    for (const entry of fs.readdirSync(src)) {
-      copyRecursiveSync(path.join(src, entry), path.join(dest, entry))
+  if (!src || !fs.existsSync(src)) return;
+  const st = fs.statSync(src);
+  if (st.isDirectory()) {
+    fs.mkdirSync(dest, { recursive: true });
+    for (const e of fs.readdirSync(src)) {
+      copyRecursiveSync(path.join(src, e), path.join(dest, e));
     }
   } else {
-    fs.mkdirSync(path.dirname(dest), { recursive: true })
-    fs.copyFileSync(src, dest)
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    fs.copyFileSync(src, dest);
   }
+}
+
+// DEV/PROD-sicher den Seed-Ordner finden.
+// Priorität: ENV → ./assets/node-red → process.resourcesPath/assets/node-red
+function resolveNodeRedSeedDir() {
+  if (process.env.IMMO24_NODERED_SEED && fs.existsSync(process.env.IMMO24_NODERED_SEED)) {
+    return process.env.IMMO24_NODERED_SEED;
+  }
+  const dev = path.join(__dirname, 'assets', 'node-red'); // lege dort deine Defaults ab
+  if (fs.existsSync(dev)) return dev;
+
+  // falls später gepackt (app.asar): hier liegen Ressourcen
+  if (process.resourcesPath) {
+    const prod = path.join(process.resourcesPath, 'assets', 'node-red');
+    if (fs.existsSync(prod)) return prod;
+  }
+  return null;
 }
 
 /**
@@ -418,18 +435,13 @@ let redStarted = false
 
 async function startNodeRED() {
   // 1) Zielordner (schreibbar) vorbereiten
-  const userDir = path.join(app.getPath('userData'), 'node-red')
-  fs.mkdirSync(userDir, { recursive: true })
+  const userDir = path.join(app.getPath('userData'), 'node-red');
+  fs.mkdirSync(userDir, { recursive: true });
 
-  // 2) Defaults beim ersten Start rüberkopieren (optional)
-  const defaultsDir =
-    process.resourcesPath
-      ? path.join(process.resourcesPath, 'assets', 'node-red')
-      : path.join(__dirname, 'assets', 'node-red')
-  const flowsPath = path.join(userDir, 'flows.json')
-  if (!fs.existsSync(flowsPath) && fs.existsSync(defaultsDir)) {
-    copyRecursiveSync(defaultsDir, userDir)
-  }
+    // für deine Function-Nodes
+  process.env.IMMO24_USERDATA ||= app.getPath('userData');
+
+  ensureNodeRedDefaults(userDir);
 
   // 3) Express + HTTP-Server
   redApp = express()
@@ -460,6 +472,45 @@ async function startNodeRED() {
   }
 
   process.env.IMMO24_USERDATA ||= app.getPath('userData');
+
+function ensureNodeRedDefaults(userDir) {
+  const flowsPath = path.join(userDir, 'flows.json');
+  const credsPath = path.join(userDir, 'flows_cred.json');
+
+  // Schon vorhanden? Dann nichts tun.
+  if (fs.existsSync(flowsPath)) {
+    console.log('[Node-RED] flows.json existiert:', flowsPath);
+    return;
+  }
+
+  const seedDir = resolveNodeRedSeedDir();
+  console.log('[Node-RED] Seed-Quelle:', seedDir || '(keine gefunden)');
+
+  try {
+    if (seedDir && fs.existsSync(path.join(seedDir, 'flows.json'))) {
+      copyRecursiveSync(seedDir, userDir);
+      console.log('[Node-RED] Defaults kopiert nach:', userDir);
+      return;
+    }
+    // Fallback: leere Dateien anlegen, damit der erste Start nie scheitert
+    fs.mkdirSync(userDir, { recursive: true });
+    fs.writeFileSync(flowsPath, '[]', 'utf8');
+    if (!fs.existsSync(credsPath)) fs.writeFileSync(credsPath, '{}', 'utf8');
+    console.warn('[Node-RED] Keine Defaults gefunden – leere flows.json angelegt.');
+  } catch (e) {
+    console.error('[Node-RED] Fehler beim Seeden:', e);
+    // letzter Rettungsanker
+    try {
+      if (!fs.existsSync(flowsPath)) fs.writeFileSync(flowsPath, '[]', 'utf8');
+      if (!fs.existsSync(credsPath)) fs.writeFileSync(credsPath, '{}', 'utf8');
+      console.warn('[Node-RED] Notfall: leere flows.json/cred.json geschrieben.');
+    } catch (e2) {
+      console.error('[Node-RED] Notfall-Seed fehlgeschlagen:', e2);
+    }
+  }
+}
+
+
 
   // 5) Node-RED initialisieren & Mountpoints setzen
   await RED.init(redServer, settings)             // init mit Server & Settings

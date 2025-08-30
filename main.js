@@ -47,9 +47,20 @@ process.on('unhandledRejection', (reason, p) => {
 })
 
 // ────────────────────────────── Konstanten & Globals ──────────────────────────────
+
 const NODE_RED_HOST = '127.0.0.1'
 const NODE_RED_PORT = 59593
 const keepAliveAgent = new http.Agent({ keepAlive: true })
+
+// ────────────────────────────── Dev-Backend / CLI ──────────────────────────────
+// CLI-Schalter: --dev-backend  → IMMO24_DEV_BACKEND=1
+const CLI_ARGS = new Set(process.argv.slice(1))
+if (CLI_ARGS.has('--dev-backend')) {
+  process.env.IMMO24_DEV_BACKEND = '1'
+  logLine('[cli] Dev backend enabled')
+}
+// Developer-Backend-Modus: Flows im UserDir bearbeitbar, Admin-UI aktiv
+const DEV_BACKEND = process.env.IMMO24_DEV_BACKEND === '1'
 
 let mainWindow, prefWin, splashWindow, pickerWin, initWin
 let initWindowClosedByApp = false // Flag: SetupWizard-Fenster per App geschlossen?
@@ -69,6 +80,21 @@ function ensureUserJsonFiles() {
 }
 
 // ────────────────────────────── Node-RED HTTP-API ──────────────────────────────
+async function fetchReadyStatus(timeoutMs = 1500) {
+  return new Promise((resolve) => {
+    const req = http.request(
+      { host: NODE_RED_HOST, port: NODE_RED_PORT, path: '/api/ping', method: 'GET', agent: keepAliveAgent },
+      (res) => {
+        // 2xx vom Flow-Endpoint gilt als bereit
+        resolve({ ok: res.statusCode >= 200 && res.statusCode < 300 })
+      }
+    )
+    req.setTimeout(timeoutMs, () => { try { req.destroy(new Error('timeout')) } catch {} })
+    req.on('error', () => resolve({ ok: false }))
+    req.end()
+  })
+}
+
 async function fetchInitializeStatus(timeoutMs = 3000) {
   return new Promise((resolve) => {
     const req = http.request(
@@ -487,23 +513,37 @@ async function startNodeRED() {
   const userDir = path.join(app.getPath('userData'), 'node-red');
   fs.mkdirSync(userDir, { recursive: true });
   process.env.IMMO24_USERDATA ||= app.getPath('userData');
-  ensureNodeRedDefaults(userDir);
+  if (DEV_BACKEND) {
+    ensureNodeRedDefaults(userDir);
+  }
 
   redApp = express()
   redServer = http.createServer(redApp)
 
+  // (Liveness & Readiness Endpunkte entfernt)
+
+  // Flows als App-Code (Assets) oder im Dev-Backend aus dem UserDir
+  const seedDir = resolveNodeRedSeedDir()
+  const assetFlowFile = seedDir ? path.join(seedDir, 'flows.json') : null
+
   const settings = {
-    httpAdminRoot: '/red',
+    // Admin-UI nur im Dev-Backend aktiv, sonst komplett aus
+    httpAdminRoot: DEV_BACKEND ? '/red' : false,
     userDir,
-    flowFile: 'flows.json',
+    // Dev-Backend: UserDir-Flows; Prod: Flows direkt aus Assets (read-only)
+    flowFile: DEV_BACKEND ? 'flows.json' : (assetFlowFile || 'flows.json'),
     logging: { console: { level: 'info' } },
     functionGlobalContext: {},
-    contextStorage: { default: { module: 'memory' } }
+    contextStorage: { default: { module: 'memory' } },
+    // Editor in Prod deaktivieren (kein Deploy/Write-Versuch auf Assets)
+    editorTheme: { disableEditor: !DEV_BACKEND }
     // adminAuth: ... (optional)
   }
 
   await RED.init(redServer, settings)
-  redApp.use(settings.httpAdminRoot, RED.httpAdmin)
+  if (settings.httpAdminRoot) {
+    redApp.use(settings.httpAdminRoot, RED.httpAdmin)
+  }
   redApp.use(RED.httpNode)
 
   await new Promise((resolve, reject) => {
@@ -514,7 +554,7 @@ async function startNodeRED() {
 
   await RED.start()
   redStarted = true
-  logLine(`Node-RED läuft: http://${NODE_RED_HOST}:${NODE_RED_PORT}${settings.httpAdminRoot}`)
+  logLine(`Node-RED läuft auf http://${NODE_RED_HOST}:${NODE_RED_PORT}` + (settings.httpAdminRoot ? settings.httpAdminRoot : ' (Admin-UI deaktiviert)'))
 }
 
 // ────────────────────────────── Menü ──────────────────────────────
@@ -566,6 +606,7 @@ Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 app.whenReady().then(async () => {
   try {
     logLine('[startup] begin')
+    logLine('[startup] mode', DEV_BACKEND ? 'DEV_BACKEND' : 'PROD_READONLY')
     installGlobalNetworkGuard()
     ensureUserJsonFiles()
     const splashTimer = setTimeout(() => createSplashWindow(), 250)
@@ -573,21 +614,33 @@ app.whenReady().then(async () => {
     createWindow()
     registerIpc()
 
-    // Poll /api/initialize bis ready:true oder Timeout
-    const timeoutMs = 12000
+    // Phase 1: Poll /ready (Runtime bereit?) bis OK oder Timeout
+    const readyTimeout = 6000
     const pollDelay = 400
+    let ready = { ok: false }
+    let t0 = Date.now()
+    while (Date.now() - t0 < readyTimeout) {
+      ready = await fetchReadyStatus()
+      if (ready?.ok) break
+      await new Promise(r => setTimeout(r, pollDelay))
+    }
+    logLine('[startup] runtime ready:', String(!!ready?.ok))
+
+    // Phase 2: Poll /api/initialize (fachliche Bereitschaft) bis ready:true oder Timeout
+    const initTimeout = 12000
     let init = null
-    let start = Date.now()
-    while (Date.now() - start < timeoutMs) {
+    let t1 = Date.now()
+    while (Date.now() - t1 < initTimeout) {
       init = await fetchInitializeStatus()
       if (init?.ready === true) break
       await new Promise(r => setTimeout(r, pollDelay))
     }
+
     clearTimeout(splashTimer)
     if (splashWindow && !splashWindow.isDestroyed()) splashWindow.close()
-    logLine('[startup] node-red ready:', String(!!init && init.ready === true))
+    logLine('[startup] node-red ready (business):', String(!!init && init.ready === true))
 
-    if (!init || init?.ready !== true) {
+    if (!ready?.ok || !init || init?.ready !== true) {
       logLine('Node-RED nicht bereit nach Timeout.')
       app.quit()
       return
@@ -625,6 +678,7 @@ app.on('before-quit', async () => {
     if (redStarted) {
       await RED.stop()
       await new Promise(r => redServer?.close(() => r()))
+      redStarted = false
     }
   } catch (e) {
     logLine('[shutdown] error', e?.stack || String(e))

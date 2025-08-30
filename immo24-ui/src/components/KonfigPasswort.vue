@@ -1,29 +1,24 @@
 <template>
   <v-card flat>
     <v-card-text>
-      <v-row class="gap-4" no-gutters>
-        <v-col cols="12" md="6">
-          <v-text-field
-            v-model="form.newPassword"
-            :type="show1 ? 'text' : 'password'"
-            label="Neues Passwort"
-            density="comfortable"
-            :append-inner-icon="show1 ? 'mdi-eye-off' : 'mdi-eye'"
-            @click:append-inner="show1 = !show1"
-          />
-        </v-col>
-
-        <v-col cols="12" md="6">
-          <v-text-field
-            v-model="form.repeatPassword"
-            :type="show2 ? 'text' : 'password'"
-            label="Neues Passwort wiederholen"
-            density="comfortable"
-            :append-inner-icon="show2 ? 'mdi-eye-off' : 'mdi-eye'"
-            @click:append-inner="show2 = !show2"
-          />
-        </v-col>
-      </v-row>
+      <v-text-field
+        v-model="form.newPassword"
+        :type="show1 ? 'text' : 'password'"
+        label="Neues Passwort"
+        density="comfortable"
+        :append-inner-icon="show1 ? 'mdi-eye-off' : 'mdi-eye'"
+        @click:append-inner="show1 = !show1"
+        class="mb-3"
+      />
+      <v-text-field
+        v-model="form.repeatPassword"
+        :type="show2 ? 'text' : 'password'"
+        label="Neues Passwort wiederholen"
+        density="comfortable"
+        :append-inner-icon="show2 ? 'mdi-eye-off' : 'mdi-eye'"
+        @click:append-inner="show2 = !show2"
+        class="mb-3"
+      />
 
       <v-alert v-if="error" type="error" class="mt-3">{{ error }}</v-alert>
       <v-alert v-if="okMsg" type="success" class="mt-3">{{ okMsg }}</v-alert>

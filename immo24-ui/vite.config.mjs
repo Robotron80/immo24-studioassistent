@@ -1,4 +1,6 @@
 // Plugins
+import fs from 'fs'
+import path from 'path'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import Fonts from 'unplugin-fonts/vite'
@@ -11,7 +13,9 @@ import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 // Utilities
 import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
-import { version } from './package.json'
+
+const rootPkg = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf8'))
+
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -31,12 +35,6 @@ export default defineConfig({
     }),
     Components(),
     Fonts({
-      google: {
-        families: [{
-          name: 'Roboto',
-          styles: 'wght@100;300;400;500;700;900',
-        }],
-      },
     }),
     AutoImport({
       imports: [
@@ -63,7 +61,7 @@ export default defineConfig({
   },
   define: {
     'process.env': {},
-    __APP_VERSION__: JSON.stringify(version),
+    __APP_VERSION__: JSON.stringify(rootPkg.version),
   },
   resolve: {
     alias: {

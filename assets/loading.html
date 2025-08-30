@@ -15,6 +15,7 @@
       height: 100vh;
       font-family: sans-serif;
       background: #f7f8fa;
+      position: relative;
     }
     .plane-wrapper {
       width: 340px;
@@ -34,35 +35,21 @@
       filter: drop-shadow(0 2px 8px rgba(34,34,34,0.13));
     }
     @keyframes flugkurve {
-      0% {
-        opacity: 0;
-        transform: translate(-100px, 18px) rotate(20deg) scale(1);
-      }
-      8% {
-        opacity: 1;
-      }
-      30% {
-        /* fast gleiche Höhe */
-        transform: translate(-20px, 10px) rotate(20deg) scale(1.04);
-        opacity: 1;
-      }
-      60% {
-        /* nur leicht tiefer */
-        transform: translate(80px, 18px) rotate(35deg) scale(1.09);
-        opacity: 1;
-      }
-      80% {
-        /* jetzt sinkt er stärker ab */
-        transform: translate(180px, 38px) rotate(70deg) scale(1.12);
-        opacity: 1;
-      }
-      92% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 0;
-        transform: translate(230px, 70px) rotate(90deg) scale(1.13);
-      }
+      0% { opacity: 0; transform: translate(-100px, 18px) rotate(20deg) scale(1);}
+      8% { opacity: 1;}
+      30% { transform: translate(-20px, 10px) rotate(20deg) scale(1.04); opacity: 1;}
+      60% { transform: translate(80px, 18px) rotate(35deg) scale(1.09); opacity: 1;}
+      80% { transform: translate(180px, 38px) rotate(70deg) scale(1.12); opacity: 1;}
+      92% { opacity: 1;}
+      100% { opacity: 0; transform: translate(230px, 70px) rotate(90deg) scale(1.13);}
+    }
+    .title {
+      font-size: 2em;
+      font-weight: 600;
+      color: #2a2a2a;
+      margin-bottom: 0.5em;
+      letter-spacing: 0.01em;
+      text-align: center;
     }
     .msg {
       font-size: 1.4em;
@@ -77,15 +64,27 @@
     .dot.active {
       opacity: 1;
     }
+    .version {
+      position: absolute;
+      bottom: 18px;
+      right: 24px;
+      font-size: 0.85em;
+      color: #888;
+      opacity: 0.7;
+      letter-spacing: 0.03em;
+      user-select: none;
+    }
   </style>
 </head>
 <body>
+  <div class="title">immo24 Studioassistent</div>
   <div class="plane-wrapper">
     <img class="plane-anim" src="flieger.png" alt="Papierflieger">
   </div>
   <div class="msg">
     Das Schnellboot macht sich bereit<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
   </div>
+  <div class="version" id="version">v0.0.0</div>
   <script>
     const dots = document.querySelectorAll('.dot');
     let step = 0;
@@ -93,6 +92,10 @@
       dots.forEach((d,i)=>d.classList.toggle('active', i <= step));
       step = (step+1) % dots.length;
     }, 400);
+
+    window.electronAPI?.getAppVersion?.().then(v => {
+      if (v) document.getElementById('version').textContent = 'v' + v;
+    });
   </script>
 </body>
 </html>

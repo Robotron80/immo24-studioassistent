@@ -2,8 +2,8 @@
   <v-container fluid class="pa-0 ma-0 settings-root">
     <div class="d-flex flex-column h-100 w-100">
 
-      <!-- scrollbarer inhalt -->
-      <div class="content-scroll flex-grow-1 overflow-auto pa-4">
+      <!-- Tab-Leiste ganz oben, außerhalb des scrollbaren Inhalts -->
+      <div class="tabs-sticky">
         <v-tabs v-model="tab" class="mb-4">
           <v-tab value="prod">Produktionsbuch</v-tab>
           <v-tab value="mitarbeiter">Mitarbeiter</v-tab>
@@ -11,7 +11,10 @@
           <v-tab value="paths">Pfade</v-tab>
           <v-tab value="pwd">Passwort</v-tab>
         </v-tabs>
+      </div>
 
+      <!-- scrollbarer Inhalt -->
+      <div class="content-scroll flex-grow-1 overflow-auto pa-4">
         <v-window v-model="tab">
           <v-window-item value="prod">
             <KonfigProduktionsbuch ref="pbRef" />
@@ -240,6 +243,14 @@ async function authenticate() {
   padding: 12px 16px;
   background: rgb(var(--v-theme-surface));
   border-top: 1px solid rgba(0,0,0,.08);
+}
+.tabs-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: rgb(var(--v-theme-surface), 1);
+  /* Optional: Schatten für bessere Sichtbarkeit */
+  box-shadow: 0 2px 8px -6px rgba(0,0,0,0.08);
 }
 :deep(.v-container) { max-width: none; }
 </style>

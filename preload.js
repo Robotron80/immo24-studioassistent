@@ -18,6 +18,8 @@ function on(channel, handler) {
  * API für die Haupt-App (UI)
  */
 contextBridge.exposeInMainWorld('electronAPI', {
+  getAppVersion: () => ipcRenderer.invoke('get-app-version'),
+
   // Ordnerauswahl (nativer Dialog)
   pickFolder: async (title, defaultPath) => {
     try {

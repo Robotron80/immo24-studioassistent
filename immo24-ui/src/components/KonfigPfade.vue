@@ -1,78 +1,68 @@
 <template>
   <v-card flat>
     <v-card-text>
-      <v-row class="gap-4">
-        <v-col cols="12" md="6">
-          <div style="display: flex; gap: 8px;">
-            <v-text-field
-              v-model="staged.PathMitarbeiter"
-              label="Pfad Mitarbeiter"
-              density="comfortable"
-            />
-            <v-btn
-              @click="browseInto('PathMitarbeiter', 'Pfad Mitarbeiter auswählen')"
-              color="primary"
-              variant="outlined"
-            >
-              Durchsuchen
-            </v-btn>
-          </div>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" md="6">
-          <div style="display: flex; gap: 8px;">
-            <v-text-field
-              v-model="staged.PathProduktionen"
-              label="Pfad Produktionen"
-              density="comfortable"
-            />
-            <v-btn
-              @click="browseInto('PathProduktionen', 'Pfad Produktionen auswählen')"
-              color="primary"
-              variant="outlined"
-            >
-              Durchsuchen
-            </v-btn>
-          </div>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" md="6">
-          <div style="display: flex; gap: 8px;">
-            <v-text-field
-              v-model="staged.PathStammdaten"
-              label="Pfad Stammdaten"
-              density="comfortable"
-            />
-            <v-btn
-              @click="browseInto('PathStammdaten', 'Pfad Stammdaten auswählen')"
-              color="primary"
-              variant="outlined"
-            >
-              Durchsuchen
-            </v-btn>
-          </div>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" md="6">
-          <div style="display: flex; gap: 8px;">
-            <v-text-field
-              v-model="staged.PathPTUser"
-              label="Pfad Pro Tools User"
-              density="comfortable"
-            />
-            <v-btn
-              @click="browseInto('PathPTUser', 'Pfad Pro Tools User auswählen')"
-              color="primary"
-              variant="outlined"
-            >
-              Durchsuchen
-            </v-btn>
-          </div>
-        </v-col>
-      </v-row>
+      <div class="pfade-fields">
+        <div class="pfade-row">
+          <v-text-field
+            v-model="staged.PathMitarbeiter"
+            label="Pfad Mitarbeiter"
+            density="comfortable"
+            class="flex-grow-1"
+          />
+          <v-btn
+            @click="browseInto('PathMitarbeiter', 'Pfad Mitarbeiter auswählen')"
+            color="primary"
+            variant="outlined"
+          >
+            Durchsuchen
+          </v-btn>
+        </div>
+        <div class="pfade-row">
+          <v-text-field
+            v-model="staged.PathProduktionen"
+            label="Pfad Produktionen"
+            density="comfortable"
+            class="flex-grow-1"
+          />
+          <v-btn
+            @click="browseInto('PathProduktionen', 'Pfad Produktionen auswählen')"
+            color="primary"
+            variant="outlined"
+          >
+            Durchsuchen
+          </v-btn>
+        </div>
+        <div class="pfade-row">
+          <v-text-field
+            v-model="staged.PathStammdaten"
+            label="Pfad Stammdaten"
+            density="comfortable"
+            class="flex-grow-1"
+          />
+          <v-btn
+            @click="browseInto('PathStammdaten', 'Pfad Stammdaten auswählen')"
+            color="primary"
+            variant="outlined"
+          >
+            Durchsuchen
+          </v-btn>
+        </div>
+        <div class="pfade-row">
+          <v-text-field
+            v-model="staged.PathPTUser"
+            label="Pfad Pro Tools User"
+            density="comfortable"
+            class="flex-grow-1"
+          />
+          <v-btn
+            @click="browseInto('PathPTUser', 'Pfad Pro Tools User auswählen')"
+            color="primary"
+            variant="outlined"
+          >
+            Durchsuchen
+          </v-btn>
+        </div>
+      </div>
       <v-alert v-if="error" type="error" class="mt-4">
         {{ error }}
       </v-alert>
@@ -143,3 +133,20 @@ defineExpose({
   resetToServer: async () => { await loadSnapshot() }
 })
 </script>
+
+<style scoped>
+.pfade-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.pfade-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+}
+.flex-grow-1 {
+  flex-grow: 1;
+}
+</style>

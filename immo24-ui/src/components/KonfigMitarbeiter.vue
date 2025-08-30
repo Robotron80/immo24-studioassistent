@@ -1,42 +1,40 @@
 <template>
-  <v-row class="gap-4" no-gutters>
-    <v-col cols="12" md="6">
-      <div class="d-flex align-center justify-end mb-2">
-        <v-btn size="small" @click="openNewDialog">Neuer Mitarbeiter</v-btn>
-      </div>
+  <div class="mitarbeiter-fullwidth">
+    <div class="d-flex align-center justify-end mb-2">
+      <v-btn size="small" @click="openNewDialog">Neuer Mitarbeiter</v-btn>
+    </div>
 
-      <v-text-field v-model="search" label="Suchen…" density="compact" class="mb-2" />
+    <v-text-field v-model="search" label="Suchen…" density="compact" class="mb-2" />
 
-      <v-table class="border rounded">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Kürzel</th>
-            <th style="width: 60px;"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="m in filteredMitarbeiter" :key="m.kuerzel">
-            <td>{{ m.name }}</td>
-            <td>{{ m.kuerzel }}</td>
-            <td>
-              <v-btn
-                icon="mdi-pencil"
-                size="small"
-                variant="text"
-                @click="openEditDialog(m)"
-                :aria-label="`Kürzel von ${m.name} bearbeiten`"
-              />
-            </td>
-          </tr>
-          <tr v-if="filteredMitarbeiter.length === 0">
-            <td colspan="3"><em>Keine Mitarbeiter gefunden.</em></td>
-          </tr>
-        </tbody>
-      </v-table>
-      <v-alert v-if="error" type="error" class="mt-4">{{ error }}</v-alert>
-    </v-col>
-  </v-row>
+    <v-table class="border rounded">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Kürzel</th>
+          <th style="width: 60px;"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="m in filteredMitarbeiter" :key="m.kuerzel">
+          <td>{{ m.name }}</td>
+          <td>{{ m.kuerzel }}</td>
+          <td>
+            <v-btn
+              icon="mdi-pencil"
+              size="small"
+              variant="text"
+              @click="openEditDialog(m)"
+              :aria-label="`Kürzel von ${m.name} bearbeiten`"
+            />
+          </td>
+        </tr>
+        <tr v-if="filteredMitarbeiter.length === 0">
+          <td colspan="3"><em>Keine Mitarbeiter gefunden.</em></td>
+        </tr>
+      </tbody>
+    </v-table>
+    <v-alert v-if="error" type="error" class="mt-4">{{ error }}</v-alert>
+  </div>
 
   <!-- Dialog: Neuer Mitarbeiter -->
   <v-dialog v-model="newDialogOpen" max-width="420">
@@ -189,3 +187,12 @@ function saveEditKuerzel() {
   }
 }
 </script>
+
+<style scoped>
+.mitarbeiter-fullwidth {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding-bottom: 32px;
+}
+</style>

@@ -1,14 +1,12 @@
 <template>
-  <v-row class="gap-4" no-gutters>
-    <!-- LINKS: Kunden -->
-    <v-col cols="12" md="4">
+  <div>
+    <!-- Kunden-Bereich -->
+    <div class="mb-6">
       <div class="d-flex align-center justify-space-between mb-2">
         <div class="text-subtitle-1">Kunden</div>
         <v-btn size="small" @click="openNewCustomer">Neuer Kunde</v-btn>
       </div>
-
       <v-text-field v-model="search" label="Suchen…" density="compact" class="mb-2" />
-
       <v-list nav density="comfortable" class="border rounded">
         <template v-for="c in filteredCustomers" :key="c.kunde">
           <v-list-item
@@ -29,17 +27,16 @@
           <v-divider />
         </template>
       </v-list>
-    </v-col>
+    </div>
 
-    <!-- RECHTS: Ordner -->
-    <v-col cols="12" md="7" class="flex-grow-1">
+    <!-- Ordner-Bereich -->
+    <div>
       <div class="d-flex align-center justify-space-between mb-2">
         <div class="text-subtitle-1">
           Ordner <span v-if="selectedKunde">für <strong>{{ selectedKunde }}</strong></span>
         </div>
         <v-btn size="small" :disabled="!selectedKunde" @click="openNewFolder">Neuer Ordner</v-btn>
       </div>
-
       <v-table class="border rounded">
         <thead>
           <tr>
@@ -67,10 +64,9 @@
           </tr>
         </tbody>
       </v-table>
-
       <v-alert v-if="error" type="error" class="mt-4">{{ error }}</v-alert>
-    </v-col>
-  </v-row>
+    </div>
+  </div>
 
   <!-- Dialog: Neuer Kunde -->
   <v-dialog v-model="newCustomerOpen" max-width="460">
@@ -270,3 +266,11 @@ let confirmCb = null
 function confirm(title, text){ confirmTitle.value=title; confirmText.value=text; confirmOpen.value=true; return new Promise(res => confirmCb = res) }
 function confirmResolve(val){ confirmOpen.value=false; confirmCb?.(val) }
 </script>
+
+<style scoped>
+.pb-single-col {
+  max-width: 700px;
+  margin: 0 auto;
+  padding-bottom: 32px;
+}
+</style>

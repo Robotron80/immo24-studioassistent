@@ -1,41 +1,61 @@
 /**
  * immo24 Studioassistent - Electron Main Process
  * ------------------------------------------------
- * - Startet Node-RED als Backend
+ * - Startet Node-RED als Backend (embedded)
  * - Verwaltet alle Fenster (Main, Picker, Setup, Splash, Preferences)
  * - IPC-Kommunikation mit Renderer
  * - User-Datenverwaltung
  * - Menü & App-Lifecycle
  */
 
-const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron')
+const { app, BrowserWindow, Menu, ipcMain, dialog, session, shell } = require('electron')
 const path = require('path')
 const http = require('http')
 const fs = require('fs')
 const express = require('express')
 const RED = require('node-red')
 
-// Einheitlich für alle internen HTTP-Calls:
+// ────────────────────────────── Fehler-Logging ──────────────────────────────
+const LOG_DIR = path.join(app.getPath('userData'), 'logs')
+const LOG_FILE = path.join(LOG_DIR, 'app.log')
+
+function logLine(...args) {
+  try {
+    const ts = new Date().toISOString()
+    const line = `[${ts}] ${args.map(a => (typeof a === 'string' ? a : JSON.stringify(a))).join(' ')}\n`
+    if (!fs.existsSync(LOG_DIR)) fs.mkdirSync(LOG_DIR, { recursive: true })
+    fs.appendFileSync(LOG_FILE, line)
+    console.log(...args)
+  } catch { /* ignore logging errors */ }
+}
+
+function showOnceErrorBox(title, message) {
+  if (showOnceErrorBox._open) return
+  showOnceErrorBox._open = true
+  try { dialog.showErrorBox(title, message) } finally { showOnceErrorBox._open = false }
+}
+
+// ────────────────────────────── Globale Fehlerfänger ──────────────────────────────
+process.on('uncaughtException', (err) => {
+  logLine('[uncaughtException]', err?.stack || String(err))
+  showOnceErrorBox('Unerwarteter Fehler', String(err?.message || err))
+})
+
+process.on('unhandledRejection', (reason, p) => {
+  logLine('[unhandledRejection]', { reason: String(reason), promise: String(p) })
+  showOnceErrorBox('Unerwarteter Fehler (Promise)', String(reason))
+})
+
+// ────────────────────────────── Konstanten & Globals ──────────────────────────────
 const NODE_RED_HOST = '127.0.0.1'
 const NODE_RED_PORT = 59593
-
-/* ────────────────────────────── Globals ────────────────────────────── */
-// Fenster-Referenzen
-let nodeRedProcess
-let mainWindow
-let prefWin = null
-let splashWindow
-let pickerWin = null
-let initWin = null
-let initWindowClosedByApp = false // Flag: SetupWizard-Fenster per App geschlossen?
-
-// HTTP Agent für Node-RED API
 const keepAliveAgent = new http.Agent({ keepAlive: true })
 
-/* ────────────────────────────── User-Daten ─────────────────────────── */
-/**
- * Kopiert die User-Konfigurationsdateien ins User-Verzeichnis, falls sie fehlen.
- */
+let mainWindow, prefWin, splashWindow, pickerWin, initWin
+let initWindowClosedByApp = false // Flag: SetupWizard-Fenster per App geschlossen?
+let redApp, redServer, redStarted = false
+
+// ────────────────────────────── User-Daten ──────────────────────────────
 function ensureUserJsonFiles() {
   const basePath = app.getPath('userData')
   const srcDir = path.join(__dirname, 'assets')
@@ -48,10 +68,7 @@ function ensureUserJsonFiles() {
   }
 }
 
-/* ─────────────────────── Node‑RED: HTTP‑Helpers ────────────────────── */
-/**
- * Holt den Initialisierungsstatus von Node-RED.
- */
+// ────────────────────────────── Node-RED HTTP-API ──────────────────────────────
 async function fetchInitializeStatus(timeoutMs = 3000) {
   return new Promise((resolve) => {
     const req = http.request(
@@ -71,40 +88,6 @@ async function fetchInitializeStatus(timeoutMs = 3000) {
   })
 }
 
-function copyRecursiveSync(src, dest) {
-  if (!src || !fs.existsSync(src)) return;
-  const st = fs.statSync(src);
-  if (st.isDirectory()) {
-    fs.mkdirSync(dest, { recursive: true });
-    for (const e of fs.readdirSync(src)) {
-      copyRecursiveSync(path.join(src, e), path.join(dest, e));
-    }
-  } else {
-    fs.mkdirSync(path.dirname(dest), { recursive: true });
-    fs.copyFileSync(src, dest);
-  }
-}
-
-// DEV/PROD-sicher den Seed-Ordner finden.
-// Priorität: ENV → ./assets/node-red → process.resourcesPath/assets/node-red
-function resolveNodeRedSeedDir() {
-  if (process.env.IMMO24_NODERED_SEED && fs.existsSync(process.env.IMMO24_NODERED_SEED)) {
-    return process.env.IMMO24_NODERED_SEED;
-  }
-  const dev = path.join(__dirname, 'assets', 'node-red'); // lege dort deine Defaults ab
-  if (fs.existsSync(dev)) return dev;
-
-  // falls später gepackt (app.asar): hier liegen Ressourcen
-  if (process.resourcesPath) {
-    const prod = path.join(process.resourcesPath, 'assets', 'node-red');
-    if (fs.existsSync(prod)) return prod;
-  }
-  return null;
-}
-
-/**
- * Holt die Mitarbeiter-Liste von Node-RED.
- */
 function getUsersFromNodeRed() {
   return new Promise((resolve) => {
     const req = http.request(
@@ -115,14 +98,8 @@ function getUsersFromNodeRed() {
         res.on('end', () => {
           try {
             const arr = JSON.parse(data)
-            if (Array.isArray(arr)) {
-              resolve(arr.map(u => u.name))
-            } else {
-              resolve([])
-            }
-          } catch {
-            resolve([])
-          }
+            resolve(Array.isArray(arr) ? arr.map(u => u.name) : [])
+          } catch { resolve([]) }
         })
       }
     )
@@ -131,9 +108,6 @@ function getUsersFromNodeRed() {
   })
 }
 
-/**
- * Setzt den aktiven User in Node-RED.
- */
 function postActiveUserToNodeRed(user) {
   return new Promise((resolve) => {
     const payload = Buffer.from(JSON.stringify({ user }))
@@ -150,9 +124,6 @@ function postActiveUserToNodeRed(user) {
   })
 }
 
-/**
- * Logout in Node-RED (schnell, fehlertolerant).
- */
 function postLogoutToNodeRed(timeoutMs = 1200) {
   return new Promise((resolve) => {
     const req = http.request(
@@ -165,90 +136,194 @@ function postLogoutToNodeRed(timeoutMs = 1200) {
   })
 }
 
-/* ───────────── Ready‑Check: HEAD‑Ping mit Backoff & Timeout ─────────── */
-/**
- * Wartet bis Node-RED bereit ist (Polling mit Backoff).
- */
-async function waitForNodeRedReady({
-  host = NODE_RED_HOST,
-  port = NODE_RED_PORT,
-  path_ = '/api/initialize',
-  method = 'GET',
-  timeoutMs = 12000,
-  perRequestTimeout = 1500,
-  minDelay = 120,
-  maxDelay = 600,
-  useAgent = false
-} = {}) {
-  const start = Date.now()
-  let delay = minDelay
-  const tryOnce = () => new Promise((resolve) => {
-    const req = http.request(
-      { host, port, path: path_, method, agent: useAgent ? keepAliveAgent : undefined },
-      (res) => { res.resume(); resolve(res.statusCode >= 200 && res.statusCode < 400) }
-    )
-    req.setTimeout(perRequestTimeout, () => { try { req.destroy(new Error('probe timeout')) } catch {} })
-    req.on('error', () => resolve(false))
-    req.end()
-  })
-  if (await tryOnce()) return true
-  while (Date.now() - start < timeoutMs) {
-    await new Promise(r => setTimeout(r, delay))
-    if (await tryOnce()) return true
-    delay = Math.min(Math.floor(delay * 1.6), maxDelay)
+// ────────────────────────────── Node-RED Seed & Defaults ──────────────────────────────
+function copyRecursiveSync(src, dest) {
+  if (!src || !fs.existsSync(src)) return;
+  const st = fs.statSync(src);
+  if (st.isDirectory()) {
+    fs.mkdirSync(dest, { recursive: true });
+    for (const e of fs.readdirSync(src)) {
+      copyRecursiveSync(path.join(src, e), path.join(dest, e));
+    }
+  } else {
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    fs.copyFileSync(src, dest);
   }
-  return false
 }
 
-/* ───────────────────────────── Fenster ─────────────────────────────── */
-/**
- * Erstellt das User-Picker-Fenster.
- */
+function resolveNodeRedSeedDir() {
+  if (process.env.IMMO24_NODERED_SEED && fs.existsSync(process.env.IMMO24_NODERED_SEED)) {
+    return process.env.IMMO24_NODERED_SEED;
+  }
+  const dev = path.join(__dirname, 'assets', 'node-red');
+  if (fs.existsSync(dev)) return dev;
+  if (process.resourcesPath) {
+    const prod = path.join(process.resourcesPath, 'assets', 'node-red');
+    if (fs.existsSync(prod)) return prod;
+  }
+  return null;
+}
+
+function ensureNodeRedDefaults(userDir) {
+  const flowsPath = path.join(userDir, 'flows.json');
+  const credsPath = path.join(userDir, 'flows_cred.json');
+  if (fs.existsSync(flowsPath)) return;
+  const seedDir = resolveNodeRedSeedDir();
+  try {
+    if (seedDir && fs.existsSync(path.join(seedDir, 'flows.json'))) {
+      copyRecursiveSync(seedDir, userDir);
+      return;
+    }
+    fs.mkdirSync(userDir, { recursive: true });
+    fs.writeFileSync(flowsPath, '[]', 'utf8');
+    if (!fs.existsSync(credsPath)) fs.writeFileSync(credsPath, '{}', 'utf8');
+  } catch (e) {
+    try {
+      if (!fs.existsSync(flowsPath)) fs.writeFileSync(flowsPath, '[]', 'utf8');
+      if (!fs.existsSync(credsPath)) fs.writeFileSync(credsPath, '{}', 'utf8');
+    } catch {}
+  }
+}
+
+// ────────────────────────────── Netzwerk-Guard ──────────────────────────────
+function installGlobalNetworkGuard() {
+  if (installGlobalNetworkGuard._done) return
+  installGlobalNetworkGuard._done = true
+  session.defaultSession.webRequest.onBeforeRequest({ urls: ['*://*/*'] }, (details, cb) => {
+    try {
+      const u = new URL(details.url)
+      const isLocalFile =
+        (u.protocol === 'file:' &&
+         (u.pathname.includes('app.asar') ||
+          u.pathname.includes(`${path.sep}dist${path.sep}`) ||
+          u.pathname.includes(`${path.sep}assets${path.sep}`)))
+      const devUrl = process.env.ELECTRON_START_URL || ''
+      const isDevServer = !!devUrl && (u.origin === devUrl.replace(/\/+$/,'') ||
+                                       u.origin === 'http://localhost:3000' ||
+                                       u.origin === 'ws://localhost:3000')
+      const isNodeRed =
+        (u.protocol === 'http:' &&
+         (u.hostname === NODE_RED_HOST ||
+          (NODE_RED_HOST === '127.0.0.1' && (u.hostname === 'localhost' || u.hostname === '::1'))) &&
+         u.port === String(NODE_RED_PORT))
+      const allowed = isLocalFile || isDevServer || isNodeRed
+      cb({ cancel: !allowed })
+    } catch {
+      cb({ cancel: true })
+    }
+  })
+}
+
+// ────────────────────────────── Fenster-Crash-Guards ──────────────────────────────
+function attachCrashGuards(win, name = 'window') {
+  if (!win || win.isDestroyed()) return
+  win.webContents.on('render-process-gone', (_e, details) => {
+    logLine(`[${name}] render-process-gone`, details)
+    showOnceErrorBox('Fenster abgestürzt', `${name} ist abgestürzt (${details.reason}). Starte neu…`)
+    try { win.reload() } catch {}
+  })
+  win.webContents.on('unresponsive', () => {
+    logLine(`[${name}] unresponsive`)
+    const choice = dialog.showMessageBoxSync(win, {
+      type: 'warning',
+      buttons: ['Warten', 'Neu laden'],
+      defaultId: 0,
+      cancelId: 0,
+      message: `${name} reagiert nicht mehr.`,
+      detail: 'Du kannst warten oder das Fenster neu laden.'
+    })
+    if (choice === 1) { try { win.reload() } catch {} }
+  })
+  win.webContents.on('responsive', () => {
+    logLine(`[${name}] responsive (wieder OK)`)
+  })
+  win.webContents.on('plugin-crashed', (_e, pname, version) => {
+    logLine(`[${name}] plugin-crashed`, { name: pname, version })
+  })
+}
+
+// ────────────────────────────── Fenster-Erstellung ──────────────────────────────
 function createUserPickerWindow() {
   if (pickerWin && !pickerWin.isDestroyed()) return pickerWin
   pickerWin = new BrowserWindow({
-    width: 420, height: 300, resizable: false, frame: false, show: true, alwaysOnTop: false, movable: true,
-    webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false, sandbox: true }
+    width: 420, height: 300, resizable: false, frame: false, show: false,
+    alwaysOnTop: false, movable: true,
+    webPreferences: {
+      contextIsolation: true, sandbox: true, nodeIntegration: false,
+      webSecurity: true, allowRunningInsecureContent: false,
+      enableRemoteModule: false, preload: path.join(__dirname, 'preload.js'),
+    }
   })
-  pickerWin.loadFile(path.join(__dirname, 'assets', 'login.html'))
+  attachCrashGuards(pickerWin, 'picker')
+  pickerWin.webContents.on('will-navigate', (e, url) => {
+    try {
+      const u = new URL(url)
+      const ok = (u.protocol === 'file:' && u.pathname.endsWith('/assets/login.html'))
+      if (!ok) e.preventDefault()
+    } catch { e.preventDefault() }
+  })
+  pickerWin.webContents.setWindowOpenHandler(({ url }) => {
+    try { const u = new URL(url); if (u.protocol === 'https:') shell.openExternal(url) } catch {}
+    return { action: 'deny' }
+  })
+  pickerWin.once('ready-to-show', () => pickerWin.show())
+  pickerWin.loadURL('file://' + path.join(__dirname, 'assets', 'login.html'))
+  pickerWin.on('closed', () => { pickerWin = null })
   return pickerWin
 }
 
-/**
- * Erstellt das Splash-Fenster (Ladeanzeige).
- */
 function createSplashWindow() {
   splashWindow = new BrowserWindow({
     width: 420, height: 300, resizable: false, frame: false, transparent: false,
-    alwaysOnTop: true, center: true, show: true, movable: false,
-    webPreferences: { nodeIntegration: false, contextIsolation: true, sandbox: true }
+    alwaysOnTop: true, center: true, show: false, movable: false,
+    webPreferences: {
+      contextIsolation: true, sandbox: true, nodeIntegration: false,
+      webSecurity: true, allowRunningInsecureContent: false,
+      enableRemoteModule: false, preload: path.join(__dirname, 'preload.js'),
+    }
   })
-  splashWindow.loadFile(path.join(__dirname, 'assets', 'loading.html'))
+  attachCrashGuards(splashWindow, 'splash')
+  splashWindow.webContents.on('will-navigate', (e, url) => {
+    try {
+      const u = new URL(url)
+      const ok = (u.protocol === 'file:' && u.pathname.endsWith('/assets/loading.html'))
+      if (!ok) e.preventDefault()
+    } catch { e.preventDefault() }
+  })
+  splashWindow.webContents.setWindowOpenHandler(() => ({ action: 'deny' }))
+  splashWindow.once('ready-to-show', () => splashWindow.show())
+  splashWindow.loadURL('file://' + path.join(__dirname, 'assets', 'loading.html'))
+  splashWindow.on('closed', () => { splashWindow = null })
 }
 
-/**
- * Erstellt das Hauptfenster (wird erst nach Login gezeigt).
- */
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200, height: 900, useContentSize: true,
     icon: path.join(__dirname, 'assets', 'icon.png'),
-    show: false, // erst nach Anmeldung
+    show: false,
     webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: true,
-      webviewTag: true,
-      preload: path.join(__dirname, 'preload.js'),
-      sandbox: true
+      contextIsolation: true, sandbox: true, nodeIntegration: false,
+      webSecurity: true, allowRunningInsecureContent: false,
+      enableRemoteModule: false, preload: path.join(__dirname, 'preload.js')
     }
   })
-  // WICHTIG: KEIN loadURL/loadFile hier – erst nach Node‑RED‑Ready
+  attachCrashGuards(mainWindow, 'main')
+  mainWindow.webContents.on('will-navigate', (e, url) => {
+    try {
+      const u = new URL(url)
+      const ok =
+        (u.protocol === 'file:' && u.pathname.endsWith('/immo24-ui/dist/index.html')) ||
+        (!!process.env.ELECTRON_START_URL && u.origin === (process.env.ELECTRON_START_URL || '').replace(/\/+$/,''))
+      if (!ok) e.preventDefault()
+    } catch { e.preventDefault() }
+  })
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    try { const u = new URL(url); if (u.protocol === 'https:') shell.openExternal(url) } catch {}
+    return { action: 'deny' }
+  })
 }
 
-/**
- * Versteckt das Hauptfenster robust (auch bei Fullscreen/Kiosk).
- */
-async function hideMainWindowRobust(win, maxWaitMs = 900) {
+function hideMainWindowRobust(win, maxWaitMs = 900) {
   if (!win || win.isDestroyed()) return
   try { win.setFullScreen(false) } catch {}
   try { win.setKiosk(false) } catch {}
@@ -257,26 +332,21 @@ async function hideMainWindowRobust(win, maxWaitMs = 900) {
   try { win.setVisibleOnAllWorkspaces(false) } catch {}
   try { win.blur() } catch {}
   try { win.hide() } catch {}
-
   const start = Date.now()
   while (Date.now() - start < maxWaitMs) {
     if (!win.isVisible()) break
-    await new Promise(r => setTimeout(r, 40))
+    require('deasync').sleep(40)
   }
   if (win.isVisible()) { try { win.minimize() } catch {} }
 }
 
-/**
- * Öffnet den User-Picker und versteckt andere Fenster.
- * Holt immer die aktuelle Mitarbeiter-Liste.
- */
 async function openPickerFlow({ doLogout = true } = {}) {
   if (prefWin && !prefWin.isDestroyed()) { prefWin.close(); prefWin = null }
   if (mainWindow && !mainWindow.isDestroyed()) {
-    await hideMainWindowRobust(mainWindow)
+    hideMainWindowRobust(mainWindow)
   }
   if (doLogout) {
-    try { await postLogoutToNodeRed(1200) } catch (e) { console.error('Logout-Fehler:', e) }
+    try { await postLogoutToNodeRed(1200) } catch (e) { logLine('Logout-Fehler:', e) }
   }
   if (!pickerWin || pickerWin.isDestroyed()) pickerWin = createUserPickerWindow()
   else { pickerWin.show(); pickerWin.focus() }
@@ -288,31 +358,24 @@ async function openPickerFlow({ doLogout = true } = {}) {
   return { ok: true }
 }
 
-/**
- * Erstellt das Konfigurations-Fenster.
- * Schließt den Picker, falls offen.
- */
 function createPreferencesWindow() {
   if (prefWin && !prefWin.isDestroyed()) { prefWin.focus(); return }
   if (pickerWin && !pickerWin.isDestroyed()) { pickerWin.close(); pickerWin = null }
-
   const parent =
     (pickerWin && !pickerWin.isDestroyed() && pickerWin.isVisible()) ? pickerWin :
     (mainWindow && !mainWindow.isDestroyed() && mainWindow.isVisible()) ? mainWindow :
-    null
-
+    undefined
   const opts = {
     width: 900, height: 650, resizable: true, title: 'Konfiguration',
-    parent: parent || undefined,
-    modal: !!(pickerWin && !pickerWin.isDestroyed() && pickerWin.isVisible()),
-    show: false,
-    webPreferences: { contextIsolation: true, nodeIntegration: false, preload: path.join(__dirname, 'preload.js') }
+    parent, modal: !!parent, show: false,
+    webPreferences: {
+      contextIsolation: true, sandbox: true, nodeIntegration: false,
+      webSecurity: true, allowRunningInsecureContent: false,
+      enableRemoteModule: false, preload: path.join(__dirname, 'preload.js')
+    }
   }
-  if (!parent) delete opts.parent
-
   prefWin = new BrowserWindow(opts)
   prefWin.setMenu(null)
-
   const isDev = !!process.env.ELECTRON_START_URL
   if (isDev) {
     prefWin.loadURL(process.env.ELECTRON_START_URL + '/konfiguration')
@@ -322,51 +385,44 @@ function createPreferencesWindow() {
       prefWin.webContents.executeJavaScript("window.location.hash = '#/konfiguration'")
     })
   }
-
   prefWin.once('ready-to-show', () => prefWin.show())
   prefWin.on('closed', () => { prefWin = null })
 }
 
-/**
- * Erstellt das SetupWizard-Fenster (Initialisierung).
- * Beendet die App, wenn der User das Fenster schließt.
- */
 function createInitWindow() {
+  const entryHtml = path.join(__dirname, 'immo24-ui', 'dist', 'index.html')
+  const startUrl = 'file://' + entryHtml + '#/Setupwizard'
   initWin = new BrowserWindow({
-    width: 900,
-    height: 800,
-    resizable: true,
-    frame: true,
-    show: true,
+    width: 900, height: 800, resizable: true, frame: true, show: false,
     webPreferences: {
-      contextIsolation: true,
-      nodeIntegration: false,
-      preload: path.join(__dirname, 'preload.js'),
-      sandbox: true
-    }
+      contextIsolation: true, sandbox: true, nodeIntegration: false,
+      webSecurity: true, allowRunningInsecureContent: false,
+      enableRemoteModule: false, preload: path.join(__dirname, 'preload.js'),
+    },
   })
-
-  initWin.loadFile(path.join(__dirname, 'immo24-ui', 'dist', 'index.html'))
-  initWin.webContents.once('did-finish-load', () => {
-    initWin.webContents.executeJavaScript("window.location.hash = '#/Setupwizard'")
+  attachCrashGuards(initWin, 'init')
+  initWin.webContents.on('will-navigate', (e, url) => {
+    try {
+      const u = new URL(url)
+      const ok = (u.protocol === 'file:' && u.pathname.endsWith('/immo24-ui/dist/index.html'))
+      if (!ok) e.preventDefault()
+    } catch { e.preventDefault() }
+  })
+  initWin.webContents.setWindowOpenHandler(({ url }) => {
+    try { const u = new URL(url); if (u.protocol === 'https:') shell.openExternal(url) } catch {}
+    return { action: 'deny' }
   })
   initWin.once('ready-to-show', () => initWin.show())
+  initWin.loadURL(startUrl)
   initWin.on('closed', () => {
-    if (!initWindowClosedByApp) {
-      app.quit() // Nur wenn der Benutzer das Fenster schließt!
-    }
+    if (!initWindowClosedByApp) app.quit()
     initWin = null
-    initWindowClosedByApp = false // Reset für nächsten Start
+    initWindowClosedByApp = false
   })
   return initWin
 }
 
-/* ───────────────────────────── IPC-Handler ─────────────────────────── */
-/**
- * IPC-Kommunikation zwischen Renderer und Main.
- */
-
-// User im Picker ausgewählt → Main-Fenster zeigen
+// ────────────────────────────── IPC-Handler ──────────────────────────────
 ipcMain.on('user-picked', async (_evt, user) => {
   await postActiveUserToNodeRed(user)
   if (mainWindow && !mainWindow.isDestroyed()) {
@@ -381,16 +437,13 @@ ipcMain.on('user-picked', async (_evt, user) => {
   if (splashWindow && !splashWindow.isDestroyed()) { splashWindow.close(); splashWindow = null }
 })
 
-// Picker „Beenden“ → ganze App schließen
 ipcMain.on('app-quit', () => { app.quit() })
 
-// Fenster verstecken + Picker öffnen (z.B. nach Logout)
 ipcMain.handle('renderer-hide-and-pick', async (_evt, args) => {
   try { return await openPickerFlow(args || { doLogout: true }) }
   catch (e) { return { ok: false, error: String(e) } }
 })
 
-// SetupWizard-Fenster programmatisch schließen
 ipcMain.handle('close-init-window', () => {
   if (initWin && !initWin.isDestroyed()) {
     initWindowClosedByApp = true
@@ -401,7 +454,6 @@ ipcMain.handle('close-init-window', () => {
   return false
 })
 
-// Mitarbeiter-Liste neu laden und an Picker senden
 ipcMain.handle('refresh-users', async () => {
   const users = await getUsersFromNodeRed()
   if (pickerWin && !pickerWin.isDestroyed()) {
@@ -410,7 +462,9 @@ ipcMain.handle('refresh-users', async () => {
   return users
 })
 
-// Ordnerauswahl-Dialog
+const rootPkg = require('./package.json')
+ipcMain.handle('get-app-version', () => rootPkg.version)
+
 function registerIpc() {
   ipcMain.removeHandler('pick-folder')
   ipcMain.handle('pick-folder', async (evt, args = {}) => {
@@ -426,113 +480,44 @@ function registerIpc() {
   })
 }
 
-/* ───────────────────────── Node‑RED Start ───────────────────────────── */
-/**
- * Startet Node-RED als separaten Prozess.
- */
-let redApp, redServer
-let redStarted = false
 
+
+// ────────────────────────────── Node-RED Start ──────────────────────────────
 async function startNodeRED() {
-  // 1) Zielordner (schreibbar) vorbereiten
   const userDir = path.join(app.getPath('userData'), 'node-red');
   fs.mkdirSync(userDir, { recursive: true });
-
-    // für deine Function-Nodes
   process.env.IMMO24_USERDATA ||= app.getPath('userData');
-
   ensureNodeRedDefaults(userDir);
 
-  // 3) Express + HTTP-Server
   redApp = express()
   redServer = http.createServer(redApp)
 
-  // 4) Node-RED Settings (inline, da embedded)
   const settings = {
-    httpAdminRoot: '/red',   // Editor unter /red
-    userDir,                 // wo flows.json, lib, credentials liegen
+    httpAdminRoot: '/red',
+    userDir,
     flowFile: 'flows.json',
-    // Logging gerne schlank halten
     logging: { console: { level: 'info' } },
-    functionGlobalContext: { /* globals, libs etc. */ },
-    // Tipp: In Produktion Admin-Auth setzen:
-    // adminAuth: {
-    //   type: 'credentials',
-    //   users: [{
-    //     username: 'admin',
-    //     password: '$2b$08$...bcrypt-hash...', // via node-red-admin hash-pw
-    //     permissions: '*'
-    //   }]
-    // }
-    contextStorage: {
-    default: { module: 'memory' }
-    }
-
-    
+    functionGlobalContext: {},
+    contextStorage: { default: { module: 'memory' } }
+    // adminAuth: ... (optional)
   }
 
-  process.env.IMMO24_USERDATA ||= app.getPath('userData');
-
-function ensureNodeRedDefaults(userDir) {
-  const flowsPath = path.join(userDir, 'flows.json');
-  const credsPath = path.join(userDir, 'flows_cred.json');
-
-  // Schon vorhanden? Dann nichts tun.
-  if (fs.existsSync(flowsPath)) {
-    console.log('[Node-RED] flows.json existiert:', flowsPath);
-    return;
-  }
-
-  const seedDir = resolveNodeRedSeedDir();
-  console.log('[Node-RED] Seed-Quelle:', seedDir || '(keine gefunden)');
-
-  try {
-    if (seedDir && fs.existsSync(path.join(seedDir, 'flows.json'))) {
-      copyRecursiveSync(seedDir, userDir);
-      console.log('[Node-RED] Defaults kopiert nach:', userDir);
-      return;
-    }
-    // Fallback: leere Dateien anlegen, damit der erste Start nie scheitert
-    fs.mkdirSync(userDir, { recursive: true });
-    fs.writeFileSync(flowsPath, '[]', 'utf8');
-    if (!fs.existsSync(credsPath)) fs.writeFileSync(credsPath, '{}', 'utf8');
-    console.warn('[Node-RED] Keine Defaults gefunden – leere flows.json angelegt.');
-  } catch (e) {
-    console.error('[Node-RED] Fehler beim Seeden:', e);
-    // letzter Rettungsanker
-    try {
-      if (!fs.existsSync(flowsPath)) fs.writeFileSync(flowsPath, '[]', 'utf8');
-      if (!fs.existsSync(credsPath)) fs.writeFileSync(credsPath, '{}', 'utf8');
-      console.warn('[Node-RED] Notfall: leere flows.json/cred.json geschrieben.');
-    } catch (e2) {
-      console.error('[Node-RED] Notfall-Seed fehlgeschlagen:', e2);
-    }
-  }
-}
-
-
-
-  // 5) Node-RED initialisieren & Mountpoints setzen
-  await RED.init(redServer, settings)             // init mit Server & Settings
+  await RED.init(redServer, settings)
   redApp.use(settings.httpAdminRoot, RED.httpAdmin)
   redApp.use(RED.httpNode)
 
-  // 6) Server starten
   await new Promise((resolve, reject) => {
     redServer.listen(NODE_RED_PORT, NODE_RED_HOST, (err) => {
       if (err) reject(err); else resolve()
     })
   })
 
-  // 7) Node-RED Runtime starten
   await RED.start()
   redStarted = true
-  console.log(`Node-RED läuft: http://${NODE_RED_HOST}:${NODE_RED_PORT}${settings.httpAdminRoot}`)
+  logLine(`Node-RED läuft: http://${NODE_RED_HOST}:${NODE_RED_PORT}${settings.httpAdminRoot}`)
 }
-/* ───────────────────────────── Menü ────────────────────────────────── */
-/**
- * Erstellt das App-Menü inkl. Bearbeiten-Funktionen (Copy/Paste etc.).
- */
+
+// ────────────────────────────── Menü ──────────────────────────────
 const isMac = process.platform === 'darwin'
 const template = [
   ...(isMac ? [{
@@ -577,15 +562,14 @@ const template = [
 ]
 Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 
-/* ───────────────────────── App Lifecycle ───────────────────────────── */
-/**
- * Startet die App, zeigt Splash, wartet auf Node-RED, öffnet SetupWizard oder Picker.
- */
+// ────────────────────────────── App Lifecycle ──────────────────────────────
 app.whenReady().then(async () => {
   try {
+    logLine('[startup] begin')
+    installGlobalNetworkGuard()
     ensureUserJsonFiles()
     const splashTimer = setTimeout(() => createSplashWindow(), 250)
-    startNodeRED()
+    await startNodeRED()
     createWindow()
     registerIpc()
 
@@ -601,10 +585,10 @@ app.whenReady().then(async () => {
     }
     clearTimeout(splashTimer)
     if (splashWindow && !splashWindow.isDestroyed()) splashWindow.close()
+    logLine('[startup] node-red ready:', String(!!init && init.ready === true))
 
     if (!init || init?.ready !== true) {
-      // Node-RED ist nicht bereit, App beenden oder Fehler anzeigen
-      console.error('Node-RED nicht bereit nach Timeout.')
+      logLine('Node-RED nicht bereit nach Timeout.')
       app.quit()
       return
     }
@@ -622,26 +606,29 @@ app.whenReady().then(async () => {
       createInitWindow()
       return
     } else {
-      // User-Picker öffnen
       const usersFromInit = Array.isArray(init?.user) ? init.user.map(u => u.name) : null
       const users = usersFromInit || (await getUsersFromNodeRed())
       const pw = createUserPickerWindow()
       pw.webContents.once('did-finish-load', () => pw.webContents.send('users', users))
     }
   } catch (err) {
-    console.error('Fehler beim App-Start:', err)
+    logLine('[startup] error', err?.stack || String(err))
+    showOnceErrorBox('Startfehler', String(err?.message || err))
     app.quit()
   }
 })
 
 // Node-RED Prozess beenden beim App-Exit
 app.on('before-quit', async () => {
+  logLine('[shutdown] begin')
   try {
     if (redStarted) {
-      await RED.stop()                // Runtime stoppen
+      await RED.stop()
       await new Promise(r => redServer?.close(() => r()))
     }
   } catch (e) {
-    console.error('Fehler beim Stoppen von Node-RED:', e)
+    logLine('[shutdown] error', e?.stack || String(e))
+  } finally {
+    logLine('[shutdown] end')
   }
 })

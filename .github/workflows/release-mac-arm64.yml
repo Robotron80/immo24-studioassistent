@@ -1,0 +1,47 @@
+name: release-mac-arm64
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*.*.*']
+
+jobs:
+  mac-arm64:
+    runs-on: macos-14
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Fetch repo (no marketplace actions)
+        run: |
+          git init .
+          git remote add origin https://github.com/${{ github.repository }}.git
+          git fetch --depth=1 origin ${{ github.sha }}
+          git checkout -qf ${{ github.sha }}
+
+      - name: Ensure Node (prefer preinstalled; fallback to Volta)
+        run: |
+          if command -v node >/dev/null; then node -v; fi
+          if ! node -v >/dev/null 2>&1; then
+            curl -fsSL https://get.volta.sh | bash -s -- --skip-setup
+            echo 'export VOLTA_HOME="$HOME/.volta"' >> $GITHUB_ENV
+            echo 'export PATH="$VOLTA_HOME/bin:$PATH"' >> $GITHUB_ENV
+            export VOLTA_HOME="$HOME/.volta"; export PATH="$VOLTA_HOME/bin:$PATH"
+            volta install node@22
+          fi
+          node -v
+          corepack enable || true
+
+      - name: Install deps (clean)
+        run: |
+          rm -rf node_modules dist out
+          npm ci
+
+      - name: Build macOS arm64
+        run: npm run dist:mac:arm64
+
+      - name: Create or update GitHub Release and upload DMG/ZIP
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          # create release if missing (draft)
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --draft -t "$TAG" -n "Automated draft release"
+          # upload all dist files
+          gh release upload "$TAG" dist/* --clobber

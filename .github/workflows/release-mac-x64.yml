@@ -1,0 +1,45 @@
+name: release-mac-x64
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*.*.*']
+
+jobs:
+  mac-x64:
+    runs-on: macos-13  # Intel Runner
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Fetch repo
+        run: |
+          git init .
+          git remote add origin https://github.com/${{ github.repository }}.git
+          git fetch --depth=1 origin ${{ github.sha }}
+          git checkout -qf ${{ github.sha }}
+
+      - name: Ensure Node
+        run: |
+          if command -v node >/dev/null; then node -v; fi
+          if ! node -v >/dev/null 2>&1; then
+            curl -fsSL https://get.volta.sh | bash -s -- --skip-setup
+            echo 'export VOLTA_HOME="$HOME/.volta"' >> $GITHUB_ENV
+            echo 'export PATH="$VOLTA_HOME/bin:$PATH"' >> $GITHUB_ENV
+            export VOLTA_HOME="$HOME/.volta"; export PATH="$VOLTA_HOME/bin:$PATH"
+            volta install node@22
+          fi
+          node -v
+          corepack enable || true
+
+      - name: Install deps (clean)
+        run: |
+          rm -rf node_modules dist out
+          npm ci
+
+      - name: Build macOS x64
+        run: npm run dist:mac:x64
+
+      - name: Upload to Release
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --draft -t "$TAG" -n "Automated draft release"
+          gh release upload "$TAG" dist/* --clobber

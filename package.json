@@ -15,7 +15,10 @@
   },
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win nsis --x64",
+    "dist:mac:arm64": "electron-builder --mac dmg --arm64",
+    "dist:mac:x64": "electron-builder --mac dmg --x64"
   },
   "build": {
     "appId": "de.immo24.studioassistent",
@@ -38,14 +41,15 @@
       "allowElevation": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "license": "assets/license.txt"
+      "license": "assets/license.txt",
+      "deleteAppDataOnUninstall": true
     },
     "mac": {
       "target": [
-      {
-        "target": "dmg"
-      }
-    ],
+        {
+          "target": "dmg"
+        }
+      ],
       "category": "public.app-category.productivity"
     },
     "dmg": {
@@ -55,7 +59,9 @@
       "buildResources": "assets"
     },
     "icon": "assets/icon",
-    "asar": false
+    "asar": false,
+    "afterPack": "afterPack.js"
+
   },
   "devDependencies": {
     "electron": "^37.3.1",

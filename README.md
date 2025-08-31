@@ -1,6 +1,6 @@
 # immo24 Studioassistent
 
-Der **immo24 Studioassistent** ist eine Desktop-Anwendung zur Verwaltung von Projekten und Presets auf vernetzten Avid Pro Tools Systemen.  
+Der **immo24 Studioassistent** ist eine Desktop-Anwendung zur Verwaltung von Projekten und Presets auf vernetzten Avid Pro Tools Systemen.
 
 ---
 
@@ -143,7 +143,7 @@ Gespeicherte Daten liegen in:
 ## 💻 Systemanforderungen
 
 - Enthält eigene **Node.js-Runtime**  
-- Node-RED läuft standardmäßig auf **Port 1880**  
+- Node-RED läuft standardmäßig auf **Port 59593**  
 - Updates können einfach installiert werden, Konfiguration bleibt erhalten  
 
 ---

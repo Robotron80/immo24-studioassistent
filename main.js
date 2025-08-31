@@ -522,6 +522,16 @@ async function startNodeRED() {
 
   // (Liveness & Readiness Endpunkte entfernt)
 
+  // Node-RED Home korrekt setzen (robust für Packaging / asar)
+  const NODE_RED_HOME = path.dirname(require.resolve('node-red/package.json'))
+  process.env.NODE_RED_HOME = NODE_RED_HOME
+  logLine('[Node-RED] HOME = ' + NODE_RED_HOME)
+
+  // Core-Nodes liegen ab Node-RED 3/4 im Paket "@node-red/nodes" (nicht in "node-red/nodes")
+  const CORE_NODES_DIR = path.dirname(require.resolve('@node-red/nodes/package.json'))
+  logLine('[Node-RED] CORE_NODES_DIR = ' + CORE_NODES_DIR)
+
+
   // Flows als App-Code (Assets) oder im Dev-Backend aus dem UserDir
   const seedDir = resolveNodeRedSeedDir()
   const assetFlowFile = seedDir ? path.join(seedDir, 'flows.json') : null
@@ -532,6 +542,8 @@ async function startNodeRED() {
     userDir,
     // Dev-Backend: UserDir-Flows; Prod: Flows direkt aus Assets (read-only)
     flowFile: DEV_BACKEND ? 'flows.json' : (assetFlowFile || 'flows.json'),
+    // Stelle sicher, dass Core-Nodes (und deren Ressourcen) gefunden werden
+    coreNodesDir: CORE_NODES_DIR,
     logging: { console: { level: 'info' } },
     functionGlobalContext: {},
     contextStorage: { default: { module: 'memory' } },

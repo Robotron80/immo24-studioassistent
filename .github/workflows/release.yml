@@ -1,0 +1,41 @@
+name: release
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*.*.*']
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download macOS arm64
+        uses: actions/download-artifact@v4
+        with:
+          name: macOS-arm64
+          path: dist/mac-arm64
+
+      - name: Download macOS x64
+        uses: actions/download-artifact@v4
+        with:
+          name: macOS-x64
+          path: dist/mac-x64
+
+      - name: Download Windows
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-nsis
+          path: dist/win
+
+      - name: Generate checksums
+        run: |
+          cd dist
+          find . -type f -not -name SHA256SUMS.txt -exec shasum -a 256 {} \; > SHA256SUMS.txt
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/**/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

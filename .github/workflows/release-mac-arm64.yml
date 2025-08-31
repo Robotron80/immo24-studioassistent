@@ -1,6 +1,12 @@
 name: release-mac-arm64
+permissions:
+  contents: write
 on:
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag (z.B. v0.2.1)'
+        required: true
   push:
     tags: ['v*.*.*']
 
@@ -9,6 +15,7 @@ jobs:
     runs-on: macos-14
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Fetch repo (no marketplace actions)
         run: |
@@ -17,16 +24,12 @@ jobs:
           git fetch --depth=1 origin ${{ github.sha }}
           git checkout -qf ${{ github.sha }}
 
-      - name: Ensure Node (prefer preinstalled; fallback to Volta)
+      - name: Ensure Node
         run: |
-          if command -v node >/dev/null; then node -v; fi
-          if ! node -v >/dev/null 2>&1; then
-            curl -fsSL https://get.volta.sh | bash -s -- --skip-setup
-            echo 'export VOLTA_HOME="$HOME/.volta"' >> $GITHUB_ENV
-            echo 'export PATH="$VOLTA_HOME/bin:$PATH"' >> $GITHUB_ENV
-            export VOLTA_HOME="$HOME/.volta"; export PATH="$VOLTA_HOME/bin:$PATH"
-            volta install node@22
-          fi
+          node -v || (curl -fsSL https://get.volta.sh | bash -s -- --skip-setup && \
+            echo 'export VOLTA_HOME="$HOME/.volta"' >> $GITHUB_ENV && \
+            echo 'export PATH="$VOLTA_HOME/bin:$PATH"' >> $GITHUB_ENV && \
+            export VOLTA_HOME="$HOME/.volta"; export PATH="$VOLTA_HOME/bin:$PATH"; volta install node@22)
           node -v
           corepack enable || true
 
@@ -38,10 +41,8 @@ jobs:
       - name: Build macOS arm64
         run: npm run dist:mac:arm64
 
-      - name: Create or update GitHub Release and upload DMG/ZIP
+      - name: Create/Upload Release
         run: |
-          TAG="${GITHUB_REF_NAME}"
-          # create release if missing (draft)
+          TAG="${{ github.event.inputs.tag || github.ref_name }}"
           gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --draft -t "$TAG" -n "Automated draft release"
-          # upload all dist files
           gh release upload "$TAG" dist/* --clobber

@@ -18,7 +18,8 @@
         <v-card class="card h-100" elevation="2">
           <v-card-text>
             <!-- ==== Dein Formular-Inhalt ==== -->
-            <v-row dense>
+            <v-form ref="formRef">
+              <v-row dense>
               <v-col cols="12">
                 <v-autocomplete
                   v-model="form.kunde"
@@ -47,10 +48,10 @@
                   v-model="form.moid"
                   label="Mo-ID" 
                   :disabled ="isVorhanden"
-                  maxlength="4"
                   prepend-inner-icon="mdi-identifier"
                   variant="outlined" density="comfortable"
-                />
+                  :rules="[(v)=> (v && String(v).trim().length) || 'Pflichtfeld', store.windowsRule('moid')]"
+                  />
               </v-col>
 
               <v-col cols="12">
@@ -60,6 +61,7 @@
                   prepend-inner-icon="mdi-file-document-edit-outline"
                   variant="outlined" density="comfortable"
                   clearable
+                  :rules="[(v)=> (v && String(v).trim().length) || 'Pflichtfeld', store.windowsRule('projektname')]"
                 />
               </v-col>
 
@@ -99,7 +101,8 @@
                   Zurücksetzen
                 </v-btn>
               </v-col>
-            </v-row>
+              </v-row>
+            </v-form>
           </v-card-text>
         </v-card>
       </v-col>
@@ -188,6 +191,8 @@ const stufen = computed(() => store.stufen)
 const rows = computed(() => store.rows)
 const loading = computed(() => store.loading)
 const isVorhanden = computed(() => form.value.vorhanden === 'vorhanden')
+const formRef = ref(null)
+
 
 // Tabelle / Suche
 const headers = [
@@ -218,6 +223,16 @@ function onKundeChange(k) {
   form.value.stufe = '' // Feld immer leeren!
 }
 async function onCreateClick(){
+  const validation = await formRef.value?.validate()
+  const fehlende = store.validateRequired()
+  const winDetails = store.validateWindows()
+  if ((validation && validation.valid === false) || fehlende.length || winDetails.length) {
+    const lines = []
+    if (fehlende.length) lines.push(`• Fehlend: ${fehlende.join(', ')}`)
+    lines.push(...store.formatValidationDetails(winDetails))
+    toast(`Bitte Eingaben korrigieren:\n${lines.join('\n')}`,'error')
+    return
+  }
   try {
     const res = await store.createOrResolve()
     toast(`Fertig.`, 'success')
@@ -226,7 +241,19 @@ async function onCreateClick(){
       openDialog.value = true
     }
   } catch(e) {
-    toast(e.message || String(e), 'error')
+    // 422 vom Backend (oder aus dem Store) hübsch ausgeben
+    if (e?.status === 422 && Array.isArray(e.details) && e.details.length) {
+      const lines = store.formatValidationDetails(e.details)
+      toast(`Bitte Eingaben korrigieren:\n${lines.join('\n')}`, 'error')
+      return
+    }
+    // 400 missing fields
+    if (e?.status === 400 && Array.isArray(e.fields)) {
+      toast(`Bitte ausfüllen: ${e.fields.join(', ')}`, 'error')
+      return
+    }
+    // Fallback
+    toast(e.message || String(e) || 'Unbekannter Fehler', 'error')
   }
 }
 async function launchProject() {

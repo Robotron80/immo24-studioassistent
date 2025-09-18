@@ -3,10 +3,70 @@ import { defineStore } from 'pinia'
 const API =
   import.meta.env.VITE_API_BASE
 
+// Windows-Dateinamen-Regeln
+const WINDOWS_FORBIDDEN_RE = /[<>:"/\\|?*\u0000-\u001F]/g
+function windowsNameReport(input) {
+  const s = String(input ?? '').trim()
+  const res = { valid: true, errors: [] }
+  const bad = s.match(WINDOWS_FORBIDDEN_RE)
+  if (bad) {
+    res.valid = false
+    const uniq = [...new Set(bad)]
+    res.errors.push({
+      code: 'forbidden_chars',
+      chars: uniq,
+      message: `Unzulässige Zeichen: ${uniq.join(' ')}`
+    })
+  }
+  if (/[. ]$/.test(s)) {
+    res.valid = false
+    res.errors.push({
+      code: 'trailing_dot_or_space',
+      message: 'Darf nicht mit Punkt oder Leerzeichen enden'
+    })
+  }
+  if (/^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\..*)?$/i.test(s)) {
+    res.valid = false
+    res.errors.push({
+      code: 'reserved_name',
+      message: 'Reservierter Windows-Name'
+    })
+  }
+  return res
+}
+function windowsFieldReports({ projektname, moid, kunde }) {
+  return {
+    projektname: windowsNameReport(projektname),
+    moid:        windowsNameReport(moid),
+    kunde:       windowsNameReport(String(kunde)),
+  }
+}
+function collectValidationDetails(reports) {
+  return Object.entries(reports)
+    .filter(([, rep]) => !rep.valid)
+    .map(([field, rep]) => ({ field, errors: rep.errors }))
+}
+
+const FIELD_LABELS = {
+  projektname: 'Projektname',
+  moid: 'Mo-ID',
+  kunde: 'Kunde',
+}
+
 async function getJSON(url, options) {
   const r = await fetch(url, options)
-  if (!r.ok) throw new Error(`${r.status} ${r.statusText}`)
-  return r.json()
+  let body = null
+  try { body = await r.json() } catch { body = null }
+  if (!r.ok) {
+    const err = new Error(body?.error || `${r.status} ${r.statusText}`)
+    err.status  = r.status
+    err.error   = body?.error || null
+    err.details = body?.details || null
+    err.fields  = body?.fields || null
+    err.payload = body || null
+    throw err
+  }
+  return body ?? {}
 }
 
 export const useProjektanlage = defineStore('Projektanlage', {
@@ -103,9 +163,37 @@ export const useProjektanlage = defineStore('Projektanlage', {
       return fehlende
     },
 
+    validateWindows() {
+      const reports = windowsFieldReports(this.form)
+      return collectValidationDetails(reports)
+    },
+    throwIfWindowsInvalid() {
+      const details = this.validateWindows()
+      if (details.length) {
+        const e = new Error('validation_failed')
+        e.status = 422
+        e.error = 'validation_failed'
+        e.details = details
+        throw e
+      }
+    },
+
+    windowsMessageFor(field, value) {
+      // Liefert true (ok) oder einen kurzen Fehlersatz für Vuetify-Rules
+      const rep = windowsNameReport(String(value ?? ''))
+      if (rep.valid) return true
+      const first = (rep.errors || [])[0]
+      return first?.message || 'Ungültiger Name'
+    },
+    windowsRule(field) {
+      // Factory für Vuetify :rules → (v) => true|string
+      return (v) => this.windowsMessageFor(field, v)
+    },
+
     async createOrResolve() {
       const fehlende = this.validateRequired()
       if (fehlende.length) throw new Error(`Bitte ausfüllen: ${fehlende.join(', ')}`)
+      this.throwIfWindowsInvalid()
 
       const stufeValue = this.form.stufe
       const stufeLabel =
@@ -147,7 +235,22 @@ export const useProjektanlage = defineStore('Projektanlage', {
       this.rows = []
       this.stufen = []
     },
+
+    formatValidationDetails(details) {
+      if (!Array.isArray(details)) return []
+      return details.map(d => {
+        const label = FIELD_LABELS[d.field] || d.field
+        const parts = (d.errors || []).map(err => {
+          if (err.code === 'forbidden_chars') {
+            if (Array.isArray(err.chars) && err.chars.length) {
+              return `Unzulässige Zeichen: ${err.chars.join(' ')}`
+            }
+            return 'Unzulässige Zeichen'
+          }
+          return err.message || err.code
+        })
+        return `${label}: ${parts.join('; ')}`
+      })
+    },
   },
 })
-
-

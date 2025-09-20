@@ -24,6 +24,43 @@
         "env": []
     },
     {
+        "id": "d0d17784f71f39d9",
+        "type": "subflow",
+        "name": "Audio Package kopieren",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 50,
+                "y": 30,
+                "wires": [
+                    {
+                        "id": "5255f9beb131ad73"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 1500,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "d21db72004540ae5",
+                        "port": 0
+                    },
+                    {
+                        "id": "5255f9beb131ad73",
+                        "port": 1
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
         "id": "e09b23f59c044bf8",
         "type": "group",
         "z": "b443cd6f4046fd9f",
@@ -33,20 +70,33 @@
         },
         "nodes": [
             "b04e57b948e77106",
-            "899e35cf49d5ba54",
-            "8ca467f1f76f9a4d",
-            "86131ee14f613e3e",
             "68d4f6662ecbfeb3",
             "cecafe4be4e250a0",
             "6d11f8df05045052",
             "16cb66e38510f820",
             "f5da02b2bd8d63a6",
-            "f82475d3c09d70a2"
+            "f82475d3c09d70a2",
+            "e7c1ee6dc65845d6",
+            "db2490f64f65d46a",
+            "74af9c8a17157812",
+            "40544c83e4544ac3",
+            "a9d910d2311ea732",
+            "c9d8b67e08e0694a",
+            "3be3c68955e61f67",
+            "c2d65d2b5328f056",
+            "6c1ecb3ede12bd26",
+            "61acbcf2c1762413",
+            "c6effc2fa16f157a",
+            "a804729e2fe35486",
+            "60723f36d0588b1c",
+            "e8ec6f49a002acc9",
+            "f03d105771fc0c67",
+            "25b1d00e5f7f1bcd"
         ],
         "x": 34,
         "y": 519,
-        "w": 1212,
-        "h": 142
+        "w": 2642,
+        "h": 302
     },
     {
         "id": "3f6058c22847f23d",
@@ -81,7 +131,7 @@
             "bd31b537d98d1d41"
         ],
         "x": 34,
-        "y": 819,
+        "y": 959,
         "w": 1952,
         "h": 282
     },
@@ -380,7 +430,8 @@
             "14eb4bbb946eedea",
             "b0aef2d54e9d0ec3",
             "3d95844779504430",
-            "e3f674d09ddc5167"
+            "bcbf5fb38d99c996",
+            "92760ac63c811f81"
         ],
         "x": 34,
         "y": 39,
@@ -410,7 +461,7 @@
             "25db702b7507e6dd"
         ],
         "x": 34,
-        "y": 691.5,
+        "y": 831.5,
         "w": 1452,
         "h": 97
     },
@@ -465,7 +516,7 @@
         "x": 34,
         "y": 173,
         "w": 3592,
-        "h": 1754
+        "h": 1834
     },
     {
         "id": "7284fb4c28608256",
@@ -516,7 +567,7 @@
             "963ca3740f921cf8"
         ],
         "x": 494,
-        "y": 1459,
+        "y": 1539,
         "w": 1752,
         "h": 202
     },
@@ -551,7 +602,7 @@
             "facd8f20ee00818d"
         ],
         "x": 494,
-        "y": 1219,
+        "y": 1299,
         "w": 1792,
         "h": 222
     },
@@ -586,7 +637,7 @@
             "b838cce695308516"
         ],
         "x": 494,
-        "y": 979,
+        "y": 1059,
         "w": 1752,
         "h": 222
     },
@@ -621,7 +672,7 @@
             "3d51bf9aaaa43479"
         ],
         "x": 494,
-        "y": 1679,
+        "y": 1759,
         "w": 1752,
         "h": 222
     },
@@ -705,7 +756,7 @@
             "03d2b25b9bdaa836"
         ],
         "x": 494,
-        "y": 779,
+        "y": 859,
         "w": 1892,
         "h": 182
     },
@@ -733,12 +784,194 @@
             "74dfc0289041bfab",
             "f6530849f84ba28d",
             "ea1bb40fdd31379f",
-            "0aff157563034614"
+            "0aff157563034614",
+            "54941cd941124367",
+            "37b447a9e5d21e4a",
+            "af5ea42d65c2235d",
+            "4a342a304d1bfc5e",
+            "14360d1caf13a4e4"
         ],
         "x": 494,
         "y": 559,
-        "w": 2172,
-        "h": 202
+        "w": 2472,
+        "h": 242
+    },
+    {
+        "id": "800344319eb6565a",
+        "type": "fs-ops-access",
+        "z": "d0d17784f71f39d9",
+        "name": "Audio Files vorhanden?",
+        "path": "",
+        "pathType": "str",
+        "filename": "paths.audioDest",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 410,
+        "y": 100,
+        "wires": [
+            [
+                "fbc86336aef9e14f"
+            ],
+            [
+                "fb0768f7e0953ec6"
+            ]
+        ]
+    },
+    {
+        "id": "fbc86336aef9e14f",
+        "type": "fs-ops-dir",
+        "z": "d0d17784f71f39d9",
+        "name": "Audio Source",
+        "path": "paths.audioSource",
+        "pathType": "msg",
+        "filter": "*",
+        "filterType": "str",
+        "dir": "files",
+        "dirType": "msg",
+        "x": 640,
+        "y": 40,
+        "wires": [
+            [
+                "38dcc211c5514b61"
+            ]
+        ]
+    },
+    {
+        "id": "fb0768f7e0953ec6",
+        "type": "fs-ops-mkdir",
+        "z": "d0d17784f71f39d9",
+        "name": "\"Audio Files\" anlegen",
+        "path": "",
+        "pathType": "str",
+        "dirname": "paths.audioDest",
+        "dirnameType": "msg",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 640,
+        "y": 200,
+        "wires": [
+            [
+                "fbc86336aef9e14f"
+            ]
+        ]
+    },
+    {
+        "id": "5255f9beb131ad73",
+        "type": "function",
+        "z": "d0d17784f71f39d9",
+        "name": "Package?",
+        "func": "// Nur wenn Package (audioSource vorhanden) → weiter zu Copy\nif (msg.paths.audioSource) return [msg, null];\n// sonst direkt Finalisieren\nreturn [null, msg];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 200,
+        "y": 140,
+        "wires": [
+            [
+                "800344319eb6565a"
+            ],
+            []
+        ],
+        "outputLabels": [
+            "Package",
+            "kein Package"
+        ]
+    },
+    {
+        "id": "38dcc211c5514b61",
+        "type": "split",
+        "z": "d0d17784f71f39d9",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "files",
+        "x": 770,
+        "y": 80,
+        "wires": [
+            [
+                "dce8ca91696a4b78"
+            ]
+        ]
+    },
+    {
+        "id": "dce8ca91696a4b78",
+        "type": "fs-ops-access",
+        "z": "d0d17784f71f39d9",
+        "name": "Datei am Ziel vorhanden?",
+        "path": "paths.audioDest",
+        "pathType": "msg",
+        "filename": "files",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 970,
+        "y": 40,
+        "wires": [
+            [
+                "d21db72004540ae5"
+            ],
+            [
+                "901af9c86ef35584"
+            ]
+        ]
+    },
+    {
+        "id": "901af9c86ef35584",
+        "type": "fs-ops-copy",
+        "z": "d0d17784f71f39d9",
+        "name": "Audio Files kopieren",
+        "sourcePath": "paths.audioSource",
+        "sourcePathType": "msg",
+        "sourceFilename": "files",
+        "sourceFilenameType": "msg",
+        "destPath": "paths.audioDest",
+        "destPathType": "msg",
+        "destFilename": "files",
+        "destFilenameType": "msg",
+        "link": false,
+        "overwrite": false,
+        "x": 1160,
+        "y": 80,
+        "wires": [
+            [
+                "d21db72004540ae5"
+            ]
+        ]
+    },
+    {
+        "id": "d21db72004540ae5",
+        "type": "join",
+        "z": "d0d17784f71f39d9",
+        "name": "",
+        "mode": "auto",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "useparts": false,
+        "accumulate": "false",
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "x": 1390,
+        "y": 80,
+        "wires": [
+            []
+        ]
     },
     {
         "id": "1fc8a67db0883fbf",
@@ -2902,7 +3135,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 160,
-        "y": 880,
+        "y": 1020,
         "wires": [
             [
                 "75c5fbafa4446ee5"
@@ -2919,7 +3152,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 370,
-        "y": 880,
+        "y": 1020,
         "wires": [
             [
                 "cd99fbc23bfa41b0"
@@ -2940,7 +3173,7 @@
         "write": false,
         "throwerror": false,
         "x": 560,
-        "y": 880,
+        "y": 1020,
         "wires": [
             [
                 "3d38c4563478a24c"
@@ -2963,7 +3196,7 @@
         "sendError": true,
         "allProps": false,
         "x": 760,
-        "y": 860,
+        "y": 1000,
         "wires": [
             [
                 "b37885c9be6e0c33"
@@ -2980,7 +3213,7 @@
         "action": "",
         "pretty": false,
         "x": 930,
-        "y": 860,
+        "y": 1000,
         "wires": [
             [
                 "25b39abb2c577e54"
@@ -2997,7 +3230,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 750,
-        "y": 900,
+        "y": 1040,
         "wires": [
             [
                 "25b39abb2c577e54"
@@ -3014,7 +3247,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1130,
-        "y": 900,
+        "y": 1040,
         "wires": [
             [
                 "20d6df6b06396c8d"
@@ -3030,7 +3263,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1340,
-        "y": 900,
+        "y": 1040,
         "wires": []
     },
     {
@@ -3045,7 +3278,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 160,
-        "y": 1020,
+        "y": 1160,
         "wires": [
             [
                 "00aa34757e5184b5"
@@ -3062,7 +3295,7 @@
         "outputs": 2,
         "noerr": 0,
         "x": 400,
-        "y": 1020,
+        "y": 1160,
         "wires": [
             [
                 "e7ccf4e57b055790"
@@ -3081,7 +3314,7 @@
         "statusCode": "400",
         "headers": {},
         "x": 630,
-        "y": 1040,
+        "y": 1180,
         "wires": []
     },
     {
@@ -3094,7 +3327,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 610,
-        "y": 1000,
+        "y": 1140,
         "wires": [
             [
                 "2e2a317d13f0f6ff"
@@ -3115,7 +3348,7 @@
         "finalize": "",
         "libs": [],
         "x": 840,
-        "y": 1000,
+        "y": 1140,
         "wires": [
             [
                 "a00da8a35639dbd8",
@@ -3135,7 +3368,7 @@
         "statusCode": "409",
         "headers": {},
         "x": 1090,
-        "y": 1060,
+        "y": 1200,
         "wires": []
     },
     {
@@ -3151,7 +3384,7 @@
         "overwriteFile": "true",
         "encoding": "utf8",
         "x": 1170,
-        "y": 1020,
+        "y": 1160,
         "wires": [
             [
                 "a4f9ae49b73f0cd9"
@@ -3168,7 +3401,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1460,
-        "y": 1020,
+        "y": 1160,
         "wires": [
             [
                 "689c9849faf696d0"
@@ -3184,7 +3417,7 @@
         "statusCode": "200",
         "headers": {},
         "x": 1650,
-        "y": 1020,
+        "y": 1160,
         "wires": []
     },
     {
@@ -3198,72 +3431,10 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 190,
-        "y": 560,
+        "y": 600,
         "wires": [
             [
-                "899e35cf49d5ba54"
-            ]
-        ]
-    },
-    {
-        "id": "899e35cf49d5ba54",
-        "type": "function",
-        "z": "b443cd6f4046fd9f",
-        "g": "e09b23f59c044bf8",
-        "name": "Template Pfad setzen",
-        "func": "let PathMitarbeiter = global.get('PathMitarbeiter');\nlet activeUser = global.get('activeUser');\nmsg.dir = `${PathMitarbeiter}/${activeUser}/immo24/templates/`;\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 460,
-        "y": 560,
-        "wires": [
-            [
-                "8ca467f1f76f9a4d"
-            ]
-        ]
-    },
-    {
-        "id": "8ca467f1f76f9a4d",
-        "type": "fs-ops-dir",
-        "z": "b443cd6f4046fd9f",
-        "g": "e09b23f59c044bf8",
-        "name": "Templates lesen",
-        "path": "dir",
-        "pathType": "msg",
-        "filter": "*.ptxt",
-        "filterType": "str",
-        "dir": "payload",
-        "dirType": "msg",
-        "x": 680,
-        "y": 560,
-        "wires": [
-            [
-                "86131ee14f613e3e"
-            ]
-        ]
-    },
-    {
-        "id": "86131ee14f613e3e",
-        "type": "function",
-        "z": "b443cd6f4046fd9f",
-        "g": "e09b23f59c044bf8",
-        "name": "Array filtern",
-        "func": "msg.options = msg.payload.map(e => ({ label: e, value: e }));\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 870,
-        "y": 560,
-        "wires": [
-            [
-                "68d4f6662ecbfeb3"
+                "e7c1ee6dc65845d6"
             ]
         ]
     },
@@ -3275,8 +3446,8 @@
         "name": "response",
         "statusCode": "",
         "headers": {},
-        "x": 1040,
-        "y": 560,
+        "x": 2580,
+        "y": 580,
         "wires": []
     },
     {
@@ -3293,8 +3464,7 @@
         "y": 260,
         "wires": [
             [
-                "6c009de142b00a69",
-                "e3f674d09ddc5167"
+                "6c009de142b00a69"
             ]
         ]
     },
@@ -3309,7 +3479,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 200,
-        "y": 740,
+        "y": 880,
         "wires": [
             [
                 "0a7761f43773cf50"
@@ -3323,7 +3493,7 @@
         "g": "6e172dd935fc089e",
         "name": "",
         "x": 630,
-        "y": 740,
+        "y": 880,
         "wires": [
             [
                 "8f60e803a9417da9"
@@ -3344,7 +3514,7 @@
         "finalize": "",
         "libs": [],
         "x": 1010,
-        "y": 740,
+        "y": 880,
         "wires": [
             [
                 "45b8aaec67b9454d"
@@ -3365,7 +3535,7 @@
         "oldrc": false,
         "name": "Pro Tools öffnen",
         "x": 1220,
-        "y": 740,
+        "y": 880,
         "wires": [
             [
                 "25db702b7507e6dd"
@@ -3393,7 +3563,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 800,
-        "y": 740,
+        "y": 880,
         "wires": [
             [
                 "530d5ce378abe4a4"
@@ -3406,7 +3576,7 @@
         "z": "b443cd6f4046fd9f",
         "g": "5096f3feef6a6d43",
         "name": "Pflichtfelder + Vorbereitung",
-        "func": "// Body sicher holen: bevorzugt msg.payload, Fallback req.body\nconst b = (msg.payload && typeof msg.payload === \"object\")\n    ? msg.payload\n    : (msg.req && msg.req.body) || {};\n\n// Pflichtfelder prüfen\nconst fehlende = [];\n[\"kunde\", \"datum\", \"moid\", \"projektname\", \"stufe\", \"template\"].forEach(k => { if (!b[k]) fehlende.push(k); });\nif (fehlende.length) {\n    msg.statusCode = 400;\n    msg.payload = { error: \"missing fields\", fields: fehlende };\n    return [null, msg];\n}\n\n// Dateinamen Windows-kompatibel prüfen\nfunction windowsNameReport(input) {\n    const res = { valid: true, errors: [] };\n    const s = String(input ?? '').trim();\n\n    // Verbotene Zeichen + Steuerzeichen\n    const forbiddenRe = /[<>:\"/\\\\|?*\\u0000-\\u001F]/g;\n    const bad = s.match(forbiddenRe);\n    if (bad) {\n        res.valid = false;\n        const uniq = [...new Set(bad)];\n        res.errors.push({\n            code: 'forbidden_chars',\n            chars: uniq,\n            message: `Unzulässige Zeichen: ${uniq.join(' ')}`\n        });\n    }\n\n    // Kein Punkt oder Leerzeichen am Ende\n    if (/[. ]$/.test(s)) {\n        res.valid = false;\n        res.errors.push({\n            code: 'trailing_dot_or_space',\n            message: 'Darf nicht mit Punkt oder Leerzeichen enden'\n        });\n    }\n\n    // Reservierte Namen\n    if (/^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\\..*)?$/i.test(s)) {\n        res.valid = false;\n        res.errors.push({\n            code: 'reserved_name',\n            message: 'Reservierter Windows-Name'\n        });\n    }\n\n    return res;\n}\n\n// Felder, die zu Pfaden werden, validieren (mit Detailausgabe)\nconst fieldReports = {\n    projektname: windowsNameReport(b.projektname),\n    moid: windowsNameReport(b.moid),\n    kunde: windowsNameReport(String(b.kunde)),\n};\n\n// Sammle alle Fehler (nur invalide Felder)\nconst validationErrors = Object.entries(fieldReports)\n    .filter(([, rep]) => !rep.valid)\n    .map(([field, rep]) => ({ field, errors: rep.errors }));\n\nif (validationErrors.length) {\n    msg.statusCode = 422; // Unprocessable Entity\n    msg.payload = { error: 'validation_failed', details: validationErrors };\n    return [null, msg];\n}\n\n// Globals\nconst PathProduktionen = global.get(\"PathProduktionen\") || \"\";\nconst PathMitarbeiter = global.get(\"PathMitarbeiter\") || \"\";\nconst activeUser = global.get(\"activeUser\") || \"\";\nconst projektordnerSchema = global.get(\"projektordnerSchema\") || \"\";\nconst kundenStammdaten = global.get(\"kundenStammdaten\") || [];\nmsg.sessionSchema = global.get(\"sessionSchema\") || \"{{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}\";\n\n// Ordnername aus Schema\nconst values = {\n    datum: b.datum,\n    projektname: b.projektname,\n    moid: b.moid,\n    benutzer: (global.get(\"activeUserKuerzel\") || \"\"),\n    kunde: b.kunde\n};\nconst projektOrdner = projektordnerSchema.replace(/{{(\\w+)}}/g, (_, k) => values[k] || \"\");\nconst zielPfad = `${PathProduktionen}/${b.kunde}/${projektOrdner}`;\n\n// Unterordner & Label\nconst kundeObj = (kundenStammdaten || []).find(k => k.kunde === b.kunde) || {};\nconst unterordner = Array.isArray(kundeObj.ordner) ? kundeObj.ordner : [];\nconst stufeObj = unterordner.find(o => o.name === b.stufe);\nconst stufeLabel = stufeObj ? stufeObj.label : b.stufe;\n\n// Template-Pfade\nmsg.templateSource = `${PathMitarbeiter}/${activeUser}/immo24/templates/${b.template}`;\nmsg.templateDest = `${zielPfad}/${b.stufe}`;\n\n// persist\nmsg.data = { ...b, stufeLabel, zielPfad, unterordner };\nmsg.filename = `${zielPfad}/immo24-proj.json`;\nmsg.payload = zielPfad; // für fs-ops-access\nreturn [msg, null];",
+        "func": "// Body sicher holen\nconst b = (msg.payload && typeof msg.payload === \"object\") ? msg.payload : (msg.req && msg.req.body) || {};\n\n// Pflichtfelder\nconst need = [\"kunde\", \"datum\", \"moid\", \"projektname\", \"stufe\", \"template\"];\nconst fehlende = need.filter(k => !b[k]);\nif (fehlende.length) {\n    msg.statusCode = 400;\n    msg.payload = { error: \"missing fields\", fields: fehlende };\n    return [null, msg];\n}\n\n// Windows-Namen prüfen (wie gehabt) – ggf. deinen bestehenden Code hier wieder einsetzen\n\n// Globals\nconst PathProduktionen = global.get(\"PathProduktionen\") || \"\";\nconst PathMitarbeiter = global.get(\"PathMitarbeiter\") || \"\";\nconst activeUser = global.get(\"activeUser\") || \"\";\nconst projektordnerSchema = global.get(\"projektordnerSchema\") || \"\";\nconst kundenStammdaten = global.get(\"kundenStammdaten\") || [];\nmsg.sessionSchema = global.get(\"sessionSchema\") || \"{{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}\";\n\n// Ordnername aus Schema\nconst values = {\n    datum: b.datum,\n    projektname: b.projektname,\n    moid: b.moid,\n    benutzer: (global.get(\"activeUserKuerzel\") || \"\"),\n    kunde: b.kunde\n};\nconst projektOrdner = projektordnerSchema.replace(/{{(\\w+)}}/g, (_, k) => values[k] || \"\");\nconst zielPfad = `${PathProduktionen}/${b.kunde}/${projektOrdner}`;\n\n// Unterordner & Label\nconst kundeObj = (kundenStammdaten || []).find(k => k.kunde === b.kunde) || {};\nconst unterordner = Array.isArray(kundeObj.ordner) ? kundeObj.ordner : [];\nconst stufeObj = unterordner.find(o => o.name === b.stufe);\nconst stufeLabel = stufeObj ? stufeObj.label : b.stufe;\n\n// --- Einfaches Template-Handling ---\nconst baseTemplates = `${PathMitarbeiter}/${activeUser}/immo24/templates`;\nconst t = String(b.template || \"\");\nconst isFile = /\\.ptxt$/i.test(t);\n\nlet templateSource = \"\";\nlet audioSource = null;\n\nif (isFile) {\n    // flaches .ptxt\n    templateSource = `${baseTemplates}/${t}`;\n} else {\n    // package: Ordnername = t, ptxt = \"<ordner>.ptxt\", Audio-Folder = \"<ordner>/Audio Files\"\n    const ptxtName = `${t}.ptxt`;\n    templateSource = `${baseTemplates}/${t}/${ptxtName}`;\n    audioSource = `${baseTemplates}/${t}/Audio Files`;\n}\n\n// Ziele\nmsg.templateSource = templateSource;\nmsg.templateDest = `${zielPfad}/${b.stufe}`;\nmsg.audioSource = audioSource;                 // null bei file\nmsg.audioDest = `${msg.templateDest}/Audio Files`;\n\n// persist\nmsg.data = { ...b, stufeLabel, zielPfad, unterordner };\nmsg.filename = `${zielPfad}/immo24-proj.json`;\nmsg.payload = zielPfad; // für fs-ops-access\nreturn [msg, null];",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -3420,8 +3590,7 @@
                 "465673bffca4e0d2"
             ],
             [
-                "a077f771503b109f",
-                "e3f674d09ddc5167"
+                "a077f771503b109f"
             ]
         ],
         "outputLabels": [
@@ -3661,7 +3830,7 @@
         "z": "b443cd6f4046fd9f",
         "g": "5096f3feef6a6d43",
         "name": "Session-Files auflisten",
-        "path": "templateDest",
+        "path": "paths.templateDest",
         "pathType": "msg",
         "filter": "*.ptx",
         "filterType": "str",
@@ -3701,22 +3870,22 @@
         "type": "fs-ops-copy",
         "z": "b443cd6f4046fd9f",
         "g": "5096f3feef6a6d43",
-        "name": "",
+        "name": "Template → neue PTX",
         "sourcePath": "",
         "sourcePathType": "str",
-        "sourceFilename": "sourcePath",
+        "sourceFilename": "paths.templateSource",
         "sourceFilenameType": "msg",
-        "destPath": "templateDest",
+        "destPath": "paths.templateDest",
         "destPathType": "msg",
         "destFilename": "filename",
         "destFilenameType": "msg",
         "link": false,
         "overwrite": false,
-        "x": 1820,
+        "x": 1860,
         "y": 320,
         "wires": [
             [
-                "3890f6f8ca6ac208"
+                "bcbf5fb38d99c996"
             ]
         ]
     },
@@ -3726,14 +3895,14 @@
         "z": "b443cd6f4046fd9f",
         "g": "5096f3feef6a6d43",
         "name": "Finalisieren",
-        "func": "msg.payload = {\n    ok: true,\n    zielPfad: msg.data.zielPfad,\n    templateDest: msg.templateDest,\n    filename: msg.filename\n};\nreturn msg;",
+        "func": "msg.payload = {\n    ok: true,\n    zielPfad: msg.data.zielPfad,\n    templateDest: msg.paths.templateDest,\n    filename: msg.filename\n};\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1970,
+        "x": 2290,
         "y": 320,
         "wires": [
             [
@@ -3749,7 +3918,7 @@
         "name": "response",
         "statusCode": "",
         "headers": {},
-        "x": 2120,
+        "x": 2440,
         "y": 320,
         "wires": []
     },
@@ -3984,7 +4153,7 @@
         "finalize": "",
         "libs": [],
         "x": 990,
-        "y": 620,
+        "y": 780,
         "wires": [
             [
                 "f82475d3c09d70a2"
@@ -4002,7 +4171,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 190,
-        "y": 620,
+        "y": 780,
         "wires": [
             [
                 "16cb66e38510f820"
@@ -4023,7 +4192,7 @@
         "finalize": "",
         "libs": [],
         "x": 470,
-        "y": 620,
+        "y": 780,
         "wires": [
             [
                 "f5da02b2bd8d63a6"
@@ -4044,7 +4213,7 @@
         "encoding": "none",
         "allProps": false,
         "x": 750,
-        "y": 620,
+        "y": 780,
         "wires": [
             [
                 "cecafe4be4e250a0"
@@ -4060,7 +4229,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1160,
-        "y": 620,
+        "y": 780,
         "wires": []
     },
     {
@@ -4201,7 +4370,7 @@
         "to": "",
         "reg": false,
         "x": 460,
-        "y": 740,
+        "y": 880,
         "wires": [
             [
                 "1d2f2c031ccf07cb"
@@ -4217,7 +4386,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1400,
-        "y": 740,
+        "y": 880,
         "wires": []
     },
     {
@@ -4243,15 +4412,15 @@
         "type": "function",
         "z": "b443cd6f4046fd9f",
         "g": "5096f3feef6a6d43",
-        "name": "Validate + Prepare",
-        "func": "// Body holen\nconst b = (msg.payload && typeof msg.payload === 'object') ? msg.payload : (msg.req && msg.req.body) || {};\nconst need = ['kunde','datum','projektname','moid','stufe','template'];\nconst fehlende = need.filter(k => !b[k]);\nif (fehlende.length) {\n  msg.statusCode = 400;\n  msg.payload = { error: 'missing', fields: fehlende };\n  return [null, msg];\n}\n\n// Globals\nconst PathProduktionen = global.get('PathProduktionen') || '';\nconst PathMitarbeiter  = global.get('PathMitarbeiter')  || '';\nconst activeUser       = global.get('activeUser')       || '';\nconst projektordnerSchema = global.get('projektordnerSchema') || '';\nconst sessionSchema    = global.get('sessionSchema')    || '{{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}';\nconst activeUserKuerzel= global.get('activeUserKuerzel')|| '';\n\n// Nutzwerte & Root\nmsg.data = { ...b };\nmsg.paths = {\n  root: `${PathProduktionen}/${b.kunde}`,\n  templateSource: `${PathMitarbeiter}/${activeUser}/immo24/templates/${b.template}`\n};\n\n// Für später\nmsg.sessionSchema = sessionSchema;\nmsg.schema = projektordnerSchema;\n\n// Response-Header (optional)\nmsg.headers = { 'Cache-Control': 'no-store', 'Content-Type': 'application/json; charset=utf-8' };\n\nreturn [msg, null];",
+        "name": "Pflichtfelder + Vorbereitung",
+        "func": "// Body holen\nconst b = (msg.payload && typeof msg.payload === 'object') ? msg.payload : (msg.req && msg.req.body) || {};\nconst need = ['kunde', 'datum', 'projektname', 'moid', 'stufe', 'template'];\nconst fehlende = need.filter(k => !b[k]);\nif (fehlende.length) {\n  msg.statusCode = 400;\n  msg.payload = { error: 'missing', fields: fehlende };\n  return [null, msg];\n}\n\n// Globals\nconst PathProduktionen = global.get('PathProduktionen') || '';\nconst PathMitarbeiter = global.get('PathMitarbeiter') || '';\nconst activeUser = global.get('activeUser') || '';\nconst projektordnerSchema = global.get('projektordnerSchema') || '';\nconst sessionSchema = global.get('sessionSchema') || '{{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}';\n\n// --- Einfaches Template-Handling ---\nconst baseTemplates = `${PathMitarbeiter}/${activeUser}/immo24/templates`;\nconst t = String(b.template || \"\");\nconst isFile = /\\.ptxt$/i.test(t);\n\nlet templateSource = \"\";\nlet audioSource = null;\n\nif (isFile) {\n  templateSource = `${baseTemplates}/${t}`;\n} else {\n  const ptxtName = `${t}.ptxt`;\n  templateSource = `${baseTemplates}/${t}/${ptxtName}`;\n  audioSource = `${baseTemplates}/${t}/Audio Files`;\n}\n\n// Nutzwerte & Root\nmsg.data = { ...b };\nmsg.paths = {\n  root: `${PathProduktionen}/${b.kunde}`,\n  templateSource,     // file oder package/<ordner>.ptxt\n  audioSource,        // null bei file\n  // zielPfad, templateDest, audioDest kommen nach Schema-Suche\n};\n\n// Für später\nmsg.sessionSchema = sessionSchema;\nmsg.schema = projektordnerSchema;\n\n// Response-Header (optional)\nmsg.headers = { 'Cache-Control': 'no-store', 'Content-Type': 'application/json; charset=utf-8' };\n\nreturn [msg, null];",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 510,
+        "x": 520,
         "y": 440,
         "wires": [
             [
@@ -4290,8 +4459,8 @@
         "filterType": "str",
         "dir": "payload",
         "dirType": "msg",
-        "x": 750,
-        "y": 420,
+        "x": 770,
+        "y": 400,
         "wires": [
             [
                 "905fc9e0315efe87"
@@ -4304,7 +4473,7 @@
         "z": "b443cd6f4046fd9f",
         "g": "5096f3feef6a6d43",
         "name": "Projektordner per Schema finden",
-        "func": "function n(s){ return String(s||'').normalize('NFC'); }\nconst entries = Array.isArray(msg.payload) ? msg.payload : [];\nconst { projektname, moid, kunde, datum, stufe } = msg.data;\nconst schema = n(msg.schema||'');\n\n// Regex aus Schema bauen\nconst values = { datum:n(datum), projektname:n(projektname), moid:n(moid), kunde:n(kunde) };\nlet pat = schema\n  .replace(/{{benutzer}}/g, '.+')\n  .replace(/{{(\\w+)}}/g, (_,k) => values[k] ? values[k].replace(/[.*+?^${}()|[\\]\\\\]/g,'\\\\$&') : '.*');\npat = '^' + pat.replace(/ /g,'\\\\s+') + '$';\nconst re = new RegExp(pat);\n\n// versteckte raus, normalisieren, matchen\nconst list = entries.filter(x => x && !String(x).startsWith('.')).map(n);\nconst gefunden = list.find(name => re.test(name));\nif (!gefunden){\n  msg.statusCode = 404;\n  msg.payload = { error: 'not_found' };\n  return [null, msg];\n}\n\nmsg.paths.zielPfad = `${msg.paths.root}/${gefunden}`;\nmsg.paths.templateDest = `${msg.paths.zielPfad}/${stufe}`;\nreturn [msg, null];",
+        "func": "function n(s){ return String(s||'').normalize('NFC'); }\nconst entries = Array.isArray(msg.payload) ? msg.payload : [];\nconst { projektname, moid, kunde, datum, stufe } = msg.data;\nconst schema = n(msg.schema||'');\n\n// Regex aus Schema bauen\nconst values = { datum:n(datum), projektname:n(projektname), moid:n(moid), kunde:n(kunde) };\nlet pat = schema\n  .replace(/{{benutzer}}/g, '.+')\n  .replace(/{{(\\w+)}}/g, (_,k) => values[k] ? values[k].replace(/[.*+?^${}()|[\\]\\\\]/g,'\\\\$&') : '.*');\npat = '^' + pat.replace(/ /g,'\\\\s+') + '$';\nconst re = new RegExp(pat);\n\n// versteckte raus, normalisieren, matchen\nconst list = entries.filter(x => x && !String(x).startsWith('.')).map(n);\nconst gefunden = list.find(name => re.test(name));\nif (!gefunden){\n  msg.statusCode = 404;\n  msg.payload = { error: 'not_found' };\n  return [null, msg];\n}\n\nmsg.paths.zielPfad = `${msg.paths.root}/${gefunden}`;\nmsg.paths.templateDest = `${msg.paths.zielPfad}/${stufe}`;\nmsg.paths.audioDest = `${msg.paths.templateDest}/Audio Files`;\nreturn [msg, null];",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -4409,7 +4578,7 @@
         "y": 400,
         "wires": [
             [
-                "b0aef2d54e9d0ec3"
+                "92760ac63c811f81"
             ]
         ]
     },
@@ -4418,7 +4587,7 @@
         "type": "function",
         "z": "b443cd6f4046fd9f",
         "g": "5096f3feef6a6d43",
-        "name": "OK Response",
+        "name": "Finalisieren",
         "func": "msg.payload = {\n  ok: true,\n  zielPfad: msg.paths.zielPfad,\n  templateDest: msg.paths.templateDest,\n  filename: msg.filename\n};\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
@@ -4426,7 +4595,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2220,
+        "x": 2450,
         "y": 400,
         "wires": [
             [
@@ -4442,7 +4611,7 @@
         "name": "response",
         "statusCode": "",
         "headers": {},
-        "x": 2380,
+        "x": 2600,
         "y": 400,
         "wires": []
     },
@@ -4460,7 +4629,7 @@
         "finalize": "",
         "libs": [],
         "x": 1160,
-        "y": 960,
+        "y": 1100,
         "wires": [
             [
                 "3be16e807066c9f4"
@@ -4481,7 +4650,7 @@
         "addname": "",
         "property": "payload",
         "x": 1370,
-        "y": 960,
+        "y": 1100,
         "wires": [
             [
                 "0cdcc1e9ef5f3e29"
@@ -4502,7 +4671,7 @@
         "write": false,
         "throwerror": false,
         "x": 1530,
-        "y": 960,
+        "y": 1100,
         "wires": [
             [
                 "b8cfaa564f921f12"
@@ -4535,7 +4704,7 @@
         "reduceInitType": "",
         "reduceFixup": "",
         "x": 1910,
-        "y": 960,
+        "y": 1100,
         "wires": [
             []
         ]
@@ -4555,7 +4724,7 @@
         "fullpath": "directory",
         "fullpathType": "msg",
         "x": 1740,
-        "y": 980,
+        "y": 1120,
         "wires": [
             [
                 "b8cfaa564f921f12"
@@ -4563,12 +4732,410 @@
         ]
     },
     {
-        "id": "e3f674d09ddc5167",
-        "type": "debug",
+        "id": "cbfadfdf6a35bd6e",
+        "type": "inject",
+        "z": "b443cd6f4046fd9f",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 220,
+        "y": 1320,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e7c1ee6dc65845d6",
+        "type": "function",
+        "z": "b443cd6f4046fd9f",
+        "g": "e09b23f59c044bf8",
+        "name": "Template Pfad setzen",
+        "func": "let PathMitarbeiter = global.get('PathMitarbeiter');\nlet activeUser = global.get('activeUser');\nmsg.dir = `${PathMitarbeiter}/${activeUser}/immo24/templates/`;\n\n// stabile Korrelations-ID in topic\nmsg.topic = msg.topic || ('templates:' + msg._msgid);\n// Mirror\nmsg.corr = msg.topic;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 600,
+        "wires": [
+            [
+                "db2490f64f65d46a"
+            ]
+        ]
+    },
+    {
+        "id": "db2490f64f65d46a",
+        "type": "fs-ops-dir",
+        "z": "b443cd6f4046fd9f",
+        "g": "e09b23f59c044bf8",
+        "name": "Templates lesen",
+        "path": "dir",
+        "pathType": "msg",
+        "filter": "",
+        "filterType": "str",
+        "dir": "payload",
+        "dirType": "msg",
+        "x": 660,
+        "y": 600,
+        "wires": [
+            [
+                "74af9c8a17157812",
+                "40544c83e4544ac3"
+            ]
+        ]
+    },
+    {
+        "id": "74af9c8a17157812",
+        "type": "function",
+        "z": "b443cd6f4046fd9f",
+        "g": "e09b23f59c044bf8",
+        "name": ".ptxt filtern",
+        "func": "// msg.payload ist ein Array von Dateinamen\nconst arr = Array.isArray(msg.payload) ? msg.payload : [];\n\n// Nur Einträge behalten, die auf \".ptxt\" enden (case-insensitive)\nconst filtered = arr.filter(name => /\\.ptxt$/i.test(name));\n\n// in Objekte mappen (label + value), damit UI direkt Optionen hat\nmsg.payload = filtered.map(n => ({\n    label: n.replace(/\\.ptxt$/i, ''), // Extension weg für Anzeige\n    value: n,\n    kind: 'file'\n}));\nmsg.files = msg.payload; // [{label,value,kind:'file'}, ...]\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 560,
+        "wires": [
+            [
+                "e8ec6f49a002acc9"
+            ]
+        ]
+    },
+    {
+        "id": "40544c83e4544ac3",
+        "type": "function",
+        "z": "b443cd6f4046fd9f",
+        "g": "e09b23f59c044bf8",
+        "name": "Ordner leer?",
+        "func": "const arr = Array.isArray(msg.payload) ? msg.payload : [];\nif (arr.length === 0) {\n    msg.payload = [];\n    return [null, msg];   // Out2 → direkt zum „Dummys verwerfen“\n}\nreturn [msg, null];     // Out1 → zum Split",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 640,
+        "wires": [
+            [
+                "a9d910d2311ea732"
+            ],
+            [
+                "a804729e2fe35486"
+            ]
+        ],
+        "outputLabels": [
+            "Weiter",
+            "Abbruch"
+        ]
+    },
+    {
+        "id": "a9d910d2311ea732",
+        "type": "split",
+        "z": "b443cd6f4046fd9f",
+        "g": "e09b23f59c044bf8",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "payload",
+        "x": 1030,
+        "y": 620,
+        "wires": [
+            [
+                "6c1ecb3ede12bd26"
+            ]
+        ]
+    },
+    {
+        "id": "c9d8b67e08e0694a",
+        "type": "function",
+        "z": "b443cd6f4046fd9f",
+        "g": "e09b23f59c044bf8",
+        "name": "Ordner filtern",
+        "func": "if (msg.stats && msg.stats.isDirectory() && !msg.folderName.startsWith('.')) {\n    return [msg, null];     // Out1 → „Audio Files?“\n}\nmsg.payload = null;        // Dummy zählt für den Join\nreturn [null, msg];        // Out2 → Join",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1470,
+        "y": 620,
+        "wires": [
+            [
+                "c2d65d2b5328f056"
+            ],
+            [
+                "a804729e2fe35486"
+            ]
+        ],
+        "outputLabels": [
+            "Ordner",
+            "kein Ordner"
+        ]
+    },
+    {
+        "id": "3be3c68955e61f67",
+        "type": "fs-ops-stats",
+        "z": "b443cd6f4046fd9f",
+        "g": "e09b23f59c044bf8",
+        "name": "",
+        "path": "",
+        "pathType": "str",
+        "filename": "folderFull",
+        "filenameType": "msg",
+        "stats": "stats",
+        "sizeType": "msg",
+        "x": 1320,
+        "y": 620,
+        "wires": [
+            [
+                "c9d8b67e08e0694a"
+            ]
+        ]
+    },
+    {
+        "id": "c2d65d2b5328f056",
+        "type": "fs-ops-access",
+        "z": "b443cd6f4046fd9f",
+        "g": "e09b23f59c044bf8",
+        "name": "Check Audio Files",
+        "path": "folderFull",
+        "pathType": "msg",
+        "filename": "Audio Files",
+        "filenameType": "str",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 1670,
+        "y": 600,
+        "wires": [
+            [
+                "61acbcf2c1762413"
+            ],
+            [
+                "f03d105771fc0c67"
+            ]
+        ]
+    },
+    {
+        "id": "6c1ecb3ede12bd26",
+        "type": "function",
+        "z": "b443cd6f4046fd9f",
+        "g": "e09b23f59c044bf8",
+        "name": "Pfade setzen",
+        "func": "msg.folderName = String(msg.payload);\nmsg.folderFull = `${msg.dir}/${msg.folderName}`;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1170,
+        "y": 620,
+        "wires": [
+            [
+                "3be3c68955e61f67"
+            ]
+        ]
+    },
+    {
+        "id": "61acbcf2c1762413",
+        "type": "fs-ops-dir",
+        "z": "b443cd6f4046fd9f",
+        "g": "e09b23f59c044bf8",
+        "name": "Ordner Check",
+        "path": "folderFull",
+        "pathType": "msg",
+        "filter": "*.ptxt",
+        "filterType": "str",
+        "dir": "payload",
+        "dirType": "msg",
+        "x": 1880,
+        "y": 560,
+        "wires": [
+            [
+                "c6effc2fa16f157a"
+            ]
+        ]
+    },
+    {
+        "id": "c6effc2fa16f157a",
+        "type": "function",
+        "z": "b443cd6f4046fd9f",
+        "g": "e09b23f59c044bf8",
+        "name": ".ptxt filtern",
+        "func": "const files = Array.isArray(msg.payload) ? msg.payload : [];\nif (files.length > 0) {\n    msg.payload = { folder: msg.folderName, files };\n    return [msg, null];    // gültig\n} else {\n    msg.payload = null;    // ungültig\n    return [null, msg];\n}",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2070,
+        "y": 560,
+        "wires": [
+            [
+                "a804729e2fe35486"
+            ],
+            [
+                "a804729e2fe35486"
+            ]
+        ],
+        "outputLabels": [
+            ".ptxt vorhanden",
+            "Abbruch"
+        ]
+    },
+    {
+        "id": "a804729e2fe35486",
+        "type": "join",
+        "z": "b443cd6f4046fd9f",
+        "g": "e09b23f59c044bf8",
+        "name": "",
+        "mode": "auto",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "useparts": false,
+        "accumulate": "false",
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "x": 2230,
+        "y": 640,
+        "wires": [
+            [
+                "60723f36d0588b1c"
+            ]
+        ]
+    },
+    {
+        "id": "60723f36d0588b1c",
+        "type": "function",
+        "z": "b443cd6f4046fd9f",
+        "g": "e09b23f59c044bf8",
+        "name": "Dummys filtern",
+        "func": "const arr = Array.isArray(msg.payload) ? msg.payload : [];\nconst out = arr.filter(Boolean).map(x => {\n    if (typeof x === 'string') return { folder: x, files: [] };\n    return x; // {folder, files}\n});\nmsg.payload = out;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2380,
+        "y": 640,
+        "wires": [
+            [
+                "e8ec6f49a002acc9"
+            ]
+        ]
+    },
+    {
+        "id": "e8ec6f49a002acc9",
+        "type": "function",
+        "z": "b443cd6f4046fd9f",
+        "g": "e09b23f59c044bf8",
+        "name": "Merge",
+        "func": "// Merge Files + Packages (ohne Timeout) + saubere relPtxt-Ermittlung\nconst key = msg.corr || msg.topic || ('merge:' + msg._msgid);\nconst ctx = flow.get('mergeStore') || {};\nconst inArr = Array.isArray(msg.payload) ? msg.payload : [];\n\n// Eintrag holen/erzeugen\nconst entry = ctx[key] || { files: null, packages: null, packagesDone: false };\n\n// Klassifizieren\nconst looksLikeFiles = inArr.length > 0 && inArr.every(x => x && x.kind === 'file');\nconst looksLikePackages = inArr.length > 0 && inArr.every(x => x && typeof x.folder === 'string');\n\n// Files übernehmen (.ptxt auf Root-Ebene)\nif (looksLikeFiles) {\n    entry.files = inArr;\n}\n\n// Packages übernehmen und relPtxt NUR aus echten Dateien bestimmen\nif (looksLikePackages) {\n    entry.packages = inArr.map(p => {\n        const folder = String(p.folder || '');\n\n        // vorhandene .ptxt-Dateien im Paket (relativ, z.B. \"Intro.ptxt\")\n        const ptxtFiles = Array.isArray(p.files)\n            ? p.files.filter(f => /\\.ptxt$/i.test(String(f || '')))\n            : [];\n\n        // bevorzugt: Datei, deren Basename dem Ordner entspricht\n        const preferred = (() => {\n            if (ptxtFiles.length === 0) return null;\n            const folderLc = folder.toLowerCase();\n            const exact = ptxtFiles.find(f => String(f).replace(/\\.ptxt$/i, '').toLowerCase() === folderLc);\n            return exact || ptxtFiles[0];\n        })();\n\n        return {\n            label: `${folder} (mit Clips)`,\n            value: folder,          // Ordnername\n            kind: 'package',\n            relPtxt: preferred || null // nur echte Datei, sonst null\n        };\n    });\n\n    entry.packagesDone = true;\n}\n\n// „leeres Array“ als „Packages fertig, aber leer“ interpretieren\nif (!looksLikeFiles && !looksLikePackages && Array.isArray(msg.payload) && msg.payload.length === 0) {\n    entry.packages = [];\n    entry.packagesDone = true;\n}\n\n// Zustand sichern\nctx[key] = entry;\nflow.set('mergeStore', ctx);\n\n// Fertig, wenn Files da sind UND Packages fertig (leer oder gefüllt)\nif (entry.files && entry.packagesDone) {\n    const out = [...entry.files, ...(entry.packages || [])].filter(Boolean);\n\n    // sortieren (de, numerisch)\n    out.sort((a, b) =>\n        String(a.label || a.folder || '').localeCompare(\n            String(b.label || b.folder || ''), 'de', { sensitivity: 'base', numeric: true }\n        )\n    );\n\n    // aufräumen\n    delete ctx[key];\n    flow.set('mergeStore', ctx);\n\n    msg.payload = out;\n    return msg;\n}\n\n// sonst warten\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2430,
+        "y": 580,
+        "wires": [
+            [
+                "68d4f6662ecbfeb3",
+                "25b1d00e5f7f1bcd"
+            ]
+        ]
+    },
+    {
+        "id": "f03d105771fc0c67",
+        "type": "function",
+        "z": "b443cd6f4046fd9f",
+        "g": "e09b23f59c044bf8",
+        "name": "Dummy generieren",
+        "func": "msg.payload = null;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1890,
+        "y": 600,
+        "wires": [
+            [
+                "a804729e2fe35486"
+            ]
+        ]
+    },
+    {
+        "id": "bcbf5fb38d99c996",
+        "type": "subflow:d0d17784f71f39d9",
         "z": "b443cd6f4046fd9f",
         "g": "5096f3feef6a6d43",
-        "name": "debug 1",
-        "active": true,
+        "name": "",
+        "x": 2090,
+        "y": 320,
+        "wires": [
+            [
+                "3890f6f8ca6ac208"
+            ]
+        ]
+    },
+    {
+        "id": "92760ac63c811f81",
+        "type": "subflow:d0d17784f71f39d9",
+        "z": "b443cd6f4046fd9f",
+        "g": "5096f3feef6a6d43",
+        "name": "",
+        "x": 2250,
+        "y": 400,
+        "wires": [
+            [
+                "b0aef2d54e9d0ec3"
+            ]
+        ]
+    },
+    {
+        "id": "25b1d00e5f7f1bcd",
+        "type": "debug",
+        "z": "b443cd6f4046fd9f",
+        "g": "e09b23f59c044bf8",
+        "name": "TEMPLATES",
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -4576,8 +5143,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 590,
-        "y": 340,
+        "x": 2560,
+        "y": 660,
         "wires": []
     },
     {
@@ -4850,6 +5417,13 @@
                 "pt": "msg",
                 "to": "payload.PluginPath & \"/\" & files & \"/\" & payload.activeUser",
                 "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "payload.pluginDir",
+                "pt": "msg",
+                "to": "payload.PluginPath & \"/\" & files",
+                "tot": "jsonata"
             }
         ],
         "action": "",
@@ -4877,8 +5451,8 @@
         "filenameType": "msg",
         "stats": "stats",
         "sizeType": "msg",
-        "x": 1600,
-        "y": 600,
+        "x": 1740,
+        "y": 620,
         "wires": [
             [
                 "2b31b10a748b6d64"
@@ -4898,8 +5472,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1770,
-        "y": 640,
+        "x": 1930,
+        "y": 600,
         "wires": [
             [
                 "71a4fd4af2c51838"
@@ -4919,11 +5493,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2210,
+        "x": 2150,
         "y": 640,
         "wires": [
             [
-                "f6530849f84ba28d"
+                "4a342a304d1bfc5e"
             ]
         ]
     },
@@ -4941,7 +5515,7 @@
         "finalize": "",
         "libs": [],
         "x": 640,
-        "y": 1080,
+        "y": 1160,
         "wires": [
             [
                 "e6c214decef4eadd",
@@ -4973,7 +5547,7 @@
         "link": false,
         "overwrite": true,
         "x": 1830,
-        "y": 1080,
+        "y": 1160,
         "wires": [
             [
                 "a520c01c5814fdac"
@@ -4993,7 +5567,7 @@
         "dir": "files",
         "dirType": "msg",
         "x": 930,
-        "y": 1040,
+        "y": 1120,
         "wires": [
             [
                 "bfc6384b6602ee8c"
@@ -5014,7 +5588,7 @@
         "finalize": "",
         "libs": [],
         "x": 1710,
-        "y": 1020,
+        "y": 1100,
         "wires": [
             [
                 "b8b13e0434601759"
@@ -5040,7 +5614,7 @@
         "repair": false,
         "outputs": 1,
         "x": 1510,
-        "y": 1260,
+        "y": 1340,
         "wires": [
             [
                 "2c990ce67e5034a6"
@@ -5061,7 +5635,7 @@
         "finalize": "",
         "libs": [],
         "x": 660,
-        "y": 1320,
+        "y": 1400,
         "wires": [
             [
                 "0b70528cdccb53e7",
@@ -5093,7 +5667,7 @@
         "link": false,
         "overwrite": true,
         "x": 1830,
-        "y": 1320,
+        "y": 1400,
         "wires": [
             [
                 "a520c01c5814fdac"
@@ -5114,7 +5688,7 @@
         "addname": "",
         "property": "quickPresets",
         "x": 1150,
-        "y": 1340,
+        "y": 1420,
         "wires": [
             [
                 "d60bb26669de3657"
@@ -5134,7 +5708,7 @@
         "dir": "files",
         "dirType": "msg",
         "x": 930,
-        "y": 1280,
+        "y": 1360,
         "wires": [
             [
                 "25bc3768c7ae50d3"
@@ -5155,7 +5729,7 @@
         "addname": "",
         "property": "files",
         "x": 1320,
-        "y": 1260,
+        "y": 1340,
         "wires": [
             [
                 "39d13a464431d31b"
@@ -5176,7 +5750,7 @@
         "finalize": "",
         "libs": [],
         "x": 1710,
-        "y": 1260,
+        "y": 1340,
         "wires": [
             [
                 "c53ffd5c163eadcb"
@@ -5197,7 +5771,7 @@
         "finalize": "",
         "libs": [],
         "x": 610,
-        "y": 1540,
+        "y": 1620,
         "wires": [
             [
                 "b20e0716bb69c289",
@@ -5229,7 +5803,7 @@
         "link": false,
         "overwrite": true,
         "x": 1830,
-        "y": 1560,
+        "y": 1640,
         "wires": [
             [
                 "a520c01c5814fdac"
@@ -5250,7 +5824,7 @@
         "addname": "",
         "property": "quickPresets",
         "x": 1150,
-        "y": 1580,
+        "y": 1660,
         "wires": [
             [
                 "6d456d2a0be0d42d"
@@ -5270,7 +5844,7 @@
         "dir": "files",
         "dirType": "msg",
         "x": 930,
-        "y": 1500,
+        "y": 1580,
         "wires": [
             [
                 "51858e71739fe5f0"
@@ -5291,7 +5865,7 @@
         "addname": "",
         "property": "files",
         "x": 1320,
-        "y": 1500,
+        "y": 1580,
         "wires": [
             [
                 "9bdaf0d4392acc21"
@@ -5317,7 +5891,7 @@
         "repair": false,
         "outputs": 1,
         "x": 1510,
-        "y": 1500,
+        "y": 1580,
         "wires": [
             [
                 "b45c327d585b78b2"
@@ -5338,7 +5912,7 @@
         "finalize": "",
         "libs": [],
         "x": 1710,
-        "y": 1500,
+        "y": 1580,
         "wires": [
             [
                 "4e89fbef3af60f1c"
@@ -5359,7 +5933,7 @@
         "finalize": "",
         "libs": [],
         "x": 640,
-        "y": 1780,
+        "y": 1860,
         "wires": [
             [
                 "126ecdd30c809417",
@@ -5387,7 +5961,7 @@
         "dir": "files",
         "dirType": "msg",
         "x": 930,
-        "y": 1720,
+        "y": 1800,
         "wires": [
             [
                 "1e1ceeb243c3e34b"
@@ -5408,7 +5982,7 @@
         "finalize": "",
         "libs": [],
         "x": 1710,
-        "y": 1720,
+        "y": 1800,
         "wires": [
             [
                 "eecbec774963fbb5"
@@ -5429,7 +6003,7 @@
         "finalize": "",
         "libs": [],
         "x": 620,
-        "y": 820,
+        "y": 900,
         "wires": [
             [
                 "97c972e18dacc01e",
@@ -5458,7 +6032,7 @@
         "addname": "",
         "property": "folders",
         "x": 840,
-        "y": 820,
+        "y": 900,
         "wires": [
             [
                 "c133d90e649a5ff2"
@@ -5495,7 +6069,7 @@
             }
         ],
         "x": 1060,
-        "y": 820,
+        "y": 900,
         "wires": [
             [
                 "16b240c5ebff9643"
@@ -5515,7 +6089,7 @@
         "dir": "files",
         "dirType": "msg",
         "x": 1310,
-        "y": 820,
+        "y": 900,
         "wires": [
             [
                 "399704b1bba9111c"
@@ -5536,7 +6110,7 @@
         "addname": "",
         "property": "files",
         "x": 1510,
-        "y": 820,
+        "y": 900,
         "wires": [
             [
                 "4cd228b5b1ec067e"
@@ -5557,7 +6131,7 @@
         "finalize": "",
         "libs": [],
         "x": 1700,
-        "y": 820,
+        "y": 900,
         "wires": [
             [
                 "5ee9d6d3e3c4f2bd"
@@ -5581,7 +6155,7 @@
         "link": false,
         "overwrite": true,
         "x": 2160,
-        "y": 820,
+        "y": 900,
         "wires": [
             [
                 "a520c01c5814fdac"
@@ -5602,7 +6176,7 @@
         "addname": "",
         "property": "quickPresets",
         "x": 850,
-        "y": 860,
+        "y": 940,
         "wires": [
             [
                 "efcec27fd6452b4e"
@@ -5626,7 +6200,7 @@
         "link": false,
         "overwrite": true,
         "x": 1560,
-        "y": 860,
+        "y": 940,
         "wires": [
             [
                 "a520c01c5814fdac"
@@ -5693,7 +6267,7 @@
         "write": false,
         "throwerror": false,
         "x": 940,
-        "y": 1360,
+        "y": 1440,
         "wires": [
             [
                 "970f9fc0808ec60f"
@@ -5718,7 +6292,7 @@
         "fullpath": "directory",
         "fullpathType": "msg",
         "x": 1160,
-        "y": 1380,
+        "y": 1460,
         "wires": [
             [
                 "970f9fc0808ec60f"
@@ -5740,7 +6314,7 @@
         "fullpath": "directory",
         "fullpathType": "msg",
         "x": 1340,
-        "y": 1300,
+        "y": 1380,
         "wires": [
             [
                 "73306ab970c38caf"
@@ -5761,7 +6335,7 @@
         "write": false,
         "throwerror": false,
         "x": 1130,
-        "y": 1280,
+        "y": 1360,
         "wires": [
             [
                 "73306ab970c38caf"
@@ -5907,7 +6481,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1890,
-        "y": 1260,
+        "y": 1340,
         "wires": [
             [
                 "05d86ab1ea26b37b"
@@ -5945,7 +6519,7 @@
         "write": false,
         "throwerror": false,
         "x": 1350,
-        "y": 1340,
+        "y": 1420,
         "wires": [
             [
                 "32f7122ac9fe151b"
@@ -5965,7 +6539,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1590,
-        "y": 1320,
+        "y": 1400,
         "wires": [
             [
                 "81215275a16d8c68"
@@ -5983,7 +6557,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1590,
-        "y": 1360,
+        "y": 1440,
         "wires": [
             [
                 "bf80e98ba0ab77be"
@@ -6001,7 +6575,7 @@
             "9d1aa8c292ad24aa"
         ],
         "x": 895,
-        "y": 1400,
+        "y": 1480,
         "wires": []
     },
     {
@@ -6021,7 +6595,7 @@
         ],
         "uncaught": false,
         "x": 630,
-        "y": 1360,
+        "y": 1440,
         "wires": [
             [
                 "facd8f20ee00818d"
@@ -6041,7 +6615,7 @@
         "finalize": "",
         "libs": [],
         "x": 680,
-        "y": 1400,
+        "y": 1480,
         "wires": [
             [
                 "a4ad4a34a821d771"
@@ -6065,7 +6639,7 @@
         ],
         "uncaught": false,
         "x": 600,
-        "y": 1580,
+        "y": 1660,
         "wires": [
             [
                 "3794b8b88a124018"
@@ -6086,7 +6660,7 @@
         "finalize": "",
         "libs": [],
         "x": 680,
-        "y": 1620,
+        "y": 1700,
         "wires": [
             [
                 "963ca3740f921cf8"
@@ -6107,7 +6681,7 @@
         "write": false,
         "throwerror": false,
         "x": 1130,
-        "y": 1500,
+        "y": 1580,
         "wires": [
             [
                 "b777a94f111ff071"
@@ -6132,7 +6706,7 @@
         "fullpath": "directory",
         "fullpathType": "msg",
         "x": 1340,
-        "y": 1540,
+        "y": 1620,
         "wires": [
             [
                 "b777a94f111ff071"
@@ -6149,7 +6723,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1890,
-        "y": 1500,
+        "y": 1580,
         "wires": [
             [
                 "4b4b88c1be70ec42"
@@ -6170,7 +6744,7 @@
         "write": false,
         "throwerror": false,
         "x": 940,
-        "y": 1580,
+        "y": 1660,
         "wires": [
             [
                 "67bd53b720f256d8"
@@ -6195,7 +6769,7 @@
         "fullpath": "directory",
         "fullpathType": "msg",
         "x": 1160,
-        "y": 1620,
+        "y": 1700,
         "wires": [
             [
                 "67bd53b720f256d8"
@@ -6216,7 +6790,7 @@
         "write": false,
         "throwerror": false,
         "x": 1350,
-        "y": 1580,
+        "y": 1660,
         "wires": [
             [
                 "7add7f28bc5bf8dd"
@@ -6236,7 +6810,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1590,
-        "y": 1560,
+        "y": 1640,
         "wires": [
             [
                 "eecef021cf5ea5f9"
@@ -6254,7 +6828,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1590,
-        "y": 1600,
+        "y": 1680,
         "wires": [
             [
                 "bf80e98ba0ab77be"
@@ -6272,7 +6846,7 @@
             "9d1aa8c292ad24aa"
         ],
         "x": 895,
-        "y": 1620,
+        "y": 1700,
         "wires": []
     },
     {
@@ -6292,7 +6866,7 @@
         ],
         "uncaught": false,
         "x": 610,
-        "y": 1120,
+        "y": 1200,
         "wires": [
             [
                 "2a28990d8768c2bf"
@@ -6313,7 +6887,7 @@
         "finalize": "",
         "libs": [],
         "x": 680,
-        "y": 1160,
+        "y": 1240,
         "wires": [
             [
                 "59542c4cb71f0d92"
@@ -6334,7 +6908,7 @@
         "write": false,
         "throwerror": false,
         "x": 1130,
-        "y": 1040,
+        "y": 1120,
         "wires": [
             [
                 "e3fc98cad4c5a589"
@@ -6358,7 +6932,7 @@
         "addname": "",
         "property": "files",
         "x": 1320,
-        "y": 1020,
+        "y": 1100,
         "wires": [
             [
                 "3e07cec2c354b562"
@@ -6384,7 +6958,7 @@
         "repair": false,
         "outputs": 1,
         "x": 1510,
-        "y": 1020,
+        "y": 1100,
         "wires": [
             [
                 "c80234e5017b0a98"
@@ -6401,7 +6975,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1890,
-        "y": 1020,
+        "y": 1100,
         "wires": [
             [
                 "98b18cba1d87bf68"
@@ -6423,7 +6997,7 @@
         "fullpath": "directory",
         "fullpathType": "msg",
         "x": 1340,
-        "y": 1060,
+        "y": 1140,
         "wires": [
             [
                 "e3fc98cad4c5a589"
@@ -6444,7 +7018,7 @@
         "write": false,
         "throwerror": false,
         "x": 1350,
-        "y": 1100,
+        "y": 1180,
         "wires": [
             [
                 "d19e7fada3c78c77"
@@ -6468,7 +7042,7 @@
         "addname": "",
         "property": "quickPresets",
         "x": 1150,
-        "y": 1100,
+        "y": 1180,
         "wires": [
             [
                 "02b22dc642dc2fef"
@@ -6490,7 +7064,7 @@
         "fullpath": "directory",
         "fullpathType": "msg",
         "x": 1160,
-        "y": 1140,
+        "y": 1220,
         "wires": [
             [
                 "7723b0bc17fd7e13"
@@ -6511,7 +7085,7 @@
         "write": false,
         "throwerror": false,
         "x": 940,
-        "y": 1120,
+        "y": 1200,
         "wires": [
             [
                 "7723b0bc17fd7e13"
@@ -6532,7 +7106,7 @@
             "9d1aa8c292ad24aa"
         ],
         "x": 895,
-        "y": 1160,
+        "y": 1240,
         "wires": []
     },
     {
@@ -6545,7 +7119,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1590,
-        "y": 1080,
+        "y": 1160,
         "wires": [
             [
                 "338d50cd66e07956"
@@ -6563,7 +7137,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1590,
-        "y": 1120,
+        "y": 1200,
         "wires": [
             [
                 "bf80e98ba0ab77be"
@@ -6588,7 +7162,7 @@
         ],
         "uncaught": false,
         "x": 610,
-        "y": 1820,
+        "y": 1900,
         "wires": [
             [
                 "563eea3d7ff40ed2"
@@ -6609,7 +7183,7 @@
         "finalize": "",
         "libs": [],
         "x": 680,
-        "y": 1860,
+        "y": 1940,
         "wires": [
             [
                 "9ccfc5bdc5b504f8"
@@ -6627,7 +7201,7 @@
             "9d1aa8c292ad24aa"
         ],
         "x": 895,
-        "y": 1860,
+        "y": 1940,
         "wires": []
     },
     {
@@ -6644,7 +7218,7 @@
         "write": false,
         "throwerror": false,
         "x": 1130,
-        "y": 1720,
+        "y": 1800,
         "wires": [
             [
                 "b08666bf6d1a972b"
@@ -6668,7 +7242,7 @@
         "addname": "",
         "property": "files",
         "x": 1320,
-        "y": 1720,
+        "y": 1800,
         "wires": [
             [
                 "cb04caf391cac468"
@@ -6694,7 +7268,7 @@
         "repair": false,
         "outputs": 1,
         "x": 1510,
-        "y": 1720,
+        "y": 1800,
         "wires": [
             [
                 "4190da9a9792cbcc"
@@ -6716,7 +7290,7 @@
         "fullpath": "directory",
         "fullpathType": "msg",
         "x": 1340,
-        "y": 1760,
+        "y": 1840,
         "wires": [
             [
                 "b08666bf6d1a972b"
@@ -6733,7 +7307,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1890,
-        "y": 1720,
+        "y": 1800,
         "wires": [
             [
                 "08170b3dbaac1481"
@@ -6754,7 +7328,7 @@
         "write": false,
         "throwerror": false,
         "x": 940,
-        "y": 1800,
+        "y": 1880,
         "wires": [
             [
                 "f1e3f6051c6ae603"
@@ -6778,7 +7352,7 @@
         "addname": "",
         "property": "quickPresets",
         "x": 1150,
-        "y": 1800,
+        "y": 1880,
         "wires": [
             [
                 "49b6df07bce631a3"
@@ -6800,7 +7374,7 @@
         "fullpath": "directory",
         "fullpathType": "msg",
         "x": 1160,
-        "y": 1840,
+        "y": 1920,
         "wires": [
             [
                 "f1e3f6051c6ae603"
@@ -6821,7 +7395,7 @@
         "write": false,
         "throwerror": false,
         "x": 1350,
-        "y": 1800,
+        "y": 1880,
         "wires": [
             [
                 "13cf5781fe9bad4b"
@@ -6841,7 +7415,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1590,
-        "y": 1780,
+        "y": 1860,
         "wires": [
             [
                 "3d51bf9aaaa43479"
@@ -6859,7 +7433,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1590,
-        "y": 1820,
+        "y": 1900,
         "wires": [
             [
                 "bf80e98ba0ab77be"
@@ -6883,7 +7457,7 @@
         "link": false,
         "overwrite": true,
         "x": 1830,
-        "y": 1780,
+        "y": 1860,
         "wires": [
             [
                 "a520c01c5814fdac"
@@ -7119,7 +7693,7 @@
             "9d1aa8c292ad24aa"
         ],
         "x": 905,
-        "y": 900,
+        "y": 980,
         "wires": []
     },
     {
@@ -7132,7 +7706,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1930,
-        "y": 820,
+        "y": 900,
         "wires": [
             [
                 "77cfbeec620abcd6",
@@ -7154,7 +7728,7 @@
         "write": false,
         "throwerror": false,
         "x": 1050,
-        "y": 860,
+        "y": 940,
         "wires": [
             [
                 "e940af9352af930c"
@@ -7175,7 +7749,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1290,
-        "y": 900,
+        "y": 980,
         "wires": [
             [
                 "bf80e98ba0ab77be"
@@ -7196,7 +7770,7 @@
         "finalize": "",
         "libs": [],
         "x": 1290,
-        "y": 860,
+        "y": 940,
         "wires": [
             [
                 "897d2cccd85f4c90"
@@ -7221,7 +7795,7 @@
         ],
         "uncaught": false,
         "x": 610,
-        "y": 860,
+        "y": 940,
         "wires": [
             [
                 "ccb723d0652e28eb"
@@ -7242,7 +7816,7 @@
         "finalize": "",
         "libs": [],
         "x": 680,
-        "y": 900,
+        "y": 980,
         "wires": [
             [
                 "1b55abfd770dda78"
@@ -7258,10 +7832,13 @@
         "scope": [
             "3118fab255283b8b",
             "8a66e0bb62460b38",
-            "a2619de64e762d39",
-            "0aff157563034614",
             "f6530849f84ba28d",
-            "ea1bb40fdd31379f"
+            "ea1bb40fdd31379f",
+            "0aff157563034614",
+            "a2619de64e762d39",
+            "54941cd941124367",
+            "af5ea42d65c2235d",
+            "4a342a304d1bfc5e"
         ],
         "uncaught": false,
         "x": 620,
@@ -7302,7 +7879,7 @@
         "func": "const cat = msg.category || \"unknown\";\nconst key = `pending:${msg.job?.id || 'none'}:${cat}`;\nflow.set(key, (flow.get(key) || 0) + 1);\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 1970,
+        "x": 1930,
         "y": 640,
         "wires": [
             [
@@ -7365,8 +7942,8 @@
         "read": false,
         "write": false,
         "throwerror": false,
-        "x": 2290,
-        "y": 700,
+        "x": 2590,
+        "y": 620,
         "wires": [
             [
                 "a2619de64e762d39"
@@ -7390,8 +7967,8 @@
         "mode": "755",
         "fullpath": "directory",
         "fullpathType": "msg",
-        "x": 2500,
-        "y": 720,
+        "x": 2820,
+        "y": 640,
         "wires": [
             [
                 "a2619de64e762d39"
@@ -7408,16 +7985,18 @@
         "pathType": "str",
         "filename": "payload.userDir",
         "filenameType": "msg",
-        "read": false,
+        "read": true,
         "write": false,
         "throwerror": false,
-        "x": 1610,
+        "x": 1630,
         "y": 680,
         "wires": [
             [
                 "8a66e0bb62460b38"
             ],
-            []
+            [
+                "54941cd941124367"
+            ]
         ]
     },
     {
@@ -7434,7 +8013,7 @@
         "write": false,
         "throwerror": false,
         "x": 2070,
-        "y": 880,
+        "y": 960,
         "wires": [
             [
                 "77cfbeec620abcd6"
@@ -7459,7 +8038,7 @@
         "fullpath": "directory",
         "fullpathType": "msg",
         "x": 2280,
-        "y": 900,
+        "y": 980,
         "wires": [
             [
                 "77cfbeec620abcd6"
@@ -7480,7 +8059,7 @@
         "write": false,
         "throwerror": false,
         "x": 1540,
-        "y": 920,
+        "y": 1000,
         "wires": [
             [
                 "b8a6163e7afb5acf"
@@ -7505,7 +8084,7 @@
         "fullpath": "directory",
         "fullpathType": "msg",
         "x": 1820,
-        "y": 900,
+        "y": 980,
         "wires": [
             [
                 "b8a6163e7afb5acf"
@@ -7540,8 +8119,8 @@
         "sourceType": "msg",
         "target": "pluginsettingDest",
         "targetType": "msg",
-        "x": 2540,
-        "y": 640,
+        "x": 2840,
+        "y": 600,
         "wires": [
             [
                 "a520c01c5814fdac"
@@ -7559,7 +8138,7 @@
         "target": "memorylocationDest",
         "targetType": "msg",
         "x": 2130,
-        "y": 1260,
+        "y": 1340,
         "wires": [
             [
                 "a520c01c5814fdac"
@@ -7577,7 +8156,7 @@
         "target": "trackdataDest",
         "targetType": "msg",
         "x": 2110,
-        "y": 1500,
+        "y": 1580,
         "wires": [
             [
                 "a520c01c5814fdac"
@@ -7595,7 +8174,7 @@
         "target": "clipeffectDest",
         "targetType": "msg",
         "x": 2110,
-        "y": 1020,
+        "y": 1100,
         "wires": [
             [
                 "a520c01c5814fdac"
@@ -7613,7 +8192,7 @@
         "target": "kbshortcutDest",
         "targetType": "msg",
         "x": 2110,
-        "y": 1720,
+        "y": 1800,
         "wires": [
             [
                 "a520c01c5814fdac"
@@ -7639,7 +8218,113 @@
         ]
     },
     {
-        "id": "e5cee854a3a661af",
+        "id": "54941cd941124367",
+        "type": "fs-ops-stats",
+        "z": "571c9add5c07840b",
+        "g": "fc811062d1cbf27f",
+        "name": "",
+        "path": "",
+        "pathType": "str",
+        "filename": "payload.pluginDir",
+        "filenameType": "msg",
+        "stats": "stats",
+        "sizeType": "msg",
+        "x": 1740,
+        "y": 740,
+        "wires": [
+            [
+                "37b447a9e5d21e4a"
+            ]
+        ]
+    },
+    {
+        "id": "37b447a9e5d21e4a",
+        "type": "function",
+        "z": "571c9add5c07840b",
+        "g": "fc811062d1cbf27f",
+        "name": "Ist ein Verzeichnis?",
+        "func": "// Prüfen ob Stat-Wert ein Verzeichnis ist\nif (msg.stats && typeof msg.stats.mode === \"number\") {\n    if ((msg.stats.mode & 57344) === 16384) {\n        // Ist ein Verzeichnis\n        return msg;\n    }\n}\n// Kein Verzeichnis: Nachricht verwerfen\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1930,
+        "y": 760,
+        "wires": [
+            [
+                "af5ea42d65c2235d"
+            ]
+        ]
+    },
+    {
+        "id": "af5ea42d65c2235d",
+        "type": "fs-ops-mkdir",
+        "z": "571c9add5c07840b",
+        "g": "fc811062d1cbf27f",
+        "name": "Ordner anlegen",
+        "path": "",
+        "pathType": "str",
+        "dirname": "payload.userDir",
+        "dirnameType": "msg",
+        "recursive": true,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 2140,
+        "y": 760,
+        "wires": [
+            [
+                "0aff157563034614"
+            ]
+        ]
+    },
+    {
+        "id": "4a342a304d1bfc5e",
+        "type": "fs-ops-access",
+        "z": "571c9add5c07840b",
+        "g": "fc811062d1cbf27f",
+        "name": "Quellpfad existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "pluginsettingSrc",
+        "filenameType": "msg",
+        "read": true,
+        "write": false,
+        "throwerror": false,
+        "x": 2370,
+        "y": 640,
+        "wires": [
+            [
+                "f6530849f84ba28d"
+            ],
+            [
+                "14360d1caf13a4e4"
+            ]
+        ]
+    },
+    {
+        "id": "14360d1caf13a4e4",
+        "type": "function",
+        "z": "571c9add5c07840b",
+        "g": "fc811062d1cbf27f",
+        "name": "Recall: Quelle fehlt → soft skip",
+        "func": "// Wenn recall-Quelle fehlt, nicht als Fehler werten:\n// Reporte 'info' + decrement pending (falls gesetzt) + doneCat\nconst category = msg.category || 'pluginsettings';\n\n// 1) Info-Report\nnode.send({\n    topic: 'report',\n    payload: { type: 'info', category, message: 'Kein Plug-In-Setting zum Recall gefunden – übersprungen.' },\n    job: msg.job\n});\n\n// 2) pending-Counter sauber abräumen\nconst key = `pending:${msg.job?.id || 'none'}:${category}`;\nlet n = flow.get(key) || 0;\nif (n > 0) {\n    n = n - 1;\n    flow.set(key, n);\n}\n\n// 3) Kategorie abschließen, wenn nichts mehr pending\nif (n === 0 && msg.job && msg.job.id) {\n    node.send({\n        topic: 'report',\n        payload: { type: 'doneCat', category },\n        job: msg.job\n    });\n}\n\nreturn null; // Flow hier beenden, kein Copy",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2630,
+        "y": 680,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "911a09018e579cbb",
         "type": "global-config",
         "env": [],
         "modules": {

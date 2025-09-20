@@ -93,9 +93,9 @@
             "f03d105771fc0c67",
             "25b1d00e5f7f1bcd"
         ],
-        "x": 34,
+        "x": 24,
         "y": 519,
-        "w": 2642,
+        "w": 2652,
         "h": 302
     },
     {
@@ -431,7 +431,9 @@
             "b0aef2d54e9d0ec3",
             "3d95844779504430",
             "bcbf5fb38d99c996",
-            "92760ac63c811f81"
+            "92760ac63c811f81",
+            "857b68302ee5f768",
+            "8fc05ef75ade694e"
         ],
         "x": 34,
         "y": 39,
@@ -3464,7 +3466,8 @@
         "y": 260,
         "wires": [
             [
-                "6c009de142b00a69"
+                "6c009de142b00a69",
+                "857b68302ee5f768"
             ]
         ]
     },
@@ -3576,7 +3579,7 @@
         "z": "b443cd6f4046fd9f",
         "g": "5096f3feef6a6d43",
         "name": "Pflichtfelder + Vorbereitung",
-        "func": "// Body sicher holen\nconst b = (msg.payload && typeof msg.payload === \"object\") ? msg.payload : (msg.req && msg.req.body) || {};\n\n// Pflichtfelder\nconst need = [\"kunde\", \"datum\", \"moid\", \"projektname\", \"stufe\", \"template\"];\nconst fehlende = need.filter(k => !b[k]);\nif (fehlende.length) {\n    msg.statusCode = 400;\n    msg.payload = { error: \"missing fields\", fields: fehlende };\n    return [null, msg];\n}\n\n// Windows-Namen prüfen (wie gehabt) – ggf. deinen bestehenden Code hier wieder einsetzen\n\n// Globals\nconst PathProduktionen = global.get(\"PathProduktionen\") || \"\";\nconst PathMitarbeiter = global.get(\"PathMitarbeiter\") || \"\";\nconst activeUser = global.get(\"activeUser\") || \"\";\nconst projektordnerSchema = global.get(\"projektordnerSchema\") || \"\";\nconst kundenStammdaten = global.get(\"kundenStammdaten\") || [];\nmsg.sessionSchema = global.get(\"sessionSchema\") || \"{{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}\";\n\n// Ordnername aus Schema\nconst values = {\n    datum: b.datum,\n    projektname: b.projektname,\n    moid: b.moid,\n    benutzer: (global.get(\"activeUserKuerzel\") || \"\"),\n    kunde: b.kunde\n};\nconst projektOrdner = projektordnerSchema.replace(/{{(\\w+)}}/g, (_, k) => values[k] || \"\");\nconst zielPfad = `${PathProduktionen}/${b.kunde}/${projektOrdner}`;\n\n// Unterordner & Label\nconst kundeObj = (kundenStammdaten || []).find(k => k.kunde === b.kunde) || {};\nconst unterordner = Array.isArray(kundeObj.ordner) ? kundeObj.ordner : [];\nconst stufeObj = unterordner.find(o => o.name === b.stufe);\nconst stufeLabel = stufeObj ? stufeObj.label : b.stufe;\n\n// --- Einfaches Template-Handling ---\nconst baseTemplates = `${PathMitarbeiter}/${activeUser}/immo24/templates`;\nconst t = String(b.template || \"\");\nconst isFile = /\\.ptxt$/i.test(t);\n\nlet templateSource = \"\";\nlet audioSource = null;\n\nif (isFile) {\n    // flaches .ptxt\n    templateSource = `${baseTemplates}/${t}`;\n} else {\n    // package: Ordnername = t, ptxt = \"<ordner>.ptxt\", Audio-Folder = \"<ordner>/Audio Files\"\n    const ptxtName = `${t}.ptxt`;\n    templateSource = `${baseTemplates}/${t}/${ptxtName}`;\n    audioSource = `${baseTemplates}/${t}/Audio Files`;\n}\n\n// Ziele\nmsg.templateSource = templateSource;\nmsg.templateDest = `${zielPfad}/${b.stufe}`;\nmsg.audioSource = audioSource;                 // null bei file\nmsg.audioDest = `${msg.templateDest}/Audio Files`;\n\n// persist\nmsg.data = { ...b, stufeLabel, zielPfad, unterordner };\nmsg.filename = `${zielPfad}/immo24-proj.json`;\nmsg.payload = zielPfad; // für fs-ops-access\nreturn [msg, null];",
+        "func": "// Body sicher holen\nconst b = (msg.payload && typeof msg.payload === \"object\") ? msg.payload : (msg.req && msg.req.body) || {};\n\n// Pflichtfelder\nconst need = [\"kunde\", \"datum\", \"moid\", \"projektname\", \"stufe\", \"template\"];\nconst fehlende = need.filter(k => !b[k]);\nif (fehlende.length) {\n    msg.statusCode = 400;\n    msg.payload = { error: \"missing fields\", fields: fehlende };\n    return [null, msg];\n}\n\n// --- Windows-Namen prüfen ---\nfunction windowsNameReport(input) {\n    const res = { valid: true, errors: [] };\n    const s = String(input ?? '').trim();\n\n    // Verbotene Zeichen + Steuerzeichen\n    const forbiddenRe = /[<>:\"/\\\\|?*\\u0000-\\u001F]/g;\n    const bad = s.match(forbiddenRe);\n    if (bad) {\n        res.valid = false;\n        const uniq = [...new Set(bad)];\n        res.errors.push({\n            code: 'forbidden_chars',\n            chars: uniq,\n            message: `Unzulässige Zeichen: ${uniq.join(' ')}`\n        });\n    }\n\n    // Kein Punkt oder Leerzeichen am Ende\n    if (/[. ]$/.test(s)) {\n        res.valid = false;\n        res.errors.push({\n            code: 'trailing_dot_or_space',\n            message: 'Darf nicht mit Punkt oder Leerzeichen enden'\n        });\n    }\n\n    // Reservierte Namen\n    if (/^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\\..*)?$/i.test(s)) {\n        res.valid = false;\n        res.errors.push({\n            code: 'reserved_name',\n            message: 'Reservierter Windows-Name'\n        });\n    }\n\n    return res;\n}\n\n// Felder, die zu Pfaden werden, validieren\nconst fieldReports = {\n    projektname: windowsNameReport(b.projektname),\n    moid: windowsNameReport(b.moid),\n    kunde: windowsNameReport(String(b.kunde)),\n};\n\nconst validationErrors = Object.entries(fieldReports)\n    .filter(([, rep]) => !rep.valid)\n    .map(([field, rep]) => ({ field, errors: rep.errors }));\n\nif (validationErrors.length) {\n    msg.statusCode = 422;\n    msg.payload = { error: 'validation_failed', details: validationErrors };\n    return [null, msg];\n}\n\n// --- Globals ---\nconst PathProduktionen = global.get(\"PathProduktionen\") || \"\";\nconst PathMitarbeiter = global.get(\"PathMitarbeiter\") || \"\";\nconst activeUser = global.get(\"activeUser\") || \"\";\nconst activeUserKuerzel = global.get(\"activeUserKuerzel\") || \"\";\nconst projektordnerSchema = global.get(\"projektordnerSchema\") || \"\";\nconst kundenStammdaten = global.get(\"kundenStammdaten\") || [];\nmsg.sessionSchema = global.get(\"sessionSchema\") || \"{{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}\";\n\n// Ordnername aus Schema\nconst values = {\n    datum: b.datum,\n    projektname: b.projektname,\n    moid: b.moid,\n    benutzer: activeUserKuerzel,\n    kunde: b.kunde\n};\nconst projektOrdner = projektordnerSchema.replace(/{{(\\w+)}}/g, (_, k) => values[k] || \"\");\nconst zielPfad = `${PathProduktionen}/${b.kunde}/${projektOrdner}`;\n\n// Unterordner & Label\nconst kundeObj = (kundenStammdaten || []).find(k => k.kunde === b.kunde) || {};\nconst unterordner = Array.isArray(kundeObj.ordner) ? kundeObj.ordner : [];\nconst stufeObj = unterordner.find(o => o.name === b.stufe);\nconst stufeLabel = stufeObj ? stufeObj.label : b.stufe;\n\n// --- Template-Handling ---\nconst baseTemplates = `${PathMitarbeiter}/${activeUser}/immo24/templates`;\nconst t = String(b.template || \"\");\nconst isFile = /\\.ptxt$/i.test(t);\n\nlet templateSource = \"\";\nlet audioSource = null;\n\nif (isFile) {\n    templateSource = `${baseTemplates}/${t}`;\n} else {\n    const ptxtName = `${t}.ptxt`;\n    templateSource = `${baseTemplates}/${t}/${ptxtName}`;\n    audioSource = `${baseTemplates}/${t}/Audio Files`;\n}\n\n// Alles unter msg.paths bündeln\nmsg.paths = {\n    zielPfad,\n    templateDest: `${zielPfad}/${b.stufe}`,\n    audioDest: `${zielPfad}/${b.stufe}/Audio Files`,\n    templateSource,\n    audioSource\n};\n\n// persist\nmsg.data = { ...b, stufeLabel, zielPfad, unterordner };\nmsg.filename = `${zielPfad}/immo24-proj.json`;\nmsg.payload = zielPfad; // für fs-ops-access\n\nreturn [msg, null];",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -3587,10 +3590,12 @@
         "y": 260,
         "wires": [
             [
-                "465673bffca4e0d2"
+                "465673bffca4e0d2",
+                "5f3509d1582245f9"
             ],
             [
-                "a077f771503b109f"
+                "a077f771503b109f",
+                "8fc05ef75ade694e"
             ]
         ],
         "outputLabels": [
@@ -3628,7 +3633,7 @@
         "z": "b443cd6f4046fd9f",
         "g": "5096f3feef6a6d43",
         "name": "Dupl. error",
-        "func": "msg.statusCode = 409;\nmsg.payload = { error: \"project exists\", zielPfad: msg.payload };\nreturn msg;",
+        "func": "msg.statusCode = 409;\nmsg.payload = { error: \"Das Projekt existiert bereits.\", zielPfad: msg.payload };\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -4413,7 +4418,7 @@
         "z": "b443cd6f4046fd9f",
         "g": "5096f3feef6a6d43",
         "name": "Pflichtfelder + Vorbereitung",
-        "func": "// Body holen\nconst b = (msg.payload && typeof msg.payload === 'object') ? msg.payload : (msg.req && msg.req.body) || {};\nconst need = ['kunde', 'datum', 'projektname', 'moid', 'stufe', 'template'];\nconst fehlende = need.filter(k => !b[k]);\nif (fehlende.length) {\n  msg.statusCode = 400;\n  msg.payload = { error: 'missing', fields: fehlende };\n  return [null, msg];\n}\n\n// Globals\nconst PathProduktionen = global.get('PathProduktionen') || '';\nconst PathMitarbeiter = global.get('PathMitarbeiter') || '';\nconst activeUser = global.get('activeUser') || '';\nconst projektordnerSchema = global.get('projektordnerSchema') || '';\nconst sessionSchema = global.get('sessionSchema') || '{{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}';\n\n// --- Einfaches Template-Handling ---\nconst baseTemplates = `${PathMitarbeiter}/${activeUser}/immo24/templates`;\nconst t = String(b.template || \"\");\nconst isFile = /\\.ptxt$/i.test(t);\n\nlet templateSource = \"\";\nlet audioSource = null;\n\nif (isFile) {\n  templateSource = `${baseTemplates}/${t}`;\n} else {\n  const ptxtName = `${t}.ptxt`;\n  templateSource = `${baseTemplates}/${t}/${ptxtName}`;\n  audioSource = `${baseTemplates}/${t}/Audio Files`;\n}\n\n// Nutzwerte & Root\nmsg.data = { ...b };\nmsg.paths = {\n  root: `${PathProduktionen}/${b.kunde}`,\n  templateSource,     // file oder package/<ordner>.ptxt\n  audioSource,        // null bei file\n  // zielPfad, templateDest, audioDest kommen nach Schema-Suche\n};\n\n// Für später\nmsg.sessionSchema = sessionSchema;\nmsg.schema = projektordnerSchema;\n\n// Response-Header (optional)\nmsg.headers = { 'Cache-Control': 'no-store', 'Content-Type': 'application/json; charset=utf-8' };\n\nreturn [msg, null];",
+        "func": "// Body holen\nconst b = (msg.payload && typeof msg.payload === 'object') ? msg.payload : (msg.req && msg.req.body) || {};\nconst need = ['kunde', 'datum', 'projektname', 'moid', 'stufe', 'template'];\nconst fehlende = need.filter(k => !b[k]);\nif (fehlende.length) {\n  msg.statusCode = 400;\n  msg.payload = { error: 'missing', fields: fehlende };\n  return [null, msg];\n}\n\n// --- Windows-Namen prüfen (wie bei \"Neue Projekte\") ---\nfunction windowsNameReport(input) {\n  const res = { valid: true, errors: [] };\n  const s = String(input ?? '').trim();\n\n  // Verbotene Zeichen + Steuerzeichen\n  const forbiddenRe = /[<>:\"/\\\\|?*\\u0000-\\u001F]/g;\n  const bad = s.match(forbiddenRe);\n  if (bad) {\n    res.valid = false;\n    const uniq = [...new Set(bad)];\n    res.errors.push({\n      code: 'forbidden_chars',\n      chars: uniq,\n      message: `Unzulässige Zeichen: ${uniq.join(' ')}`\n    });\n  }\n\n  // Kein Punkt oder Leerzeichen am Ende\n  if (/[. ]$/.test(s)) {\n    res.valid = false;\n    res.errors.push({\n      code: 'trailing_dot_or_space',\n      message: 'Darf nicht mit Punkt oder Leerzeichen enden'\n    });\n  }\n\n  // Reservierte Namen\n  if (/^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\\..*)?$/i.test(s)) {\n    res.valid = false;\n    res.errors.push({\n      code: 'reserved_name',\n      message: 'Reservierter Windows-Name'\n    });\n  }\n  return res;\n}\n\n// Felder, die zu Pfaden werden, validieren\nconst fieldReports = {\n  projektname: windowsNameReport(b.projektname),\n  moid: windowsNameReport(b.moid),\n  kunde: windowsNameReport(String(b.kunde)),\n};\n\nconst validationErrors = Object.entries(fieldReports)\n  .filter(([, rep]) => !rep.valid)\n  .map(([field, rep]) => ({ field, errors: rep.errors }));\n\nif (validationErrors.length) {\n  msg.statusCode = 422;\n  msg.payload = { error: 'validation_failed', details: validationErrors };\n  return [null, msg];\n}\n\n// --- Globals ---\nconst PathProduktionen = global.get('PathProduktionen') || '';\nconst PathMitarbeiter = global.get('PathMitarbeiter') || '';\nconst activeUser = global.get('activeUser') || '';\nconst projektordnerSchema = global.get('projektordnerSchema') || '';\nconst sessionSchema = global.get('sessionSchema') || '{{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}';\n\n// --- Einfaches Template-Handling (wie bei \"Neue Projekte\") ---\nconst baseTemplates = `${PathMitarbeiter}/${activeUser}/immo24/templates`;\nconst t = String(b.template || '');\nconst isFile = /\\.ptxt$/i.test(t);\n\nlet templateSource = '';\nlet audioSource = null;\n\nif (isFile) {\n  // einzelne .ptxt-Datei\n  templateSource = `${baseTemplates}/${t}`;\n} else {\n  // Package: Ordner=t, .ptxt=\"<ordner>.ptxt\", Audio-Folder=\"<ordner>/Audio Files\"\n  const ptxtName = `${t}.ptxt`;\n  templateSource = `${baseTemplates}/${t}/${ptxtName}`;\n  audioSource = `${baseTemplates}/${t}/Audio Files`;\n}\n\n// --- Daten & Pfade bündeln ---\n// (zielPfad / templateDest / audioDest werden erst nach Schema-Suche gesetzt)\nmsg.data = { ...b };\nmsg.paths = {\n  root: `${PathProduktionen}/${b.kunde}`,\n  templateSource,\n  audioSource\n};\n\n// Für spätere Schritte\nmsg.sessionSchema = sessionSchema;\nmsg.schema = projektordnerSchema;\n\n// Response-Header (optional)\nmsg.headers = { 'Cache-Control': 'no-store', 'Content-Type': 'application/json; charset=utf-8' };\n\nreturn [msg, null];",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -5145,6 +5150,59 @@
         "statusType": "auto",
         "x": 2560,
         "y": 660,
+        "wires": []
+    },
+    {
+        "id": "857b68302ee5f768",
+        "type": "debug",
+        "z": "b443cd6f4046fd9f",
+        "g": "5096f3feef6a6d43",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 310,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "5f3509d1582245f9",
+        "type": "debug",
+        "z": "b443cd6f4046fd9f",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "8fc05ef75ade694e",
+        "type": "debug",
+        "z": "b443cd6f4046fd9f",
+        "g": "5096f3feef6a6d43",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 360,
         "wires": []
     },
     {
@@ -8324,7 +8382,7 @@
         ]
     },
     {
-        "id": "911a09018e579cbb",
+        "id": "5720930db3e1070d",
         "type": "global-config",
         "env": [],
         "modules": {

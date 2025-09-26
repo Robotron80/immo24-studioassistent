@@ -62,9 +62,15 @@
     </v-card>
 
     <!-- Sticky Action-Bar -->
-    <div class="actions-sticky d-flex justify-end ga-2">
-      <v-btn variant="outlined" :disabled="!anySelected" @click="onRecallAll">Recall</v-btn>
-      <v-btn color="primary" :disabled="!anySelected" @click="onStoreAll">Store</v-btn>
+    <div class="actions-sticky d-flex justify-space-between align-center ga-2">
+      <div class="d-flex ga-2">
+        <v-btn size="small" variant="outlined" @click="selectAllPresets">Alles auswählen</v-btn>
+        <v-btn size="small" variant="text" @click="deselectAllPresets">Alles abwählen</v-btn>
+      </div>
+      <div class="d-flex ga-2">
+        <v-btn variant="outlined" :disabled="!anySelected" @click="onRecallAll">Recall</v-btn>
+        <v-btn color="primary" :disabled="!anySelected" @click="onStoreAll">Store</v-btn>
+      </div>
     </div>
 
     <v-snackbar v-model="snack.open" timeout="2000">{{ snack.text }}</v-snackbar>
@@ -181,6 +187,19 @@ function showConfirm(title, text) {
 function confirmResolve(val) {
   confirm.open = false
   confirm.cb?.(val)
+}
+
+function selectAllPresets() {
+  cat1.forEach(i => i.selected = true)
+  cat2.forEach(i => i.selected = true)
+  cat3.forEach(i => i.selected = true)
+  // Quick Presets NICHT automatisch aktivieren!
+  cat2.forEach(i => i.quick = false)
+}
+function deselectAllPresets() {
+  cat1.forEach(i => i.selected = false)
+  cat2.forEach(i => { i.selected = false; i.quick = false })
+  cat3.forEach(i => i.selected = false)
 }
 
 onMounted(() => {

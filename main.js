@@ -520,8 +520,6 @@ async function startNodeRED() {
   redApp = express()
   redServer = http.createServer(redApp)
 
-  // (Liveness & Readiness Endpunkte entfernt)
-
   // Node-RED Home korrekt setzen (robust für Packaging / asar)
   const NODE_RED_HOME = path.dirname(require.resolve('node-red/package.json'))
   process.env.NODE_RED_HOME = NODE_RED_HOME
@@ -612,6 +610,25 @@ const template = [
     ]
   }
 ]
+
+if (DEV_BACKEND) {
+  template.push({
+    label: 'Entwickler',
+    submenu: [
+      {
+        label: 'Konsole öffnen',
+        accelerator: 'CmdOrCtrl+Shift+I',
+        click: () => {
+          if (mainWindow && !mainWindow.isDestroyed()) {
+            mainWindow.webContents.openDevTools({ mode: 'detach' })
+          }
+        }
+      }
+    ]
+  })
+}
+
+
 Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 
 // ────────────────────────────── App Lifecycle ──────────────────────────────

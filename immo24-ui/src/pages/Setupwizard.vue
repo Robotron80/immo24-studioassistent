@@ -8,11 +8,13 @@
         <v-divider />
         <v-stepper-item :value="2" title="Pfade" />
         <v-divider />
-        <v-stepper-item :value="3" title="Namensschema" />
+        <v-stepper-item :value="3" title="Benutzer" />
         <v-divider />
-        <v-stepper-item :value="4" title="Passwort" />
+        <v-stepper-item :value="4" title="Namensschema" />
         <v-divider />
-        <v-stepper-item :value="5" title="Fertigstellen" />
+        <v-stepper-item :value="5" title="Passwort" />
+        <v-divider />
+        <v-stepper-item :value="6" title="Fertigstellen" />
       </v-stepper-header>
 
       <v-stepper-window>
@@ -99,8 +101,89 @@
           </v-card>
         </v-stepper-window-item>
 
-        <!-- Schritt 3: Namensschema -->
+        <!-- Schritt 3: Benutzer -->
         <v-stepper-window-item :value="3">
+          <v-card class="pa-4" variant="flat">
+            <div class="mitarbeiter-fullwidth">
+              <div class="d-flex align-center justify-end mb-2">
+                <v-btn size="small" @click="openNewDialog">Neuer Mitarbeiter</v-btn>
+              </div>
+
+              <v-table class="border rounded">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Kürzel</th>
+                    <th style="width: 60px;"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="m in users" :key="m.kuerzel + m.name">
+                    <td>{{ m.name }}</td>
+                    <td>{{ m.kuerzel }}</td>
+                    <td>
+                      <v-btn
+                        icon="mdi-pencil"
+                        size="small"
+                        variant="text"
+                        @click="openEditDialog(m)"
+                        :aria-label="`Kürzel von ${m.name} bearbeiten`"
+                      />
+                    </td>
+                  </tr>
+                  <tr v-if="users.length === 0">
+                    <td colspan="3"><em>Keine Mitarbeiter hinzugefügt.</em></td>
+                  </tr>
+                </tbody>
+              </v-table>
+              <v-alert v-if="error" type="error" class="mt-4">{{ error }}</v-alert>
+            </div>
+
+            <!-- Dialog: Neuer Mitarbeiter -->
+            <v-dialog v-model="newDialogOpen" max-width="420">
+              <v-card>
+                <v-card-title class="text-h6">Neuer Mitarbeiter</v-card-title>
+                <v-card-text>
+                  <v-text-field v-model="newName" label="Name" autofocus />
+                  <v-text-field v-model="newKuerzel" label="Kürzel" maxlength="8" />
+                  <v-alert v-if="dialogError" type="error" class="mt-2">{{ dialogError }}</v-alert>
+                </v-card-text>
+                <v-card-actions class="justify-end">
+                  <v-btn variant="text" @click="newDialogOpen=false">Abbrechen</v-btn>
+                  <v-btn color="primary" @click="createMitarbeiter">Anlegen</v-btn>
+                </v-card-actions>
+            
+            
+
+              </v-card>
+            </v-dialog>
+
+            <!-- Dialog: Kürzel bearbeiten -->
+            <v-dialog v-model="editDialogOpen" max-width="420">
+              <v-card>
+                <v-card-title class="text-h6">Kürzel bearbeiten</v-card-title>
+                <v-card-text>
+                  <div class="mb-2">Mitarbeiter: <strong>{{ editName }}</strong></div>
+                  <v-text-field v-model="editKuerzel" label="Neues Kürzel" maxlength="8" />
+                  <v-alert v-if="editDialogError" type="error" class="mt-2">{{ editDialogError }}</v-alert>
+                </v-card-text>
+                <v-card-actions class="justify-end">
+                  <v-btn variant="text" @click="editDialogOpen=false">Abbrechen</v-btn>
+                  <v-btn color="primary" @click="saveEditKuerzel">Speichern</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+            <div class="d-flex ga-2 mt-2">
+              <v-btn variant="text" @click="prev">Zurück</v-btn>
+              <v-spacer />
+              <v-btn color="primary" :disabled="!stepUsersOk" @click="next">Weiter</v-btn>
+            </div>
+
+          </v-card>
+        </v-stepper-window-item>
+
+        <!-- Schritt 4: Namensschema -->
+        <v-stepper-window-item :value="4">
           <v-card class="pa-4" variant="flat">
             <div class="text-body-1 mb-6">
               Bitte festlegen, wie die Projektordner und Session-Files benannt werden sollen.
@@ -173,8 +256,8 @@
           </v-card>
         </v-stepper-window-item>
 
-        <!-- Schritt 4: Passwort -->
-        <v-stepper-window-item :value="4">
+        <!-- Schritt 5: Passwort -->
+        <v-stepper-window-item :value="5">
           <v-card class="pa-4" variant="flat">
             <div class="text-body-1 mb-6">
               Bitte ein Passwort für das Konfigurations-Menü vergeben.
@@ -207,8 +290,8 @@
           </v-card>
         </v-stepper-window-item>
 
-        <!-- Schritt 5: Fertigstellen -->
-        <v-stepper-window-item :value="5">
+        <!-- Schritt 6: Fertigstellen -->
+        <v-stepper-window-item :value="6">
           <v-card class="pa-4" variant="flat">
             <p class="text-body-1 mb-4">
               Alles bereit. Mit „Fertig“ werden die Einstellungen gespeichert. Danach prüft immo24 die
@@ -216,6 +299,7 @@
             </p>
             <ul class="text-body-2 mb-4">
               <li>Die Pfade werden gesichert.</li>
+              <li>Neue Mitarbeiter werden angelegt.</li>
               <li>Die Schemas werden übernommen.</li>
               <li>Das Passwort wird gesetzt.</li>
             </ul>
@@ -238,7 +322,7 @@
 <script setup>
 import { reactive, ref, onMounted, computed } from 'vue'
 
-const API = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:1880/api'
+const API = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:59593/api'
 
 const step = ref(1)
 const saving = ref(false)
@@ -261,14 +345,72 @@ const password2 = ref('')
 const showPw = ref(false)
 const showPw2 = ref(false)
 
-const lastInit = ref(null)
-const initOk = computed(() =>
-  !!(lastInit.value?.ready &&
-     lastInit.value?.initialize?.paths_json_present &&
-     lastInit.value?.initialize?.required_keys_ok &&
-     lastInit.value?.initialize?.schema_ok)
-)
+const users = ref([])
+const error = ref('')
 
+// Mitarbeiter-Dialoge und Logik
+const newDialogOpen = ref(false)
+const newName = ref('')
+const newKuerzel = ref('')
+const dialogError = ref('')
+
+function openNewDialog() {
+  newName.value = ''
+  newKuerzel.value = ''
+  dialogError.value = ''
+  newDialogOpen.value = true
+}
+
+function createMitarbeiter() {
+  const name = (newName.value || '').trim()
+  const kuerzel = (newKuerzel.value || '').trim()
+  if (!name) { dialogError.value = 'Bitte Namen eingeben.'; return }
+  if (!kuerzel) { dialogError.value = 'Bitte Kürzel eingeben.'; return }
+  const existsName = users.value.some(m => (m.name || '').toLowerCase() === name.toLowerCase())
+  if (existsName) { dialogError.value = 'Mitarbeiter existiert bereits.'; return }
+  const existsKuerzel = users.value.some(m => (m.kuerzel || '').toLowerCase() === kuerzel.toLowerCase())
+  if (existsKuerzel) { dialogError.value = 'Kürzel existiert bereits.'; return }
+  users.value.push({ name, kuerzel })
+  newDialogOpen.value = false
+}
+
+// Kürzel bearbeiten Dialog
+const editDialogOpen = ref(false)
+const editName = ref('')
+const editKuerzel = ref('')
+const editDialogError = ref('')
+let editIndex = -1
+
+function openEditDialog(m) {
+  editName.value = m.name
+  editKuerzel.value = m.kuerzel
+  editDialogError.value = ''
+  editIndex = users.value.findIndex(x => x.name === m.name)
+  editDialogOpen.value = true
+}
+
+function saveEditKuerzel() {
+  const kuerzel = (editKuerzel.value || '').trim()
+  if (!kuerzel) {
+    editDialogError.value = 'Bitte Kürzel eingeben.'
+    return
+  }
+  // Prüfe auf Duplikate (außer für den aktuellen Eintrag)
+  const existsKuerzel = users.value.some((m, idx) =>
+    idx !== editIndex && (m.kuerzel || '').toLowerCase() === kuerzel.toLowerCase()
+  )
+  if (existsKuerzel) {
+    editDialogError.value = 'Kürzel existiert bereits.'
+    return
+  }
+  if (editIndex >= 0) {
+    users.value[editIndex].kuerzel = kuerzel
+    editDialogOpen.value = false
+  }
+}
+
+// Schritt-Checks
+const stepUsersOk = computed(() => users.value.length >= 1)
 const step2Ok = computed(() =>
   !!paths.PathMitarbeiter && !!paths.PathProduktionen && !!paths.PathStammdaten && !!paths.PathPTUser
 )
@@ -279,15 +421,19 @@ const step4Ok = computed(() =>
   !!password.value && password.value.length >= 4 && password.value === password2.value
 )
 
+// Snackbar
 function toast(text, color = 'success') {
   snack.text = text; snack.color = color; snack.show = true
 }
 
+// Pfad-Auswahl
 async function pick(title, key) {
   const dir = await window.electronAPI?.pickFolder?.(title, paths[key] || undefined)
   if (dir) paths[key] = dir
 }
 
+// Backend laden
+const lastInit = ref(null)
 async function loadFromInitialize() {
   checking.value = true
   try {
@@ -301,8 +447,54 @@ async function loadFromInitialize() {
   } finally { checking.value = false }
 }
 
+// Mitarbeiter laden
+const userApiReady = ref(true)
+async function loadUsersSnapshot() {
+  try {
+    const res = await fetch(`${API}/user`)
+    if (!res.ok) throw new Error(`${res.status} ${res.statusText}`)
+    let arr = await res.json()
+    if (Array.isArray(arr) && typeof arr[0] === 'string') {
+      arr = arr.map(name => ({ name, kuerzel: '' }))
+    }
+    arr = arr.map(m => ({
+      name: m.name,
+      kuerzel: m.kuerzel || ''
+    }))
+    users.value = arr || []
+    userApiReady.value = true
+  } catch (e) {
+    userApiReady.value = false
+    toast('Mitarbeiter konnten nicht geladen werden.', 'error')
+  }
+}
+
+// Mitarbeiter speichern
+async function saveUsersSnapshot() {
+  let rInit = await fetch(`${API}/initialize`)
+  let initData = await rInit.json()
+  let version = initData?.initialize?.user_version || "0"
+
+  const r = await fetch(`${API}/user`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ mitarbeiter: users.value, version }),
+  })
+  if (r.status === 409) {
+    const err = await r.json()
+    version = err.currentVersion
+    // Retry mit aktueller Version
+    await fetch(`${API}/user`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mitarbeiter: users.value, version }),
+    })
+  }
+}
+
+// Schrittwechsel
 function prev() { step.value = Math.max(1, step.value - 1) }
-function next() { step.value = Math.min(5, step.value + 1) }
+function next() { step.value = Math.min(6, step.value + 1) }
 
 async function nextFromPaths() {
   if (!step2Ok.value) {
@@ -336,12 +528,14 @@ async function nextFromPaths() {
   }
   // 3. Werte laden
   await loadFromInitialize()
+  await loadUsersSnapshot()
   next()
 }
+
 async function finish() {
   if (!step2Ok.value) { toast('Bitte alle vier Pfade setzen.', 'warning'); step.value = 2; return }
-  if (!step3Ok.value) { toast('Namensschema unvollständig.', 'warning'); step.value = 3; return }
-  if (!step4Ok.value) { toast('Passwort unvollständig/ungleich.', 'warning'); step.value = 4; return }
+  if (!step3Ok.value) { toast('Namensschema unvollständig.', 'warning'); step.value = 4; return }
+  if (!step4Ok.value) { toast('Passwort unvollständig/ungleich.', 'warning'); step.value = 5; return }
 
   saving.value = true
   try {
@@ -390,10 +584,14 @@ async function finish() {
     })
     if (!r.ok) throw new Error(`Passwort speichern fehlgeschlagen: ${r.status} ${r.statusText}`)
 
+    // 4) Benutzer speichern (mindestens einer)
+    if (!users.value.length) throw new Error('Es muss mindestens ein Benutzer angelegt sein.')
+    await saveUsersSnapshot()
+
     // Backend erneut prüfen
     const r2 = await fetch(`${API}/initialize`)
     lastInit.value = await r2.json()
-    if (!initOk.value) {
+    if (!(lastInit.value?.ready && lastInit.value?.initialize?.paths_json_present && lastInit.value?.initialize?.required_keys_ok && lastInit.value?.initialize?.schema_ok) || users.value.length < 1) {
       toast('Konfiguration unvollständig. Bitte Eingaben prüfen.', 'warning')
       return
     }
@@ -412,6 +610,7 @@ async function finish() {
   }
 }
 
+// Vorschau für Schemas
 const demoValues = {
   datum: '1997-01-23',
   projektname: 'Faszination Falten',
@@ -429,7 +628,12 @@ function renderPreview(schemaStr = '') {
 const previewProjektordner = computed(() => renderPreview(schema.projektordnerSchema))
 const previewSession       = computed(() => renderPreview(schema.sessionSchema))
 
-onMounted(loadFromInitialize)
+onMounted(async () => {
+  await loadFromInitialize()
+  if (paths.PathMitarbeiter) {
+    await loadUsersSnapshot()
+  }
+})
 
 const projektordnerPlaceholders = [
   '{{benutzer}}', '{{datum}}', '{{projektname}}', '{{moid}}',
@@ -442,6 +646,7 @@ const sessionPlaceholders = [
 </script>
 
 <style>
+.table th { font-weight: 600; }
 code {
   background: #f4f6f8;
   padding: 2px 6px;

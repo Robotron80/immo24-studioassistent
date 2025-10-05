@@ -181,11 +181,13 @@
             "6a158b47a9a44d52",
             "abfb2e6ff7c827c4",
             "26e136e20196659a",
-            "ccab7051afe7c5f9"
+            "ccab7051afe7c5f9",
+            "8c98a713fae2174e",
+            "61086db22d8b853d"
         ],
         "x": 34,
         "y": 39,
-        "w": 1112,
+        "w": 1572,
         "h": 222
     },
     {
@@ -2645,7 +2647,7 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 490,
+        "x": 930,
         "y": 180,
         "wires": [
             [
@@ -2670,7 +2672,7 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 480,
+        "x": 920,
         "y": 220,
         "wires": [
             [
@@ -2698,7 +2700,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 300,
+        "x": 740,
         "y": 180,
         "wires": [
             [
@@ -2726,7 +2728,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 290,
+        "x": 730,
         "y": 220,
         "wires": [
             [
@@ -2756,7 +2758,7 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 650,
+        "x": 1090,
         "y": 200,
         "wires": [
             [
@@ -2777,7 +2779,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 850,
+        "x": 1290,
         "y": 200,
         "wires": [
             [
@@ -2793,7 +2795,7 @@
         "name": "response",
         "statusCode": "",
         "headers": {},
-        "x": 1060,
+        "x": 1500,
         "y": 160,
         "wires": []
     },
@@ -2803,14 +2805,14 @@
         "z": "92e5dfcb5c3552c2",
         "g": "682d5ba9e57c89d0",
         "name": "path.json lesen",
-        "filename": "filename",
+        "filename": "filenamePath",
         "filenameType": "msg",
         "format": "utf8",
         "chunk": false,
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 520,
+        "x": 1020,
         "y": 100,
         "wires": [
             [
@@ -2823,19 +2825,19 @@
         "type": "function",
         "z": "92e5dfcb5c3552c2",
         "g": "682d5ba9e57c89d0",
-        "name": "Pfad setzen",
-        "func": "// Function-Node (Sandbox) → KEIN process.env!\n// Richtig: env.get('IMMO24_USERDATA')\nconst base =\n    env.get('IMMO24_USERDATA') ||\n    global.get('IMMO24_USERDATA') ||   // Fallback, falls du es global setzt\n    '';\n\nif (!base) {\n    // optionales Logging hilft beim Debuggen\n    node.warn('IMMO24_USERDATA ist leer – verwende Fallback im UserData-Verzeichnis?');\n    // Wenn du willst, kannst du hier noch einen Default setzen:\n    // msg.filename = '/tmp/path.json'; return msg;\n}\n\nmsg.filename = base + '/path.json';\nreturn msg;",
+        "name": "Userdata-Pfad setzen",
+        "func": "// Function-Node (Sandbox) → KEIN process.env!\n// Richtig: env.get('IMMO24_USERDATA')\nconst base =\n    env.get('IMMO24_USERDATA') ||\n    global.get('IMMO24_USERDATA') ||   // Fallback, falls du es global setzt\n    '';\n\nif (!base) {\n    // optionales Logging hilft beim Debuggen\n    node.warn('IMMO24_USERDATA ist leer – verwende Fallback im UserData-Verzeichnis?');\n    // Wenn du willst, kannst du hier noch einen Default setzen:\n    // msg.filename = '/tmp/path.json'; return msg;\n}\n\nmsg.filenamePath = base + '/path.json';\nmsg.filenameConfig = base + '/config.json';\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 330,
+        "x": 360,
         "y": 100,
         "wires": [
             [
-                "6a158b47a9a44d52"
+                "8c98a713fae2174e"
             ]
         ]
     },
@@ -2852,7 +2854,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 720,
+        "x": 1220,
         "y": 100,
         "wires": [
             [
@@ -2880,7 +2882,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 960,
+        "x": 1460,
         "y": 80,
         "wires": [
             [
@@ -3124,6 +3126,48 @@
         "x": 460,
         "y": 1840,
         "wires": []
+    },
+    {
+        "id": "8c98a713fae2174e",
+        "type": "file in",
+        "z": "92e5dfcb5c3552c2",
+        "g": "682d5ba9e57c89d0",
+        "name": "config.json lesen",
+        "filename": "filenameConfig",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 590,
+        "y": 100,
+        "wires": [
+            [
+                "61086db22d8b853d"
+            ]
+        ]
+    },
+    {
+        "id": "61086db22d8b853d",
+        "type": "function",
+        "z": "92e5dfcb5c3552c2",
+        "g": "682d5ba9e57c89d0",
+        "name": "Check config.json",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 810,
+        "y": 100,
+        "wires": [
+            [
+                "6a158b47a9a44d52"
+            ]
+        ]
     },
     {
         "id": "36ed84ccc9d35759",
@@ -8382,7 +8426,7 @@
         ]
     },
     {
-        "id": "5720930db3e1070d",
+        "id": "1b28e31342af6b2b",
         "type": "global-config",
         "env": [],
         "modules": {

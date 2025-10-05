@@ -70,7 +70,7 @@ let redApp, redServer, redStarted = false
 function ensureUserJsonFiles() {
   const basePath = app.getPath('userData')
   const srcDir = path.join(__dirname, 'assets')
-  for (const file of ['path.json', 'adminpw.json']) {
+  for (const file of ['path.json', 'adminpw.json', 'config.json']) {
     const dest = path.join(basePath, file)
     if (!fs.existsSync(dest)) {
       const src = path.join(srcDir, file)

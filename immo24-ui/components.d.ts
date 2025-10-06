@@ -11,6 +11,7 @@ declare module 'vue' {
     AppFooter: typeof import('./src/components/AppFooter.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     KonfigMitarbeiter: typeof import('./src/components/KonfigMitarbeiter.vue')['default']
+    KonfigModule: typeof import('./src/components/KonfigModule.vue')['default']
     KonfigNamensschema: typeof import('./src/components/KonfigNamensschema.vue')['default']
     KonfigPasswort: typeof import('./src/components/KonfigPasswort.vue')['default']
     KonfigPfade: typeof import('./src/components/KonfigPfade.vue')['default']

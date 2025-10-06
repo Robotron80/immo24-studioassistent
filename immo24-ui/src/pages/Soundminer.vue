@@ -6,13 +6,13 @@
       <div class="d-flex align-center ga-3">
         <v-icon size="24">mdi-dots-grid</v-icon>
         <div>
-          <div class="text-subtitle-1 font-weight-medium">Pro Tools Presets</div>
+          <div class="text-subtitle-1 font-weight-medium">Soundminer Presets</div>
           <div class="text-caption text-medium-emphasis">Auswahl unten, dann Store/Recall</div>
         </div>
       </div>
       <div class="d-flex align-center ga-2">
         <span :class="['status-dot', isOnline ? 'online' : 'offline']"></span>
-        <span class="text-body-2">{{ isOnline ? 'Pro Tools läuft' : 'Pro Tools nicht geöffnet' }}</span>
+        <span class="text-body-2">{{ isOnline ? 'Soundminer läuft' : 'Soundminer nicht geöffnet' }}</span>
       </div>
     </div>
 
@@ -28,7 +28,9 @@
       </v-list>
     </v-card>
 
-    <!-- Kategorie 2 -->
+
+    
+    <!-- Kategorie 2 
     <v-card class="mb-3" outlined>
       <v-divider />
       <v-list density="compact">
@@ -36,20 +38,11 @@
           <template #prepend>
             <v-checkbox v-model="item.selected" hide-details :label="item.label" density="compact" />
           </template>
-          <template #append>
-            <v-checkbox
-              v-model="item.quick"
-              label="Quick Presets"
-              hide-details
-              density="compact"
-              :disabled="!item.selected"
-            />
-          </template>
         </v-list-item>
       </v-list>
-    </v-card>
+    </v-card> -->
 
-    <!-- Kategorie 3 -->
+    <!-- Kategorie 3 
     <v-card class="mb-3" outlined>
       <v-divider />
       <v-list density="compact">
@@ -59,7 +52,7 @@
           </template>
         </v-list-item>
       </v-list>
-    </v-card>
+    </v-card> -->
 
     <!-- Sticky Action-Bar -->
     <div class="actions-sticky d-flex justify-space-between align-center ga-2">
@@ -98,19 +91,11 @@ const isOnline = ref(false)
 let pollTimer = null
 
 const cat1 = reactive([
-  { key: 'templates', label: 'Templates', selected: false },
-  { key: 'trackPresets', label: 'Track Presets', selected: false },
-  { key: 'pluginSettings', label: 'Plug-In Settings', selected: false }
+  { key: 'tablayouts', label: 'Tab Layouts', selected: false }
 ])
 const cat2 = reactive([
-  { key: 'fadePresets', label: 'Fade Presets', selected: false, quick: false },
-  { key: 'clipFxPresets', label: 'Clip Effects Presets', selected: false, quick: false },
-  { key: 'memoryLocation', label: 'Memory Location Presets', selected: false, quick: false },
-  { key: 'trackDataToRecall', label: 'Track Data to Recall Presets', selected: false, quick: false }
 ])
 const cat3 = reactive([
-  { key: 'keyboardShortcuts', label: 'Keyboard Shortcuts', selected: false }
-//  { key: 'pluginMaps', label: 'Plug-In Maps', selected: false }
 ])
 
 const anySelected = computed(() =>
@@ -139,13 +124,13 @@ async function sendAction(action) {
     action,
     categories: {
       cat1: cat1.filter(i => i.selected).map(i => ({ key: i.key })),
-      cat2: cat2.filter(i => i.selected).map(i => ({ key: i.key, quick: !!i.quick })),
+      cat2: cat2.filter(i => i.selected).map(i => ({ key: i.key })),
       cat3: cat3.filter(i => i.selected).map(i => ({ key: i.key }))
     }
   }
 
   try {
-    const res = await fetch(`${API}/protools/presets`, {
+    const res = await fetch(`${API}/soundminer/presets`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -193,19 +178,17 @@ function selectAllPresets() {
   cat1.forEach(i => i.selected = true)
   cat2.forEach(i => i.selected = true)
   cat3.forEach(i => i.selected = true)
-  // Quick Presets NICHT automatisch aktivieren!
-  cat2.forEach(i => i.quick = false)
 }
 function deselectAllPresets() {
   cat1.forEach(i => i.selected = false)
-  cat2.forEach(i => { i.selected = false; i.quick = false })
+  cat2.forEach(i => i.selected = false)
   cat3.forEach(i => i.selected = false)
 }
 
 onMounted(() => {
   pollTimer = setInterval(async () => {
     try {
-      const res = await fetch(`${API}/protools/status`)
+      const res = await fetch(`${API}/soundminer/status`)
       isOnline.value = res.ok && (await res.json()).online
     } catch {
       isOnline.value = false

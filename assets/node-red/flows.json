@@ -24,6 +24,14 @@
         "env": []
     },
     {
+        "id": "dc0428f114f14299",
+        "type": "tab",
+        "label": "[Modul] Soundminer",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "d0d17784f71f39d9",
         "type": "subflow",
         "name": "Audio Package kopieren",
@@ -93,8 +101,8 @@
             "f03d105771fc0c67",
             "25b1d00e5f7f1bcd"
         ],
-        "x": 24,
-        "y": 519,
+        "x": 34,
+        "y": 499,
         "w": 2652,
         "h": 302
     },
@@ -157,7 +165,7 @@
             "7ccfa3d0c632af77"
         ],
         "x": 34,
-        "y": 1579,
+        "y": 1859,
         "w": 1172,
         "h": 182
     },
@@ -183,12 +191,15 @@
             "26e136e20196659a",
             "ccab7051afe7c5f9",
             "8c98a713fae2174e",
-            "61086db22d8b853d"
+            "61086db22d8b853d",
+            "09539a417349ed12",
+            "349c507dcedc766a",
+            "703535289b800aa9"
         ],
         "x": 34,
-        "y": 39,
-        "w": 1572,
-        "h": 222
+        "y": 19,
+        "w": 1792,
+        "h": 262
     },
     {
         "id": "e26be10f69baa19a",
@@ -218,7 +229,7 @@
             "9836651176dc7871"
         ],
         "x": 34,
-        "y": 1079,
+        "y": 1059,
         "w": 1472,
         "h": 222
     },
@@ -246,7 +257,7 @@
             "148040fcc730ca47"
         ],
         "x": 34,
-        "y": 1339,
+        "y": 1619,
         "w": 1532,
         "h": 202
     },
@@ -311,7 +322,7 @@
             "135b0f9e7062482a"
         ],
         "x": 34,
-        "y": 599,
+        "y": 579,
         "w": 2052,
         "h": 222
     },
@@ -334,7 +345,7 @@
             "eaf345ce67077f77"
         ],
         "x": 34,
-        "y": 479,
+        "y": 459,
         "w": 692,
         "h": 82
     },
@@ -375,7 +386,7 @@
             "dfe946a1c6b4afd3"
         ],
         "x": 34,
-        "y": 859,
+        "y": 839,
         "w": 2392,
         "h": 182
     },
@@ -433,9 +444,7 @@
             "b0aef2d54e9d0ec3",
             "3d95844779504430",
             "bcbf5fb38d99c996",
-            "92760ac63c811f81",
-            "857b68302ee5f768",
-            "8fc05ef75ade694e"
+            "92760ac63c811f81"
         ],
         "x": 34,
         "y": 39,
@@ -536,9 +545,90 @@
             "2030ad39c5ce3066"
         ],
         "x": 34,
-        "y": 1799,
+        "y": 2079,
         "w": 512,
         "h": 82
+    },
+    {
+        "id": "ff71a0cd16ac6b9a",
+        "type": "group",
+        "z": "dc0428f114f14299",
+        "name": "SM App Status",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "9dc3f8daa6165afa",
+            "a59b36ea067e1e1d",
+            "d75c1435d5327109",
+            "6f78ed16ec0b7d1d",
+            "7aca2be01d9adf50",
+            "4a043797261bc164"
+        ],
+        "x": 14,
+        "y": 11.5,
+        "w": 1212,
+        "h": 97
+    },
+    {
+        "id": "d1026232071f8035",
+        "type": "group",
+        "z": "dc0428f114f14299",
+        "name": "SM-Modul Funktionen",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "af1e02d1ab6b667f",
+            "5bbaacf6d81a1fd8",
+            "805c84f4a6107c66",
+            "f21d5854511e80b1",
+            "e1774f21848a73f9",
+            "7bd0e3d340c2defe",
+            "7ca377477ddf71a2",
+            "13df15e725ddf3e0",
+            "9c27162cd4fef719",
+            "ce6570fba079d51d"
+        ],
+        "x": 14,
+        "y": 133,
+        "w": 2672,
+        "h": 400
+    },
+    {
+        "id": "5381319fd7c06d55",
+        "type": "group",
+        "z": "92e5dfcb5c3552c2",
+        "name": "Konfiguration - Module",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "e671f4a51b6362bc",
+            "1ade0bf0a6f674ee",
+            "f398f167cb8c7178",
+            "9a9282133aeacde2",
+            "26b9a8e7932224ac",
+            "1f895ac9932a7cee",
+            "8170b5bc86b3784d",
+            "62c2acd3be62b23d",
+            "771b3e806a126478",
+            "2923ea5fd1c21c81",
+            "ee974cb3fd7f6996",
+            "4ff74ba316e148db",
+            "ac5eefe43e71e5d0",
+            "6251fde0a0385289",
+            "4c56eea28bb6fae8",
+            "6597a2c2d9574b19",
+            "acfb3b627f62a753",
+            "c1c396c4cb20147e",
+            "242004fdae032167",
+            "eae9c18d41aab546"
+        ],
+        "x": 34,
+        "y": 1319,
+        "w": 1472,
+        "h": 262
     },
     {
         "id": "843cd62abaaec61f",
@@ -801,6 +891,54 @@
         "h": 242
     },
     {
+        "id": "abcfbec7d754cfc2",
+        "type": "group",
+        "z": "dc0428f114f14299",
+        "g": "ce6570fba079d51d",
+        "name": "Tab Layouts v6 Pro",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "e5a6aaef78e0213f",
+            "3cb4e46a592b768d",
+            "85697c1f655fc5ad",
+            "2d11e09698f93dd6",
+            "075e0152b1769bc3",
+            "378644b9e162c3f9",
+            "f2b59359c1057179",
+            "4d90b76601b01db2",
+            "42a691e8f3dcac92",
+            "aa36a54f20e4c10a"
+        ],
+        "x": 454,
+        "y": 259,
+        "w": 1392,
+        "h": 222
+    },
+    {
+        "id": "ce6570fba079d51d",
+        "type": "group",
+        "z": "dc0428f114f14299",
+        "g": "d1026232071f8035",
+        "name": "Tab Layouts",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "b462655b17044340",
+            "2bdfc8a3cb2667fb",
+            "19865295a3b0b455",
+            "2e86fe3ac42c241a",
+            "abcfbec7d754cfc2",
+            "4f9be02996cc22f6"
+        ],
+        "x": 428,
+        "y": 159,
+        "w": 1444,
+        "h": 348
+    },
+    {
         "id": "800344319eb6565a",
         "type": "fs-ops-access",
         "z": "d0d17784f71f39d9",
@@ -988,7 +1126,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 180,
-        "y": 1640,
+        "y": 1920,
         "wires": [
             [
                 "9e6d05ed3a7e1f73"
@@ -1009,7 +1147,7 @@
         "finalize": "",
         "libs": [],
         "x": 930,
-        "y": 1620,
+        "y": 1900,
         "wires": [
             [
                 "be5f366354440cc0"
@@ -1025,7 +1163,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1120,
-        "y": 1620,
+        "y": 1900,
         "wires": []
     },
     {
@@ -1040,7 +1178,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 140,
-        "y": 1140,
+        "y": 1120,
         "wires": [
             [
                 "0a04cc918e1099a3"
@@ -1061,7 +1199,7 @@
         "finalize": "",
         "libs": [],
         "x": 330,
-        "y": 1140,
+        "y": 1120,
         "wires": [
             [
                 "16f984c570189fdb"
@@ -1082,7 +1220,7 @@
         "write": false,
         "throwerror": false,
         "x": 520,
-        "y": 1140,
+        "y": 1120,
         "wires": [
             [
                 "38a319aec097873b"
@@ -1105,7 +1243,7 @@
         "sendError": true,
         "allProps": false,
         "x": 720,
-        "y": 1120,
+        "y": 1100,
         "wires": [
             [
                 "686120e0242c6e78"
@@ -1122,7 +1260,7 @@
         "action": "",
         "pretty": false,
         "x": 890,
-        "y": 1120,
+        "y": 1100,
         "wires": [
             [
                 "b376e9b9b273d316"
@@ -1139,7 +1277,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 710,
-        "y": 1160,
+        "y": 1140,
         "wires": [
             [
                 "b376e9b9b273d316"
@@ -1160,7 +1298,7 @@
         "finalize": "",
         "libs": [],
         "x": 1100,
-        "y": 1120,
+        "y": 1100,
         "wires": [
             [
                 "a49a99f318f8c8a9"
@@ -1176,7 +1314,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1320,
-        "y": 1120,
+        "y": 1100,
         "wires": []
     },
     {
@@ -1191,7 +1329,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 140,
-        "y": 1240,
+        "y": 1220,
         "wires": [
             [
                 "975bba0b013c6913"
@@ -1212,7 +1350,7 @@
         "finalize": "",
         "libs": [],
         "x": 360,
-        "y": 1240,
+        "y": 1220,
         "wires": [
             [
                 "3efc42592dbe14c5"
@@ -1231,7 +1369,7 @@
         "statusCode": "400",
         "headers": {},
         "x": 590,
-        "y": 1260,
+        "y": 1240,
         "wires": []
     },
     {
@@ -1248,7 +1386,7 @@
         "finalize": "",
         "libs": [],
         "x": 570,
-        "y": 1220,
+        "y": 1200,
         "wires": [
             [
                 "17d495e513099ccd"
@@ -1265,7 +1403,7 @@
         "outputs": 2,
         "noerr": 0,
         "x": 770,
-        "y": 1220,
+        "y": 1200,
         "wires": [
             [
                 "d8f01b3cc92d1167"
@@ -1284,7 +1422,7 @@
         "statusCode": "409",
         "headers": {},
         "x": 970,
-        "y": 1240,
+        "y": 1220,
         "wires": []
     },
     {
@@ -1300,7 +1438,7 @@
         "overwriteFile": "true",
         "encoding": "utf8",
         "x": 990,
-        "y": 1200,
+        "y": 1180,
         "wires": [
             [
                 "c525012d8c78c4b7"
@@ -1321,7 +1459,7 @@
         "finalize": "",
         "libs": [],
         "x": 1230,
-        "y": 1200,
+        "y": 1180,
         "wires": [
             [
                 "9836651176dc7871"
@@ -1337,7 +1475,7 @@
         "statusCode": "200",
         "headers": {},
         "x": 1430,
-        "y": 1200,
+        "y": 1180,
         "wires": []
     },
     {
@@ -1354,7 +1492,7 @@
         "encoding": "none",
         "allProps": false,
         "x": 710,
-        "y": 1620,
+        "y": 1900,
         "wires": [
             [
                 "965b3c8fd920c952"
@@ -1375,7 +1513,7 @@
         "finalize": "",
         "libs": [],
         "x": 460,
-        "y": 1640,
+        "y": 1920,
         "wires": [
             [
                 "bc4d2fcb1292f184"
@@ -1397,7 +1535,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 150,
-        "y": 1700,
+        "y": 1980,
         "wires": [
             [
                 "c269273b6151b3ba"
@@ -1414,7 +1552,7 @@
         "outputs": 2,
         "noerr": 0,
         "x": 360,
-        "y": 1700,
+        "y": 1980,
         "wires": [
             [
                 "0b64a9434672861a"
@@ -1437,7 +1575,7 @@
         "overwriteFile": "true",
         "encoding": "utf8",
         "x": 590,
-        "y": 1680,
+        "y": 1960,
         "wires": [
             [
                 "92cfee7ee2b864cf"
@@ -1454,7 +1592,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 800,
-        "y": 1680,
+        "y": 1960,
         "wires": [
             [
                 "7ccfa3d0c632af77"
@@ -1470,7 +1608,7 @@
         "statusCode": "",
         "headers": {},
         "x": 560,
-        "y": 1720,
+        "y": 2000,
         "wires": []
     },
     {
@@ -1482,7 +1620,7 @@
         "statusCode": "",
         "headers": {},
         "x": 960,
-        "y": 1680,
+        "y": 1960,
         "wires": []
     },
     {
@@ -1496,7 +1634,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 140,
-        "y": 1400,
+        "y": 1680,
         "wires": [
             [
                 "84a54dfd32c09623"
@@ -1517,7 +1655,7 @@
         "encoding": "none",
         "allProps": false,
         "x": 890,
-        "y": 1380,
+        "y": 1660,
         "wires": [
             [
                 "34d4dff87db069a4"
@@ -1534,7 +1672,7 @@
         "action": "",
         "pretty": false,
         "x": 1070,
-        "y": 1380,
+        "y": 1660,
         "wires": [
             [
                 "02a64ed83e42b932"
@@ -1550,7 +1688,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1480,
-        "y": 1420,
+        "y": 1700,
         "wires": []
     },
     {
@@ -1564,7 +1702,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 140,
-        "y": 1500,
+        "y": 1780,
         "wires": [
             [
                 "72f7fe6d9db4a64b"
@@ -1585,7 +1723,7 @@
         "finalize": "",
         "libs": [],
         "x": 350,
-        "y": 1500,
+        "y": 1780,
         "wires": [
             [
                 "1d16bbe8cc72169d"
@@ -1612,7 +1750,7 @@
         "overwriteFile": "true",
         "encoding": "utf8",
         "x": 850,
-        "y": 1480,
+        "y": 1760,
         "wires": [
             [
                 "c95b6a77fbecb357"
@@ -1628,7 +1766,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1060,
-        "y": 1480,
+        "y": 1760,
         "wires": [],
         "info": "Bei Erfolg sendet der vorangehende http response (200) schon –\ndieser Knoten dient als Fallback für Fehlerausgänge."
     },
@@ -1646,7 +1784,7 @@
         "finalize": "",
         "libs": [],
         "x": 370,
-        "y": 1400,
+        "y": 1680,
         "wires": [
             [
                 "3dcdb1f1d4539178"
@@ -1667,7 +1805,7 @@
         "finalize": "",
         "libs": [],
         "x": 590,
-        "y": 1480,
+        "y": 1760,
         "wires": [
             [
                 "1809518017dbcabf"
@@ -1776,7 +1914,7 @@
         "dir": "payload",
         "dirType": "msg",
         "x": 210,
-        "y": 700,
+        "y": 680,
         "wires": [
             [
                 "52b1a396d290f184"
@@ -1793,7 +1931,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 430,
-        "y": 700,
+        "y": 680,
         "wires": [
             [
                 "24a5473359171122"
@@ -1810,7 +1948,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 670,
-        "y": 700,
+        "y": 680,
         "wires": [
             [
                 "135b0f9e7062482a"
@@ -1830,7 +1968,7 @@
         "stats": "stats",
         "sizeType": "msg",
         "x": 1090,
-        "y": 680,
+        "y": 660,
         "wires": [
             [
                 "011503d41e3558fb"
@@ -1847,7 +1985,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1310,
-        "y": 680,
+        "y": 660,
         "wires": [
             [
                 "f12d625b1efdeba0"
@@ -1867,7 +2005,7 @@
         "stream": false,
         "addname": "",
         "x": 410,
-        "y": 760,
+        "y": 740,
         "wires": [
             [
                 "db07b5ab350e85bb"
@@ -1888,7 +2026,7 @@
         "finalize": "",
         "libs": [],
         "x": 660,
-        "y": 760,
+        "y": 740,
         "wires": [
             [
                 "2a61d62257f7adba"
@@ -1909,7 +2047,7 @@
         "write": false,
         "throwerror": false,
         "x": 930,
-        "y": 760,
+        "y": 740,
         "wires": [
             [
                 "11da59bf9c49b269"
@@ -1933,7 +2071,7 @@
         "encoding": "none",
         "allProps": false,
         "x": 1170,
-        "y": 740,
+        "y": 720,
         "wires": [
             [
                 "f512e915f1bef756"
@@ -1950,7 +2088,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1140,
-        "y": 780,
+        "y": 760,
         "wires": [
             [
                 "18f6220e38521937"
@@ -1969,7 +2107,7 @@
         "propertyType": "msg",
         "useparts": true,
         "x": 1720,
-        "y": 780,
+        "y": 760,
         "wires": [
             [
                 "a8652c7098e651f4"
@@ -1990,7 +2128,7 @@
         "finalize": "",
         "libs": [],
         "x": 1940,
-        "y": 780,
+        "y": 760,
         "wires": [
             [
                 "61816f910386b34c"
@@ -2011,7 +2149,7 @@
         "finalize": "",
         "libs": [],
         "x": 1450,
-        "y": 740,
+        "y": 720,
         "wires": [
             [
                 "18f6220e38521937"
@@ -2030,7 +2168,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 130,
-        "y": 640,
+        "y": 620,
         "wires": [
             [
                 "32033b1942a816ca"
@@ -2049,7 +2187,7 @@
         "linkType": "static",
         "timeout": "30",
         "x": 330,
-        "y": 640,
+        "y": 620,
         "wires": [
             [
                 "f76642bcb1764cca"
@@ -2067,7 +2205,7 @@
             "Content-Type": "application/json"
         },
         "x": 550,
-        "y": 640,
+        "y": 620,
         "wires": []
     },
     {
@@ -2079,7 +2217,7 @@
         "mode": "return",
         "links": [],
         "x": 1995,
-        "y": 720,
+        "y": 700,
         "wires": []
     },
     {
@@ -2090,7 +2228,7 @@
         "name": "GET User Flow In",
         "links": [],
         "x": 75,
-        "y": 700,
+        "y": 680,
         "wires": [
             [
                 "1a86fd43dc214f2e"
@@ -2128,7 +2266,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 140,
-        "y": 900,
+        "y": 880,
         "wires": [
             [
                 "a29b45ce8662063f"
@@ -2147,7 +2285,7 @@
         "linkType": "static",
         "timeout": "120",
         "x": 350,
-        "y": 900,
+        "y": 880,
         "wires": [
             [
                 "84239da3ef9920ba"
@@ -2165,7 +2303,7 @@
             "Content-Type": "application/json"
         },
         "x": 680,
-        "y": 900,
+        "y": 880,
         "wires": []
     },
     {
@@ -2176,7 +2314,7 @@
         "name": "POST User Flow In",
         "links": [],
         "x": 75,
-        "y": 960,
+        "y": 940,
         "wires": [
             [
                 "9594938aa57ba1e4"
@@ -2197,7 +2335,7 @@
         "finalize": "",
         "libs": [],
         "x": 200,
-        "y": 960,
+        "y": 940,
         "wires": [
             [
                 "798096a61f91b326"
@@ -2218,7 +2356,7 @@
         "addname": "",
         "property": "payload",
         "x": 380,
-        "y": 960,
+        "y": 940,
         "wires": [
             [
                 "897b0239ea7136a4"
@@ -2239,7 +2377,7 @@
         "finalize": "",
         "libs": [],
         "x": 560,
-        "y": 960,
+        "y": 940,
         "wires": [
             [
                 "6e1e460999059bbc"
@@ -2260,7 +2398,7 @@
         "write": false,
         "throwerror": false,
         "x": 760,
-        "y": 960,
+        "y": 940,
         "wires": [
             [
                 "a4056ba0f72c5e5a"
@@ -2285,7 +2423,7 @@
         "fullpath": "dir",
         "fullpathType": "msg",
         "x": 940,
-        "y": 980,
+        "y": 960,
         "wires": [
             [
                 "a4056ba0f72c5e5a"
@@ -2306,7 +2444,7 @@
         "write": false,
         "throwerror": false,
         "x": 1120,
-        "y": 960,
+        "y": 940,
         "wires": [
             [
                 "ce86d3ee96f10372"
@@ -2331,7 +2469,7 @@
         "fullpath": "dir",
         "fullpathType": "msg",
         "x": 1300,
-        "y": 980,
+        "y": 960,
         "wires": [
             [
                 "ce86d3ee96f10372",
@@ -2349,7 +2487,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1510,
-        "y": 960,
+        "y": 940,
         "wires": [
             [
                 "7b2d14455bd6e85f"
@@ -2369,7 +2507,7 @@
         "overwriteFile": "true",
         "encoding": "none",
         "x": 1760,
-        "y": 960,
+        "y": 940,
         "wires": [
             [
                 "02a0f39c7026dc2c"
@@ -2386,7 +2524,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 1970,
-        "y": 960,
+        "y": 940,
         "wires": [
             [
                 "91978a0f8d70300f"
@@ -2416,7 +2554,7 @@
         "reduceInitType": "",
         "reduceFixup": "",
         "x": 2110,
-        "y": 960,
+        "y": 940,
         "wires": [
             [
                 "eebd44240de5fb71"
@@ -2433,7 +2571,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 2260,
-        "y": 960,
+        "y": 940,
         "wires": [
             [
                 "7f3c436b70327156"
@@ -2449,7 +2587,7 @@
         "mode": "return",
         "links": [],
         "x": 2385,
-        "y": 960,
+        "y": 940,
         "wires": []
     },
     {
@@ -2526,7 +2664,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 150,
-        "y": 520,
+        "y": 500,
         "wires": [
             [
                 "e6e5edd1e7c1104b"
@@ -2549,7 +2687,7 @@
             }
         ],
         "x": 400,
-        "y": 520,
+        "y": 500,
         "wires": [
             [
                 "eaf345ce67077f77"
@@ -2565,7 +2703,7 @@
         "statusCode": "200",
         "headers": {},
         "x": 640,
-        "y": 520,
+        "y": 500,
         "wires": []
     },
     {
@@ -2605,7 +2743,7 @@
         "finalize": "",
         "libs": [],
         "x": 1270,
-        "y": 1380,
+        "y": 1660,
         "wires": [
             [
                 "6b575f053cf737f1"
@@ -2623,7 +2761,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 140,
-        "y": 100,
+        "y": 80,
         "wires": [
             [
                 "abfb2e6ff7c827c4"
@@ -2648,7 +2786,7 @@
         "senderr": false,
         "headers": [],
         "x": 930,
-        "y": 180,
+        "y": 160,
         "wires": [
             [
                 "3d5bcef0e3e1d8e1"
@@ -2673,7 +2811,7 @@
         "senderr": false,
         "headers": [],
         "x": 920,
-        "y": 220,
+        "y": 200,
         "wires": [
             [
                 "3d5bcef0e3e1d8e1"
@@ -2701,7 +2839,7 @@
         "to": "",
         "reg": false,
         "x": 740,
-        "y": 180,
+        "y": 160,
         "wires": [
             [
                 "22c77170bc28046b"
@@ -2729,7 +2867,7 @@
         "to": "",
         "reg": false,
         "x": 730,
-        "y": 220,
+        "y": 200,
         "wires": [
             [
                 "7935cf731073a570"
@@ -2752,14 +2890,14 @@
         "useparts": false,
         "accumulate": false,
         "timeout": "",
-        "count": "2",
+        "count": "3",
         "reduceRight": false,
         "reduceExp": "",
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
         "x": 1090,
-        "y": 200,
+        "y": 180,
         "wires": [
             [
                 "67df1612aa33160e"
@@ -2772,7 +2910,7 @@
         "z": "92e5dfcb5c3552c2",
         "g": "682d5ba9e57c89d0",
         "name": "Globals setzen, Finalize",
-        "func": "const all = msg.payload || {};\nlet schemaIn = all.schema || {};\nconst user = all.user || [];\n\n// Bestehendes initialize (vom Schema-Endpoint oder Check path) übernehmen\nconst upstreamInit =\n    (schemaIn && typeof schemaIn === \"object\" && schemaIn.initialize && typeof schemaIn.initialize === \"object\")\n        ? schemaIn.initialize\n        : {};\n\n// Schema normalisieren (falls {data:{...}})\nconst schemaObj = (schemaIn && typeof schemaIn === \"object\" && schemaIn.data)\n    ? schemaIn.data\n    : schemaIn;\n\n// Schema-Felder extrahieren als Strings\nconst schemaOut = {\n    sessionSchema: typeof schemaObj?.sessionSchema === \"string\" ? schemaObj.sessionSchema : \"\",\n    projektordnerSchema: typeof schemaObj?.projektordnerSchema === \"string\" ? schemaObj.projektordnerSchema : \"\"\n};\n\n// Paths aus msg.paths ODER aus Globals\nconst fromGlobals = {\n    PathProduktionen: global.get(\"PathProduktionen\") || \"\",\n    PathMitarbeiter: global.get(\"PathMitarbeiter\") || \"\",\n    PathStammdaten: global.get(\"PathStammdaten\") || \"\",\n    PathPTUser: global.get(\"PathPTUser\") || \"\"\n};\nconst paths = (msg.paths && typeof msg.paths === \"object\") ? msg.paths : fromGlobals;\n\n// Bewertung (nur für Felder, die wir beisteuern)\nconst schemaOK = !!(schemaOut.sessionSchema || schemaOut.projektordnerSchema);\n\n// Initialize zusammenführen – vorhandene Felder aus upstreamInit werden respektiert\nconst initialize = {\n    // Falls upstream etwas gesetzt hat, übernehmen; sonst sinnvolle Defaults\n    paths_json_present: upstreamInit.paths_json_present ?? true,\n    required_keys_ok: upstreamInit.required_keys_ok ?? true,\n\n    // aktueller Stand zum Schema\n    schema_ok: upstreamInit.schema_ok ?? schemaOK,\n\n    // Weitere Felder durchreichen, wenn vorhanden\n    dirs_exist: upstreamInit.dirs_exist ?? null,\n    missingKeys: Array.isArray(upstreamInit.missingKeys) ? upstreamInit.missingKeys : [],\n    emptyKeys: Array.isArray(upstreamInit.emptyKeys) ? upstreamInit.emptyKeys : [],\n    notFoundDirs: upstreamInit.notFoundDirs ?? null,\n\n    // needsUserAction: bleibt true, sobald irgendein Schritt das verlangt\n    needsUserAction: !!upstreamInit.needsUserAction\n};\n\n// === Vorgabe: ready immer true ===\nconst ready = true;\n\n// Globale Flags setzen\ntry { global.set(\"configReady\", ready, \"file\"); } catch { global.set(\"configReady\", ready); }\ntry { global.set(\"configReadyAt\", Date.now(), \"file\"); } catch { global.set(\"configReadyAt\", Date.now()); }\n\n// HTTP-Status immer 200\nmsg.statusCode = 200;\n\n// Antwort zusammensetzen: ready, initialize, paths, schema\nmsg.payload = {\n    ready,\n    initialize,\n    paths,\n    schema: schemaOut\n};\n\nreturn msg;\n",
+        "func": "const all = msg.payload || {};\nlet schemaIn = all.schema || {};\nconst user = all.user || [];\nconst modules = all.modules || {};\n\n// Bestehendes initialize (vom Schema-Endpoint oder Check path) übernehmen\nconst upstreamInit =\n    (schemaIn && typeof schemaIn === \"object\" && schemaIn.initialize && typeof schemaIn.initialize === \"object\")\n        ? schemaIn.initialize\n        : {};\n\nconst modulesData = (modules && typeof modules === 'object' &&\n    modules.data && typeof modules.data === 'object')\n    ? modules.data\n    : {};\n\n\n// Schema normalisieren (falls {data:{...}})\nconst schemaObj = (schemaIn && typeof schemaIn === \"object\" && schemaIn.data)\n    ? schemaIn.data\n    : schemaIn;\n\n// Schema-Felder extrahieren als Strings\nconst schemaOut = {\n    sessionSchema: typeof schemaObj?.sessionSchema === \"string\" ? schemaObj.sessionSchema : \"\",\n    projektordnerSchema: typeof schemaObj?.projektordnerSchema === \"string\" ? schemaObj.projektordnerSchema : \"\"\n};\n\n// Paths aus msg.paths ODER aus Globals\nconst fromGlobals = {\n    PathProduktionen: global.get(\"PathProduktionen\") || \"\",\n    PathMitarbeiter: global.get(\"PathMitarbeiter\") || \"\",\n    PathStammdaten: global.get(\"PathStammdaten\") || \"\",\n    PathPTUser: global.get(\"PathPTUser\") || \"\"\n};\nconst paths = (msg.paths && typeof msg.paths === \"object\") ? msg.paths : fromGlobals;\n\n// Bewertung (nur für Felder, die wir beisteuern)\nconst schemaOK = !!(schemaOut.sessionSchema || schemaOut.projektordnerSchema);\n\n// Initialize zusammenführen – vorhandene Felder aus upstreamInit werden respektiert\nconst initialize = {\n    // Falls upstream etwas gesetzt hat, übernehmen; sonst sinnvolle Defaults\n    paths_json_present: upstreamInit.paths_json_present ?? true,\n    required_keys_ok: upstreamInit.required_keys_ok ?? true,\n\n    // aktueller Stand zum Schema\n    schema_ok: upstreamInit.schema_ok ?? schemaOK,\n\n    // Weitere Felder durchreichen, wenn vorhanden\n    dirs_exist: upstreamInit.dirs_exist ?? null,\n    missingKeys: Array.isArray(upstreamInit.missingKeys) ? upstreamInit.missingKeys : [],\n    emptyKeys: Array.isArray(upstreamInit.emptyKeys) ? upstreamInit.emptyKeys : [],\n    notFoundDirs: upstreamInit.notFoundDirs ?? null,\n\n    // needsUserAction: bleibt true, sobald irgendein Schritt das verlangt\n    needsUserAction: !!upstreamInit.needsUserAction\n};\n\n// === Vorgabe: ready immer true ===\nconst ready = true;\n\n// Globale Flags setzen\ntry { global.set(\"configReady\", ready, \"file\"); } catch { global.set(\"configReady\", ready); }\ntry { global.set(\"configReadyAt\", Date.now(), \"file\"); } catch { global.set(\"configReadyAt\", Date.now()); }\n\n// HTTP-Status immer 200\nmsg.statusCode = 200;\n\n// Antwort zusammensetzen: ready, initialize, paths, schema\nmsg.payload = {\n    ready,\n    initialize,\n    paths,\n    schema: schemaOut,\n    modules: modulesData\n};\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2780,7 +2918,7 @@
         "finalize": "",
         "libs": [],
         "x": 1290,
-        "y": 200,
+        "y": 180,
         "wires": [
             [
                 "0b59bc840a6c75b4"
@@ -2795,7 +2933,7 @@
         "name": "response",
         "statusCode": "",
         "headers": {},
-        "x": 1500,
+        "x": 1620,
         "y": 160,
         "wires": []
     },
@@ -2812,8 +2950,8 @@
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 1020,
-        "y": 100,
+        "x": 1240,
+        "y": 80,
         "wires": [
             [
                 "26e136e20196659a"
@@ -2834,7 +2972,7 @@
         "finalize": "",
         "libs": [],
         "x": 360,
-        "y": 100,
+        "y": 80,
         "wires": [
             [
                 "8c98a713fae2174e"
@@ -2854,8 +2992,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1220,
-        "y": 100,
+        "x": 1440,
+        "y": 80,
         "wires": [
             [
                 "ccab7051afe7c5f9"
@@ -2882,12 +3020,13 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1460,
-        "y": 80,
+        "x": 1680,
+        "y": 60,
         "wires": [
             [
                 "104b571128586e5f",
-                "c0aa387d8488293b"
+                "c0aa387d8488293b",
+                "09539a417349ed12"
             ]
         ]
     },
@@ -2905,7 +3044,7 @@
         "finalize": "",
         "libs": [],
         "x": 1540,
-        "y": 680,
+        "y": 660,
         "wires": [
             [
                 "8ce945730cd5d01d"
@@ -2933,7 +3072,7 @@
         "finalize": "",
         "libs": [],
         "x": 900,
-        "y": 700,
+        "y": 680,
         "wires": [
             [
                 "b9e241fc311d4a8e"
@@ -2962,7 +3101,7 @@
         "fullpath": "directory",
         "fullpathType": "msg",
         "x": 1970,
-        "y": 1000,
+        "y": 980,
         "wires": [
             []
         ]
@@ -2981,7 +3120,7 @@
         "finalize": "",
         "libs": [],
         "x": 1480,
-        "y": 1000,
+        "y": 980,
         "wires": [
             [
                 "202dfb827bd90aa1"
@@ -3002,7 +3141,7 @@
         "finalize": "",
         "libs": [],
         "x": 1650,
-        "y": 1000,
+        "y": 980,
         "wires": [
             [
                 "dfe946a1c6b4afd3"
@@ -3023,7 +3162,7 @@
         "addname": "",
         "property": "payload",
         "x": 1790,
-        "y": 1000,
+        "y": 980,
         "wires": [
             [
                 "cbb4b8942696bb9d"
@@ -3044,7 +3183,7 @@
         "write": false,
         "throwerror": false,
         "x": 640,
-        "y": 1400,
+        "y": 1680,
         "wires": [
             [
                 "8fabcb73dec928c3"
@@ -3068,7 +3207,7 @@
         "finalize": "",
         "libs": [],
         "x": 870,
-        "y": 1420,
+        "y": 1700,
         "wires": [
             [
                 "6b575f053cf737f1"
@@ -3087,7 +3226,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 130,
-        "y": 1840,
+        "y": 2120,
         "wires": [
             [
                 "e04a90dbd5bf3cd6"
@@ -3108,7 +3247,7 @@
         "finalize": "",
         "libs": [],
         "x": 300,
-        "y": 1840,
+        "y": 2120,
         "wires": [
             [
                 "2030ad39c5ce3066"
@@ -3124,7 +3263,7 @@
         "statusCode": "200",
         "headers": {},
         "x": 460,
-        "y": 1840,
+        "y": 2120,
         "wires": []
     },
     {
@@ -3141,7 +3280,7 @@
         "encoding": "none",
         "allProps": false,
         "x": 590,
-        "y": 100,
+        "y": 80,
         "wires": [
             [
                 "61086db22d8b853d"
@@ -3162,7 +3301,455 @@
         "finalize": "",
         "libs": [],
         "x": 810,
-        "y": 100,
+        "y": 80,
+        "wires": [
+            [
+                "703535289b800aa9"
+            ]
+        ]
+    },
+    {
+        "id": "e671f4a51b6362bc",
+        "type": "http in",
+        "z": "92e5dfcb5c3552c2",
+        "g": "5381319fd7c06d55",
+        "name": "",
+        "url": "/api/modules",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 150,
+        "y": 1420,
+        "wires": [
+            [
+                "1ade0bf0a6f674ee"
+            ]
+        ]
+    },
+    {
+        "id": "1ade0bf0a6f674ee",
+        "type": "function",
+        "z": "92e5dfcb5c3552c2",
+        "g": "5381319fd7c06d55",
+        "name": "Pfad setzen",
+        "func": "// Function-Node (Sandbox) → KEIN process.env!\n// Richtig: env.get('IMMO24_USERDATA')\nconst base =\n    env.get('IMMO24_USERDATA') ||\n    global.get('IMMO24_USERDATA') ||\n    '';\n\nif (!base) {\n    node.warn('IMMO24_USERDATA ist leer – verwende Fallback im UserData-Verzeichnis?');\n}\n\nmsg.filename = base + '/config.json';\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 1420,
+        "wires": [
+            [
+                "f398f167cb8c7178"
+            ]
+        ]
+    },
+    {
+        "id": "f398f167cb8c7178",
+        "type": "fs-ops-access",
+        "z": "92e5dfcb5c3552c2",
+        "g": "5381319fd7c06d55",
+        "name": "existiert Datei?",
+        "path": "",
+        "pathType": "str",
+        "filename": "filename",
+        "filenameType": "msg",
+        "read": true,
+        "write": false,
+        "throwerror": false,
+        "x": 520,
+        "y": 1420,
+        "wires": [
+            [
+                "9a9282133aeacde2"
+            ],
+            [
+                "26b9a8e7932224ac"
+            ]
+        ]
+    },
+    {
+        "id": "9a9282133aeacde2",
+        "type": "file in",
+        "z": "92e5dfcb5c3552c2",
+        "g": "5381319fd7c06d55",
+        "name": "config.json lesen",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": true,
+        "allProps": false,
+        "x": 730,
+        "y": 1400,
+        "wires": [
+            [
+                "242004fdae032167"
+            ]
+        ]
+    },
+    {
+        "id": "26b9a8e7932224ac",
+        "type": "function",
+        "z": "92e5dfcb5c3552c2",
+        "g": "5381319fd7c06d55",
+        "name": "Fallback: {}",
+        "func": "msg.payload = {};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 710,
+        "y": 1440,
+        "wires": [
+            [
+                "1f895ac9932a7cee"
+            ]
+        ]
+    },
+    {
+        "id": "1f895ac9932a7cee",
+        "type": "function",
+        "z": "92e5dfcb5c3552c2",
+        "g": "5381319fd7c06d55",
+        "name": "Module anhängen + Globals",
+        "func": "const raw = (msg.payload && typeof msg.payload === 'object') ? msg.payload : {};\nconst modules = (raw.modules && typeof raw.modules === 'object') ? raw.modules : {};\n\n// Version initialisieren/holen\nlet ver = global.get('modules_version');\nif (!ver) { ver = String(Date.now()); global.set('modules_version', ver); }\n\n// Globals setzen\nconst sm = modules.soundminer || {};\nglobal.set('modSoundminerEnabled', !!sm.enabled);\nglobal.set('modSoundminerVersion', typeof sm.version === 'string' ? sm.version : '');\nglobal.set('modSoundminerSupportPath', typeof sm.supportPath === 'string' ? sm.supportPath : '');\n\nmsg.payload = { data: modules, version: ver };\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1100,
+        "y": 1400,
+        "wires": [
+            [
+                "8170b5bc86b3784d"
+            ]
+        ]
+    },
+    {
+        "id": "8170b5bc86b3784d",
+        "type": "http response",
+        "z": "92e5dfcb5c3552c2",
+        "g": "5381319fd7c06d55",
+        "name": "response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1320,
+        "y": 1400,
+        "wires": []
+    },
+    {
+        "id": "62c2acd3be62b23d",
+        "type": "http in",
+        "z": "92e5dfcb5c3552c2",
+        "g": "5381319fd7c06d55",
+        "name": "",
+        "url": "/api/modules",
+        "method": "put",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 150,
+        "y": 1520,
+        "wires": [
+            [
+                "771b3e806a126478"
+            ]
+        ]
+    },
+    {
+        "id": "771b3e806a126478",
+        "type": "function",
+        "z": "92e5dfcb5c3552c2",
+        "g": "5381319fd7c06d55",
+        "name": "Body parsen + prüfen",
+        "func": "// Robustes Parsing\nfunction safeParse(x) {\n  if (x == null) return null;\n  if (Buffer.isBuffer(x)) { try { return JSON.parse(x.toString('utf8')); } catch { return null; } }\n  if (typeof x === 'string') { try { return JSON.parse(x); } catch { return null; } }\n  if (typeof x === 'object') return x;\n  return null;\n}\n\nconst body = safeParse(msg.payload);\n\n// Erwartet: { version: string, data: object }  mit data = { <modulname>: {…}, ... }\nif (!body || typeof body.version !== 'string' || typeof body.data !== 'object' || body.data === null || Array.isArray(body.data)) {\n  msg.statusCode = 400;\n  msg.payload = { error: 'bad_payload' };\n  return [null, msg];\n}\n\n// Minimalvalidierung pro Modul (hier: Soundminer strikt, andere Module pass-through)\nfunction normalizeModule(name, val) {\n  const v = (val && typeof val === 'object') ? val : {};\n  if (name.toLowerCase() === 'soundminer') {\n    return {\n      enabled: !!v.enabled,\n      version: typeof v.version === 'string' ? v.version : '',\n      supportPath: typeof v.supportPath === 'string' ? v.supportPath : ''\n    };\n  }\n  // Default: einfache Sanitization (keine Funktionen)\n  const out = {};\n  for (const k of Object.keys(v)) {\n    const x = v[k];\n    if (['string', 'number', 'boolean'].includes(typeof x) || (x && typeof x === 'object' && !Array.isArray(x))) {\n      out[k] = x;\n    }\n  }\n  return out;\n}\n\n// Alle Module normalisieren (aber NICHT mergen – das kommt später)\nconst incoming = {};\nfor (const m of Object.keys(body.data)) {\n  incoming[m] = normalizeModule(m, body.data[m]);\n}\n\nmsg.body = {\n  version: body.version,\n  incomingModules: incoming\n};\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 1520,
+        "wires": [
+            [
+                "4ff74ba316e148db"
+            ],
+            [
+                "2923ea5fd1c21c81"
+            ]
+        ]
+    },
+    {
+        "id": "2923ea5fd1c21c81",
+        "type": "http response",
+        "z": "92e5dfcb5c3552c2",
+        "g": "5381319fd7c06d55",
+        "name": "400 bad payload",
+        "statusCode": "400",
+        "headers": {},
+        "x": 590,
+        "y": 1540,
+        "wires": []
+    },
+    {
+        "id": "ee974cb3fd7f6996",
+        "type": "function",
+        "z": "92e5dfcb5c3552c2",
+        "g": "5381319fd7c06d55",
+        "name": "Pfad setzen",
+        "func": "// Function-Node (Sandbox) → KEIN process.env!\n// Richtig: env.get('IMMO24_USERDATA')\nconst base =\n    env.get('IMMO24_USERDATA') ||\n    global.get('IMMO24_USERDATA') ||\n    '';\n\nif (!base) {\n    node.warn('IMMO24_USERDATA ist leer – verwende Fallback im UserData-Verzeichnis?');\n}\n\nmsg.filename = base + '/config.json';\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 770,
+        "y": 1480,
+        "wires": [
+            [
+                "acfb3b627f62a753"
+            ]
+        ]
+    },
+    {
+        "id": "4ff74ba316e148db",
+        "type": "function",
+        "z": "92e5dfcb5c3552c2",
+        "g": "5381319fd7c06d55",
+        "name": "Version vergleichen",
+        "func": "const cur = global.get('modules_version') || '0';\nconst cli = String(msg.body?.version ?? '');\n\nif (!cli) {\n  msg.statusCode = 409;\n  msg.payload = { error: 'version_required', currentVersion: cur };\n  return [null, msg];\n}\n\nif (cli !== cur) {\n  msg.statusCode = 409;\n  msg.payload = { error: 'version_conflict', currentVersion: cur };\n  return [null, msg];\n}\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 1500,
+        "wires": [
+            [
+                "ee974cb3fd7f6996"
+            ],
+            [
+                "ac5eefe43e71e5d0"
+            ]
+        ]
+    },
+    {
+        "id": "ac5eefe43e71e5d0",
+        "type": "http response",
+        "z": "92e5dfcb5c3552c2",
+        "g": "5381319fd7c06d55",
+        "name": "409 conflict",
+        "statusCode": "409",
+        "headers": {},
+        "x": 790,
+        "y": 1520,
+        "wires": []
+    },
+    {
+        "id": "6251fde0a0385289",
+        "type": "file",
+        "z": "92e5dfcb5c3552c2",
+        "g": "5381319fd7c06d55",
+        "name": "config.json schreiben",
+        "filename": "filename",
+        "filenameType": "msg",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "utf8",
+        "x": 1000,
+        "y": 1480,
+        "wires": [
+            [
+                "4c56eea28bb6fae8"
+            ]
+        ]
+    },
+    {
+        "id": "4c56eea28bb6fae8",
+        "type": "function",
+        "z": "92e5dfcb5c3552c2",
+        "g": "5381319fd7c06d55",
+        "name": "Globals setzen + Antwort",
+        "func": "// Neue modules_version setzen\nif (msg.nextVersion) global.set('modules_version', msg.nextVersion);\n\n// Optional: hilfreiche Module-Globals aktualisieren\nlet cfg;\ntry { cfg = JSON.parse(msg.payload); } catch { cfg = {}; }\nconst modules = (cfg.modules && typeof cfg.modules === 'object') ? cfg.modules : {};\nconst sm = modules.soundminer || {};\nglobal.set('SoundminerEnabled', !!sm.enabled);\nglobal.set('SoundminerVersion', typeof sm.version === 'string' ? sm.version : '');\nglobal.set('SoundminerSupportPath', typeof sm.supportPath === 'string' ? sm.supportPath : '');\n\nmsg.statusCode = 200;\nmsg.payload = { ok: true, version: global.get('modules_version') || '0' };\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1230,
+        "y": 1480,
+        "wires": [
+            [
+                "6597a2c2d9574b19"
+            ]
+        ]
+    },
+    {
+        "id": "6597a2c2d9574b19",
+        "type": "http response",
+        "z": "92e5dfcb5c3552c2",
+        "g": "5381319fd7c06d55",
+        "name": "200 ok",
+        "statusCode": "200",
+        "headers": {},
+        "x": 1430,
+        "y": 1480,
+        "wires": []
+    },
+    {
+        "id": "acfb3b627f62a753",
+        "type": "file in",
+        "z": "92e5dfcb5c3552c2",
+        "g": "5381319fd7c06d55",
+        "name": "config.json lesen",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": true,
+        "allProps": false,
+        "x": 970,
+        "y": 1440,
+        "wires": [
+            [
+                "eae9c18d41aab546"
+            ]
+        ]
+    },
+    {
+        "id": "c1c396c4cb20147e",
+        "type": "function",
+        "z": "92e5dfcb5c3552c2",
+        "g": "5381319fd7c06d55",
+        "name": "Mergen + JSON bauen",
+        "func": "const cfg = (msg.payload && typeof msg.payload === 'object') ? msg.payload : {};\nif (!cfg.modules || typeof cfg.modules !== 'object') cfg.modules = {};\n\nconst incoming = msg.body?.incomingModules || {};\nfor (const name of Object.keys(incoming)) {\n    const before = (cfg.modules[name] && typeof cfg.modules[name] === 'object') ? cfg.modules[name] : {};\n    cfg.modules[name] = { ...before, ...incoming[name] };\n}\n\nmsg.nextVersion = String(Date.now());\nmsg.payload = JSON.stringify(cfg, null, 2);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1310,
+        "y": 1440,
+        "wires": [
+            [
+                "6251fde0a0385289"
+            ]
+        ]
+    },
+    {
+        "id": "242004fdae032167",
+        "type": "json",
+        "z": "92e5dfcb5c3552c2",
+        "g": "5381319fd7c06d55",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 890,
+        "y": 1360,
+        "wires": [
+            [
+                "1f895ac9932a7cee"
+            ]
+        ]
+    },
+    {
+        "id": "eae9c18d41aab546",
+        "type": "json",
+        "z": "92e5dfcb5c3552c2",
+        "g": "5381319fd7c06d55",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 1130,
+        "y": 1440,
+        "wires": [
+            [
+                "c1c396c4cb20147e"
+            ]
+        ]
+    },
+    {
+        "id": "09539a417349ed12",
+        "type": "change",
+        "z": "92e5dfcb5c3552c2",
+        "g": "682d5ba9e57c89d0",
+        "name": "topic = modules",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "modules",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 740,
+        "y": 240,
+        "wires": [
+            [
+                "349c507dcedc766a"
+            ]
+        ]
+    },
+    {
+        "id": "349c507dcedc766a",
+        "type": "http request",
+        "z": "92e5dfcb5c3552c2",
+        "g": "682d5ba9e57c89d0",
+        "name": "GET Modules",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://127.0.0.1:59593/api/modules",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 940,
+        "y": 240,
+        "wires": [
+            [
+                "3d5bcef0e3e1d8e1"
+            ]
+        ]
+    },
+    {
+        "id": "703535289b800aa9",
+        "type": "function",
+        "z": "92e5dfcb5c3552c2",
+        "g": "682d5ba9e57c89d0",
+        "name": "Set Config Globals",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1030,
+        "y": 80,
         "wires": [
             [
                 "6a158b47a9a44d52"
@@ -3476,8 +4063,8 @@
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 190,
-        "y": 600,
+        "x": 200,
+        "y": 580,
         "wires": [
             [
                 "e7c1ee6dc65845d6"
@@ -3492,8 +4079,8 @@
         "name": "response",
         "statusCode": "",
         "headers": {},
-        "x": 2580,
-        "y": 580,
+        "x": 2590,
+        "y": 560,
         "wires": []
     },
     {
@@ -3510,8 +4097,7 @@
         "y": 260,
         "wires": [
             [
-                "6c009de142b00a69",
-                "857b68302ee5f768"
+                "6c009de142b00a69"
             ]
         ]
     },
@@ -3634,12 +4220,10 @@
         "y": 260,
         "wires": [
             [
-                "465673bffca4e0d2",
-                "5f3509d1582245f9"
+                "465673bffca4e0d2"
             ],
             [
-                "a077f771503b109f",
-                "8fc05ef75ade694e"
+                "a077f771503b109f"
             ]
         ],
         "outputLabels": [
@@ -4201,8 +4785,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 990,
-        "y": 780,
+        "x": 1000,
+        "y": 760,
         "wires": [
             [
                 "f82475d3c09d70a2"
@@ -4219,8 +4803,8 @@
         "method": "get",
         "upload": false,
         "swaggerDoc": "",
-        "x": 190,
-        "y": 780,
+        "x": 200,
+        "y": 760,
         "wires": [
             [
                 "16cb66e38510f820"
@@ -4240,8 +4824,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 470,
-        "y": 780,
+        "x": 480,
+        "y": 760,
         "wires": [
             [
                 "f5da02b2bd8d63a6"
@@ -4261,8 +4845,8 @@
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 750,
-        "y": 780,
+        "x": 760,
+        "y": 760,
         "wires": [
             [
                 "cecafe4be4e250a0"
@@ -4277,8 +4861,8 @@
         "name": "response",
         "statusCode": "",
         "headers": {},
-        "x": 1160,
-        "y": 780,
+        "x": 1170,
+        "y": 760,
         "wires": []
     },
     {
@@ -4781,33 +5365,6 @@
         ]
     },
     {
-        "id": "cbfadfdf6a35bd6e",
-        "type": "inject",
-        "z": "b443cd6f4046fd9f",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 220,
-        "y": 1320,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "e7c1ee6dc65845d6",
         "type": "function",
         "z": "b443cd6f4046fd9f",
@@ -4820,8 +5377,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 460,
-        "y": 600,
+        "x": 470,
+        "y": 580,
         "wires": [
             [
                 "db2490f64f65d46a"
@@ -4840,8 +5397,8 @@
         "filterType": "str",
         "dir": "payload",
         "dirType": "msg",
-        "x": 660,
-        "y": 600,
+        "x": 670,
+        "y": 580,
         "wires": [
             [
                 "74af9c8a17157812",
@@ -4862,8 +5419,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 870,
-        "y": 560,
+        "x": 880,
+        "y": 540,
         "wires": [
             [
                 "e8ec6f49a002acc9"
@@ -4883,8 +5440,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 870,
-        "y": 640,
+        "x": 880,
+        "y": 620,
         "wires": [
             [
                 "a9d910d2311ea732"
@@ -4911,8 +5468,8 @@
         "stream": false,
         "addname": "",
         "property": "payload",
-        "x": 1030,
-        "y": 620,
+        "x": 1040,
+        "y": 600,
         "wires": [
             [
                 "6c1ecb3ede12bd26"
@@ -4932,8 +5489,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1470,
-        "y": 620,
+        "x": 1480,
+        "y": 600,
         "wires": [
             [
                 "c2d65d2b5328f056"
@@ -4959,8 +5516,8 @@
         "filenameType": "msg",
         "stats": "stats",
         "sizeType": "msg",
-        "x": 1320,
-        "y": 620,
+        "x": 1330,
+        "y": 600,
         "wires": [
             [
                 "c9d8b67e08e0694a"
@@ -4980,8 +5537,8 @@
         "read": false,
         "write": false,
         "throwerror": false,
-        "x": 1670,
-        "y": 600,
+        "x": 1680,
+        "y": 580,
         "wires": [
             [
                 "61acbcf2c1762413"
@@ -5004,8 +5561,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1170,
-        "y": 620,
+        "x": 1180,
+        "y": 600,
         "wires": [
             [
                 "3be3c68955e61f67"
@@ -5024,8 +5581,8 @@
         "filterType": "str",
         "dir": "payload",
         "dirType": "msg",
-        "x": 1880,
-        "y": 560,
+        "x": 1890,
+        "y": 540,
         "wires": [
             [
                 "c6effc2fa16f157a"
@@ -5045,8 +5602,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2070,
-        "y": 560,
+        "x": 2080,
+        "y": 540,
         "wires": [
             [
                 "a804729e2fe35486"
@@ -5078,8 +5635,8 @@
         "timeout": "",
         "count": "",
         "reduceRight": false,
-        "x": 2230,
-        "y": 640,
+        "x": 2240,
+        "y": 620,
         "wires": [
             [
                 "60723f36d0588b1c"
@@ -5099,8 +5656,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2380,
-        "y": 640,
+        "x": 2390,
+        "y": 620,
         "wires": [
             [
                 "e8ec6f49a002acc9"
@@ -5120,8 +5677,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2430,
-        "y": 580,
+        "x": 2440,
+        "y": 560,
         "wires": [
             [
                 "68d4f6662ecbfeb3",
@@ -5142,8 +5699,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1890,
-        "y": 600,
+        "x": 1900,
+        "y": 580,
         "wires": [
             [
                 "a804729e2fe35486"
@@ -5192,61 +5749,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 2560,
-        "y": 660,
-        "wires": []
-    },
-    {
-        "id": "857b68302ee5f768",
-        "type": "debug",
-        "z": "b443cd6f4046fd9f",
-        "g": "5096f3feef6a6d43",
-        "name": "debug 1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 310,
-        "y": 320,
-        "wires": []
-    },
-    {
-        "id": "5f3509d1582245f9",
-        "type": "debug",
-        "z": "b443cd6f4046fd9f",
-        "name": "debug 2",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 560,
-        "y": 320,
-        "wires": []
-    },
-    {
-        "id": "8fc05ef75ade694e",
-        "type": "debug",
-        "z": "b443cd6f4046fd9f",
-        "g": "5096f3feef6a6d43",
-        "name": "debug 3",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 560,
-        "y": 360,
+        "x": 2570,
+        "y": 640,
         "wires": []
     },
     {
@@ -5382,7 +5886,7 @@
         "z": "571c9add5c07840b",
         "g": "4e47faa505954ee5",
         "name": "Auswahl",
-        "func": "// ===== Robust body lesen (String oder Objekt) =====\nlet body = msg.payload;\nif (Buffer.isBuffer(body)) {\n    try { body = JSON.parse(body.toString('utf8')); } catch { body = {}; }\n} else if (typeof body === 'string') {\n    try { body = JSON.parse(body); } catch { body = {}; }\n} else if (typeof body !== 'object' || body === null) {\n    body = {};\n}\n\n// Erwartetes Format:\n// { action: \"store\" | \"recall\", categories: { cat1: [{key}], cat2: [{key,quick?}], cat3: [{key}] } }\nconst action = (body.action || '').toLowerCase();\nconst cats = body.categories || {};\nconst cat1 = Array.isArray(cats.cat1) ? cats.cat1 : [];\nconst cat2 = Array.isArray(cats.cat2) ? cats.cat2 : [];\nconst cat3 = Array.isArray(cats.cat3) ? cats.cat3 : [];\n\n// ===== Globale Pfade & User holen =====\nconst PathMitarbeiter = global.get('PathMitarbeiter') || '';\nconst PathPTUser = global.get('PathPTUser') || '';\nconst activeUser = global.get('activeUser') || '';\n\n// ===== 9 Ausgänge vorbereiten =====\nconst outs = Array(9).fill(null);\n\n// kleine Helper zum Bauen der Payloads\nconst base = { action, PathMitarbeiter, PathPTUser, activeUser };\n\n// Mapping-Helfer: setzt outs[index] wenn Key in der Liste vorhanden ist\nfunction handleCat(items, matchKey, outIndex, extra = {}) {\n    const found = items.find(it => (it?.key || '').toLowerCase() === matchKey);\n    if (!found) return;\n    // quick bei cat2 optional durchreichen\n    outs[outIndex] = {\n        ...msg,\n        payload: { ...base, quick: !!found.quick, ...extra }\n    };\n}\n\n// ===== cat1 =====\nhandleCat(cat1, 'templates', 0);\nhandleCat(cat1, 'trackpresets', 1);\nhandleCat(cat1, 'pluginsettings', 2);\n\n// ===== cat2 =====\n// Achtung: deine UI liefert \"clipFxPresets\" → wir normalisieren auf lowercase:\nhandleCat(cat2, 'fadepresets', 3);\nhandleCat(cat2, 'clipfxpresets', 4);\nhandleCat(cat2, 'memorylocation', 5);\nhandleCat(cat2, 'trackdatatorecall', 6);\n\n// ===== cat3 =====\nhandleCat(cat3, 'keyboardshortcuts', 7);\nhandleCat(cat3, 'pluginmaps', 8);\n\n// Falls gar nichts ausgewählt war, kannst du optional 400 melden –\n// ich lasse das absichtlich als \"kein Output = kein Job\".\n// ganz am Ende der Funktion:\nmsg.job = msg.job || {};\nmsg.job.action = action;   // \"store\" | \"recall\"\n\nreturn outs;",
+        "func": "// ===== Robust body lesen (String oder Objekt) =====\nlet body = msg.payload;\nif (Buffer.isBuffer(body)) {\n    try { body = JSON.parse(body.toString('utf8')); } catch { body = {}; }\n} else if (typeof body === 'string') {\n    try { body = JSON.parse(body); } catch { body = {}; }\n} else if (typeof body !== 'object' || body === null) {\n    body = {};\n}\n\n// Erwartetes Format:\n// { action: \"store\" | \"recall\", categories: { cat1: [{key}], cat2: [{key,quick?}], cat3: [{key}] } }\nconst action = (body.action || '').toLowerCase();\nconst cats = body.categories || {};\nconst cat1 = Array.isArray(cats.cat1) ? cats.cat1 : [];\nconst cat2 = Array.isArray(cats.cat2) ? cats.cat2 : [];\nconst cat3 = Array.isArray(cats.cat3) ? cats.cat3 : [];\n\n// ===== Globale Pfade & User holen =====\nconst PathMitarbeiter = global.get('PathMitarbeiter') || '';\nconst PathPTUser = global.get('PathPTUser') || '';\nconst activeUser = global.get('activeUser') || '';\n\n// ===== 9 Ausgänge vorbereiten =====\nconst outs = Array(9).fill(null);\n\n// kleine Helper zum Bauen der Payloads\nconst base = { action, PathMitarbeiter, PathPTUser, activeUser };\n\n// Mapping-Helfer: setzt outs[index] wenn Key in der Liste vorhanden ist\nfunction handleCat(items, matchKey, outIndex, extra = {}) {\n    const found = items.find(it => (it?.key || '').toLowerCase() === matchKey);\n    if (!found) return;\n    // quick bei cat2 optional durchreichen\n    outs[outIndex] = {\n        ...msg,\n        payload: { ...base, quick: !!found.quick, ...extra }\n    };\n}\n\n// ===== cat1 =====\nhandleCat(cat1, 'templates', 0);\nhandleCat(cat1, 'trackpresets', 1);\nhandleCat(cat1, 'pluginsettings', 2);\n\n// ===== cat2 =====\n// Achtung: UI liefert \"clipFxPresets\" → normalisieren auf lowercase:\nhandleCat(cat2, 'fadepresets', 3);\nhandleCat(cat2, 'clipfxpresets', 4);\nhandleCat(cat2, 'memorylocation', 5);\nhandleCat(cat2, 'trackdatatorecall', 6);\n\n// ===== cat3 =====\nhandleCat(cat3, 'keyboardshortcuts', 7);\nhandleCat(cat3, 'pluginmaps', 8);\n\n// Falls gar nichts ausgewählt war, optional 400 melden\nmsg.job = msg.job || {};\nmsg.job.action = action;   // \"store\" | \"recall\"\n\nreturn outs;",
         "outputs": 9,
         "timeout": 0,
         "noerr": 0,
@@ -6549,7 +7053,8 @@
             "8a745d4f06ab7d74",
             "5f59f44b2aac691e",
             "1b55abfd770dda78",
-            "a77776b195ab0290"
+            "a77776b195ab0290",
+            "13d031566b37fbf4"
         ],
         "x": 2955,
         "y": 980,
@@ -8426,7 +8931,634 @@
         ]
     },
     {
-        "id": "1b28e31342af6b2b",
+        "id": "9dc3f8daa6165afa",
+        "type": "http in",
+        "z": "dc0428f114f14299",
+        "g": "ff71a0cd16ac6b9a",
+        "name": "",
+        "url": "/api/soundminer/status",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 160,
+        "y": 60,
+        "wires": [
+            [
+                "7aca2be01d9adf50"
+            ]
+        ]
+    },
+    {
+        "id": "a59b36ea067e1e1d",
+        "type": "exec",
+        "z": "dc0428f114f14299",
+        "g": "ff71a0cd16ac6b9a",
+        "command": "",
+        "addpay": "command",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "check SM",
+        "x": 720,
+        "y": 60,
+        "wires": [
+            [
+                "d75c1435d5327109"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "d75c1435d5327109",
+        "type": "function",
+        "z": "dc0428f114f14299",
+        "g": "ff71a0cd16ac6b9a",
+        "name": "JSON formatieren",
+        "func": "const out = (msg.payload||'').toString().trim().toLowerCase();\nmsg.payload = { online: out === 'true' };\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 960,
+        "y": 60,
+        "wires": [
+            [
+                "6f78ed16ec0b7d1d"
+            ]
+        ]
+    },
+    {
+        "id": "6f78ed16ec0b7d1d",
+        "type": "http response",
+        "z": "dc0428f114f14299",
+        "g": "ff71a0cd16ac6b9a",
+        "name": "response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1140,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "7aca2be01d9adf50",
+        "type": "OS",
+        "z": "dc0428f114f14299",
+        "g": "ff71a0cd16ac6b9a",
+        "name": "",
+        "x": 350,
+        "y": 60,
+        "wires": [
+            [
+                "4a043797261bc164"
+            ]
+        ]
+    },
+    {
+        "id": "4a043797261bc164",
+        "type": "function",
+        "z": "dc0428f114f14299",
+        "g": "ff71a0cd16ac6b9a",
+        "name": "Befehle je nach OS",
+        "func": "const platform = (msg?.payload?.platform) || process.platform;\n\nif (platform === 'win32') {\n    // Windows: prüft auf Prozess \"Soundminer v6\"\n    msg.command = `powershell -NoProfile -Command \"Get-Process | Where-Object { $_.ProcessName -eq 'Soundminer v6' } | Measure | ForEach-Object { $_.Count -gt 0 }\"`;\n} else if (platform === 'darwin') {\n    // macOS: prüft auf Prozess \"Soundminer\"\n    msg.command = `osascript -e 'tell application \"System Events\" to (exists process \"Soundminer\")'`;\n} else {\n    msg.command = `echo OS nicht unterstützt`;\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 60,
+        "wires": [
+            [
+                "a59b36ea067e1e1d"
+            ]
+        ]
+    },
+    {
+        "id": "af1e02d1ab6b667f",
+        "type": "http in",
+        "z": "dc0428f114f14299",
+        "g": "d1026232071f8035",
+        "name": "",
+        "url": "/api/soundminer/presets",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 260,
+        "wires": [
+            [
+                "805c84f4a6107c66"
+            ]
+        ]
+    },
+    {
+        "id": "5bbaacf6d81a1fd8",
+        "type": "function",
+        "z": "dc0428f114f14299",
+        "g": "d1026232071f8035",
+        "name": "Auswahl",
+        "func": "// ===== Body robust lesen (String/Buffer/Objekt) =====\nlet body = msg.payload;\nif (Buffer.isBuffer(body)) {\n    try { body = JSON.parse(body.toString('utf8')); } catch { body = {}; }\n} else if (typeof body === 'string') {\n    try { body = JSON.parse(body); } catch { body = {}; }\n} else if (typeof body !== 'object' || body === null) {\n    body = {};\n}\n\n// Erwartet:\n// { action: \"store\" | \"recall\", categories: { cat1: [{key}], cat2: [{key}], cat3: [{key}] } }\nconst action = String(body.action || '').toLowerCase();\nconst cats = body.categories || {};\nconst cat1 = Array.isArray(cats.cat1) ? cats.cat1 : [];\n// (cat2/cat3 aktuell ungenutzt, aber hier gelassen falls später erweitert)\nconst cat2 = Array.isArray(cats.cat2) ? cats.cat2 : [];\nconst cat3 = Array.isArray(cats.cat3) ? cats.cat3 : [];\n\n// ===== Globale Pfade & Modul-Infos =====\nconst PathMitarbeiter = global.get('PathMitarbeiter') || '';\nconst activeUser = global.get('activeUser') || '';\nconst modSoundminerVersion = global.get('modSoundminerVersion') || '';\nconst modSoundminerSupportPath = global.get('modSoundminerSupportPath') || '';\n\n// === WICHTIG: job.action VOR dem Klonen setzen ===\nmsg.job = msg.job || {};\nmsg.job.action = action; // \"store\" | \"recall\"\n\n// Basis-Payload, die an die Ziel-Flows geht\nconst base = {\n    action,\n    PathMitarbeiter,\n    activeUser,\n    modSoundminerSupportPath,\n    modSoundminerVersion\n};\n\n// === Helper zum Routen auf einen Ausgang, wenn ein Key gewählt wurde ===\nfunction routeIfSelected(items, matchKey, outIndex) {\n    const found = items.find(it => String(it?.key || '').toLowerCase() === matchKey);\n    if (!found) return null;\n\n    const m = RED.util.cloneMessage(msg); // enthält jetzt auch msg.job.action\n    m.payload = { ...base };\n    return { index: outIndex, msg: m };\n}\n\n// 2 Ausgänge vorbereiten\nconst outs = [null, null];\n\n// cat1: unterstützte Keys\nconst r1 = routeIfSelected(cat1, 'tablayouts', 0);\nif (r1) outs[r1.index] = r1.msg;\n\nconst r2 = routeIfSelected(cat1, 'spare', 1);\nif (r2) outs[r2.index] = r2.msg;\n\n// Wenn nichts ausgewählt ist, bleiben die Ausgänge null.\n// (Das ist ok – der Flow nachgelagert reagiert entsprechend.)\n\nreturn outs;",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 320,
+        "wires": [
+            [
+                "2e86fe3ac42c241a"
+            ],
+            []
+        ],
+        "outputLabels": [
+            "Tab Layouts",
+            "spare"
+        ]
+    },
+    {
+        "id": "805c84f4a6107c66",
+        "type": "function",
+        "z": "dc0428f114f14299",
+        "g": "d1026232071f8035",
+        "name": "Job ID",
+        "func": "// 2 Outputs: [weiter zum Flow, Start-Report an Aggregator]\nconst id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);\n\nmsg.job = {\n    id,\n    started: new Date().toISOString()\n};\n\n// HTTP response Handle zwischenspeichern\nflow.set(\"job:\" + id + \":res\", msg.res);\n\n// 1) Normal weiter\nconst next = RED.util.cloneMessage(msg);\n\n// 2) Start-Event (optional, registriert res auch im Aggregator)\nconst start = {\n    topic: \"report\",\n    payload: { type: \"start\" },\n    job: msg.job,\n    res: msg.res\n};\n\nreturn [next, start];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 170,
+        "y": 320,
+        "wires": [
+            [
+                "5bbaacf6d81a1fd8"
+            ],
+            [
+                "13df15e725ddf3e0"
+            ]
+        ],
+        "outputLabels": [
+            "Auswahl",
+            "Report"
+        ]
+    },
+    {
+        "id": "f21d5854511e80b1",
+        "type": "function",
+        "z": "dc0428f114f14299",
+        "g": "d1026232071f8035",
+        "name": "Aggregator",
+        "func": "// Aggregiert ohne Counts, speichert aber jetzt auch Fehltexte\nconst key = \"job:\" + (msg.job?.id || \"none\");\nlet st = flow.get(key) || {\n  started: msg.job?.started || new Date().toISOString(),\n  expect: {},    // cat → true (gestartet)\n  done: {},      // cat → true (fertig)\n  hasError: {},  // cat → true (Fehler aufgetreten)\n  hasSkipped: {},// cat → true (irgendwas übersprungen)\n  errors: {}     // NEU: cat → letzter Fehltext\n};\n\n// 'start' kann res registrieren\nif (msg.topic === \"report\" && msg.payload?.type === \"start\" && msg.res) {\n  flow.set(key + \":res\", msg.res);\n}\n\nif (msg.topic === \"report\" && msg.payload) {\n  const p = msg.payload;\n\n  if (p.type === \"startCat\") {\n    const cat = p.category || \"unknown\";\n    st.expect[cat] = true;\n  }\n\n  if (p.type === \"skipped\") {\n    const cat = p.category || \"unknown\";\n    st.hasSkipped[cat] = true;\n  }\n\n  if (p.type === \"error\") {\n    const cat = p.category || \"unknown\";\n    st.hasError[cat] = true;\n    if (typeof p.message === \"string\" && p.message) {\n      st.errors[cat] = p.message;   // <<<<<< FEHLTEXT SPEICHERN\n    }\n    // falls jemand 'error' sendet ohne startCat, trotzdem tracken:\n    if (!st.expect[cat]) st.expect[cat] = true;\n  }\n\n  if (p.type === \"doneCat\") {\n    const cat = p.category || \"unknown\";\n    st.done[cat] = true;\n    // falls vorher noch kein startCat kam (Preflight ist ok), sicherheitshalber:\n    if (!st.expect[cat]) st.expect[cat] = true;\n  }\n}\n\n// sichern\nflow.set(key, st);\n\n// fertig?\nconst expectedCats = Object.keys(st.expect);\nconst finished = expectedCats.length > 0 && expectedCats.every(cat => st.done[cat]);\n\nconst progressMsg = { ...msg, aggregated: st };\nif (finished) {\n  const finalizeMsg = { ...msg, aggregated: st, _ready: true };\n  return [progressMsg, finalizeMsg];\n}\nreturn [progressMsg, null];",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2190,
+        "y": 300,
+        "wires": [
+            [],
+            [
+                "e1774f21848a73f9"
+            ]
+        ],
+        "outputLabels": [
+            "Progress",
+            "Finalize"
+        ]
+    },
+    {
+        "id": "e1774f21848a73f9",
+        "type": "function",
+        "z": "dc0428f114f14299",
+        "g": "d1026232071f8035",
+        "name": "Finalize → HTTP response",
+        "func": "// Nur antworten, wenn _ready\nif (!msg._ready) return null;\n\nconst key = \"job:\" + (msg.job?.id || \"none\");\nconst st = msg.aggregated || flow.get(key) || { expect: {}, done: {}, hasError: {}, hasSkipped: {}, errors: {} };\n\nconst cats = Object.keys(st.expect);\n\n// Details inkl. Fehltext pro Kategorie\nconst details = cats.map(cat => {\n  const error = !!st.hasError[cat];\n  const skipped = !!st.hasSkipped[cat];\n  const status = error ? \"error\" : (skipped ? \"partial\" : \"ok\");\n  const message = (error && st.errors?.[cat]) ? st.errors[cat] : undefined; // <<<<<<\n  const note = status === \"partial\" ? \"some items were not present\" : undefined;\n  return { category: cat, status, message, note };\n});\n\nconst hasError = details.some(d => d.status === \"error\");\nconst hasPartial = details.some(d => d.status === \"partial\");\nconst overall = hasError ? \"error\" : \"ok\";\n\n// res holen\nconst res = flow.get(key + \":res\");\nif (!res) {\n  flow.set(key, null);\n  flow.set(key + \":res\", null);\n  return null;\n}\n\nconst action = msg.job?.action || \"unknown\";\n\n// User-facing message: nimm den ersten konkreten Fehltext, falls vorhanden\nlet userMessage;\nif (hasError) {\n  const firstErr = details.find(d => d.status === \"error\" && d.message)?.message;\n  userMessage = firstErr || \"Vorgang abgeschlossen – Fehler aufgetreten\";\n} else if (hasPartial) {\n  userMessage = \"Vorgang abgeschlossen – mit Hinweisen\";\n} else {\n  userMessage = (action === \"store\" ? \"Store erfolgreich\" : \"Recall erfolgreich\");\n}\n\nmsg.res = res;\n// Du kannst hier 207 lassen – oder bei Preflight-Blocker 409 senden.\n// 207 ist okay, wenn das Frontend strikt auf payload.message schaut.\nmsg.statusCode = (hasError || hasPartial) ? 207 : 200;\n\nmsg.payload = {\n  action,             // \"store\" | \"recall\"\n  overall,            // \"ok\" | \"error\"\n  details,            // [{ category, status, message?, note? }]\n  jobId: msg.job?.id,\n  started: st.started,\n  finished: new Date().toISOString(),\n  message: userMessage // <<<<<< konkrete Meldung kommt jetzt hier an\n};\n\n// Cleanup\nflow.set(key, null);\nflow.set(key + \":res\", null);\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2400,
+        "y": 320,
+        "wires": [
+            [
+                "7bd0e3d340c2defe"
+            ]
+        ]
+    },
+    {
+        "id": "7bd0e3d340c2defe",
+        "type": "http response",
+        "z": "dc0428f114f14299",
+        "g": "d1026232071f8035",
+        "name": "response",
+        "statusCode": "",
+        "headers": {},
+        "x": 2600,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "7ca377477ddf71a2",
+        "type": "link in",
+        "z": "dc0428f114f14299",
+        "g": "d1026232071f8035",
+        "name": "REPORT IN",
+        "links": [
+            "13df15e725ddf3e0",
+            "3cb4e46a592b768d",
+            "4f9be02996cc22f6"
+        ],
+        "x": 2065,
+        "y": 340,
+        "wires": [
+            [
+                "f21d5854511e80b1"
+            ]
+        ]
+    },
+    {
+        "id": "13df15e725ddf3e0",
+        "type": "link out",
+        "z": "dc0428f114f14299",
+        "g": "d1026232071f8035",
+        "name": "REPORT OUT",
+        "mode": "link",
+        "links": [
+            "7ca377477ddf71a2"
+        ],
+        "x": 275,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "e5a6aaef78e0213f",
+        "type": "function",
+        "z": "dc0428f114f14299",
+        "g": "abcfbec7d754cfc2",
+        "name": "Tab Layout Funktion",
+        "func": "// Template Funktion (Outputs: 2)\n// Out1 = normal weiter, Out2 = startCat / error\ntry {\n    const { PathMitarbeiter, activeUser, action, modSoundminerSupportPath, modSoundminerVersion } = msg.payload || {};\n    msg.category = \"tablayouts\";\n\n    // startCat nur 1x nebenbei senden\n    let startCat = null;\n    if (msg.job && msg.job.id) {\n        startCat = {\n            topic: \"report\",\n            payload: { type: \"startCat\", category: msg.category },\n            job: msg.job\n        };\n    }\n\n    if (action === \"recall\") {\n        msg.tablayoutSrc = `${PathMitarbeiter}/${activeUser}/immo24/soundminer`;\n        msg.tablayoutDest = `${modSoundminerSupportPath}`;\n        return [msg, startCat];\n    } else if (action === \"store\") {\n        msg.tablayoutSrc = `${modSoundminerSupportPath}`;\n        msg.tablayoutDest = `${PathMitarbeiter}/${activeUser}/immo24/soundminer`;\n        return [msg, startCat];\n    }\n\n    // ungültige Aktion\n    return [null, startCat];\n\n} catch (err) {\n    const errorMsg = {\n        topic: \"report\",\n        payload: { type: \"error\", category: \"tablayouts\", message: err.message },\n        job: msg.job\n    };\n    return [null, errorMsg];\n}",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 360,
+        "wires": [
+            [
+                "075e0152b1769bc3"
+            ],
+            [
+                "3cb4e46a592b768d"
+            ]
+        ],
+        "outputLabels": [
+            "",
+            "REPORT IN"
+        ]
+    },
+    {
+        "id": "3cb4e46a592b768d",
+        "type": "link out",
+        "z": "dc0428f114f14299",
+        "g": "abcfbec7d754cfc2",
+        "name": "REPORT OUT",
+        "mode": "link",
+        "links": [
+            "7ca377477ddf71a2"
+        ],
+        "x": 865,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "85697c1f655fc5ad",
+        "type": "catch",
+        "z": "dc0428f114f14299",
+        "g": "abcfbec7d754cfc2",
+        "name": "CATCH tablayout",
+        "scope": [
+            "075e0152b1769bc3",
+            "378644b9e162c3f9",
+            "f2b59359c1057179",
+            "aa36a54f20e4c10a"
+        ],
+        "uncaught": false,
+        "x": 560,
+        "y": 400,
+        "wires": [
+            [
+                "2d11e09698f93dd6"
+            ]
+        ]
+    },
+    {
+        "id": "2d11e09698f93dd6",
+        "type": "function",
+        "z": "dc0428f114f14299",
+        "g": "abcfbec7d754cfc2",
+        "name": "ERROR → report + counter -- + doneCat",
+        "func": "const category = msg.category || 'templates';\n\n// 1) Fehlertext bestimmen\nconst e = msg.error || {};\nconst message = e.message || (typeof e === 'string' ? e : (e && e.toString ? e.toString() : 'unknown error'));\n\n// 2) error an Aggregator senden\nnode.send({\n  topic: 'report',\n  payload: { type: 'error', category, message },\n  job: msg.job\n});\n\n// 3) pending-Counter dekrementieren (falls zuvor ++ passiert ist)\nconst key = `pending:${msg.job?.id || 'none'}:${category}`;\nlet n = flow.get(key) || 0;\nif (n > 0) {\n  n = n - 1;\n  flow.set(key, n);\n}\n\n// 4) Wenn nichts mehr pending → doneCat, damit Aggregator abschließen kann\nif (n === 0 && msg.job && msg.job.id) {\n  node.send({\n    topic: 'report',\n    payload: { type: 'doneCat', category },\n    job: msg.job\n  });\n}\n\nreturn null;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 440,
+        "wires": [
+            [
+                "3cb4e46a592b768d"
+            ]
+        ]
+    },
+    {
+        "id": "075e0152b1769bc3",
+        "type": "fs-ops-dir",
+        "z": "dc0428f114f14299",
+        "g": "abcfbec7d754cfc2",
+        "name": "Quellpfad durchsuchen",
+        "path": "tablayoutSrc",
+        "pathType": "msg",
+        "filter": "*",
+        "filterType": "str",
+        "dir": "files",
+        "dirType": "msg",
+        "x": 870,
+        "y": 320,
+        "wires": [
+            [
+                "378644b9e162c3f9"
+            ]
+        ]
+    },
+    {
+        "id": "378644b9e162c3f9",
+        "type": "fs-ops-access",
+        "z": "dc0428f114f14299",
+        "g": "abcfbec7d754cfc2",
+        "name": "Zielpfad existiert?",
+        "path": "",
+        "pathType": "str",
+        "filename": "tablayoutDest",
+        "filenameType": "msg",
+        "read": false,
+        "write": false,
+        "throwerror": false,
+        "x": 1110,
+        "y": 320,
+        "wires": [
+            [
+                "4d90b76601b01db2"
+            ],
+            [
+                "f2b59359c1057179"
+            ]
+        ]
+    },
+    {
+        "id": "f2b59359c1057179",
+        "type": "fs-ops-mkdir",
+        "z": "dc0428f114f14299",
+        "g": "abcfbec7d754cfc2",
+        "name": "Ordner anlegen",
+        "path": "",
+        "pathType": "str",
+        "dirname": "tablayoutDest",
+        "dirnameType": "msg",
+        "recursive": false,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 1320,
+        "y": 340,
+        "wires": [
+            [
+                "4d90b76601b01db2"
+            ]
+        ]
+    },
+    {
+        "id": "4d90b76601b01db2",
+        "type": "split",
+        "z": "dc0428f114f14299",
+        "g": "abcfbec7d754cfc2",
+        "name": "split files",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "files",
+        "x": 1300,
+        "y": 300,
+        "wires": [
+            [
+                "42a691e8f3dcac92"
+            ]
+        ]
+    },
+    {
+        "id": "42a691e8f3dcac92",
+        "type": "switch",
+        "z": "dc0428f114f14299",
+        "g": "abcfbec7d754cfc2",
+        "name": "Tab Layouts rausfiltern",
+        "property": "files",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "tabstate",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1480,
+        "y": 300,
+        "wires": [
+            [
+                "aa36a54f20e4c10a"
+            ]
+        ]
+    },
+    {
+        "id": "9c27162cd4fef719",
+        "type": "function",
+        "z": "dc0428f114f14299",
+        "g": "d1026232071f8035",
+        "name": "Counter -- & DONE",
+        "func": "const cat = msg.category || \"unknown\";\nconst key = `pending:${msg.job?.id || 'none'}:${cat}`;\nlet n = flow.get(key) || 0;\nif (n > 0) n--; else n = 0;\nflow.set(key, n);\nif (n === 0 && msg.job && msg.job.id) {\n  node.send({\n    topic: \"report\",\n    payload: { type: \"doneCat\", category: cat },\n    job: msg.job\n  });\n}\nreturn null;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1990,
+        "y": 300,
+        "wires": [
+            [
+                "f21d5854511e80b1"
+            ]
+        ]
+    },
+    {
+        "id": "b462655b17044340",
+        "type": "switch",
+        "z": "dc0428f114f14299",
+        "g": "ce6570fba079d51d",
+        "name": "Version",
+        "property": "payload.modSoundminerVersion",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "V6 Pro",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1240,
+        "y": 200,
+        "wires": [
+            [
+                "e5a6aaef78e0213f"
+            ]
+        ]
+    },
+    {
+        "id": "aa36a54f20e4c10a",
+        "type": "fs-ops-copy",
+        "z": "dc0428f114f14299",
+        "g": "abcfbec7d754cfc2",
+        "name": "Tab Layouts kopieren",
+        "sourcePath": "tablayoutSrc",
+        "sourcePathType": "msg",
+        "sourceFilename": "files",
+        "sourceFilenameType": "msg",
+        "destPath": "tablayoutDest",
+        "destPathType": "msg",
+        "destFilename": "files",
+        "destFilenameType": "msg",
+        "link": false,
+        "overwrite": true,
+        "x": 1720,
+        "y": 300,
+        "wires": [
+            [
+                "9c27162cd4fef719"
+            ]
+        ]
+    },
+    {
+        "id": "2bdfc8a3cb2667fb",
+        "type": "http request",
+        "z": "dc0428f114f14299",
+        "g": "ce6570fba079d51d",
+        "name": "GET soundminer/status",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "http://127.0.0.1:59593/api/soundminer/status",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 830,
+        "y": 220,
+        "wires": [
+            [
+                "19865295a3b0b455"
+            ]
+        ]
+    },
+    {
+        "id": "19865295a3b0b455",
+        "type": "function",
+        "z": "dc0428f114f14299",
+        "g": "ce6570fba079d51d",
+        "name": "Soundminer läuft?",
+        "func": "// Preflight: Soundminer-Status & Aktion prüfen\n// Inputs:\n// - msg.payload.online   (vom HTTP-Request)\n// - msg._smPrev          (vorheriger Payload aus \"Auswahl\")\n// - msg.job.id / msg.job.action\n\nconst prev = (msg._smPrev && typeof msg._smPrev === 'object') ? msg._smPrev : {};\nconst statusObj = (msg.payload && typeof msg.payload === 'object') ? msg.payload : {};\nconst online = !!statusObj.online;\nconst action = String(msg.job?.action || '').toLowerCase();\n\n// Hilfsfunktion: 3 Meldungen an Aggregator (startCat → error → doneCat)\nfunction buildAbortReport(reasonText) {\n    const job = msg.job || {};\n    const cat = 'preflight';\n    const mk = (type, extra = {}) => ({\n        topic: 'report',\n        payload: { type, category: cat, ...extra },\n        job\n    });\n    return [mk('startCat'), mk('error', { message: reasonText }), mk('doneCat')];\n}\n\n// 1) Soundminer läuft → über Aggregator abbrechen\nif (online) {\n    const reportMsgs = buildAbortReport('Soundminer läuft – bitte zuerst Soundminer schließen.');\n    // Aufräumen\n    delete msg._smPrev;\n    return [null, reportMsgs];\n}\n\n// 2) Aktion prüfen\nif (action !== 'store' && action !== 'recall') {\n    const reportMsgs = buildAbortReport('Ungültige Aktion. Erwartet: \"store\" oder \"recall\".');\n    delete msg._smPrev;\n    return [null, reportMsgs];\n}\n\n// 3) OK → vorherigen Payload mit Status mergen und weiter\nmsg.payload = { ...prev, online: false };\ndelete msg._smPrev;\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1050,
+        "y": 220,
+        "wires": [
+            [
+                "b462655b17044340"
+            ],
+            [
+                "4f9be02996cc22f6"
+            ]
+        ],
+        "outputLabels": [
+            "offline",
+            "online"
+        ]
+    },
+    {
+        "id": "2e86fe3ac42c241a",
+        "type": "function",
+        "z": "dc0428f114f14299",
+        "g": "ce6570fba079d51d",
+        "name": "msg.payload zwispeichern",
+        "func": "// Alles, was die Auswahl gebaut hat, weglegen,\n// damit der HTTP-Request es nicht überschreibt.\nmsg._smPrev = msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 220,
+        "wires": [
+            [
+                "2bdfc8a3cb2667fb"
+            ]
+        ]
+    },
+    {
+        "id": "4f9be02996cc22f6",
+        "type": "link out",
+        "z": "dc0428f114f14299",
+        "g": "ce6570fba079d51d",
+        "name": "REPORT OUT",
+        "mode": "link",
+        "links": [
+            "7ca377477ddf71a2"
+        ],
+        "x": 1195,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "715643787fbe702d",
         "type": "global-config",
         "env": [],
         "modules": {

@@ -9,6 +9,7 @@
           <v-tab value="mitarbeiter">Mitarbeiter</v-tab>
           <v-tab value="schema">Namensschema</v-tab>
           <v-tab value="paths">Pfade</v-tab>
+          <v-tab value="module">Module</v-tab>
           <v-tab value="pwd">Passwort</v-tab>
         </v-tabs>
       </div>
@@ -27,6 +28,9 @@
           </v-window-item>
           <v-window-item value="paths">
             <KonfigPfade ref="pfadeRef" />
+          </v-window-item>
+          <v-window-item value="module">
+            <KonfigModule ref="moduleRef" />
           </v-window-item>
           <v-window-item value="pwd">
             <KonfigPasswort ref="pwRef" />
@@ -81,6 +85,7 @@ import KonfigMitarbeiter from '@/components/KonfigMitarbeiter.vue'
 import KonfigPfade from '@/components/KonfigPfade.vue'
 import KonfigPasswort from '@/components/KonfigPasswort.vue'
 import KonfigNamensschema from '@/components/KonfigNamensschema.vue'
+import KonfigModule from '@/components/KonfigModule.vue'
 
 const API = import.meta.env.VITE_API_BASE || '/api'
 const pbRef = ref(null)
@@ -88,6 +93,7 @@ const mitarbeiterRef = ref(null)
 const pfadeRef = ref(null)
 const pwRef = ref(null)
 const schemaRef = ref(null)
+const moduleRef = ref(null)
 const tab = ref('prod')
 const saving = ref(false)
 
@@ -101,7 +107,7 @@ async function onSave() {
   // Prüfen, ob Mitarbeiter Änderungen hat
   if (mitarbeiterRef.value?.isDirty()) dirtySomething = true
 
-  // Prüfen, ob Pfade Änderungen haben
+  // Prüfen, ob Pfade Änderungen hat
   if (pfadeRef.value?.isDirty()) dirtySomething = true
 
   // Prüfen, ob Passwort Änderungen hat
@@ -109,6 +115,16 @@ async function onSave() {
 
   // Prüfen, ob Schema Änderungen hat
   if (schemaRef.value?.isDirty()) dirtySomething = true
+
+  // Prüfen, ob Module Änderungen haben
+  if (moduleRef.value?.isDirty()) {
+    if (!moduleRef.value.isSoundminerValid()) {
+      alert('Bitte Pfad und Version für Soundminer angeben.')
+      saving.value = false
+      return
+    }
+    dirtySomething = true
+  }
 
   // Falls nichts geändert: Fenster schließen
   if (!dirtySomething) {
@@ -152,7 +168,7 @@ async function onSave() {
       await pfadeRef.value.resetToServer()
     }
 
-    // Mitarbeiter speichern (jetzt mit POST /api/user)
+    // Mitarbeiter speichern
     if (mitarbeiterRef.value?.isDirty()) {
       const snap = mitarbeiterRef.value.getSnapshotForSave()
       const res = await fetch(`${API}/user`, {
@@ -181,6 +197,23 @@ async function onSave() {
       await schemaRef.value.resetToServer()
     }
 
+    // Module
+    if (moduleRef.value?.isDirty()) {
+      const snap = moduleRef.value.getSnapshotForSave()
+      const res = await fetch(`${API}/modules`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(snap)
+      })
+        if (res.status === 409) {
+        await moduleRef.value.resetToServer()
+        alert('Module wurden zwischenzeitlich geändert. Ansicht aktualisiert.')
+        return
+      }
+      if (!res.ok) throw new Error(await res.text())
+      await moduleRef.value.resetToServer()
+    }
+
     // Wenn alles erfolgreich war → Fenster schließen
     window.close?.()
 
@@ -198,6 +231,8 @@ async function onCancel() {
   await pfadeRef.value?.resetToServer()
   await pwRef.value?.resetToServer()
   await schemaRef.value?.resetToServer()
+  await mitarbeiterRef.value?.resetToServer()
+  await moduleRef.value?.resetToServer()
   window.close?.()
 }
 

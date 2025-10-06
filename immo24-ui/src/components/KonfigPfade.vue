@@ -11,7 +11,6 @@
           />
           <v-btn
             @click="browseInto('PathMitarbeiter', 'Pfad Mitarbeiter auswählen')"
-            color="primary"
             variant="outlined"
           >
             Durchsuchen
@@ -26,7 +25,6 @@
           />
           <v-btn
             @click="browseInto('PathProduktionen', 'Pfad Produktionen auswählen')"
-            color="primary"
             variant="outlined"
           >
             Durchsuchen
@@ -41,7 +39,6 @@
           />
           <v-btn
             @click="browseInto('PathStammdaten', 'Pfad Stammdaten auswählen')"
-            color="primary"
             variant="outlined"
           >
             Durchsuchen
@@ -56,7 +53,6 @@
           />
           <v-btn
             @click="browseInto('PathPTUser', 'Pfad Pro Tools User auswählen')"
-            color="primary"
             variant="outlined"
           >
             Durchsuchen

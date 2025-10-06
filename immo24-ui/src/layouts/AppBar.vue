@@ -1,6 +1,6 @@
 <template>
   <v-app-bar app flat density="comfortable" height="64" class="border-b">
-    <v-toolbar-title class="text-no-wrap">immo24 Studioassistent</v-toolbar-title>
+    <v-toolbar-title class="toolbar-title">immo24 Studioassistent</v-toolbar-title>
 
     <v-tabs
       :model-value="$route.path"
@@ -12,6 +12,7 @@
     >
       <v-tab :value="'/projektanlage'" :to="{ path: '/projektanlage' }">Projektanlage</v-tab>
       <v-tab :value="'/protools'" :to="{ path: '/protools' }">Pro Tools</v-tab>
+      <v-tab v-if="soundminerEnabled" :value="'/soundminer'" :to="{ path: '/soundminer' }">Soundminer</v-tab>
     </v-tabs>
 
     <v-spacer />
@@ -34,11 +35,13 @@ const activeUser  = ref(null)
 const loggingOut  = ref(false)
 const isLoggedIn  = computed(() => !!activeUser.value)
 const displayName = computed(() => activeUser.value || 'Nicht angemeldet')
+const soundminerEnabled = ref(false)
 
 const API = import.meta.env.VITE_API_BASE || '/api'
 
 onMounted(() => {
   fetchActiveUser()
+  fetchModuleStatus()
 })
 
 async function fetchActiveUser() {
@@ -57,6 +60,18 @@ async function fetchActiveUser() {
     }
   } catch {
     activeUser.value = null
+  }
+}
+
+async function fetchModuleStatus() {
+  try {
+    const res = await fetch(`${API}/modules`)
+    if (res.ok) {
+      const data = await res.json()
+      soundminerEnabled.value = !!data?.data?.soundminer?.enabled
+    }
+  } catch {
+    soundminerEnabled.value = false
   }
 }
 
@@ -80,4 +95,12 @@ async function onLogout() {
 
 <style scoped>
 .border-b { border-bottom: 1px solid rgba(0,0,0,0.08); }
+.toolbar-title {
+  min-width: 240px;
+  max-width: 100vw;
+  flex-shrink: 0;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: unset;
+}
 </style>

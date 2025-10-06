@@ -95,6 +95,11 @@ const staged = reactive({
 // -------- Utils --------
 const deepEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b)
 const isDirty   = computed(() => !deepEqual(staged, original.value.schema))
+const isSchemaValid = computed(() =>
+  staged.projektordnerSchema.trim() !== '' &&
+  staged.sessionSchema.trim() !== '' &&
+  staged.sessionSchema.includes('{{version}}')
+)
 
 // Demo-Werte (wie im alten Flow)
 const demoValues = {
@@ -156,6 +161,7 @@ async function loadSnapshot() {
 // Für Elternkomponente (Konfiguration.vue) exposen
 defineExpose({
   isDirty: () => isDirty.value,
+  isSchemaValid: () => isSchemaValid.value,
   getSnapshotForSave: () => ({
     schema: { ...staged },
     version: original.value.version

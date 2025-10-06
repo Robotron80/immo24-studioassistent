@@ -119,8 +119,15 @@ async function onSave() {
   // Prüfen, ob Passwort Änderungen hat
   if (pwRef.value?.isDirty()) dirtySomething = true
 
-  // Prüfen, ob Schema Änderungen hat
-  if (schemaRef.value?.isDirty()) dirtySomething = true
+  // Prüfen, ob Schema Änderungen hat und gültig ist
+  if (schemaRef.value?.isDirty()) {
+    if (!schemaRef.value.isSchemaValid()) {
+      alert('Bitte alle Felder im Schema ausfüllen.')
+      saving.value = false
+      return
+    }
+    dirtySomething = true
+  }
 
   // Prüfen, ob Module Änderungen hat und gültig ist
   if (moduleRef.value?.isDirty()) {

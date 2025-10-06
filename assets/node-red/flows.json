@@ -388,7 +388,10 @@
             "202dfb827bd90aa1",
             "dfe946a1c6b4afd3",
             "8411f0fc6b0dc3e6",
-            "d113ce50c563b0ce"
+            "d113ce50c563b0ce",
+            "67304c1ed354dd16",
+            "2a8afe3d3e358b7c",
+            "8a36408e736e7b53"
         ],
         "x": 34,
         "y": 839,
@@ -2375,7 +2378,7 @@
         "z": "92e5dfcb5c3552c2",
         "g": "353adffaf98dbce5",
         "name": "Pfade festlegen",
-        "func": "const base = msg.base || '';\nconst name = msg.payload.name;\nconst kuerzel = msg.payload.kuerzel;\nif (!name) { msg.payload = { name, action: 'skipped:name-missing' }; return msg; }\nmsg.user = { name, kuerzel };\nmsg.paths = {\n  userDir: `${base}/${name}`,\n  metaDir: `${base}/${name}/immo24`,\n  metaFile: `${base}/${name}/immo24/immo24-user.json`\n};\nreturn msg;",
+        "func": "const base = msg.base || '';\nconst name = String(msg.payload.name || '').trim();\nconst kuerzel = String(msg.payload.kuerzel || '').trim(); \nif (!name) { msg.payload = { name, action: 'skipped:name-missing' }; return msg; }\nmsg.user = { name, kuerzel };\nmsg.paths = {\n  userDir: `${base}/${name}`,\n  metaDir: `${base}/${name}/immo24`,\n  metaFile: `${base}/${name}/immo24/immo24-user.json`\n};\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -2386,7 +2389,7 @@
         "y": 940,
         "wires": [
             [
-                "6e1e460999059bbc"
+                "67304c1ed354dd16"
             ]
         ]
     },
@@ -3805,6 +3808,68 @@
         "wires": [
             [
                 "8411f0fc6b0dc3e6"
+            ]
+        ]
+    },
+    {
+        "id": "67304c1ed354dd16",
+        "type": "function",
+        "z": "92e5dfcb5c3552c2",
+        "g": "353adffaf98dbce5",
+        "name": "Parent & Ziel extrahieren",
+        "func": "// Erwartet: msg.paths.userDir = \"<base>/<Name>\"\nconst full = String(msg?.paths?.userDir || '').replace(/[\\\\\\/]+$/, '');\nconst m = full.match(/^(.*)[\\/\\\\]([^\\/\\\\]+)$/);\nif (!m) return null; // kein valider Pfad → diesen Datensatz überspringen\n\nmsg._userParent = m[1];\nmsg._userTargetOrig = m[2];\nmsg._userTargetLower = msg._userTargetOrig.normalize('NFC').toLowerCase();\n\n// für fs-ops-dir:\nmsg.path = msg._userParent;   // node-red-contrib-fs-ops-dir liest 'path'\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 1000,
+        "wires": [
+            [
+                "2a8afe3d3e358b7c"
+            ]
+        ]
+    },
+    {
+        "id": "2a8afe3d3e358b7c",
+        "type": "fs-ops-dir",
+        "z": "92e5dfcb5c3552c2",
+        "g": "353adffaf98dbce5",
+        "name": "",
+        "path": "path",
+        "pathType": "msg",
+        "filter": "*",
+        "filterType": "str",
+        "dir": "files",
+        "dirType": "msg",
+        "x": 640,
+        "y": 1000,
+        "wires": [
+            [
+                "8a36408e736e7b53"
+            ]
+        ]
+    },
+    {
+        "id": "8a36408e736e7b53",
+        "type": "function",
+        "z": "92e5dfcb5c3552c2",
+        "g": "353adffaf98dbce5",
+        "name": "Case-insensitive auflösen",
+        "func": "// Sucht im Elternverzeichnis einen Ordner, der case-insensitiv entspricht\nconst list = Array.isArray(msg.files) ? msg.files : [];\nconst want = String(msg._userTargetLower || '');\n\nconst hit = list.find(name =>\n    String(name).normalize('NFC').toLowerCase() === want\n);\n\n// Wenn vorhanden → kanonischen Namen nehmen,\n// sonst gewünschten Namen beibehalten (wird ggf. neu angelegt)\nconst finalName = hit || msg._userTargetOrig;\n\n// Alle nachfolgenden Pfade auf den kanonischen Namen umbiegen\nconst base = msg._userParent.replace(/[\\\\\\/]+$/, '');\nmsg.paths.userDir = `${base}/${finalName}`;\nmsg.paths.metaDir = `${base}/${finalName}/immo24`;\nmsg.paths.metaFile = `${base}/${finalName}/immo24/immo24-user.json`;\n\n// Aufräumen\ndelete msg.files;\ndelete msg.path;\ndelete msg._userParent;\ndelete msg._userTargetOrig;\ndelete msg._userTargetLower;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 1000,
+        "wires": [
+            [
+                "6e1e460999059bbc"
             ]
         ]
     },
@@ -9698,7 +9763,7 @@
         ]
     },
     {
-        "id": "588d02edabddcf8b",
+        "id": "ab4bcfb5e84b5fda",
         "type": "global-config",
         "env": [],
         "modules": {

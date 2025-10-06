@@ -136,11 +136,14 @@
             "3be16e807066c9f4",
             "0cdcc1e9ef5f3e29",
             "b8cfaa564f921f12",
-            "bd31b537d98d1d41"
+            "bd31b537d98d1d41",
+            "6815750d15e9a5f1",
+            "97d5a86d341b99cd",
+            "3fe7a23ea2f69481"
         ],
         "x": 34,
         "y": 959,
-        "w": 1952,
+        "w": 2072,
         "h": 282
     },
     {
@@ -5335,7 +5338,7 @@
         "y": 1100,
         "wires": [
             [
-                "0cdcc1e9ef5f3e29"
+                "6815750d15e9a5f1"
             ]
         ]
     },
@@ -5352,7 +5355,7 @@
         "read": true,
         "write": false,
         "throwerror": false,
-        "x": 1530,
+        "x": 1610,
         "y": 1100,
         "wires": [
             [
@@ -5385,7 +5388,7 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 1910,
+        "x": 1990,
         "y": 1100,
         "wires": [
             []
@@ -5405,7 +5408,7 @@
         "mode": "755",
         "fullpath": "directory",
         "fullpathType": "msg",
-        "x": 1740,
+        "x": 1820,
         "y": 1120,
         "wires": [
             [
@@ -5801,6 +5804,68 @@
         "x": 2570,
         "y": 640,
         "wires": []
+    },
+    {
+        "id": "6815750d15e9a5f1",
+        "type": "function",
+        "z": "b443cd6f4046fd9f",
+        "g": "3f6058c22847f23d",
+        "name": "Parent & Ziel extrahieren",
+        "func": "// Erwartet: msg.payload = \"<base>/<Kunde>\"\n// Liefert:  msg.parentDir, msg.targetNameOriginal, msg.targetNameLower\nconst full = String(msg.payload || '').replace(/[\\\\\\/]+$/, '');\nconst m = full.match(/^(.*)[\\/\\\\]([^\\/\\\\]+)$/);\nif (!m) return null; // ungültiger Pfad -> skip\n\nmsg.parentDir = m[1];\nmsg.targetNameOriginal = m[2];\nmsg.targetNameLower = msg.targetNameOriginal.normalize('NFC').toLowerCase();\n\n// fs-ops-dir erwartet den Verzeichnis-Pfad in msg.path bzw. property \"path\"\nmsg.path = msg.parentDir;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1590,
+        "y": 1040,
+        "wires": [
+            [
+                "97d5a86d341b99cd"
+            ]
+        ]
+    },
+    {
+        "id": "97d5a86d341b99cd",
+        "type": "fs-ops-dir",
+        "z": "b443cd6f4046fd9f",
+        "g": "3f6058c22847f23d",
+        "name": "",
+        "path": "parentDir",
+        "pathType": "msg",
+        "filter": "*",
+        "filterType": "str",
+        "dir": "files",
+        "dirType": "msg",
+        "x": 1780,
+        "y": 1040,
+        "wires": [
+            [
+                "3fe7a23ea2f69481"
+            ]
+        ]
+    },
+    {
+        "id": "3fe7a23ea2f69481",
+        "type": "function",
+        "z": "b443cd6f4046fd9f",
+        "g": "3f6058c22847f23d",
+        "name": "Case-insensitive auflösen",
+        "func": "// Sucht in msg.files (vom fs-ops-dir) einen Eintrag, der\n// case-insensitiv dem gewünschten Kundenordner entspricht.\nconst want = String(msg.targetNameLower || '');\nconst list = Array.isArray(msg.files) ? msg.files : [];\n\nconst found = list.find(name =>\n    String(name).normalize('NFC').toLowerCase() === want\n);\n\n// Wenn gefunden -> existierenden, kanonischen Pfad verwenden,\n// sonst den gewünschten (ggf. neu anzulegenden) Pfad belassen.\nif (found) {\n    msg.payload = msg.parentDir + '/' + found;\n    msg._ciResolved = true;   // nur für Debug\n} else {\n    msg.payload = msg.parentDir + '/' + msg.targetNameOriginal;\n    msg._ciResolved = false;\n}\n\n// Aufräumen der Hilfsfelder\ndelete msg.parentDir;\ndelete msg.targetNameOriginal;\ndelete msg.targetNameLower;\ndelete msg.files;\ndelete msg.path;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1970,
+        "y": 1040,
+        "wires": [
+            [
+                "0cdcc1e9ef5f3e29"
+            ]
+        ]
     },
     {
         "id": "acbdc911869fcb0b",
@@ -9633,7 +9698,7 @@
         ]
     },
     {
-        "id": "1f7655056a78a980",
+        "id": "588d02edabddcf8b",
         "type": "global-config",
         "env": [],
         "modules": {

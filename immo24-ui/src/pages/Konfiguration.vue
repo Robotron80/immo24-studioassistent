@@ -107,16 +107,22 @@ async function onSave() {
   // Prüfen, ob Mitarbeiter Änderungen hat
   if (mitarbeiterRef.value?.isDirty()) dirtySomething = true
 
-  // Prüfen, ob Pfade Änderungen hat
-  if (pfadeRef.value?.isDirty()) dirtySomething = true
-
+  // Prüfen, ob Pfade Änderungen hat und gültig ist
+  if (pfadeRef.value?.isDirty()) {
+    if (!pfadeRef.value.isPfadeValid()) {
+      alert('Bitte alle Pfade ausfüllen.')
+      saving.value = false
+      return
+    }
+    dirtySomething = true
+  }
   // Prüfen, ob Passwort Änderungen hat
   if (pwRef.value?.isDirty()) dirtySomething = true
 
   // Prüfen, ob Schema Änderungen hat
   if (schemaRef.value?.isDirty()) dirtySomething = true
 
-  // Prüfen, ob Module Änderungen haben
+  // Prüfen, ob Module Änderungen hat und gültig ist
   if (moduleRef.value?.isDirty()) {
     if (!moduleRef.value.isSoundminerValid()) {
       alert('Bitte Pfad und Version für Soundminer angeben.')

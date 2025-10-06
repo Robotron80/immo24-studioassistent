@@ -80,6 +80,12 @@ const error    = ref('')
 // Helpers
 const deepEqual = (a,b) => JSON.stringify(a) === JSON.stringify(b)
 const isDirty   = computed(() => !deepEqual(staged, original.value.data))
+const isPfadeValid = computed(() => {
+  return staged.PathMitarbeiter.length > 0 &&
+         staged.PathProduktionen.length > 0 &&
+         staged.PathStammdaten.length > 0 &&
+         staged.PathPTUser.length > 0;
+});
 
 async function loadSnapshot() {
   loading.value = true; error.value = ''
@@ -122,6 +128,7 @@ async function browseInto(key, title) {
 // Methoden für Elternkomponente exponieren
 defineExpose({
   isDirty: () => isDirty.value,
+  isPfadeValid: () => isPfadeValid.value,
   getSnapshotForSave: () => ({
     data: { ...staged },
     version: original.value.version

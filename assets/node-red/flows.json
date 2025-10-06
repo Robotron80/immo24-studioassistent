@@ -229,7 +229,7 @@
             "9836651176dc7871"
         ],
         "x": 34,
-        "y": 1059,
+        "y": 1079,
         "w": 1472,
         "h": 222
     },
@@ -383,12 +383,14 @@
             "cbb4b8942696bb9d",
             "cfde9cbf7130a7bb",
             "202dfb827bd90aa1",
-            "dfe946a1c6b4afd3"
+            "dfe946a1c6b4afd3",
+            "8411f0fc6b0dc3e6",
+            "d113ce50c563b0ce"
         ],
         "x": 34,
         "y": 839,
         "w": 2392,
-        "h": 182
+        "h": 222
     },
     {
         "id": "5096f3feef6a6d43",
@@ -563,11 +565,12 @@
             "d75c1435d5327109",
             "6f78ed16ec0b7d1d",
             "7aca2be01d9adf50",
-            "4a043797261bc164"
+            "4a043797261bc164",
+            "2c1436aee4b4016a"
         ],
         "x": 14,
         "y": 11.5,
-        "w": 1212,
+        "w": 1372,
         "h": 97
     },
     {
@@ -1178,7 +1181,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 140,
-        "y": 1120,
+        "y": 1140,
         "wires": [
             [
                 "0a04cc918e1099a3"
@@ -1199,7 +1202,7 @@
         "finalize": "",
         "libs": [],
         "x": 330,
-        "y": 1120,
+        "y": 1140,
         "wires": [
             [
                 "16f984c570189fdb"
@@ -1220,7 +1223,7 @@
         "write": false,
         "throwerror": false,
         "x": 520,
-        "y": 1120,
+        "y": 1140,
         "wires": [
             [
                 "38a319aec097873b"
@@ -1243,7 +1246,7 @@
         "sendError": true,
         "allProps": false,
         "x": 720,
-        "y": 1100,
+        "y": 1120,
         "wires": [
             [
                 "686120e0242c6e78"
@@ -1260,7 +1263,7 @@
         "action": "",
         "pretty": false,
         "x": 890,
-        "y": 1100,
+        "y": 1120,
         "wires": [
             [
                 "b376e9b9b273d316"
@@ -1277,7 +1280,7 @@
         "outputs": 1,
         "noerr": 0,
         "x": 710,
-        "y": 1140,
+        "y": 1160,
         "wires": [
             [
                 "b376e9b9b273d316"
@@ -1298,7 +1301,7 @@
         "finalize": "",
         "libs": [],
         "x": 1100,
-        "y": 1100,
+        "y": 1120,
         "wires": [
             [
                 "a49a99f318f8c8a9"
@@ -1314,7 +1317,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1320,
-        "y": 1100,
+        "y": 1120,
         "wires": []
     },
     {
@@ -1329,7 +1332,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 140,
-        "y": 1220,
+        "y": 1240,
         "wires": [
             [
                 "975bba0b013c6913"
@@ -1350,7 +1353,7 @@
         "finalize": "",
         "libs": [],
         "x": 360,
-        "y": 1220,
+        "y": 1240,
         "wires": [
             [
                 "3efc42592dbe14c5"
@@ -1369,7 +1372,7 @@
         "statusCode": "400",
         "headers": {},
         "x": 590,
-        "y": 1240,
+        "y": 1260,
         "wires": []
     },
     {
@@ -1386,7 +1389,7 @@
         "finalize": "",
         "libs": [],
         "x": 570,
-        "y": 1200,
+        "y": 1220,
         "wires": [
             [
                 "17d495e513099ccd"
@@ -1403,7 +1406,7 @@
         "outputs": 2,
         "noerr": 0,
         "x": 770,
-        "y": 1200,
+        "y": 1220,
         "wires": [
             [
                 "d8f01b3cc92d1167"
@@ -1422,7 +1425,7 @@
         "statusCode": "409",
         "headers": {},
         "x": 970,
-        "y": 1220,
+        "y": 1240,
         "wires": []
     },
     {
@@ -1438,7 +1441,7 @@
         "overwriteFile": "true",
         "encoding": "utf8",
         "x": 990,
-        "y": 1180,
+        "y": 1200,
         "wires": [
             [
                 "c525012d8c78c4b7"
@@ -1459,7 +1462,7 @@
         "finalize": "",
         "libs": [],
         "x": 1230,
-        "y": 1180,
+        "y": 1200,
         "wires": [
             [
                 "9836651176dc7871"
@@ -1475,7 +1478,7 @@
         "statusCode": "200",
         "headers": {},
         "x": 1430,
-        "y": 1180,
+        "y": 1200,
         "wires": []
     },
     {
@@ -2473,7 +2476,8 @@
         "wires": [
             [
                 "ce86d3ee96f10372",
-                "cfde9cbf7130a7bb"
+                "cfde9cbf7130a7bb",
+                "d113ce50c563b0ce"
             ]
         ]
     },
@@ -3091,7 +3095,7 @@
         "type": "fs-ops-mkdir",
         "z": "92e5dfcb5c3552c2",
         "g": "353adffaf98dbce5",
-        "name": "Pro Tools Ordner anlegen",
+        "name": "Ordner anlegen",
         "path": "dir",
         "pathType": "msg",
         "dirname": "payload",
@@ -3100,7 +3104,7 @@
         "mode": "755",
         "fullpath": "directory",
         "fullpathType": "msg",
-        "x": 1970,
+        "x": 1940,
         "y": 980,
         "wires": [
             []
@@ -3753,6 +3757,51 @@
         "wires": [
             [
                 "6a158b47a9a44d52"
+            ]
+        ]
+    },
+    {
+        "id": "8411f0fc6b0dc3e6",
+        "type": "function",
+        "z": "92e5dfcb5c3552c2",
+        "g": "353adffaf98dbce5",
+        "name": "Ordnerliste",
+        "func": "\nmsg.payload = [\n    \"soundminer\"\n];\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1650,
+        "y": 1020,
+        "wires": [
+            [
+                "dfe946a1c6b4afd3"
+            ]
+        ]
+    },
+    {
+        "id": "d113ce50c563b0ce",
+        "type": "switch",
+        "z": "92e5dfcb5c3552c2",
+        "g": "353adffaf98dbce5",
+        "name": "SM Modul aktiv",
+        "property": "modSoundminerEnabled",
+        "propertyType": "global",
+        "rules": [
+            {
+                "t": "true"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1480,
+        "y": 1020,
+        "wires": [
+            [
+                "8411f0fc6b0dc3e6"
             ]
         ]
     },
@@ -8962,7 +9011,7 @@
         "winHide": false,
         "oldrc": false,
         "name": "check SM",
-        "x": 720,
+        "x": 880,
         "y": 60,
         "wires": [
             [
@@ -8985,7 +9034,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 960,
+        "x": 1120,
         "y": 60,
         "wires": [
             [
@@ -9001,7 +9050,7 @@
         "name": "response",
         "statusCode": "",
         "headers": {},
-        "x": 1140,
+        "x": 1300,
         "y": 60,
         "wires": []
     },
@@ -9015,7 +9064,7 @@
         "y": 60,
         "wires": [
             [
-                "4a043797261bc164"
+                "2c1436aee4b4016a"
             ]
         ]
     },
@@ -9024,7 +9073,7 @@
         "type": "function",
         "z": "dc0428f114f14299",
         "g": "ff71a0cd16ac6b9a",
-        "name": "Befehle je nach OS",
+        "name": "Befehle V6 Pro",
         "func": "const platform = (msg?.payload?.platform) || process.platform;\n\nif (platform === 'win32') {\n    // Windows: prüft auf Prozess \"Soundminer v6\"\n    msg.command = `powershell -NoProfile -Command \"Get-Process | Where-Object { $_.ProcessName -eq 'Soundminer v6' } | Measure | ForEach-Object { $_.Count -gt 0 }\"`;\n} else if (platform === 'darwin') {\n    // macOS: prüft auf Prozess \"Soundminer\"\n    msg.command = `osascript -e 'tell application \"System Events\" to (exists process \"Soundminer\")'`;\n} else {\n    msg.command = `echo OS nicht unterstützt`;\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
@@ -9032,7 +9081,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 530,
+        "x": 680,
         "y": 60,
         "wires": [
             [
@@ -9558,7 +9607,33 @@
         "wires": []
     },
     {
-        "id": "715643787fbe702d",
+        "id": "2c1436aee4b4016a",
+        "type": "switch",
+        "z": "dc0428f114f14299",
+        "g": "ff71a0cd16ac6b9a",
+        "name": "Version",
+        "property": "modSoundminerVersion",
+        "propertyType": "global",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "V6 Pro",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 500,
+        "y": 60,
+        "wires": [
+            [
+                "4a043797261bc164"
+            ]
+        ]
+    },
+    {
+        "id": "1f7655056a78a980",
         "type": "global-config",
         "env": [],
         "modules": {

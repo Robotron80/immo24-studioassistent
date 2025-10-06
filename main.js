@@ -385,6 +385,14 @@ async function openPickerFlow({ doLogout = true } = {}) {
 }
 
 function createPreferencesWindow() {
+  // Sperre, wenn SetupWizard offen ist
+  if (initWin && !initWin.isDestroyed() && initWin.isVisible()) {
+    dialog.showMessageBoxSync({
+      type: 'info',
+      message: 'Die Konfiguration kann während der Ersteinrichtung nicht geöffnet werden.'
+    })
+    return
+  }
   if (prefWin && !prefWin.isDestroyed()) { prefWin.focus(); return }
   if (pickerWin && !pickerWin.isDestroyed()) { pickerWin.close(); pickerWin = null }
   const parent =

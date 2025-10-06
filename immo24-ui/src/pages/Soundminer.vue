@@ -185,7 +185,16 @@ function deselectAllPresets() {
   cat3.forEach(i => i.selected = false)
 }
 
-onMounted(() => {
+onMounted(async () => {
+  // Initialer Status-Check direkt beim Laden
+  try {
+    const res = await fetch(`${API}/soundminer/status`)
+    isOnline.value = res.ok && (await res.json()).online
+  } catch {
+    isOnline.value = false
+  }
+
+  // Polling
   pollTimer = setInterval(async () => {
     try {
       const res = await fetch(`${API}/soundminer/status`)

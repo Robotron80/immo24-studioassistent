@@ -8,7 +8,8 @@ Der **immo24 Studioassistent** ist eine Desktop-Anwendung zur Verwaltung von Pro
 
 - Projektanlage nach Namenskonventionen und Vorlagen  
 - Automatische Verzeichnisstruktur mit Produktionsstufen  
-- Speichern und Abrufen von Pro Tools Presets (Store/Recall)  
+- Speichern und Abrufen von Pro Tools Presets (Store/Recall)
+- Speichern und Abrufen von Soundminer Presets (Store/Recall)
 - Multi-User Funktionalität mit Benutzer-Login  
 - Cross-Plattform (macOS & Windows)  
 
@@ -47,7 +48,7 @@ oder per Tastenkürzel: **CMD+,** (macOS) / **STRG+,** (Windows).
     - Produktionsstufen sind Ordner, in denen Pro Tools Sessions angelegt werden.  
 - Jeder Kunde kann eine individuelle Struktur haben.
 
-![Screenshot Produktionsbuch](./docs/screenshots/produktionsbuch.png)
+![Screenshot Produktionsbuch](./docs/screenshots/konfig_produktionsbuch.png)
 
 ### Mitarbeiter
 - Mitarbeiter = Unterverzeichnis im Ordner `Mitarbeiter`.  
@@ -58,6 +59,8 @@ oder per Tastenkürzel: **CMD+,** (macOS) / **STRG+,** (Windows).
     - Plug-In Settings
 Restlicher Ordner bleibt frei für Backups & Testprojekte.
 
+![Screenshot Mitarbeiter](./docs/screenshots/konfig_mitarbeiter.png)
+
 ### Namensschema
 - Projekte & Sessions folgen einem festen **Namensschema**.
     - Als Projektordner wird der Ordner bezeichnet, in dem alle Unterordner, Sessions, etc. liegen.
@@ -65,13 +68,23 @@ Restlicher Ordner bleibt frei für Backups & Testprojekte.
 - Variablen + Freitext kombinierbar, Vorschau zeigt Beispielausgabe. Das Session-Schema muss die Version beinhalten.
 - **Achtung:** Das Namensschema sollte nicht im laufenden Betrieb geändert werden, da nach einer Änderung vorhandene Projekte nicht mehr über immo24 Studioassistent bearbeitet werden können.
 
-![Screenshot Namensschema](./docs/screenshots/namensschema.png)
+![Screenshot Namensschema](./docs/screenshots/konfig_namensschema.png)
 
 ### Pfade
 - **Mitarbeiter** → siehe *Mitarbeiter*  
 - **Produktionen** → siehe *Produktionsbuch*  
 - **Stammdaten** → Namensschema & Kundendaten (z. B. auf Netzlaufwerk für gemeinsame Nutzung)  
 - **Pro Tools User** → typischerweise `/Users/<username>/Documents/Pro Tools` (macOS) oder `C:/Users/<username>/Documents/Pro Tools` (Windows)
+
+### Module
+Zusatzmodule können hier aktiviert werden.
+
+**Soundminer-Modul** 
+- Mit **Modul aktivieren** wird das Soundminer-Modul aktiviert. Der Tab **Soundminer** erscheint nach einem Neustart der Software.
+- **Version** → Die verwendete Soundminer-Version. Aktuell ist nur Version V6 Pro verfügbar.
+- **Soundminer Support Folder** → Der Pfad des Soundminer Support Verzeichnis 
+
+![Screenshot Module](./docs/screenshots/konfig_module.png)
 
 ### Passwort
 - Änderung des Passworts für das Konfigurationsmenü.
@@ -86,7 +99,7 @@ Nach Auswahl → „Anmelden“.
 
 ---
 
-### Modul Projektanlage
+### Projektanlage
 
 Über das Eingabeformular können Projekte und Sessions angelegt werden.  
 Unterschieden wird zwischen **Neuem Projekt** und **Vorhandenem Projekt**.
@@ -131,6 +144,26 @@ Gespeicherte Daten liegen in:
 `Mitarbeiter/<Name>/immo24`
 
 ![Screenshot Pro Tools Modul](./docs/screenshots/protools.png)
+
+---
+
+### Modul: Soundminer
+
+Über das **Soundminer Modul** können individuelle Presets und Templates zwischen einem zentralen Speicherort und dem lokalen Soundminer-Verzeichnis synchronisiert werden.
+
+Aktuell können nur die Tab-Layouts synchronisiert werden.
+
+Aktionen:
+- **Store** → lokale Files → zentraler Mitarbeiter-Ordner  
+- **Recall** → zentrale Files → lokales Soundminer-Verzeichnis  
+
+> Hinweis: Das Soundminer-Modul muss in der Konfiguration aktiviert werden. 
+> Einige Presets können nur synchronisiert werden, wenn Soundminer geschlossen ist.  
+
+Gespeicherte Daten liegen in:  
+`Mitarbeiter/<Name>/immo24/soundminer`
+
+![Screenshot Soundminer Modul](./docs/screenshots/soundminer.png)
 
 ---
 

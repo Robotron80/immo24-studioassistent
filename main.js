@@ -412,7 +412,16 @@ function createPreferencesWindow() {
     })
   }
   prefWin.once('ready-to-show', () => prefWin.show())
-  prefWin.on('closed', () => { prefWin = null })
+  prefWin.on('closed', async () => {
+    prefWin = null
+    // Prüfe, ob das MainWindow existiert und sichtbar ist
+    if (!mainWindow || mainWindow.isDestroyed() || !mainWindow.isVisible()) {
+      const pw = createUserPickerWindow()
+      // User-Liste holen und senden
+      const users = await getUsersFromNodeRed()
+      pw.webContents.once('did-finish-load', () => pw.webContents.send('users', users))
+    }
+  })
 }
 
 function createInitWindow() {

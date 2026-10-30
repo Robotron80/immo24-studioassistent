@@ -179,6 +179,17 @@ Gespeicherte Daten liegen in:
 - Node-RED läuft standardmäßig auf **Port 59593**  
 - Updates können einfach installiert werden, Konfiguration bleibt erhalten  
 
+### Backend-Entwicklung
+
+Das eingebettete Backend verwendet Node-RED 5. Für lokale Entwicklung und
+Backend-Tests ist Node.js ab 22.9 erforderlich; die ausgelieferte App verwendet
+die in Electron enthaltene Runtime.
+
+Mit `npm run test:backend` werden die vorhandenen Flows einschließlich der
+Zusatz-Nodes gestartet und die Ping-, Pfad- und Initialisierungs-Endpunkte
+geprüft. Der Test verwendet ein temporäres Datenverzeichnis und einen freien
+lokalen Port; bestehende Benutzerdaten werden nicht verwendet.
+
 ---
 
 ## 🛡️ Lizenz

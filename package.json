@@ -15,6 +15,7 @@
   },
   "scripts": {
     "start": "electron .",
+    "test:backend": "node --test tests/backend.test.cjs",
     "dist": "electron-builder",
     "dist:win": "electron-builder --win nsis --x64",
     "dist:mac:arm64": "electron-builder --mac dmg --arm64",
@@ -61,16 +62,15 @@
     "icon": "assets/icon",
     "asar": false,
     "afterPack": "afterPack.js"
-
   },
   "devDependencies": {
-    "electron": "^37.3.1",
+    "electron": "^45.1.0",
     "electron-builder": "^26.0.12"
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
-    "express": "4.21.2",
-    "node-red": "^4.1.0",
+    "express": "4.22.3",
+    "node-red": "^5.0.9",
     "node-red-contrib-fs-extra": "^1.0.1",
     "node-red-contrib-fs-ops": "^1.6.0",
     "node-red-contrib-os": "^0.2.1",

@@ -99,6 +99,18 @@ function exposedMethods(): Record<string, (arg: any) => unknown> {
   }
 }
 
+// Mit dem Startparameter --immo24-debug wird jeder Aufruf protokolliert, zur Fehlersuche
+const DEBUG = process.argv.includes('--immo24-debug')
+// Bei diesen Aufrufen stehen Passwörter in den Daten, sie bleiben aus dem Log heraus
+const SECRET_METHODS = new Set(['checkPassword', 'setPassword'])
+
+/** Schreibt einen Aufruf samt Dauer ins Log. Tut ohne --immo24-debug nichts. */
+function debugCall(method: string, arg: unknown, startedAt: number, outcome: string): void {
+  if (!DEBUG) return
+  const shownArg = SECRET_METHODS.has(method) || arg === undefined ? '' : ` ${JSON.stringify(arg)}`
+  logLine(`[debug] ${method}${shownArg} -> ${outcome} (${Date.now() - startedAt} ms)`)
+}
+
 /** Nimmt die Aufrufe der Oberfläche entgegen. Einmal beim Programmstart aufrufen. */
 export function registerBackendIpc(): void {
   const methods = exposedMethods()
@@ -107,9 +119,13 @@ export function registerBackendIpc(): void {
     if (!Object.hasOwn(methods, method)) {
       return { ok: false, error: { code: 'unknown_method', message: method } }
     }
+    const startedAt = Date.now()
     try {
-      return { ok: true, data: await methods[method](arg) }
+      const data = await methods[method](arg)
+      debugCall(method, arg, startedAt, 'ok')
+      return { ok: true, data }
     } catch (error) {
+      debugCall(method, arg, startedAt, error instanceof CoreError ? `Fehler ${error.code}` : `Fehler ${String(error)}`)
       if (error instanceof CoreError) {
         return { ok: false, error: { code: error.code, details: error.details } }
       }

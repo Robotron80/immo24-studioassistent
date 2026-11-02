@@ -48,9 +48,9 @@ interface ProjectMeta {
 const NOT_SCANNED = new Set(['Audio Files', 'Session File Backups', 'Fade Files', 'Video Files', 'Rendered Files'])
 
 /**
- * Sucht Sperrdateien einer offenen Session. Pro Tools legt laut Studio-Erfahrung eine
- * .tmp-Datei im Sessionordner an, solange die Session offen ist. Der genaue Name ist
- * noch unbestätigt, deshalb zählt jede .tmp-Datei. Im Zweifel lieber einmal mehr warnen.
+ * Sucht Sperrdateien einer offenen Session. Solange eine Session offen ist, legt Pro Tools
+ * daneben eine Datei mit ihrem Namen und der Endung .tmp an. Wir zählen bewusst jede
+ * .tmp-Datei: Eine falsche Warnung kostet nur einen Klick, eine verpasste Sperre mehr.
  */
 async function findLockFiles(projectDir: string): Promise<string[]> {
   const found: string[] = []

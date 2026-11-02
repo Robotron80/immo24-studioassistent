@@ -24,6 +24,19 @@ export function logLine(...args: unknown[]): void {
   }
 }
 
+const MAX_LOG_BYTES = 5 * 1024 * 1024
+
+/** Hält das Log klein: Beim Start wird ein zu großes Log zu app.old.log. */
+export function rotateLog(): void {
+  try {
+    const logDir = path.join(app.getPath('userData'), 'logs')
+    const file = path.join(logDir, 'app.log')
+    if (fs.statSync(file).size > MAX_LOG_BYTES) fs.renameSync(file, path.join(logDir, 'app.old.log'))
+  } catch {
+    // Noch kein Log vorhanden
+  }
+}
+
 // Merkt sich, ob gerade ein Fehlerfenster offen ist, damit sich keine stapeln.
 let errorBoxOpen = false
 

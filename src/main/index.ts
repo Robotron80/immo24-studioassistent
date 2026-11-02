@@ -15,7 +15,7 @@ import { app, session } from 'electron'
 
 import { backend } from './backend'
 import { registerIpc } from './ipc'
-import { installGlobalErrorHandlers, logLine, showOnceErrorBox } from './logger'
+import { installGlobalErrorHandlers, logLine, rotateLog, showOnceErrorBox } from './logger'
 import { installApplicationMenu } from './menu'
 import { assetPath, configureUserData, devServerUrl } from './paths'
 import {
@@ -73,6 +73,7 @@ function installNetworkGuard(): void {
  */
 async function startup(): Promise<void> {
   const startedAt = Date.now()
+  rotateLog()
   logLine('[startup] begin', `v${app.getVersion()}`)
   installNetworkGuard()
   ensureUserJsonFiles()

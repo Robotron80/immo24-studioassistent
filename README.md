@@ -200,6 +200,20 @@ App verwendet die in Electron enthaltene Runtime.
 | `npm run dist:mac` | DMG für Apple Silicon bauen |
 | `npm run dist:win` | Windows-Installer bauen |
 
+**Fehlersuche:** Das Log liegt im Einstellungsordner unter `logs/app.log`. Mit dem
+Startparameter `--immo24-debug` protokolliert das Programm zusätzlich jeden Backend-Aufruf
+samt Dauer und Fehler und zeigt das Menü „Entwickler“ mit der Konsole.
+
+```bash
+"/Applications/immo24 Studioassistent.app/Contents/MacOS/immo24 Studioassistent" --immo24-debug
+```
+
+Unter Windows das Programm mit `--immo24-debug` starten und das Log in PowerShell verfolgen:
+
+```powershell
+Get-Content "$env:APPDATA\immo24-studioassistent\logs\app.log" -Wait -Tail 50
+```
+
 Versionen mit `-next` im Namen laufen als **immo24 Studioassistent Next** mit
 eigenen Einstellungen neben der installierten Version.
 

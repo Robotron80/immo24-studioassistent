@@ -61,8 +61,8 @@ export function installApplicationMenu(): void {
     },
   ]
 
-  // Die Entwicklerkonsole nur beim Entwickeln oder mit dem Startparameter --dev-tools
-  if (!app.isPackaged || process.argv.includes('--dev-tools')) {
+  // Die Entwicklerkonsole nur beim Entwickeln oder mit dem Startparameter --immo24-debug
+  if (!app.isPackaged || process.argv.includes('--immo24-debug')) {
     template.push({
       label: 'Entwickler',
       submenu: [

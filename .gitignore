@@ -1,10 +1,17 @@
 node_modules/
 node-red-portable/
 dist/
+dist-electron/
+release/
 out/
 bin/
 *.log
 .DS_Store
+
+# beim Build erzeugte Typen
+src/renderer/typed-router.d.ts
+src/renderer/components.d.ts
+src/renderer/auto-imports.d.ts
 
 # local env files
 .env.local

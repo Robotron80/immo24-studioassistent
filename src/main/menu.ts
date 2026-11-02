@@ -1,0 +1,74 @@
+import { app, Menu, type MenuItemConstructorOptions } from 'electron'
+
+import { DEV_BACKEND } from './nodeRed'
+import { createPreferencesWindow, openDevTools } from './windows'
+
+export function installApplicationMenu(): void {
+  const isMac = process.platform === 'darwin'
+  const preferences: MenuItemConstructorOptions = {
+    label: 'Konfiguration',
+    accelerator: 'CommandOrControl+,',
+    click: () => createPreferencesWindow(),
+  }
+
+  const template: MenuItemConstructorOptions[] = [
+    isMac
+      ? {
+          label: app.name,
+          submenu: [
+            { role: 'about' },
+            { type: 'separator' },
+            preferences,
+            { type: 'separator' },
+            { role: 'hide' },
+            { role: 'hideOthers' },
+            { role: 'unhide' },
+            { type: 'separator' },
+            { role: 'quit' },
+          ],
+        }
+      : {
+          label: 'Datei',
+          submenu: [preferences, { type: 'separator' }, { role: 'quit' }],
+        },
+    {
+      label: 'Bearbeiten',
+      submenu: [
+        { role: 'undo' },
+        { role: 'redo' },
+        { type: 'separator' },
+        { role: 'cut' },
+        { role: 'copy' },
+        { role: 'paste' },
+        ...(isMac
+          ? ([
+              { role: 'pasteAndMatchStyle' },
+              { role: 'delete' },
+              { role: 'selectAll' },
+              { type: 'separator' },
+              { label: 'Sprachausgabe', submenu: [{ role: 'startSpeaking' }, { role: 'stopSpeaking' }] },
+            ] satisfies MenuItemConstructorOptions[])
+          : ([
+              { role: 'delete' },
+              { type: 'separator' },
+              { role: 'selectAll' },
+            ] satisfies MenuItemConstructorOptions[])),
+      ],
+    },
+  ]
+
+  if (DEV_BACKEND) {
+    template.push({
+      label: 'Entwickler',
+      submenu: [
+        {
+          label: 'Konsole öffnen',
+          accelerator: 'CmdOrCtrl+Shift+I',
+          click: () => openDevTools(),
+        },
+      ],
+    })
+  }
+
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template))
+}

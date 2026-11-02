@@ -1,7 +1,7 @@
 {
   "name": "immo24-studioassistent",
-  "version": "0.4.0-beta",
-  "main": "main.js",
+  "version": "1.0.0-next.1",
+  "main": "dist-electron/index.js",
   "description": "Applikation zur Dateiorganisation auf vernetzten Avid Pro Tools Systemen",
   "author": "Philipp Menzel",
   "license": "AGPL-3.0-only",
@@ -14,66 +14,44 @@
     "url": "https://github.com/Robotron80/immo24-studioassistent/issues"
   },
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
     "start": "electron .",
-    "test:backend": "node --test tests/backend.test.cjs",
-    "dist": "electron-builder",
-    "dist:win": "electron-builder --win nsis --x64",
-    "dist:mac:arm64": "electron-builder --mac dmg --arm64",
-    "dist:mac:x64": "electron-builder --mac dmg --x64"
-  },
-  "build": {
-    "appId": "de.immo24.studioassistent",
-    "productName": "immo24 Studioassistent",
-    "files": [
-      "main.js",
-      "preload.js",
-      "assets/**",
-      "package.json",
-      "immo24-ui/dist/**"
-    ],
-    "win": {
-      "target": [
-        "nsis"
-      ]
-    },
-    "nsis": {
-      "oneClick": false,
-      "perMachine": true,
-      "allowElevation": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "license": "assets/license.txt",
-      "deleteAppDataOnUninstall": true
-    },
-    "mac": {
-      "target": [
-        {
-          "target": "dmg"
-        }
-      ],
-      "category": "public.app-category.productivity"
-    },
-    "dmg": {
-      "iconSize": 128
-    },
-    "directories": {
-      "buildResources": "assets"
-    },
-    "icon": "assets/icon",
-    "asar": false,
-    "afterPack": "afterPack.js"
-  },
-  "devDependencies": {
-    "electron": "^45.1.0",
-    "electron-builder": "^26.0.12"
+    "typecheck": "tsc -p tsconfig.node.json",
+    "test": "node --test tests/backend.test.cjs",
+    "dist:dir": "npm run build && electron-builder --config electron-builder.config.cjs --dir",
+    "dist:mac": "npm run build && electron-builder --config electron-builder.config.cjs --mac dmg --arm64 --publish never",
+    "dist:win": "npm run build && electron-builder --config electron-builder.config.cjs --win nsis --x64 --publish never"
   },
   "dependencies": {
-    "@mdi/font": "^7.4.47",
     "express": "4.22.3",
     "node-red": "^5.0.9",
     "node-red-contrib-fs-extra": "^1.0.1",
     "node-red-contrib-fs-ops": "^1.6.0",
-    "node-red-contrib-os": "^0.2.1",
+    "node-red-contrib-os": "^0.2.1"
+  },
+  "devDependencies": {
+    "@fontsource/roboto": "5.2.6",
+    "@mdi/font": "7.4.47",
+    "@types/node": "^24.13.2",
+    "@vitejs/plugin-vue": "^5.2.3",
+    "electron": "^45.1.0",
+    "electron-builder": "^26.0.12",
+    "eslint": "^9.30.1",
+    "eslint-config-vuetify": "^4.0.0",
+    "pinia": "^3.0.3",
+    "sass-embedded": "^1.89.2",
+    "typescript": "~6.0.2",
+    "unplugin-auto-import": "^19.3.0",
+    "unplugin-fonts": "^1.3.1",
+    "unplugin-vue-components": "^28.8.0",
+    "unplugin-vue-router": "^0.14.0",
+    "vite": "^6.3.5",
+    "vite-plugin-electron": "^1.2.0",
+    "vite-plugin-vue-layouts-next": "^1.0.0",
+    "vite-plugin-vuetify": "^2.1.1",
+    "vue": "^3.5.17",
+    "vue-router": "^4.5.1",
     "vuetify": "^3.9.3"
   }
 }

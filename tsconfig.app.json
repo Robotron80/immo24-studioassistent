@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "target": "es2023",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "lib": ["es2023", "dom", "dom.iterable"],
+    "paths": {
+      "@/*": ["./src/renderer/*"]
+    },
+    "skipLibCheck": true,
+    "noEmit": true
+  },
+  "include": ["src/renderer/**/*"]
+}

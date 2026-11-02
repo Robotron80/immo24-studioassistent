@@ -179,13 +179,26 @@ Gespeicherte Daten liegen in:
 - Node-RED läuft standardmäßig auf **Port 59593**  
 - Updates können einfach installiert werden, Konfiguration bleibt erhalten  
 
-### Backend-Entwicklung
+### Entwicklung
 
-Das eingebettete Backend verwendet Node-RED 5. Für lokale Entwicklung und
-Backend-Tests ist Node.js ab 22.9 erforderlich; die ausgelieferte App verwendet
-die in Electron enthaltene Runtime.
+Für die lokale Entwicklung ist Node.js ab 22.9 erforderlich; die ausgelieferte
+App verwendet die in Electron enthaltene Runtime.
 
-Mit `npm run test:backend` werden die vorhandenen Flows einschließlich der
+| Befehl | Zweck |
+|---|---|
+| `npm run dev` | App mit Dev-Server starten |
+| `npm run typecheck` | Hauptprozess prüfen |
+| `npm test` | Backend-Tests ausführen |
+| `npm run dist:mac` | DMG für Apple Silicon bauen |
+| `npm run dist:win` | Windows-Installer bauen |
+
+Versionen mit `-next` im Namen laufen als **immo24 Studioassistent Next** mit
+eigenen Einstellungen neben der installierten Version. Beide lassen sich
+installieren, aber nicht gleichzeitig starten, da sie denselben Port verwenden.
+
+Das eingebettete Backend verwendet Node-RED 5.
+
+Mit `npm test` werden die vorhandenen Flows einschließlich der
 Zusatz-Nodes gestartet und die Ping-, Pfad- und Initialisierungs-Endpunkte
 geprüft. Der Test verwendet ein temporäres Datenverzeichnis und einen freien
 lokalen Port; bestehende Benutzerdaten werden nicht verwendet.

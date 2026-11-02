@@ -8,6 +8,7 @@
 import { createConfigService } from '../../src/core/config.ts'
 import { CoreError } from '../../src/core/errors.ts'
 import { createPasswordService } from '../../src/core/password.ts'
+import { createPresetService } from '../../src/core/presets.ts'
 import { createProjectService } from '../../src/core/projects.ts'
 import { createSessionService } from '../../src/core/session.ts'
 import { createStammdatenService } from '../../src/core/stammdaten.ts'
@@ -57,6 +58,14 @@ export function createCoreRequest(userDataDir: string) {
   const session = createSessionService(config)
   const stammdaten = createStammdatenService(config)
   const projects = createProjectService(config, stammdaten, session)
+  // In den Tests läuft weder Pro Tools noch Soundminer
+  const presets = createPresetService(config, session, async () => false)
+
+  /** Node-RED antwortete mit 207, wenn nicht alles glatt lief. */
+  const presetResponse = (body: { details: Array<{ status: string }> }): AdapterResponse => ({
+    status: body.details.every((detail) => detail.status === 'ok') ? 200 : 207,
+    body,
+  })
 
   async function route(key: string, url: URL, body: any): Promise<AdapterResponse> {
     switch (key) {
@@ -112,6 +121,10 @@ export function createCoreRequest(userDataDir: string) {
         return { status: 200, body: await projects.createProject(body) }
       case 'POST /api/projektanlage/resolve-existing':
         return { status: 200, body: await projects.addSession(body) }
+      case 'POST /api/protools/presets':
+        return presetResponse(await presets.runProTools(body))
+      case 'POST /api/soundminer/presets':
+        return presetResponse(await presets.runSoundminer(body))
       default:
         throw new Error(`Im Adapter noch nicht vorhanden: ${key}`)
     }

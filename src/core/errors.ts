@@ -34,6 +34,8 @@ export type CoreErrorCode =
   | 'validation_failed'
   | 'project_exists'
   | 'not_found'
+  | 'invalid_action'
+  | 'nothing_selected'
 
 export class CoreError extends Error {
   /** Fester Code, z. B. "version_conflict". */

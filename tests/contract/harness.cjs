@@ -142,7 +142,8 @@ async function startBackend({ seed } = {}) {
           files[`${rel}/`] = null
           walk(full)
         } else {
-          files[rel] = normalizeText(fs.readFileSync(full, 'utf8'))
+          // Windows schreibt Zeilenenden als \r\n: Für den Vergleich zählt nur der Inhalt
+          files[rel] = normalizeText(fs.readFileSync(full, 'utf8')).replaceAll('\r\n', '\n')
         }
       }
     }

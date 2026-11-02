@@ -93,7 +93,7 @@ test('Pro-Tools- und Soundminer-Presets', { timeout: 120000 }, async (t) => {
   snapshot('Lokal nach Recall', dirs.ptUser)
 
   // Soundminer
-  await call('Soundminer: nichts ausgewählt', 'POST', '/api/soundminer/presets', { action: 'store', categories: {} })
+  await call('Hänger: Soundminer ohne Auswahl', 'POST', '/api/soundminer/presets', { action: 'store', categories: {} })
   await call('Soundminer Store', 'POST', '/api/soundminer/presets', { action: 'store', categories: { cat1: [{ key: 'tablayouts' }] } })
   snapshot('Archiv nach Soundminer-Store', path.join(archive, 'soundminer'))
   write(path.join(archive, 'soundminer', 'Neu.tabstate'), 'neu')

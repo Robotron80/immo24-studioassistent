@@ -31,8 +31,11 @@ const path = require('node:path')
 
 const ROOT = path.resolve(__dirname, '../..')
 const REFERENCE_DIR = path.join(__dirname, 'reference')
-// Antwortet das Backend so lange nicht, gilt die Anfrage als "hängt".
-const HANG_TIMEOUT_MS = 3000
+// Schritte mit "Hänger" im Namen antworten bekanntlich nie, dort warten wir nur kurz.
+// Alle anderen dürfen länger dauern: Windows braucht z. B. für die PowerShell-Abfrage
+// des Soundminer-Status mehrere Sekunden.
+const KNOWN_HANG_TIMEOUT_MS = 3000
+const REQUEST_TIMEOUT_MS = 30000
 const SESSION_SCHEMA = '{{datum}} {{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}'
 
 /** Schreibt eine Testdatei und legt fehlende Ordner vorher an. */
@@ -104,7 +107,8 @@ function createEnvironment({ seed } = {}) {
 
   /** Stellt eine Anfrage und schreibt Anfrage und Antwort ins Protokoll. */
   env.call = async (label, method, url, body) => {
-    const response = await env.request(method, url, body)
+    const timeout = label.startsWith('Hänger') ? KNOWN_HANG_TIMEOUT_MS : REQUEST_TIMEOUT_MS
+    const response = await env.request(method, url, body, timeout)
     steps.push({ step: label, request: `${method} ${url}`, response: normalizeValue(response, normalizeText) })
     return response
   }
@@ -185,13 +189,13 @@ async function startBackend({ seed } = {}) {
   await RED.start()
 
   /** Echte HTTP-Anfrage. Kommt keine Antwort, wird { hang: true } festgehalten. */
-  env.request = async (method, url, body) => {
+  env.request = async (method, url, body, timeout = REQUEST_TIMEOUT_MS) => {
     try {
       const res = await fetch(`http://127.0.0.1:${port}${url}`, {
         method,
         headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },
         body: body === undefined ? undefined : JSON.stringify(body),
-        signal: AbortSignal.timeout(HANG_TIMEOUT_MS),
+        signal: AbortSignal.timeout(timeout),
       })
       const text = await res.text()
       let parsed = text

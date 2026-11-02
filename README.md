@@ -128,6 +128,15 @@ Aktionen:
 
 ![Screenshot Vorhandenes Projekt](./docs/screenshots/projekt_vorhanden.png)
 
+#### Projekt umbenennen
+Ist die Funktion in der Konfiguration unter **Module** eingeschaltet, erscheint in der Projektliste ein Stift. Projektname und Mo-ID lassen sich so ändern.
+
+- Eine Vorschau zeigt den neuen Ordnernamen, bevor etwas passiert.
+- Pro Tools muss auf diesem Rechner geschlossen sein. Sperrdateien einer offenen Session werden angezeigt.
+- Vorhandene Sessions behalten ihren Namen. Neue Sessions tragen den neuen Namen, die Version zählt weiter.
+- Videodateien müssen danach eventuell neu in die Session importiert werden.
+- Frühere Namen stehen in `immo24-proj.json` im Feld `umbenannt`.
+
 ---
 
 ### Modul: Pro Tools

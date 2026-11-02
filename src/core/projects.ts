@@ -272,7 +272,8 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
         datum: new Date().toISOString().slice(0, 10),
         benutzer: user.kuerzel.normalize('NFC'),
         produktionsstufe: String(input.stufeLabel ?? '').normalize('NFC'),
-      }, ['datum', 'benutzer'])
+        // Auch Name und MoID zählen nicht: Nach dem Umbenennen zählt die Version weiter
+      }, ['datum', 'benutzer', 'projektname', 'moid'])
       await copySession(sources, stageDir, filename)
 
       return { ok: true, zielPfad, templateDest: stageDir, filename }

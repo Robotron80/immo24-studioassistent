@@ -18,6 +18,7 @@ import { createPasswordService } from '../core/password.ts'
 import { createPresetService } from '../core/presets.ts'
 import { isProcessRunning } from '../core/processes.ts'
 import { createProjectService, type ProjectInput } from '../core/projects.ts'
+import { createRenameService, type RenameInput } from '../core/rename.ts'
 import { createSessionService } from '../core/session.ts'
 import { createStammdatenService } from '../core/stammdaten.ts'
 import { createUserService } from '../core/users.ts'
@@ -38,6 +39,7 @@ function createServices() {
     users: createUserService(config),
     projects: createProjectService(config, stammdaten, session),
     presets: createPresetService(config, session, isProcessRunning),
+    rename: createRenameService(config, session, isProcessRunning),
   }
 }
 
@@ -51,7 +53,7 @@ export function backend() {
 
 /** Alle Funktionen, die die Oberfläche aufrufen darf. */
 function exposedMethods(): Record<string, (arg: any) => unknown> {
-  const { config, passwords, presets, projects, session, stammdaten, users } = backend()
+  const { config, passwords, presets, projects, rename, session, stammdaten, users } = backend()
   return {
     getInitializeStatus: () => config.getInitializeStatus(),
     getPaths: () => config.getPaths(),
@@ -81,6 +83,14 @@ function exposedMethods(): Record<string, (arg: any) => unknown> {
       return result
     },
     addSession: (input: ProjectInput) => projects.addSession(input),
+
+    isRenameEnabled: () => rename.isEnabled(),
+    previewRename: (input: RenameInput) => rename.preview(input),
+    renameProject: async (input: RenameInput) => {
+      const result = await rename.rename(input)
+      logLine(`[projekt] umbenannt: ${result.von} -> ${result.nach}${input.trotzSperre ? ' (trotz Sperrdatei)' : ''}`)
+      return result
+    },
 
     proToolsStatus: () => presets.proToolsStatus(),
     runProToolsPresets: (input) => presets.runProTools(input),

@@ -36,6 +36,11 @@ export type CoreErrorCode =
   | 'not_found'
   | 'invalid_action'
   | 'nothing_selected'
+  | 'nichts_geaendert'
+  | 'schema_passt_nicht'
+  | 'protools_laeuft'
+  | 'session_offen'
+  | 'umbenennen_blockiert'
 
 export class CoreError extends Error {
   /** Fester Code, z. B. "version_conflict". */

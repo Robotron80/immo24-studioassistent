@@ -30,6 +30,11 @@ const MESSAGES = {
   project_fields_missing: 'Bitte alle Felder ausfüllen.',
   invalid_action: 'Ungültige Aktion.',
   nothing_selected: 'Bitte mindestens einen Eintrag auswählen.',
+  nichts_geaendert: 'Name und Mo-ID sind unverändert.',
+  schema_passt_nicht: 'Der Projektordner passt nicht zum aktuellen Namensschema und wird deshalb nicht angefasst.',
+  protools_laeuft: 'Pro Tools läuft auf diesem Rechner. Bitte zuerst schließen.',
+  session_offen: 'Im Projekt liegt eine Sperrdatei, vermutlich ist eine Session geöffnet.',
+  umbenennen_blockiert: 'Der Ordner ließ sich nicht umbenennen, vermutlich ist darin eine Datei geöffnet.',
 }
 
 export class BackendError extends Error {
@@ -75,6 +80,10 @@ export const backend = {
   listProjects: kunde => call('listProjects', kunde),
   createProject: input => call('createProject', input),
   addSession: input => call('addSession', input),
+
+  isRenameEnabled: () => call('isRenameEnabled'),
+  previewRename: input => call('previewRename', input),
+  renameProject: input => call('renameProject', input),
 
   proToolsStatus: () => call('proToolsStatus'),
   runProToolsPresets: input => call('runProToolsPresets', input),

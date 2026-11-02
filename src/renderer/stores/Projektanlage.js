@@ -70,6 +70,7 @@ export const useProjektanlage = defineStore('Projektanlage', {
     loading: { kunden:false, templates:false, rows:false, stufen:false, create:false },
     error: null,
     activeUser: null,
+    renameEnabled: false,
   }),
 
   actions: {
@@ -83,13 +84,18 @@ export const useProjektanlage = defineStore('Projektanlage', {
 
     async init() {
       try { await this.fetchActiveUser() } catch {}
-      await Promise.allSettled([ this.loadKunden(), this.loadTemplates() ])
+      await Promise.allSettled([ this.loadKunden(), this.loadTemplates(), this.loadRenameEnabled() ])
+    },
+
+    // Ist das Umbenennen in der Konfiguration eingeschaltet?
+    async loadRenameEnabled() {
+      this.renameEnabled = await backend.isRenameEnabled()
     },
 
     // Nach der Konfiguration: Listen neu laden. Ein gewählter Kunde bleibt gewählt,
     // seine Produktionsstufen können sich aber geändert haben.
     async refreshAfterConfig() {
-      await Promise.allSettled([ this.loadKunden(), this.loadTemplates() ])
+      await Promise.allSettled([ this.loadKunden(), this.loadTemplates(), this.loadRenameEnabled() ])
       if (this.form.kunde) await this.selectKunde(this.form.kunde)
     },
 
@@ -211,6 +217,12 @@ export const useProjektanlage = defineStore('Projektanlage', {
       } finally {
         this.loading.create = false
       }
+    },
+
+    // Nach dem Umbenennen: Liste neu laden, die alten Werte im Formular passen nicht mehr
+    async resetAfterRename() {
+      Object.assign(this.form, { projektname: '', moid: '', datum: new Date().toISOString().slice(0, 10) })
+      await this.loadRows(this.form.kunde)
     },
 
     resetForm() {

@@ -38,6 +38,20 @@
       </v-btn>
     </div>
   </v-card>
+
+  <v-card class="pa-4 mb-4 shadow-card" variant="text">
+    <div class="schema-title mb-2">Projekte umbenennen</div>
+    <v-checkbox
+      v-model="staged.renameEnabled"
+      label="Umbenennen vorhandener Projekte erlauben"
+      density="comfortable"
+      hide-details
+      class="ma-0"
+    />
+    <div class="text-caption text-medium-emphasis mt-1">
+      Erst einschalten, wenn das Umbenennen auf dem gemeinsamen Speicher getestet wurde.
+    </div>
+  </v-card>
 </template>
 
 <script setup>
@@ -58,8 +72,8 @@ const soundminerVersions = [
 ]
 
 // Serverzustand + Arbeitskopie (UI-Felder bleiben flach: soundminerEnabled/Path/Version)
-const original = ref({ data:{ soundminerEnabled:false, soundminerPath:'', soundminerVersion:'' }, version:'' })
-const staged   = reactive({ soundminerEnabled:false, soundminerPath:'', soundminerVersion:'' })
+const original = ref({ data:{ soundminerEnabled:false, soundminerPath:'', soundminerVersion:'', renameEnabled:false }, version:'' })
+const staged   = reactive({ soundminerEnabled:false, soundminerPath:'', soundminerVersion:'', renameEnabled:false })
 const loading  = ref(false)
 const error    = ref('')
 
@@ -89,7 +103,8 @@ async function loadSnapshot() {
       data: {
         soundminerEnabled: !!sm.enabled,
         soundminerPath:    typeof sm.supportPath === 'string' ? sm.supportPath : '',
-        soundminerVersion: typeof sm.version === 'string' ? sm.version : ''
+        soundminerVersion: typeof sm.version === 'string' ? sm.version : '',
+        renameEnabled: !!snap?.data?.umbenennen?.enabled
           },
       version: snap?.version || ''
     }
@@ -130,7 +145,8 @@ defineExpose({
         enabled: !!staged.soundminerEnabled,
         supportPath: staged.soundminerPath || '',
         version: staged.soundminerVersion || ''
-      }
+      },
+      umbenennen: { enabled: !!staged.renameEnabled }
     }
   }),
   resetToServer: async () => { await loadSnapshot() }

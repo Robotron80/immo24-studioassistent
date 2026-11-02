@@ -3,9 +3,8 @@
  *
  * Es ist eine Sperre gegen versehentliche Änderungen, kein Sicherheitsmerkmal.
  * Deshalb liegt es bewusst lesbar in adminpw.json im Einstellungsordner:
- * nachschauen geht jederzeit. Wer die Datei löscht, setzt es zurück: Beim nächsten
- * Start legt die App sie mit dem Standardpasswort aus assets/adminpw.json neu an.
- * Ist die Datei leer, ist kein Passwort gesetzt und die Konfiguration offen.
+ * nachschauen geht jederzeit. Das Passwort entsteht im Einrichtungsassistenten. Wer die
+ * Datei löscht, setzt es zurück: Ohne gesetztes Passwort ist die Konfiguration offen.
  *
  * Format: { "password": "..." }. Version 0.4 liest und schreibt dasselbe.
  * Ältere Dateien können das Passwort auch als reinen Text enthalten.

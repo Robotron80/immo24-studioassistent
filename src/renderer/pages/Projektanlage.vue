@@ -147,6 +147,15 @@
                   <td>{{ item.projektname }}</td>
                   <td>{{ item.moid }}</td>
                   <td>{{ item.user }}</td>
+                  <td v-if="store.renameEnabled" class="text-right">
+                    <v-btn
+                      icon="mdi-pencil"
+                      size="x-small"
+                      variant="text"
+                      aria-label="Projekt umbenennen"
+                      @click.stop="startRename(item)"
+                    />
+                  </td>
                 </tr>
               </template>
               <template #no-data>
@@ -161,6 +170,8 @@
     <v-snackbar v-model="snack.show" :color="snack.color" timeout="3500">
       {{ snack.text }}
     </v-snackbar>
+
+    <RenameProjectDialog v-model="rename.open" :kunde="form.kunde" :project="rename.project" @renamed="onRenamed" />
 
     <v-dialog v-model="openDialog" max-width="400">
       <v-card>
@@ -196,12 +207,24 @@ const formRef = ref(null)
 
 
 // Tabelle / Suche
-const headers = [
+const headers = computed(() => [
   { title: 'Datum', key: 'date' },
   { title: 'Projektname', key: 'projektname' },
   { title: 'Mo-ID', key: 'moid' },
   { title: 'Mitarbeiter*in', key: 'user' },
-]
+  ...(store.renameEnabled ? [{ title: '', key: 'aktionen', sortable: false }] : []),
+])
+
+// Umbenennen
+const rename = reactive({ open: false, project: null })
+function startRename(row) {
+  rename.project = row
+  rename.open = true
+}
+async function onRenamed({ nach }) {
+  toast(`Umbenannt in: ${nach}`, 'success')
+  await store.resetAfterRename()
+}
 const search = ref('')
 const filteredRows = computed(() => {
   const q = search.value?.toLowerCase() || ''

@@ -136,6 +136,12 @@ export const useProjektanlage = defineStore('Projektanlage', {
       } finally { this.loading.stufen = false }
     },
 
+    // MoID immer groß, keine Leerzeichen am Rand. Läuft auch beim Verlassen der Felder.
+    normalizeNames() {
+      this.form.moid = String(this.form.moid ?? '').trim().toUpperCase()
+      this.form.projektname = String(this.form.projektname ?? '').trim()
+    },
+
     validateRequired() {
       const f = this.form, fehlende = []
       if (!f.kunde) fehlende.push('Kunde')
@@ -183,6 +189,9 @@ export const useProjektanlage = defineStore('Projektanlage', {
       const stufeLabel =
         this.stufen.find(s => s.value === stufeValue)?.label
         || (stufeValue || '').replace(/^\d+_/, '').replace(/_/g, ' ').trim()
+
+      // Bei neuen Projekten die Eingaben bereinigen, damit das Formular zeigt, was entsteht
+      if (this.form.vorhanden === 'neu') this.normalizeNames()
 
       const { kunde, vorhanden, projektname, moid, datum, template, stufe } = this.form
       const payload = { kunde, vorhanden, projektname, moid, datum, template, stufe, stufeLabel }

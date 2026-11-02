@@ -47,6 +47,7 @@
                 <v-text-field
                   v-model="form.moid"
                   label="Mo-ID" 
+                  @blur="store.normalizeNames()"
                   :disabled ="isVorhanden"
                   prepend-inner-icon="mdi-identifier"
                   variant="outlined" density="comfortable"
@@ -57,6 +58,7 @@
               <v-col cols="12">
                 <v-text-field
                   v-model="form.projektname"
+                  @blur="store.normalizeNames()"
                   label="Projektname" :disabled="isVorhanden"
                   prepend-inner-icon="mdi-file-document-edit-outline"
                   variant="outlined" density="comfortable"

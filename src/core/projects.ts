@@ -35,6 +35,15 @@ export interface ProjectInput {
 const DEFAULT_SESSION_SCHEMA = '{{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}'
 const REQUIRED_FIELDS = ['kunde', 'datum', 'moid', 'projektname', 'stufe', 'template'] as const
 
+/** Entfernt versehentliche Leerzeichen am Rand der Eingaben, die zu Ordnernamen werden. */
+function trimNames(input: ProjectInput): ProjectInput {
+  return {
+    ...input,
+    projektname: String(input?.projektname ?? '').trim(),
+    moid: String(input?.moid ?? '').trim(),
+  }
+}
+
 /** Prüft Pflichtfelder und alle Namen, die später zu Ordnern oder Dateien werden. */
 function validate(input: ProjectInput): Required<Pick<ProjectInput, (typeof REQUIRED_FIELDS)[number]>> {
   const missing = REQUIRED_FIELDS.filter((field) => !input?.[field])
@@ -128,7 +137,7 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
       return options.sort((a, b) => a.label.localeCompare(b.label, 'de', { sensitivity: 'base', numeric: true }))
     },
 
-    /** Für "vorhandenes Projekt": alle Projekte eines Kunden mit gültigen Metadaten. */
+    /** Für "vorhandenes Projekt": alle Projekte eines Kunden mit gültigen Metadaten, neueste zuerst. */
     async listProjects(kundeInput: unknown) {
       const kunde = String(kundeInput ?? '').trim()
       if (!kunde) throw new CoreError('kunde_required')
@@ -141,7 +150,10 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
         if (!meta?.erstellt_am || !meta.projektname || !meta.mo_id || !meta.user) return null
         return { date: meta.erstellt_am, projektname: meta.projektname, moid: meta.mo_id, user: meta.user }
       }))
-      return rows.filter((row) => row !== null)
+      // Neueste zuerst, bei gleichem Datum alphabetisch
+      return rows
+        .filter((row) => row !== null)
+        .sort((a, b) => b.date.localeCompare(a.date) || a.projektname.localeCompare(b.projektname, 'de'))
     },
 
     /**
@@ -151,7 +163,9 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
      * Projekt zurückbleibt, das eine Wiederholung blockiert.
      */
     async createProject(input: ProjectInput) {
-      const data = validate(input)
+      // Die MoID schreiben wir bei neuen Projekten immer groß
+      const trimmed = trimNames(input)
+      const data = validate({ ...trimmed, moid: trimmed.moid?.toUpperCase() })
       const user = session.requireUser()
       const { produktionen, mitarbeiter, projektordnerSchema, sessionSchema } = await settings()
 
@@ -220,7 +234,9 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
      * ursprüngliche Datum und Kürzel, die Session bekommt aber das heutige Datum.
      */
     async addSession(input: ProjectInput) {
-      const data = validate(input)
+      // Die MoID bleibt hier unverändert: Ältere Projekte können sie kleingeschrieben
+      // im Ordnernamen tragen und würden sonst nicht mehr gefunden.
+      const data = validate(trimNames(input))
       const user = session.requireUser()
       const { produktionen, mitarbeiter, projektordnerSchema, sessionSchema } = await settings()
 

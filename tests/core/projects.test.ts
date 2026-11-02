@@ -114,6 +114,41 @@ test('Punkte im Projektnamen kürzen den Sessionnamen nicht ab', async (t) => {
   assert.match(next.filename, /Spot v1\.2 AB12 - Dialog TE v2\.ptx$/)
 })
 
+test('neue Projekte: MoID wird großgeschrieben, Leerzeichen am Rand entfernt', async (t) => {
+  const { dirs, projects } = await setup(t)
+  const created = await projects.createProject({ ...project, moid: ' ab12 ', projektname: '  Testprojekt ' })
+
+  assert.equal(created.filename, '2026-01-15 Testprojekt AB12 - Dialog TE v1.ptx')
+  const meta = JSON.parse(fs.readFileSync(path.join(dirs.produktionen, 'Kunde A', PROJECT_FOLDER, 'immo24-proj.json'), 'utf8'))
+  assert.equal(meta.mo_id, 'AB12')
+  assert.equal(meta.projektname, 'Testprojekt')
+})
+
+test('nur aus Leerzeichen bestehende Eingaben gelten als fehlend', async (t) => {
+  const { projects } = await setup(t)
+  await assert.rejects(projects.createProject({ ...project, moid: '   ' }), hasCode('project_fields_missing'))
+})
+
+test('vorhandene Projekte mit kleingeschriebener MoID werden weiter gefunden', async (t) => {
+  // Solche Ordner kann Version 0.4 angelegt haben
+  const { dirs, projects } = await setup(t)
+  const folder = path.join(dirs.produktionen, 'Kunde A', '2026-01-15 Testprojekt ab12', '02_Dialogschnitt')
+  fs.mkdirSync(folder, { recursive: true })
+
+  const next = await projects.addSession({ ...project, moid: 'ab12 ' })
+  assert.match(next.filename, /Testprojekt ab12 - Dialog TE v1\.ptx$/)
+})
+
+test('die Projektliste zeigt die neuesten Projekte zuerst', async (t) => {
+  const { projects } = await setup(t)
+  await projects.createProject({ ...project, datum: '2026-01-15', moid: 'AA01', projektname: 'Mittel' })
+  await projects.createProject({ ...project, datum: '2026-03-01', moid: 'AA02', projektname: 'Neu' })
+  await projects.createProject({ ...project, datum: '2025-12-24', moid: 'AA03', projektname: 'Alt' })
+
+  const rows = await projects.listProjects('Kunde A')
+  assert.deepEqual(rows.map((row) => row.projektname), ['Neu', 'Mittel', 'Alt'])
+})
+
 test('legt nichts an, wenn der Produktionen-Ordner fehlt', async (t) => {
   // So sieht es aus, wenn der Share nicht eingehängt ist
   const { dirs, projects, stammdaten } = await setup(t)

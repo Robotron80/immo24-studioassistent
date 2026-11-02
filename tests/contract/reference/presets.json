@@ -1,0 +1,475 @@
+[
+  {
+    "step": "Start",
+    "request": "GET /api/initialize",
+    "response": {
+      "status": 200,
+      "body": {
+        "ready": true,
+        "initialize": {
+          "paths_json_present": true,
+          "required_keys_ok": true,
+          "schema_ok": true,
+          "dirs_exist": null,
+          "missingKeys": [],
+          "emptyKeys": [],
+          "notFoundDirs": null,
+          "needsUserAction": false
+        },
+        "paths": {
+          "PathMitarbeiter": "<BASE>/Mitarbeiter",
+          "PathProduktionen": "<BASE>/Produktionen",
+          "PathStammdaten": "<BASE>/Stammdaten",
+          "PathPTUser": "<BASE>/ProToolsUser"
+        },
+        "schema": {
+          "sessionSchema": "{{datum}} {{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}",
+          "projektordnerSchema": "{{datum}} {{projektname}} {{moid}}"
+        },
+        "modules": {
+          "soundminer": {
+            "enabled": true,
+            "version": "V6 Pro",
+            "supportPath": "<BASE>/SoundminerSupport"
+          }
+        }
+      }
+    }
+  },
+  {
+    "step": "Module laden",
+    "request": "GET /api/modules",
+    "response": {
+      "status": 200,
+      "body": {
+        "data": {
+          "soundminer": {
+            "enabled": true,
+            "version": "V6 Pro",
+            "supportPath": "<BASE>/SoundminerSupport"
+          }
+        },
+        "version": "<VERSION>"
+      }
+    }
+  },
+  {
+    "step": "Anmelden",
+    "request": "POST /api/login",
+    "response": {
+      "status": 200,
+      "body": "TE"
+    }
+  },
+  {
+    "step": "Hänger: nichts ausgewählt",
+    "request": "POST /api/protools/presets",
+    "response": {
+      "hang": true
+    }
+  },
+  {
+    "step": "Store alles, ohne Quick",
+    "request": "POST /api/protools/presets",
+    "response": {
+      "status": 207,
+      "body": {
+        "action": "store",
+        "overall": "error",
+        "details": [
+          {
+            "category": "fadePresets",
+            "status": "error"
+          }
+        ],
+        "jobId": "<ID>",
+        "started": "<TIME>",
+        "finished": "<TIME>",
+        "message": "Vorgang abgeschlossen – Fehler aufgetreten"
+      }
+    }
+  },
+  {
+    "step": "Archiv nach Store nur Fades",
+    "files": {
+      "Mitarbeiter/Tester/immo24/fadepresets/": null,
+      "Mitarbeiter/Tester/immo24/fadepresets/Batch Fade/": null,
+      "Mitarbeiter/Tester/immo24/fadepresets/Batch Fade/Stapel.fdpreset": "stapel",
+      "Mitarbeiter/Tester/immo24/fadepresets/Cross Fade/": null,
+      "Mitarbeiter/Tester/immo24/fadepresets/Cross Fade/Kreuz.fdpreset": "kreuz",
+      "Mitarbeiter/Tester/immo24/fadepresets/Fade In/": null,
+      "Mitarbeiter/Tester/immo24/fadepresets/Fade In/Weich.fdpreset": "fade",
+      "Mitarbeiter/Tester/immo24/fadepresets/Fade Out/": null,
+      "Mitarbeiter/Tester/immo24/fadepresets/Fade Out/Hart.fdpreset": "hart",
+      "Mitarbeiter/Tester/immo24/immo24-user.json": "TE"
+    }
+  },
+  {
+    "step": "Store alles",
+    "request": "POST /api/protools/presets",
+    "response": {
+      "status": 200,
+      "body": {
+        "action": "store",
+        "overall": "ok",
+        "details": [
+          {
+            "category": "templates",
+            "status": "ok"
+          },
+          {
+            "category": "trackpresets",
+            "status": "ok"
+          },
+          {
+            "category": "pluginsettings",
+            "status": "ok"
+          },
+          {
+            "category": "fadePresets",
+            "status": "ok"
+          },
+          {
+            "category": "clipfxpresets",
+            "status": "ok"
+          },
+          {
+            "category": "memoryLocation",
+            "status": "ok"
+          },
+          {
+            "category": "trackdatarecall",
+            "status": "ok"
+          },
+          {
+            "category": "keyboardshortcuts",
+            "status": "ok"
+          }
+        ],
+        "jobId": "<ID>",
+        "started": "<TIME>",
+        "finished": "<TIME>",
+        "message": "Store erfolgreich"
+      }
+    }
+  },
+  {
+    "step": "Archiv nach Store",
+    "files": {
+      "Mitarbeiter/Tester/immo24/clipeffectspresets/": null,
+      "Mitarbeiter/Tester/immo24/clipeffectspresets/Clip.tfx": "clip",
+      "Mitarbeiter/Tester/immo24/clipeffectspresets/Quick Presets/": null,
+      "Mitarbeiter/Tester/immo24/clipeffectspresets/Quick Presets/Quick Preset 1.tfx": "quick clip",
+      "Mitarbeiter/Tester/immo24/fadepresets/": null,
+      "Mitarbeiter/Tester/immo24/fadepresets/Batch Fade/": null,
+      "Mitarbeiter/Tester/immo24/fadepresets/Batch Fade/Stapel.fdpreset": "stapel",
+      "Mitarbeiter/Tester/immo24/fadepresets/Cross Fade/": null,
+      "Mitarbeiter/Tester/immo24/fadepresets/Cross Fade/Kreuz.fdpreset": "kreuz",
+      "Mitarbeiter/Tester/immo24/fadepresets/Fade In/": null,
+      "Mitarbeiter/Tester/immo24/fadepresets/Fade In/Quick Preset 1.fdpreset": "quick fade",
+      "Mitarbeiter/Tester/immo24/fadepresets/Fade In/Weich.fdpreset": "fade",
+      "Mitarbeiter/Tester/immo24/fadepresets/Fade Out/": null,
+      "Mitarbeiter/Tester/immo24/fadepresets/Fade Out/Hart.fdpreset": "hart",
+      "Mitarbeiter/Tester/immo24/immo24-user.json": "TE",
+      "Mitarbeiter/Tester/immo24/keyboardshortcuts/": null,
+      "Mitarbeiter/Tester/immo24/keyboardshortcuts/Quick Presets/": null,
+      "Mitarbeiter/Tester/immo24/keyboardshortcuts/Tasten.ptpreset": "tasten",
+      "Mitarbeiter/Tester/immo24/memorylocationpresets/": null,
+      "Mitarbeiter/Tester/immo24/memorylocationpresets/Ort.ptpreset": "ort",
+      "Mitarbeiter/Tester/immo24/memorylocationpresets/Quick Presets/": null,
+      "Mitarbeiter/Tester/immo24/memorylocationpresets/Quick Presets/Quick Preset 2.ptpreset": "quick ort",
+      "Mitarbeiter/Tester/immo24/pluginsettings/": null,
+      "Mitarbeiter/Tester/immo24/pluginsettings/EQ/": null,
+      "Mitarbeiter/Tester/immo24/pluginsettings/EQ/Mein.tfx": "eq",
+      "Mitarbeiter/Tester/immo24/pluginsettings/Ohne User/": null,
+      "Mitarbeiter/Tester/immo24/templates/": null,
+      "Mitarbeiter/Tester/immo24/templates/Vorlage.ptxt": "template",
+      "Mitarbeiter/Tester/immo24/trackdatapresets/": null,
+      "Mitarbeiter/Tester/immo24/trackdatapresets/Daten.ptpreset": "daten",
+      "Mitarbeiter/Tester/immo24/trackdatarecallpresets/": null,
+      "Mitarbeiter/Tester/immo24/trackdatarecallpresets/Quick Presets/": null,
+      "Mitarbeiter/Tester/immo24/trackpresets/": null,
+      "Mitarbeiter/Tester/immo24/trackpresets/Spur.trackpreset": "track"
+    }
+  },
+  {
+    "step": "Recall templates",
+    "request": "POST /api/protools/presets",
+    "response": {
+      "status": 200,
+      "body": {
+        "action": "recall",
+        "overall": "ok",
+        "details": [
+          {
+            "category": "templates",
+            "status": "ok"
+          }
+        ],
+        "jobId": "<ID>",
+        "started": "<TIME>",
+        "finished": "<TIME>",
+        "message": "Recall erfolgreich"
+      }
+    }
+  },
+  {
+    "step": "Recall trackPresets",
+    "request": "POST /api/protools/presets",
+    "response": {
+      "status": 200,
+      "body": {
+        "action": "recall",
+        "overall": "ok",
+        "details": [
+          {
+            "category": "trackpresets",
+            "status": "ok"
+          }
+        ],
+        "jobId": "<ID>",
+        "started": "<TIME>",
+        "finished": "<TIME>",
+        "message": "Recall erfolgreich"
+      }
+    }
+  },
+  {
+    "step": "Recall pluginSettings",
+    "request": "POST /api/protools/presets",
+    "response": {
+      "status": 200,
+      "body": {
+        "action": "recall",
+        "overall": "ok",
+        "details": [
+          {
+            "category": "pluginsettings",
+            "status": "ok"
+          }
+        ],
+        "jobId": "<ID>",
+        "started": "<TIME>",
+        "finished": "<TIME>",
+        "message": "Recall erfolgreich"
+      }
+    }
+  },
+  {
+    "step": "Recall fadePresets",
+    "request": "POST /api/protools/presets",
+    "response": {
+      "status": 200,
+      "body": {
+        "action": "recall",
+        "overall": "ok",
+        "details": [
+          {
+            "category": "fadePresets",
+            "status": "ok"
+          }
+        ],
+        "jobId": "<ID>",
+        "started": "<TIME>",
+        "finished": "<TIME>",
+        "message": "Recall erfolgreich"
+      }
+    }
+  },
+  {
+    "step": "Recall clipFxPresets",
+    "request": "POST /api/protools/presets",
+    "response": {
+      "status": 200,
+      "body": {
+        "action": "recall",
+        "overall": "ok",
+        "details": [
+          {
+            "category": "clipfxpresets",
+            "status": "ok"
+          }
+        ],
+        "jobId": "<ID>",
+        "started": "<TIME>",
+        "finished": "<TIME>",
+        "message": "Recall erfolgreich"
+      }
+    }
+  },
+  {
+    "step": "Recall memoryLocation",
+    "request": "POST /api/protools/presets",
+    "response": {
+      "status": 200,
+      "body": {
+        "action": "recall",
+        "overall": "ok",
+        "details": [
+          {
+            "category": "memoryLocation",
+            "status": "ok"
+          }
+        ],
+        "jobId": "<ID>",
+        "started": "<TIME>",
+        "finished": "<TIME>",
+        "message": "Recall erfolgreich"
+      }
+    }
+  },
+  {
+    "step": "Recall trackDataToRecall",
+    "request": "POST /api/protools/presets",
+    "response": {
+      "status": 200,
+      "body": {
+        "action": "recall",
+        "overall": "ok",
+        "details": [
+          {
+            "category": "trackdatarecall",
+            "status": "ok"
+          }
+        ],
+        "jobId": "<ID>",
+        "started": "<TIME>",
+        "finished": "<TIME>",
+        "message": "Recall erfolgreich"
+      }
+    }
+  },
+  {
+    "step": "Recall keyboardShortcuts",
+    "request": "POST /api/protools/presets",
+    "response": {
+      "status": 207,
+      "body": {
+        "action": "recall",
+        "overall": "error",
+        "details": [
+          {
+            "category": "keyboardshortcuts",
+            "status": "error"
+          }
+        ],
+        "jobId": "<ID>",
+        "started": "<TIME>",
+        "finished": "<TIME>",
+        "message": "Vorgang abgeschlossen – Fehler aufgetreten"
+      }
+    }
+  },
+  {
+    "step": "Lokal nach Recall",
+    "files": {
+      "ProToolsUser/Clip Effects Presets/": null,
+      "ProToolsUser/Clip Effects Presets/Quick Preset 1.tfx": "quick clip",
+      "ProToolsUser/Clip Effects Presets/Tester/": null,
+      "ProToolsUser/Clip Effects Presets/Tester/Clip.tfx": "clip",
+      "ProToolsUser/Fade Presets/": null,
+      "ProToolsUser/Fade Presets/Batch Fade/": null,
+      "ProToolsUser/Fade Presets/Batch Fade/Stapel.fdpreset": "stapel",
+      "ProToolsUser/Fade Presets/Cross Fade/": null,
+      "ProToolsUser/Fade Presets/Cross Fade/Kreuz.fdpreset": "kreuz",
+      "ProToolsUser/Fade Presets/Fade In/": null,
+      "ProToolsUser/Fade Presets/Fade In/Quick Preset 1.fdpreset": "quick fade",
+      "ProToolsUser/Fade Presets/Fade In/Weich.fdpreset": "fade",
+      "ProToolsUser/Fade Presets/Fade Out/": null,
+      "ProToolsUser/Fade Presets/Fade Out/Hart.fdpreset": "hart",
+      "ProToolsUser/Fade Presets/Fade Out/keine-vorlage.txt": "x",
+      "ProToolsUser/Plug-In Settings/": null,
+      "ProToolsUser/Plug-In Settings/EQ/": null,
+      "ProToolsUser/Plug-In Settings/EQ/Tester/": null,
+      "ProToolsUser/Plug-In Settings/EQ/Tester/Mein.tfx": "eq",
+      "ProToolsUser/Plug-In Settings/EQ/anderer/": null,
+      "ProToolsUser/Plug-In Settings/EQ/anderer/fremd.tfx": "fremd",
+      "ProToolsUser/Plug-In Settings/Ohne User/": null,
+      "ProToolsUser/Plug-In Settings/Ohne User/Tester/": null,
+      "ProToolsUser/Plug-In Settings/Ohne User/anderer/": null,
+      "ProToolsUser/Plug-In Settings/Ohne User/anderer/fremd.tfx": "fremd",
+      "ProToolsUser/Pro Tools Presets/": null,
+      "ProToolsUser/Pro Tools Presets/Keyboard Shortcuts/": null,
+      "ProToolsUser/Pro Tools Presets/Keyboard Shortcuts/Tester/": null,
+      "ProToolsUser/Pro Tools Presets/Keyboard Shortcuts/Tester/Tasten.ptpreset": "tasten",
+      "ProToolsUser/Pro Tools Presets/Memory Location Window/": null,
+      "ProToolsUser/Pro Tools Presets/Memory Location Window/Quick Preset 2.ptpreset": "quick ort",
+      "ProToolsUser/Pro Tools Presets/Memory Location Window/Tester/": null,
+      "ProToolsUser/Pro Tools Presets/Memory Location Window/Tester/Ort.ptpreset": "ort",
+      "ProToolsUser/Pro Tools Presets/Track Data to Recall/": null,
+      "ProToolsUser/Pro Tools Presets/Track Data to Recall/Tester/": null,
+      "ProToolsUser/Pro Tools Presets/Track Data to Recall/Tester/Daten.ptpreset": "daten",
+      "ProToolsUser/Session Templates/": null,
+      "ProToolsUser/Session Templates/Tester/": null,
+      "ProToolsUser/Session Templates/Tester/Vorlage.ptxt": "template",
+      "ProToolsUser/Track Presets/": null,
+      "ProToolsUser/Track Presets/Tester/": null,
+      "ProToolsUser/Track Presets/Tester/Spur.trackpreset": "track",
+      "ProToolsUser/Track Presets/anderer/": null,
+      "ProToolsUser/Track Presets/anderer/fremd.trackpreset": "fremd"
+    }
+  },
+  {
+    "step": "Soundminer: nichts ausgewählt",
+    "request": "POST /api/soundminer/presets",
+    "response": {
+      "hang": true
+    }
+  },
+  {
+    "step": "Soundminer Store",
+    "request": "POST /api/soundminer/presets",
+    "response": {
+      "status": 200,
+      "body": {
+        "action": "store",
+        "overall": "ok",
+        "details": [
+          {
+            "category": "tablayouts",
+            "status": "ok"
+          }
+        ],
+        "jobId": "<ID>",
+        "started": "<TIME>",
+        "finished": "<TIME>",
+        "message": "Store erfolgreich"
+      }
+    }
+  },
+  {
+    "step": "Archiv nach Soundminer-Store",
+    "files": {
+      "Mitarbeiter/Tester/immo24/soundminer/Standard.tabstate": "layout"
+    }
+  },
+  {
+    "step": "Soundminer Recall",
+    "request": "POST /api/soundminer/presets",
+    "response": {
+      "status": 200,
+      "body": {
+        "action": "recall",
+        "overall": "ok",
+        "details": [
+          {
+            "category": "tablayouts",
+            "status": "ok"
+          }
+        ],
+        "jobId": "<ID>",
+        "started": "<TIME>",
+        "finished": "<TIME>",
+        "message": "Recall erfolgreich"
+      }
+    }
+  },
+  {
+    "step": "Lokal nach Soundminer-Recall",
+    "files": {
+      "SoundminerSupport/Neu.tabstate": "neu",
+      "SoundminerSupport/Standard.tabstate": "layout",
+      "SoundminerSupport/andere-datei.txt": "x"
+    }
+  }
+]

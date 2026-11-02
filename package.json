@@ -19,6 +19,7 @@
     "start": "electron .",
     "typecheck": "tsc -p tsconfig.node.json",
     "test": "node --test tests/backend.test.cjs",
+    "test:contract": "node --test \"tests/contract/*.test.cjs\"",
     "dist:dir": "npm run build && electron-builder --config electron-builder.config.cjs --dir",
     "dist:mac": "npm run build && electron-builder --config electron-builder.config.cjs --mac dmg --arm64 --publish never",
     "dist:win": "npm run build && electron-builder --config electron-builder.config.cjs --win nsis --x64 --publish never"

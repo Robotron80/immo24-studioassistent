@@ -1,0 +1,474 @@
+[
+  {
+    "step": "Bereit",
+    "request": "GET /api/ping",
+    "response": {
+      "status": 200,
+      "body": {
+        "ok": true
+      }
+    }
+  },
+  {
+    "step": "Noch nicht eingerichtet",
+    "request": "GET /api/initialize",
+    "response": {
+      "status": 503,
+      "body": {
+        "ready": true,
+        "initialize": {
+          "paths_json_present": false,
+          "required_keys_ok": false,
+          "schema_ok": false,
+          "dirs_exist": null,
+          "missingKeys": [
+            "PathProduktionen",
+            "PathMitarbeiter"
+          ],
+          "emptyKeys": [
+            "PathProduktionen",
+            "PathMitarbeiter"
+          ],
+          "notFoundDirs": null,
+          "needsUserAction": true
+        }
+      }
+    }
+  },
+  {
+    "step": "Pfade leer",
+    "request": "GET /api/paths",
+    "response": {
+      "status": 200,
+      "body": {
+        "data": {},
+        "version": "<VERSION>"
+      }
+    }
+  },
+  {
+    "step": "Pfade: kaputter Body",
+    "request": "PUT /api/paths",
+    "response": {
+      "status": 400,
+      "body": {
+        "error": "bad_payload"
+      }
+    }
+  },
+  {
+    "step": "Pfade: Versionskonflikt",
+    "request": "PUT /api/paths",
+    "response": {
+      "status": 409,
+      "body": {
+        "error": "version_conflict",
+        "currentVersion": "<VERSION>"
+      }
+    }
+  },
+  {
+    "step": "Pfade speichern",
+    "request": "PUT /api/paths",
+    "response": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "version": "<VERSION>"
+      }
+    }
+  },
+  {
+    "step": "Pfade: alte Version erneut",
+    "request": "PUT /api/paths",
+    "response": {
+      "status": 409,
+      "body": {
+        "error": "version_conflict",
+        "currentVersion": "<VERSION>"
+      }
+    }
+  },
+  {
+    "step": "Pfade lesen",
+    "request": "GET /api/paths",
+    "response": {
+      "status": 200,
+      "body": {
+        "data": {
+          "PathMitarbeiter": "<BASE>/Mitarbeiter",
+          "PathProduktionen": "<BASE>/Produktionen",
+          "PathStammdaten": "<BASE>/Stammdaten",
+          "PathPTUser": "<BASE>/ProToolsUser"
+        },
+        "version": "<VERSION>"
+      }
+    }
+  },
+  {
+    "step": "Pfade: neue Version gilt",
+    "request": "PUT /api/paths",
+    "response": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "version": "<VERSION>"
+      }
+    }
+  },
+  {
+    "step": "Schema fehlt",
+    "request": "GET /api/schema",
+    "response": {
+      "status": 404,
+      "body": {
+        "data": {},
+        "version": null,
+        "initialize": {
+          "paths_json_present": true,
+          "required_keys_ok": true,
+          "schema_ok": false,
+          "dirs_exist": null,
+          "missingKeys": [],
+          "emptyKeys": [],
+          "notFoundDirs": null,
+          "needsUserAction": true
+        }
+      }
+    }
+  },
+  {
+    "step": "Schema: kaputter Body",
+    "request": "PUT /api/schema",
+    "response": {
+      "status": 400,
+      "body": {
+        "error": "bad_payload"
+      }
+    }
+  },
+  {
+    "step": "Schema speichern",
+    "request": "PUT /api/schema",
+    "response": {
+      "status": 200,
+      "body": {
+        "projektordnerSchema": "{{datum}} {{projektname}} {{moid}}",
+        "sessionSchema": "{{projektname}} {{moid}} {{version}}"
+      }
+    }
+  },
+  {
+    "step": "Schema lesen",
+    "request": "GET /api/schema",
+    "response": {
+      "status": 200,
+      "body": {
+        "data": {
+          "projektordnerSchema": "{{datum}} {{projektname}} {{moid}}",
+          "sessionSchema": "{{projektname}} {{moid}} {{version}}"
+        },
+        "version": "<VERSION>"
+      }
+    }
+  },
+  {
+    "step": "Passwort: nichts gesetzt",
+    "request": "POST /api/check-password",
+    "response": {
+      "status": 401,
+      "body": {
+        "ok": false
+      }
+    }
+  },
+  {
+    "step": "Passwort: fehlt",
+    "request": "POST /api/check-password",
+    "response": {
+      "status": 400,
+      "body": {
+        "ok": false,
+        "error": "missing_password"
+      }
+    }
+  },
+  {
+    "step": "Passwort setzen: Felder fehlen",
+    "request": "POST /api/adminpw",
+    "response": {
+      "status": 400,
+      "body": {
+        "ok": false,
+        "error": "missing_fields"
+      }
+    }
+  },
+  {
+    "step": "Passwort setzen: ungleich",
+    "request": "POST /api/adminpw",
+    "response": {
+      "status": 422,
+      "body": {
+        "ok": false,
+        "error": "password_mismatch"
+      }
+    }
+  },
+  {
+    "step": "Passwort setzen",
+    "request": "POST /api/adminpw",
+    "response": {
+      "status": 200,
+      "body": {
+        "ok": true
+      }
+    }
+  },
+  {
+    "step": "Passwort: richtig",
+    "request": "POST /api/check-password",
+    "response": {
+      "status": 200,
+      "body": {
+        "ok": true
+      }
+    }
+  },
+  {
+    "step": "Passwort: falsch",
+    "request": "POST /api/check-password",
+    "response": {
+      "status": 401,
+      "body": {
+        "ok": false
+      }
+    }
+  },
+  {
+    "step": "Module leer",
+    "request": "GET /api/modules",
+    "response": {
+      "status": 200,
+      "body": {
+        "data": {},
+        "version": "<VERSION>"
+      }
+    }
+  },
+  {
+    "step": "Module: kaputter Body",
+    "request": "PUT /api/modules",
+    "response": {
+      "status": 400,
+      "body": {
+        "error": "bad_payload"
+      }
+    }
+  },
+  {
+    "step": "Module: Version fehlt",
+    "request": "PUT /api/modules",
+    "response": {
+      "status": 409,
+      "body": {
+        "error": "version_required",
+        "currentVersion": "<VERSION>"
+      }
+    }
+  },
+  {
+    "step": "Module: Versionskonflikt",
+    "request": "PUT /api/modules",
+    "response": {
+      "status": 409,
+      "body": {
+        "error": "version_conflict",
+        "currentVersion": "<VERSION>"
+      }
+    }
+  },
+  {
+    "step": "Module speichern",
+    "request": "PUT /api/modules",
+    "response": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "version": "<VERSION>"
+      }
+    }
+  },
+  {
+    "step": "Module lesen",
+    "request": "GET /api/modules",
+    "response": {
+      "status": 200,
+      "body": {
+        "data": {
+          "soundminer": {
+            "enabled": true,
+            "version": "V6 Pro",
+            "supportPath": "<BASE>/SoundminerSupport"
+          },
+          "anderes": {
+            "a": 1
+          }
+        },
+        "version": "<VERSION>"
+      }
+    }
+  },
+  {
+    "step": "Mitarbeiter leer",
+    "request": "GET /api/user",
+    "response": {
+      "status": 200,
+      "body": []
+    }
+  },
+  {
+    "step": "Hänger: Mitarbeiterliste fehlt",
+    "request": "POST /api/user",
+    "response": {
+      "hang": true
+    }
+  },
+  {
+    "step": "Mitarbeiter anlegen",
+    "request": "POST /api/user",
+    "response": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "results": [
+          {
+            "name": "Zweite",
+            "action": "written"
+          },
+          {
+            "name": "Ärger",
+            "action": "written"
+          }
+        ],
+        "count": 2
+      }
+    }
+  },
+  {
+    "step": "Hänger: Mitarbeiter ohne Namen",
+    "request": "POST /api/user",
+    "response": {
+      "hang": true
+    }
+  },
+  {
+    "step": "Mitarbeiter: Kürzel ändern, andere Schreibweise",
+    "request": "POST /api/user",
+    "response": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "results": [
+          {
+            "name": "zweite",
+            "action": "written"
+          }
+        ],
+        "count": 1
+      }
+    }
+  },
+  {
+    "step": "Mitarbeiter lesen",
+    "request": "GET /api/user",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "name": "Ärger",
+          "kuerzel": "AE"
+        },
+        {
+          "name": "Zweite",
+          "kuerzel": "Z2"
+        }
+      ]
+    }
+  },
+  {
+    "step": "Eingerichtet",
+    "request": "GET /api/initialize",
+    "response": {
+      "status": 200,
+      "body": {
+        "ready": true,
+        "initialize": {
+          "paths_json_present": true,
+          "required_keys_ok": true,
+          "schema_ok": true,
+          "dirs_exist": null,
+          "missingKeys": [],
+          "emptyKeys": [],
+          "notFoundDirs": null,
+          "needsUserAction": false
+        },
+        "paths": {
+          "PathMitarbeiter": "<BASE>/Mitarbeiter",
+          "PathProduktionen": "<BASE>/Produktionen",
+          "PathStammdaten": "<BASE>/Stammdaten",
+          "PathPTUser": "<BASE>/ProToolsUser"
+        },
+        "schema": {
+          "sessionSchema": "{{projektname}} {{moid}} {{version}}",
+          "projektordnerSchema": "{{datum}} {{projektname}} {{moid}}"
+        },
+        "modules": {
+          "soundminer": {
+            "enabled": true,
+            "version": "V6 Pro",
+            "supportPath": "<BASE>/SoundminerSupport"
+          },
+          "anderes": {
+            "a": 1
+          }
+        }
+      }
+    }
+  },
+  {
+    "step": "Dateien",
+    "files": {
+      "userdata/adminpw.json": "{\n  \"password\": \"geheim\"\n}",
+      "userdata/config.json": "{\n  \"modules\": {\n    \"soundminer\": {\n      \"enabled\": true,\n      \"version\": \"V6 Pro\",\n      \"supportPath\": \"<BASE>/SoundminerSupport\"\n    },\n    \"anderes\": {\n      \"a\": 1\n    }\n  }\n}",
+      "userdata/path.json": "{\n  \"PathMitarbeiter\": \"<BASE>/Mitarbeiter\",\n  \"PathProduktionen\": \"<BASE>/Produktionen\",\n  \"PathStammdaten\": \"<BASE>/Stammdaten\",\n  \"PathPTUser\": \"<BASE>/ProToolsUser\"\n}",
+      "Mitarbeiter/Zweite/": null,
+      "Mitarbeiter/Zweite/immo24/": null,
+      "Mitarbeiter/Zweite/immo24/clipeffectspresets/": null,
+      "Mitarbeiter/Zweite/immo24/fadepresets/": null,
+      "Mitarbeiter/Zweite/immo24/immo24-user.json": "Z2",
+      "Mitarbeiter/Zweite/immo24/keyboardshortcuts/": null,
+      "Mitarbeiter/Zweite/immo24/memorylocationpresets/": null,
+      "Mitarbeiter/Zweite/immo24/pluginsettings/": null,
+      "Mitarbeiter/Zweite/immo24/soundminer/": null,
+      "Mitarbeiter/Zweite/immo24/templates/": null,
+      "Mitarbeiter/Zweite/immo24/trackdatapresets/": null,
+      "Mitarbeiter/Zweite/immo24/trackdatarecallpresets/": null,
+      "Mitarbeiter/Zweite/immo24/trackpresets/": null,
+      "Mitarbeiter/Ärger/": null,
+      "Mitarbeiter/Ärger/immo24/": null,
+      "Mitarbeiter/Ärger/immo24/clipeffectspresets/": null,
+      "Mitarbeiter/Ärger/immo24/fadepresets/": null,
+      "Mitarbeiter/Ärger/immo24/immo24-user.json": "AE",
+      "Mitarbeiter/Ärger/immo24/keyboardshortcuts/": null,
+      "Mitarbeiter/Ärger/immo24/memorylocationpresets/": null,
+      "Mitarbeiter/Ärger/immo24/pluginsettings/": null,
+      "Mitarbeiter/Ärger/immo24/soundminer/": null,
+      "Mitarbeiter/Ärger/immo24/templates/": null,
+      "Mitarbeiter/Ärger/immo24/trackdatapresets/": null,
+      "Mitarbeiter/Ärger/immo24/trackdatarecallpresets/": null,
+      "Mitarbeiter/Ärger/immo24/trackpresets/": null,
+      "Stammdaten/schemes.json": "{\n  \"projektordnerSchema\": \"{{datum}} {{projektname}} {{moid}}\",\n  \"sessionSchema\": \"{{projektname}} {{moid}} {{version}}\"\n}"
+    }
+  }
+]

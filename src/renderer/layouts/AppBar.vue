@@ -29,6 +29,7 @@
 </template>
 
 <script setup>
+import { backend } from '@/lib/backend'
 import { ref, computed, onMounted } from 'vue'
 
 const activeUser  = ref(null)
@@ -37,7 +38,6 @@ const isLoggedIn  = computed(() => !!activeUser.value)
 const displayName = computed(() => activeUser.value || 'Nicht angemeldet')
 const soundminerEnabled = ref(false)
 
-const API = import.meta.env.VITE_API_BASE || '/api'
 
 onMounted(() => {
   fetchActiveUser()
@@ -46,18 +46,7 @@ onMounted(() => {
 
 async function fetchActiveUser() {
   try {
-    const res = await fetch(`${API}/activeUser`)
-    if (res.ok) {
-      const text = await res.text()
-      // Wenn der Text wie HTML aussieht, als "Nicht angemeldet" anzeigen
-      if (text.trim().startsWith('<!DOCTYPE html>')) {
-        activeUser.value = null
-      } else {
-        activeUser.value = text.trim() || null
-      }
-    } else {
-      activeUser.value = null
-    }
+    activeUser.value = await backend.getActiveUser()
   } catch {
     activeUser.value = null
   }
@@ -65,11 +54,8 @@ async function fetchActiveUser() {
 
 async function fetchModuleStatus() {
   try {
-    const res = await fetch(`${API}/modules`)
-    if (res.ok) {
-      const data = await res.json()
-      soundminerEnabled.value = !!data?.data?.soundminer?.enabled
-    }
+    const modules = await backend.getModules()
+    soundminerEnabled.value = !!modules?.data?.soundminer?.enabled
   } catch {
     soundminerEnabled.value = false
   }
@@ -78,10 +64,8 @@ async function fetchModuleStatus() {
 async function onLogout() {
   loggingOut.value = true
   try {
-    // Backend-Logout ausführen
-    await fetch(`${API}/logout`, { method: 'POST' })
     activeUser.value = null
-    // Picker anzeigen
+    // Abmelden und zurück zur Anmeldung
     if (window.electronAPI?.hideAndOpenPicker) {
       await window.electronAPI.hideAndOpenPicker({ doLogout: true })
     }

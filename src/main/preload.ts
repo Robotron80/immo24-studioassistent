@@ -19,6 +19,12 @@ function on<T>(channel: string, callback: (value: T) => void): () => void {
 contextBridge.exposeInMainWorld('electronAPI', {
   getAppVersion: () => ipcRenderer.invoke('get-app-version'),
 
+  // Aufrufe ins Backend (siehe src/renderer/lib/backend.js und src/main/backend.ts)
+  backend: (method: string, arg?: unknown) => ipcRenderer.invoke('backend', method, arg),
+
+  // Session im zugehörigen Programm öffnen
+  openSession: (file: string) => ipcRenderer.invoke('open-session', file),
+
   // Ordnerauswahl (nativer Dialog)
   pickFolder: async (title?: string, defaultPath?: string) => {
     try {

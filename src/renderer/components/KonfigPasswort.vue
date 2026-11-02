@@ -29,7 +29,7 @@
 <script setup>
 import { reactive, ref } from 'vue'
 
-const API = import.meta.env.VITE_API_BASE || '/api'
+import { backend } from '@/lib/backend'
 
 const original = { newPassword: '', repeatPassword: '' }
 const form = reactive({ newPassword: '', repeatPassword: '' })
@@ -59,18 +59,11 @@ async function saveToServer() {
     throw new Error('validation')
   }
 
-  const res = await fetch(`${API}/adminpw`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ newPassword, repeatPassword })
-  })
-
-  let data = {}
-  try { data = await res.json() } catch {}
-
-  if (!res.ok || !data.ok) {
-    error.value = data?.error || `HTTP ${res.status}`
-    throw new Error(error.value)
+  try {
+    await backend.setPassword({ newPassword, repeatPassword })
+  } catch (e) {
+    error.value = e.message
+    throw e
   }
 
   okMsg.value = 'Passwort wurde gespeichert.'

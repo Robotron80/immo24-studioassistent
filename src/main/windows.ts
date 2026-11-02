@@ -13,8 +13,8 @@
  */
 import { app, BrowserWindow, dialog, shell, type WebPreferences } from 'electron'
 
+import { backend } from './backend'
 import { logLine, showOnceErrorBox } from './logger'
-import { getUsers, postLogout } from './nodeRed'
 import { assetPath, devServerUrl, preloadPath, rendererIndexPath } from './paths'
 
 let mainWindow: BrowserWindow | null = null
@@ -222,6 +222,11 @@ async function hideMainWindow(win: BrowserWindow, maxWaitMs = 900): Promise<void
   if (win.isVisible()) win.minimize()
 }
 
+/** Die Namen aller Mitarbeiter für das Anmeldefenster. */
+export async function listUserNames(): Promise<string[]> {
+  return (await backend().users.listUsers()).map((user) => user.name)
+}
+
 /** Schickt die Mitarbeiterliste ans Anmeldefenster und wartet nötigenfalls, bis es geladen ist. */
 export function sendUsersToPicker(win: BrowserWindow, users: string[]): void {
   const send = () => win.webContents.send('users', users)
@@ -239,11 +244,11 @@ export async function openPickerFlow({ doLogout = true }: { doLogout?: boolean }
   if (isOpen(prefWindow)) prefWindow.close()
   prefWindow = null
   if (isOpen(mainWindow)) await hideMainWindow(mainWindow)
-  if (doLogout) await postLogout()
+  if (doLogout) backend().session.logout()
   const picker = createUserPickerWindow()
   picker.show()
   picker.focus()
-  sendUsersToPicker(picker, await getUsers())
+  sendUsersToPicker(picker, await listUserNames())
   return { ok: true }
 }
 
@@ -282,7 +287,7 @@ export function createPreferencesWindow(): void {
   win.on('closed', async () => {
     prefWindow = null
     if (!isOpen(mainWindow) || !mainWindow.isVisible()) {
-      sendUsersToPicker(createUserPickerWindow(), await getUsers())
+      sendUsersToPicker(createUserPickerWindow(), await listUserNames())
     }
   })
 }

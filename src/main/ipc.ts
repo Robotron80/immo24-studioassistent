@@ -6,16 +6,21 @@
  * eine benannte Nachricht (siehe preload.ts), und hier steht, was dann passiert.
  *   ipcMain.on:     Nachricht ohne Antwort
  *   ipcMain.handle: Anfrage, auf die die Oberfläche eine Antwort bekommt
+ *
+ * Hier stehen nur Dinge rund um Fenster und Betriebssystem. Die Fachlogik läuft
+ * über backend.ts.
  */
-import { app, BrowserWindow, dialog, ipcMain } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain, shell } from 'electron'
 
-import { getUsers, postActiveUser } from './nodeRed'
-import { closeInitWindow, openPickerFlow, refreshPickerUsers, showMainWindowForUser } from './windows'
+import { backend, registerBackendIpc } from './backend'
+import { closeInitWindow, listUserNames, openPickerFlow, refreshPickerUsers, showMainWindowForUser } from './windows'
 
 /** Meldet alle Nachrichten an. Wird einmal beim Programmstart aufgerufen. */
 export function registerIpc(): void {
+  registerBackendIpc()
+
   ipcMain.on('user-picked', async (_event, user: string) => {
-    await postActiveUser(user)
+    await backend().session.login(user)
     showMainWindowForUser(user)
   })
 
@@ -32,7 +37,7 @@ export function registerIpc(): void {
   ipcMain.handle('close-init-window', () => closeInitWindow())
 
   ipcMain.handle('refresh-users', async () => {
-    const users = await getUsers()
+    const users = await listUserNames()
     refreshPickerUsers(users)
     return users
   })
@@ -49,5 +54,12 @@ export function registerIpc(): void {
     const win = BrowserWindow.fromWebContents(event.sender)
     const result = win ? await dialog.showOpenDialog(win, options) : await dialog.showOpenDialog(options)
     return result.canceled ? null : (result.filePaths[0] ?? null)
+  })
+
+  // Öffnet eine Session im zugehörigen Programm. Nur .ptx-Dateien, damit die Oberfläche
+  // hierüber keine beliebigen Programme starten kann. Gibt einen Fehlertext zurück, sonst ''.
+  ipcMain.handle('open-session', async (_event, file: unknown) => {
+    if (typeof file !== 'string' || !/\.ptx$/i.test(file)) return 'Keine Pro Tools Session.'
+    return shell.openPath(file)
   })
 }

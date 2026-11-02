@@ -118,7 +118,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 
-const API = import.meta.env.VITE_API_BASE || '/api'
+import { backend } from '@/lib/backend'
 
 // Server-Snapshot (Original) + lokale Arbeitskopie (staged)
 const original = ref({ customers: [], version: '' })
@@ -149,9 +149,7 @@ const folders = computed(() => currentCustomer.value?.ordner || [])
 async function loadSnapshot() {
   loading.value = true; error.value = ''
   try {
-    const res = await fetch(`${API}/pb/snapshot`)
-    if (!res.ok) throw new Error(`${res.status} ${res.statusText}`)
-    const snap = await res.json()
+    const snap = await backend.getSnapshot()
     original.value = { customers: snap.customers || [], version: snap.version || '' }
     staged.value   = deepClone(original.value.customers)
     // Auswahl behalten, wenn Kunde noch existiert

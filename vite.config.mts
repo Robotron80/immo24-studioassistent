@@ -11,8 +11,6 @@ import electron from 'vite-plugin-electron'
 import Layouts from 'vite-plugin-vue-layouts-next'
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
-const mainExternals = ['express', 'node-red']
-
 export default defineConfig({
   base: './',
   plugins: [
@@ -56,7 +54,6 @@ export default defineConfig({
           build: {
             // Lesbare Stacktraces im Log
             minify: false,
-            rollupOptions: { external: mainExternals },
           },
         },
       },

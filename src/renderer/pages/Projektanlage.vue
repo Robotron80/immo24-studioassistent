@@ -180,7 +180,6 @@
 import { computed, ref, onMounted, reactive } from 'vue'
 import { useProjektanlage } from '@/stores/Projektanlage'
 
-const API = import.meta.env.VITE_API_BASE || '/api'
 const store = useProjektanlage()
 
 // Bindings
@@ -241,15 +240,14 @@ async function onCreateClick(){
       openDialog.value = true
     }
   } catch(e) {
-    // 422 vom Backend (oder aus dem Store) hübsch ausgeben
-    if (e?.status === 422 && Array.isArray(e.details) && e.details.length) {
-      const lines = store.formatValidationDetails(e.details)
+    // Ungültige Namen und fehlende Felder verständlich auflisten
+    if (e?.code === 'validation_failed' && Array.isArray(e.details?.details)) {
+      const lines = store.formatValidationDetails(e.details.details)
       toast(`Bitte Eingaben korrigieren:\n${lines.join('\n')}`, 'error')
       return
     }
-    // 400 missing fields
-    if (e?.status === 400 && Array.isArray(e.fields)) {
-      toast(`Bitte ausfüllen: ${e.fields.join(', ')}`, 'error')
+    if (e?.code === 'project_fields_missing' && Array.isArray(e.details?.fields)) {
+      toast(`Bitte ausfüllen: ${e.details.fields.join(', ')}`, 'error')
       return
     }
     // Fallback
@@ -259,15 +257,8 @@ async function onCreateClick(){
 async function launchProject() {
   openDialog.value = false
   try {
-    const res = await fetch(`${API}/projektanlage/launchpt`, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ fullPath: lastCreatedProject.value.fullPath })
-    })
-    if (!res.ok) {
-      const msg = await res.text()
-      toast('Projekt konnte nicht geöffnet werden: ' + msg, 'error')
-    }
+    const error = await window.electronAPI.openSession(lastCreatedProject.value.fullPath)
+    if (error) toast('Projekt konnte nicht geöffnet werden: ' + error, 'error')
   } catch(e) {
     toast('Projekt konnte nicht geöffnet werden: ' + (e.message || String(e)), 'error')
   }

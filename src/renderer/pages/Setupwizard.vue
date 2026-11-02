@@ -322,7 +322,7 @@
 <script setup>
 import { reactive, ref, onMounted, computed } from 'vue'
 
-const API = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:59593/api'
+import { backend } from '@/lib/backend'
 
 const step = ref(1)
 const saving = ref(false)
@@ -437,8 +437,7 @@ const lastInit = ref(null)
 async function loadFromInitialize() {
   checking.value = true
   try {
-    const r = await fetch(`${API}/initialize`)
-    const data = await r.json()
+    const data = await backend.getInitializeStatus()
     lastInit.value = data
     if (data?.paths) Object.assign(paths, data.paths)
     if (data?.schema) Object.assign(schema, data.schema)
@@ -451,9 +450,7 @@ async function loadFromInitialize() {
 const userApiReady = ref(true)
 async function loadUsersSnapshot() {
   try {
-    const res = await fetch(`${API}/user`)
-    if (!res.ok) throw new Error(`${res.status} ${res.statusText}`)
-    let arr = await res.json()
+    let arr = await backend.listUsers()
     if (Array.isArray(arr) && typeof arr[0] === 'string') {
       arr = arr.map(name => ({ name, kuerzel: '' }))
     }
@@ -471,25 +468,13 @@ async function loadUsersSnapshot() {
 
 // Mitarbeiter speichern
 async function saveUsersSnapshot() {
-  let rInit = await fetch(`${API}/initialize`)
-  let initData = await rInit.json()
-  let version = initData?.initialize?.user_version || "0"
+  await backend.saveUsers({ mitarbeiter: users.value })
+}
 
-  const r = await fetch(`${API}/user`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ mitarbeiter: users.value, version }),
-  })
-  if (r.status === 409) {
-    const err = await r.json()
-    version = err.currentVersion
-    // Retry mit aktueller Version
-    await fetch(`${API}/user`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ mitarbeiter: users.value, version }),
-    })
-  }
+// Pfade speichern: Die aktuelle Version kommt direkt aus dem Backend
+async function savePaths() {
+  const { version } = await backend.getPaths()
+  await backend.savePaths({ data: { ...paths }, version })
 }
 
 // Schrittwechsel
@@ -501,32 +486,13 @@ async function nextFromPaths() {
     toast('Bitte alle vier Pfade setzen.', 'warning')
     return
   }
-  // 1. Version aus /initialize holen
-  let rInit = await fetch(`${API}/initialize`)
-  let initData = await rInit.json()
-  let version = initData?.initialize?.paths_version || "0"
-
-  // 2. Pfade speichern mit Version
-  let r = await fetch(`${API}/paths`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ data: { ...paths }, version }),
-  })
-  if (r.status === 409) {
-    const err = await r.json()
-    version = err.currentVersion
-    // Retry mit aktueller Version
-    r = await fetch(`${API}/paths`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ data: { ...paths }, version }),
-    })
-  }
-  if (!r.ok) {
-    toast(`Pfade speichern fehlgeschlagen: ${r.status} ${r.statusText}`, 'error')
+  try {
+    await savePaths()
+  } catch (e) {
+    toast(`Pfade speichern fehlgeschlagen: ${e.message}`, 'error')
     return
   }
-  // 3. Werte laden
+  // Werte laden
   await loadFromInitialize()
   await loadUsersSnapshot()
   next()
@@ -539,58 +505,21 @@ async function finish() {
 
   saving.value = true
   try {
-    // Version aus /initialize holen
-    let rInit = await fetch(`${API}/initialize`)
-    let initData = await rInit.json()
-    let version = initData?.initialize?.paths_version || "0"
-
     // 1) Pfade speichern
-    let r = await fetch(`${API}/paths`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ data: { ...paths }, version }),
-    })
-    if (r.status === 409) {
-      const err = await r.json()
-      version = err.currentVersion
-      // Retry mit aktueller Version
-      r = await fetch(`${API}/paths`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data: { ...paths }, version }),
-      })
-    }
-    if (!r.ok) throw new Error(`Pfade speichern fehlgeschlagen: ${r.status} ${r.statusText}`)
+    await savePaths()
 
-    // 2) Schemas speichern (nutze dieselbe Version)
-    r = await fetch(`${API}/schema`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        schema: { ...schema },
-        version,
-      }),
-    })
-    if (!r.ok) throw new Error(`Schemas speichern fehlgeschlagen: ${r.status} ${r.statusText}`)
+    // 2) Schemas speichern. Es gibt noch keine Version, der Wert wird nicht geprüft.
+    await backend.saveSchema({ schema: { ...schema }, version: '0' })
 
     // 3) Passwort speichern
-    r = await fetch(`${API}/adminpw`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        newPassword: password.value,
-        repeatPassword: password2.value
-      }),
-    })
-    if (!r.ok) throw new Error(`Passwort speichern fehlgeschlagen: ${r.status} ${r.statusText}`)
+    await backend.setPassword({ newPassword: password.value, repeatPassword: password2.value })
 
     // 4) Benutzer speichern (mindestens einer)
     if (!users.value.length) throw new Error('Es muss mindestens ein Benutzer angelegt sein.')
     await saveUsersSnapshot()
 
     // Backend erneut prüfen
-    const r2 = await fetch(`${API}/initialize`)
-    lastInit.value = await r2.json()
+    lastInit.value = await backend.getInitializeStatus()
     if (!(lastInit.value?.ready && lastInit.value?.initialize?.paths_json_present && lastInit.value?.initialize?.required_keys_ok && lastInit.value?.initialize?.schema_ok) || users.value.length < 1) {
       toast('Konfiguration unvollständig. Bitte Eingaben prüfen.', 'warning')
       return
@@ -604,7 +533,7 @@ async function finish() {
     // Picker öffnen
     await window.electronAPI?.hideAndOpenPicker?.({ doLogout: true })
   } catch (e) {
-    toast(String(e), 'error')
+    toast(e.message || String(e), 'error')
   } finally {
     saving.value = false
   }

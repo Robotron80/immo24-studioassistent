@@ -14,7 +14,10 @@ import { app } from 'electron'
  * Next-Builds nutzen einen eigenen Ordner, damit die installierte Version unberührt bleibt.
  */
 export function configureUserData(): void {
-  if (app.getVersion().includes('-next')) {
+  // Für automatische Tests: eigener Ordner, damit sie eine laufende App nicht stören
+  if (process.env.IMMO24_USER_DATA) {
+    app.setPath('userData', process.env.IMMO24_USER_DATA)
+  } else if (app.getVersion().includes('-next')) {
     app.setPath('userData', path.join(app.getPath('appData'), 'immo24-studioassistent-next'))
   }
 }

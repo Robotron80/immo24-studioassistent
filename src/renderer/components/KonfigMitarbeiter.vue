@@ -72,7 +72,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 
-const API = import.meta.env.VITE_API_BASE || '/api'
+import { backend } from '@/lib/backend'
 
 // Server-Snapshot + lokale Arbeitskopie
 const original = ref({ mitarbeiter: [], version: '' })
@@ -100,9 +100,7 @@ const filteredMitarbeiter = computed(() => {
 async function loadSnapshot() {
   error.value = ''
   try {
-    const res = await fetch(`${API}/user`)
-    if (!res.ok) throw new Error(`${res.status} ${res.statusText}`)
-    let arr = await res.json()
+    let arr = await backend.listUsers()
     // Falls die API ein Array von Strings liefert, umwandeln:
     if (Array.isArray(arr) && typeof arr[0] === 'string') {
       arr = arr.map(name => ({ name, kuerzel: '' }))

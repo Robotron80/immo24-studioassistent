@@ -29,7 +29,6 @@ const http = require('node:http')
 const os = require('node:os')
 const path = require('node:path')
 
-const ROOT = path.resolve(__dirname, '../..')
 const REFERENCE_DIR = path.join(__dirname, 'reference')
 // Schritte mit "Hänger" im Namen antworten bekanntlich nie, dort warten wir nur kurz.
 // Alle anderen dürfen länger dauern: Windows braucht z. B. für die PowerShell-Abfrage
@@ -174,7 +173,7 @@ async function startBackend({ seed } = {}) {
   // Schritt 2: Die Flows rufen sich teils selbst über den festen Port 59593 auf.
   // Wir ersetzen ihn, damit die Tests nicht mit einer laufenden App kollidieren.
   const flowFile = path.join(dirs.userData, 'flows.json')
-  const flows = fs.readFileSync(path.join(ROOT, 'assets/node-red/flows.json'), 'utf8')
+  const flows = fs.readFileSync(path.join(__dirname, 'flows.json'), 'utf8')
   fs.writeFileSync(flowFile, flows.replaceAll('59593', String(port)))
 
   // Schritt 3: Node-RED mit denselben Einstellungen wie in der App starten

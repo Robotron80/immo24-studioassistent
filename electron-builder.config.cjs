@@ -40,7 +40,6 @@ module.exports = {
     output: 'release',
   },
   icon: 'assets/icon',
-  // Node-RED lädt seine Nodes aus dem Dateisystem. Mit dem Ausbau wird asar aktiviert.
-  asar: false,
-  afterPack: 'afterPack.js',
+  // Packt den Programmcode in eine einzige Datei. Das spart Virenscannern tausende Einzelprüfungen.
+  asar: true,
 }

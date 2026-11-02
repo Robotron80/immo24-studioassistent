@@ -4,7 +4,6 @@
  */
 import { app, Menu, type MenuItemConstructorOptions } from 'electron'
 
-import { DEV_BACKEND } from './nodeRed'
 import { createPreferencesWindow, openDevTools } from './windows'
 
 /** Baut das Menü und setzt es. Wird einmal beim Programmstart aufgerufen. */
@@ -62,7 +61,8 @@ export function installApplicationMenu(): void {
     },
   ]
 
-  if (DEV_BACKEND) {
+  // Die Entwicklerkonsole nur beim Entwickeln oder mit dem Startparameter --dev-tools
+  if (!app.isPackaged || process.argv.includes('--dev-tools')) {
     template.push({
       label: 'Entwickler',
       submenu: [

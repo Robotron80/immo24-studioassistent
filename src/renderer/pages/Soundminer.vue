@@ -85,7 +85,7 @@
 <script setup>
 import { reactive, ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
-const API = import.meta.env.VITE_API_BASE || '/api'
+import { backend } from '@/lib/backend'
 const POLL_MS = 5000
 const isOnline = ref(false)
 let pollTimer = null
@@ -130,13 +130,7 @@ async function sendAction(action) {
   }
 
   try {
-    const res = await fetch(`${API}/soundminer/presets`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    })
-
-    const data = await res.json()
+    const data = await backend.runSoundminerPresets(payload)
 
     // Backend-Message bevorzugt nutzen
     const text = data.message
@@ -145,13 +139,7 @@ async function sendAction(action) {
           : 'Vorgang abgeschlossen – mit Hinweisen')
 
     // Statusfarbe bestimmen
-    if (res.status === 200) {
-      snack.color = 'success'
-    } else if (res.status === 207) {
-      snack.color = 'warning'
-    } else {
-      snack.color = 'error'
-    }
+    snack.color = data.details.every(detail => detail.status === 'ok') ? 'success' : 'warning'
 
     snack.text = text
     snack.open = true
@@ -188,8 +176,7 @@ function deselectAllPresets() {
 onMounted(async () => {
   // Initialer Status-Check direkt beim Laden
   try {
-    const res = await fetch(`${API}/soundminer/status`)
-    isOnline.value = res.ok && (await res.json()).online
+    isOnline.value = (await backend.soundminerStatus()).online
   } catch {
     isOnline.value = false
   }
@@ -197,8 +184,7 @@ onMounted(async () => {
   // Polling
   pollTimer = setInterval(async () => {
     try {
-      const res = await fetch(`${API}/soundminer/status`)
-      isOnline.value = res.ok && (await res.json()).online
+      isOnline.value = (await backend.soundminerStatus()).online
     } catch {
       isOnline.value = false
     }

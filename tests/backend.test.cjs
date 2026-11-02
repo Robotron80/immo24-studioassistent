@@ -39,7 +39,7 @@ test('embedded Node-RED loads the application flows with isolated user data', { 
     await fs.writeFile(path.join(dataDir, file), '{}')
   }
   const flowFile = path.join(dataDir, 'flows.json')
-  await fs.copyFile(path.join(root, 'assets/node-red/flows.json'), flowFile)
+  await fs.copyFile(path.join(root, 'tests/contract/flows.json'), flowFile)
   await RED.init(server, {
     httpAdminRoot: false,
     userDir: path.join(dataDir, 'node-red'),

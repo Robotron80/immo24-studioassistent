@@ -87,7 +87,22 @@ import KonfigPasswort from '@/components/KonfigPasswort.vue'
 import KonfigNamensschema from '@/components/KonfigNamensschema.vue'
 import KonfigModule from '@/components/KonfigModule.vue'
 
-const API = import.meta.env.VITE_API_BASE || '/api'
+import { backend } from '@/lib/backend'
+
+/** Speichert einen Bereich. Hat jemand die Daten zwischenzeitlich geändert, wird neu geladen. */
+async function saveVersioned (save, reload, conflictText) {
+  try {
+    await save()
+  } catch (e) {
+    if (e.code !== 'version_conflict' && e.code !== 'version_required') throw e
+    await reload()
+    alert(conflictText)
+    return false
+  }
+  await reload()
+  return true
+}
+
 const pbRef = ref(null)
 const mitarbeiterRef = ref(null)
 const pfadeRef = ref(null)
@@ -149,47 +164,27 @@ async function onSave() {
   try {
     // Produktionsbuch speichern
     if (pbRef.value?.isDirty()) {
-      const snap = pbRef.value.getSnapshotForSave()
-      const res = await fetch(`${API}/pb/snapshot`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(snap)
-      })
-      if (res.status === 409) {
-        await pbRef.value.resetToServer()
-        alert('Produktionsbuch wurde zwischenzeitlich geändert. Ansicht aktualisiert.')
-        return
-      }
-      if (!res.ok) throw new Error(await res.text())
-      await pbRef.value.resetToServer()
+      const saved = await saveVersioned(
+        () => backend.saveSnapshot(pbRef.value.getSnapshotForSave()),
+        () => pbRef.value.resetToServer(),
+        'Produktionsbuch wurde zwischenzeitlich geändert. Ansicht aktualisiert.',
+      )
+      if (!saved) return
     }
 
     // Pfade speichern
     if (pfadeRef.value?.isDirty()) {
-      const snap = pfadeRef.value.getSnapshotForSave()
-      const res = await fetch(`${API}/paths`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(snap)
-      })
-      if (res.status === 409) {
-        await pfadeRef.value.resetToServer()
-        alert('Pfade wurden zwischenzeitlich geändert. Ansicht aktualisiert.')
-        return
-      }
-      if (!res.ok) throw new Error(await res.text())
-      await pfadeRef.value.resetToServer()
+      const saved = await saveVersioned(
+        () => backend.savePaths(pfadeRef.value.getSnapshotForSave()),
+        () => pfadeRef.value.resetToServer(),
+        'Pfade wurden zwischenzeitlich geändert. Ansicht aktualisiert.',
+      )
+      if (!saved) return
     }
 
     // Mitarbeiter speichern
     if (mitarbeiterRef.value?.isDirty()) {
-      const snap = mitarbeiterRef.value.getSnapshotForSave()
-      const res = await fetch(`${API}/user`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(snap)
-      })
-      if (!res.ok) throw new Error(await res.text())
+      await backend.saveUsers(mitarbeiterRef.value.getSnapshotForSave())
       await mitarbeiterRef.value.resetToServer()
       await window.electronAPI?.refreshUsers?.() // User-Liste in main aktualisieren
     }
@@ -200,31 +195,18 @@ async function onSave() {
 
     // Schema
     if (schemaRef.value?.isDirty()) {
-      const snap = schemaRef.value.getSnapshotForSave()
-      const res = await fetch(`${API}/schema`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(snap)
-      })
-      if (!res.ok) throw new Error(await res.text())
+      await backend.saveSchema(schemaRef.value.getSnapshotForSave())
       await schemaRef.value.resetToServer()
     }
 
     // Module
     if (moduleRef.value?.isDirty()) {
-      const snap = moduleRef.value.getSnapshotForSave()
-      const res = await fetch(`${API}/modules`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(snap)
-      })
-        if (res.status === 409) {
-        await moduleRef.value.resetToServer()
-        alert('Module wurden zwischenzeitlich geändert. Ansicht aktualisiert.')
-        return
-      }
-      if (!res.ok) throw new Error(await res.text())
-      await moduleRef.value.resetToServer()
+      const saved = await saveVersioned(
+        () => backend.saveModules(moduleRef.value.getSnapshotForSave()),
+        () => moduleRef.value.resetToServer(),
+        'Module wurden zwischenzeitlich geändert. Ansicht aktualisiert.',
+      )
+      if (!saved) return
     }
 
     // Wenn alles erfolgreich war → Fenster schließen
@@ -232,7 +214,7 @@ async function onSave() {
 
   } catch (e) {
     console.error(e)
-    alert('Speichern fehlgeschlagen.')
+    alert(`Speichern fehlgeschlagen: ${e.message}`)
   } finally {
     saving.value = false
   }
@@ -260,19 +242,19 @@ const pwField = ref(null)
 
 const canSubmit = computed(() => !!authPassword.value && !authLoading.value)
 function focusPw(){ nextTick(() => pwField.value?.focus()) }
-onMounted(() => { document.title = 'Konfiguration'; if (authOpen.value) focusPw() })
+onMounted(async () => {
+  document.title = 'Konfiguration'
+  // Ohne gesetztes Passwort ist die Konfiguration offen
+  if (!(await backend.isPasswordSet())) authOpen.value = false
+  if (authOpen.value) focusPw()
+})
 
 function onPwKey(ev){ try { capsOn.value = !!ev.getModifierState?.('CapsLock') } catch {} }
 
 async function authenticate() {
   authError.value = ''; authLoading.value = true
   try {
-    const res = await fetch(`${API}/check-password`, {
-      method:'POST', headers:{ 'Content-Type':'application/json' },
-      body: JSON.stringify({ password: authPassword.value })
-    })
-    const data = await res.json().catch(()=> ({}))
-    if (!res.ok || !data.ok) throw new Error('Passwort falsch')
+    if (!(await backend.checkPassword(authPassword.value))) throw new Error('Passwort falsch')
     authOpen.value = false
   } catch (e) {
     authError.value = e.message || 'Passwort falsch'

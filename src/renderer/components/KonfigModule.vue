@@ -43,7 +43,7 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
 
-const API = import.meta.env.VITE_API_BASE || '/api'
+import { backend } from '@/lib/backend'
 
 
 
@@ -80,9 +80,7 @@ const isSoundminerValid = computed(() => {
 async function loadSnapshot() {
   loading.value = true; error.value = ''
   try {
-    const res = await fetch(`${API}/modules`)
-    if (!res.ok) throw new Error(`${res.status} ${res.statusText}`)
-    const snap = await res.json() // {data:{...}, version:"..."}
+    const snap = await backend.getModules() // {data:{...}, version:"..."}
     // Mapping Backend -> UI
     const sm = snap?.data?.soundminer || {}
 

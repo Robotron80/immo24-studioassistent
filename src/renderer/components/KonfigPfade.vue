@@ -69,7 +69,7 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
 
-const API = import.meta.env.VITE_API_BASE || '/api'
+import { backend } from '@/lib/backend'
 
 // Serverzustand + Arbeitskopie
 const original = ref({ data:{ PathMitarbeiter:'', PathProduktionen:'', PathStammdaten:'', PathPTUser:'' }, version:'' })
@@ -90,9 +90,7 @@ const isPfadeValid = computed(() => {
 async function loadSnapshot() {
   loading.value = true; error.value = ''
   try {
-    const res = await fetch(`${API}/paths`)
-    if (!res.ok) throw new Error(`${res.status} ${res.statusText}`)
-    const snap = await res.json() // {data:{...}, version:"..."}
+    const snap = await backend.getPaths() // {data:{...}, version:"..."}
     original.value = {
       data: {
         PathMitarbeiter: snap?.data?.PathMitarbeiter || '',

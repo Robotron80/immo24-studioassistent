@@ -72,7 +72,7 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
 
-const API = import.meta.env.VITE_API_BASE || '/api'
+import { backend } from '@/lib/backend'
 
 // -------- State --------
 const loading = ref(false)
@@ -123,18 +123,7 @@ const previewSession       = computed(() => renderPreview(staged.sessionSchema))
 async function loadSnapshot() {
   loading.value = true; error.value = ''
   try {
-    const res = await fetch(`${API}/schema`)
-    if (!res.ok) {
-      const txt = await res.text().catch(()=> '')
-      let errObj = {}
-      try { errObj = JSON.parse(txt) } catch {}
-      const msg = errObj?.error === 'no_stammdaten_path'
-        ? 'Kein Stammdaten-Pfad gesetzt. Bitte zuerst unter „Pfade“ speichern.'
-        : `${res.status} ${res.statusText}`
-      throw new Error(msg)
-    }
-
-    const snap = await res.json().catch(()=> ({}))
+    const snap = await backend.getSchema()
     // unterstützt: {schema:{…}}, {data:{…}} oder flach
     const src =
       (snap && typeof snap === 'object' && typeof snap.schema === 'object' && snap.schema) ||

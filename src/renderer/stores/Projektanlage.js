@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia'
 
-const API =
-  import.meta.env.VITE_API_BASE
-
+import { backend } from '@/lib/backend'
 // Windows-Dateinamen-Regeln
 const WINDOWS_FORBIDDEN_RE = /[<>:"/\\|?*\u0000-\u001F]/g
 function windowsNameReport(input) {
@@ -53,21 +51,6 @@ const FIELD_LABELS = {
   kunde: 'Kunde',
 }
 
-async function getJSON(url, options) {
-  const r = await fetch(url, options)
-  let body = null
-  try { body = await r.json() } catch { body = null }
-  if (!r.ok) {
-    const err = new Error(body?.error || `${r.status} ${r.statusText}`)
-    err.status  = r.status
-    err.error   = body?.error || null
-    err.details = body?.details || null
-    err.fields  = body?.fields || null
-    err.payload = body || null
-    throw err
-  }
-  return body ?? {}
-}
 
 export const useProjektanlage = defineStore('Projektanlage', {
   state: () => ({
@@ -92,13 +75,7 @@ export const useProjektanlage = defineStore('Projektanlage', {
   actions: {
     async fetchActiveUser() {
       try {
-        const res = await fetch(`${API}/activeUser`)
-        if (res.ok) {
-          const text = await res.text()
-          this.activeUser = (text || '').trim() || null
-        } else {
-          this.activeUser = null
-        }
+        this.activeUser = await backend.getActiveUser()
       } catch {
         this.activeUser = null
       }
@@ -112,7 +89,7 @@ export const useProjektanlage = defineStore('Projektanlage', {
     async loadKunden() {
       this.loading.kunden = true
       try {
-        const raw = await getJSON(`${API}/projektanlage/kunden`)
+        const raw = await backend.listCustomers()
         this.kunden = (Array.isArray(raw) ? raw : []).map(k => ({
           label: String(k.label ?? ''),
           value: String(k.value ?? ''),
@@ -128,7 +105,7 @@ export const useProjektanlage = defineStore('Projektanlage', {
 
     async loadTemplates() {
       this.loading.templates = true
-      try { this.templates = await getJSON(`${API}/projektanlage/templates`) }
+      try { this.templates = await backend.listTemplates() }
       finally { this.loading.templates = false }
     },
 
@@ -140,7 +117,7 @@ export const useProjektanlage = defineStore('Projektanlage', {
     async loadRows(kunde) {
       if (!kunde) { this.rows = []; return }
       this.loading.rows = true
-      try { this.rows = await getJSON(`${API}/projektanlage/projekte?kunde=${encodeURIComponent(kunde)}`) }
+      try { this.rows = await backend.listProjects(kunde) }
       finally { this.loading.rows = false }
     },
 
@@ -205,21 +182,12 @@ export const useProjektanlage = defineStore('Projektanlage', {
 
       this.loading.create = true
       try {
-        const headers = { 'Content-Type': 'application/json' }
         if (this.form.vorhanden === 'neu') {
-          const res = await getJSON(`${API}/projektanlage/projekte`, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(payload),
-          })
+          const res = await backend.createProject(payload)
           await this.loadRows(this.form.kunde)
           return res
         } else {
-          const resolved = await getJSON(`${API}/projektanlage/resolve-existing`, {
-            method: 'POST',
-            headers,
-            body: JSON.stringify(payload),
-          })
+          const resolved = await backend.addSession(payload)
           if (!resolved?.templateDest) throw new Error('Kein passender Projektordner gefunden!')
           await this.loadRows(this.form.kunde)
           return resolved

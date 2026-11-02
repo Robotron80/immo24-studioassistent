@@ -286,6 +286,8 @@ export function createPreferencesWindow(): void {
   win.once('ready-to-show', () => win.show())
   win.on('closed', async () => {
     prefWindow = null
+    // Das Hauptfenster soll geänderte Kunden, Vorlagen und Module gleich anzeigen
+    if (isOpen(mainWindow)) mainWindow.webContents.send('config-changed')
     if (!isOpen(mainWindow) || !mainWindow.isVisible()) {
       sendUsersToPicker(createUserPickerWindow(), await listUserNames())
     }

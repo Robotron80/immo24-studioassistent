@@ -89,6 +89,8 @@ test('eine fehlende Quelle ist ein Hinweis, die anderen Kategorien laufen weiter
   ])
   assert.equal(result.overall, 'ok')
   assert.equal(result.message, 'Vorgang abgeschlossen – mit Hinweisen')
+  // Der Hinweis nennt, was gefehlt hat, damit man damit etwas anfangen kann
+  assert.match(result.details[1].note ?? '', /Nichts zu kopieren.*trackpresets/)
   assert.ok(fs.existsSync(path.join(dirs.ptUser, 'Session Templates', USER, 'Vorlage.ptxt')))
 })
 

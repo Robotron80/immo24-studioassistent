@@ -41,7 +41,11 @@ interface Context {
 }
 
 /** Wird geworfen, wenn die Quelle fehlt. Das ist ein Hinweis, kein Fehler. */
-class SourceMissing extends Error {}
+class SourceMissing extends Error {
+  constructor(source: string) {
+    super(`Nichts zu kopieren, dieser Ordner existiert nicht: ${source}`)
+  }
+}
 
 /** Ordner kopieren, vorhandene Dateien werden überschrieben. */
 async function copyFolder(source: string, target: string, exclude?: string): Promise<void> {
@@ -121,7 +125,7 @@ const QUICK_FADE = /^Quick Preset\s+[1-5]\.fdpreset$/i
 
 /** Fade Presets: vier feste Ordner, nur .fdpreset-Dateien, Quick Presets separat. */
 async function fadePresets(ctx: Context, quick: boolean): Promise<void> {
-  let missing = 0
+  const missing: string[] = []
   for (const folder of FADE_FOLDERS) {
     const { source, target } = direction(
       ctx,
@@ -129,7 +133,7 @@ async function fadePresets(ctx: Context, quick: boolean): Promise<void> {
       path.join(ctx.archive, 'fadepresets', folder),
     )
     if (!(await exists(source))) {
-      missing++
+      missing.push(source)
       continue
     }
     await fs.mkdir(target, { recursive: true })
@@ -140,7 +144,7 @@ async function fadePresets(ctx: Context, quick: boolean): Promise<void> {
     }
     if (quick) await copyQuickPresets(source, target, 'fdpreset')
   }
-  if (missing > 0) throw new SourceMissing('Fade Presets')
+  if (missing.length > 0) throw new SourceMissing(missing.join(', '))
 }
 
 /**
@@ -181,8 +185,8 @@ async function runCategory(category: string, run: () => Promise<void>): Promise<
     await run()
     return { category, status: 'ok' }
   } catch (error) {
-    if (error instanceof SourceMissing) return { category, status: 'partial', note: 'some items were not present' }
-    return { category, status: 'error', note: error instanceof Error ? error.message : String(error) }
+    const note = error instanceof Error ? error.message : String(error)
+    return { category, status: error instanceof SourceMissing ? 'partial' : 'error', note }
   }
 }
 

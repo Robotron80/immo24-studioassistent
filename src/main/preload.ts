@@ -37,6 +37,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // Aktiven User empfangen (nach Auswahl im Picker)
   onActiveUser: (callback?: (user: string) => void) => on<string>('active-user', (user) => callback?.(user)),
 
+  // Meldet, dass die Konfiguration geschlossen wurde und sich Daten geändert haben können
+  onConfigChanged: (callback: () => void) => on<void>('config-changed', callback),
+
   // Mitarbeiterliste neu laden und an Picker senden
   refreshUsers: () => ipcRenderer.invoke('refresh-users'),
 

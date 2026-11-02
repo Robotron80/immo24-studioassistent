@@ -73,7 +73,10 @@
       </div>
     </div>
 
-    <v-snackbar v-model="snack.open" timeout="2000">{{ snack.text }}</v-snackbar>
+    <v-snackbar v-model="snack.open" :color="snack.color" timeout="2000">{{ snack.text }}</v-snackbar>
+
+    <!-- Ergebnis pro Kategorie, wenn nicht alles glatt lief -->
+    <PresetResultDialog v-model="resultDialog.open" :result="resultDialog.data" />
 
     <!-- Bestätigungs-Dialog -->
     <v-dialog v-model="confirm.open" max-width="400">
@@ -118,6 +121,7 @@ const anySelected = computed(() =>
 )
 
 const snack = reactive({ open: false, text: '', color: 'success' })
+const resultDialog = reactive({ open: false, data: null })
 const confirm = reactive({
   open: false,
   title: '',
@@ -147,17 +151,15 @@ async function sendAction(action) {
   try {
     const data = await backend.runProToolsPresets(payload)
 
-    // Backend-Message bevorzugt nutzen
-    const text = data.message
-      || (data.overall === 'ok'
-          ? (data.action === 'store' ? 'Store erfolgreich' : 'Recall erfolgreich')
-          : 'Vorgang abgeschlossen – mit Hinweisen')
-
-    // Statusfarbe bestimmen
-    snack.color = data.details.every(detail => detail.status === 'ok') ? 'success' : 'warning'
-
-    snack.text = text
-    snack.open = true
+    // Lief nicht alles glatt, zeigen wir die Einzelheiten statt nur einer kurzen Meldung
+    if (data.details.every(detail => detail.status === 'ok')) {
+      snack.color = 'success'
+      snack.text = data.message
+      snack.open = true
+    } else {
+      resultDialog.data = data
+      resultDialog.open = true
+    }
 
   } catch (e) {
     snack.color = 'error'

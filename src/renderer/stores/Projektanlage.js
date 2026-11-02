@@ -86,6 +86,13 @@ export const useProjektanlage = defineStore('Projektanlage', {
       await Promise.allSettled([ this.loadKunden(), this.loadTemplates() ])
     },
 
+    // Nach der Konfiguration: Listen neu laden. Ein gewählter Kunde bleibt gewählt,
+    // seine Produktionsstufen können sich aber geändert haben.
+    async refreshAfterConfig() {
+      await Promise.allSettled([ this.loadKunden(), this.loadTemplates() ])
+      if (this.form.kunde) await this.selectKunde(this.form.kunde)
+    },
+
     async loadKunden() {
       this.loading.kunden = true
       try {

@@ -80,7 +80,7 @@ Restlicher Ordner bleibt frei für Backups & Testprojekte.
 Zusatzmodule können hier aktiviert werden.
 
 **Soundminer-Modul** 
-- Mit **Modul aktivieren** wird das Soundminer-Modul aktiviert. Der Tab **Soundminer** erscheint nach einem Neustart der Software.
+- Mit **Modul aktivieren** wird das Soundminer-Modul aktiviert. Der Tab **Soundminer** erscheint, sobald die Konfiguration gespeichert ist.
 - **Version** → Die verwendete Soundminer-Version. Aktuell ist nur Version V6 Pro verfügbar.
 - **Soundminer Support Folder** → Der Pfad des Soundminer Support Verzeichnis 
 

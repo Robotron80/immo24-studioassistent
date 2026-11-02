@@ -30,10 +30,11 @@
 
 <script setup>
 import { backend } from '@/lib/backend'
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
 const activeUser  = ref(null)
 const loggingOut  = ref(false)
+let stopListening = null
 const isLoggedIn  = computed(() => !!activeUser.value)
 const displayName = computed(() => activeUser.value || 'Nicht angemeldet')
 const soundminerEnabled = ref(false)
@@ -42,7 +43,10 @@ const soundminerEnabled = ref(false)
 onMounted(() => {
   fetchActiveUser()
   fetchModuleStatus()
+  // Ein in der Konfiguration eingeschaltetes Modul soll sofort als Tab erscheinen
+  stopListening = window.electronAPI?.onConfigChanged?.(fetchModuleStatus)
 })
+onBeforeUnmount(() => stopListening?.())
 
 async function fetchActiveUser() {
   try {

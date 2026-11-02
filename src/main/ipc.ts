@@ -1,8 +1,18 @@
+/**
+ * IPC: die Gesprächsleitung zwischen Oberfläche und Hauptprozess.
+ *
+ * IPC heißt "Inter-Process Communication". Die Oberfläche läuft aus Sicherheitsgründen
+ * in einem eigenen Prozess und darf z. B. keinen Dateidialog öffnen. Sie schickt dafür
+ * eine benannte Nachricht (siehe preload.ts), und hier steht, was dann passiert.
+ *   ipcMain.on:     Nachricht ohne Antwort
+ *   ipcMain.handle: Anfrage, auf die die Oberfläche eine Antwort bekommt
+ */
 import { app, BrowserWindow, dialog, ipcMain } from 'electron'
 
 import { getUsers, postActiveUser } from './nodeRed'
 import { closeInitWindow, openPickerFlow, refreshPickerUsers, showMainWindowForUser } from './windows'
 
+/** Meldet alle Nachrichten an. Wird einmal beim Programmstart aufgerufen. */
 export function registerIpc(): void {
   ipcMain.on('user-picked', async (_event, user: string) => {
     await postActiveUser(user)

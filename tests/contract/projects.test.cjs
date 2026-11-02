@@ -1,8 +1,13 @@
+/**
+ * Hält das Verhalten von Anmeldung, Stammdaten und Projektanlage in Node-RED fest.
+ * Die Schritte mit "Hänger" im Namen sind bekannte Fehler: Dort antwortet Node-RED nie.
+ */
 const fs = require('node:fs')
 const path = require('node:path')
 const test = require('node:test')
 const { expectReference, seedConfigured, startBackend, write } = require('./harness.cjs')
 
+/** Dummy-Daten: die Standard-Einrichtung plus Vorlagen und ein paar Sonderfälle. */
 function seed(dirs) {
   seedConfigured(dirs)
   const templates = path.join(dirs.mitarbeiter, 'Tester', 'immo24', 'templates')
@@ -17,6 +22,7 @@ function seed(dirs) {
   write(path.join(dirs.produktionen, 'Kunde A', 'lose-datei.txt'), 'x')
 }
 
+/** Ein gültiges Projekt, von dem einzelne Tests nur abweichende Felder ändern. */
 const project = (overrides = {}) => ({
   kunde: 'Kunde A',
   datum: '2026-01-15',

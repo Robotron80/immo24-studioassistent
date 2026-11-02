@@ -1,0 +1,90 @@
+/**
+ * Übersetzer zwischen den Vergleichstests und dem neuen Backend.
+ *
+ * Die Szenarien in tests/contract/scenarios sprechen die alten Web-Adressen an,
+ * z. B. "GET /api/paths". Das neue Backend hat keine Web-Adressen, sondern
+ * normale Funktionen. Diese Datei übersetzt zwischen beiden. Sie gehört nur zu
+ * den Tests und kommt nicht in die App.
+ */
+import { createConfigService } from '../../src/core/config.ts'
+import { CoreError } from '../../src/core/errors.ts'
+import { createPasswordService } from '../../src/core/password.ts'
+import { createUserService } from '../../src/core/users.ts'
+
+export interface AdapterResponse {
+  status: number
+  body: unknown
+}
+
+/** Übersetzt einen gemeldeten Fehler in die Antwort, die Node-RED gegeben hat. */
+function toResponse(error: CoreError): AdapterResponse {
+  switch (error.code) {
+    case 'version_conflict':
+    case 'version_required':
+      return { status: 409, body: { error: error.code, ...error.details } }
+    case 'missing_password':
+    case 'missing_fields':
+      return { status: 400, body: { ok: false, error: error.code } }
+    case 'password_mismatch':
+      return { status: 422, body: { ok: false, error: error.code } }
+    case 'mitarbeiter_required':
+      return { status: 400, body: { error: 'mitarbeiter array required' } }
+    default:
+      return { status: 400, body: { error: error.code } }
+  }
+}
+
+/** Erstellt eine request-Funktion, die das neue Backend wie Node-RED ansprechbar macht. */
+export function createCoreRequest(userDataDir: string) {
+  const config = createConfigService(userDataDir)
+  const passwords = createPasswordService(userDataDir)
+  const users = createUserService(config)
+
+  /** Ordnet jeder Web-Adresse den passenden Funktionsaufruf zu. */
+  async function route(key: string, body: any): Promise<AdapterResponse> {
+    switch (key) {
+      case 'GET /api/ping':
+        return { status: 200, body: { ok: true } }
+      case 'GET /api/initialize': {
+        const status = await config.getInitializeStatus()
+        return { status: status.paths ? 200 : 503, body: status }
+      }
+      case 'GET /api/paths':
+        return { status: 200, body: await config.getPaths() }
+      case 'PUT /api/paths':
+        return { status: 200, body: await config.savePaths(body) }
+      case 'GET /api/schema': {
+        const schema = await config.getSchema()
+        return { status: schema.version === null ? 404 : 200, body: schema }
+      }
+      case 'PUT /api/schema':
+        return { status: 200, body: await config.saveSchema(body) }
+      case 'POST /api/check-password': {
+        const ok = await passwords.check(body?.password)
+        return { status: ok ? 200 : 401, body: { ok } }
+      }
+      case 'POST /api/adminpw':
+        await passwords.set(body)
+        return { status: 200, body: { ok: true } }
+      case 'GET /api/modules':
+        return { status: 200, body: await config.getModules() }
+      case 'PUT /api/modules':
+        return { status: 200, body: await config.saveModules(body) }
+      case 'GET /api/user':
+        return { status: 200, body: await users.listUsers() }
+      case 'POST /api/user':
+        return { status: 200, body: await users.saveUsers(body) }
+      default:
+        throw new Error(`Im Adapter noch nicht vorhanden: ${key}`)
+    }
+  }
+
+  return async function request(method: string, url: string, body?: unknown): Promise<AdapterResponse> {
+    try {
+      return await route(`${method} ${url}`, body)
+    } catch (error) {
+      if (error instanceof CoreError) return toResponse(error)
+      throw error
+    }
+  }
+}

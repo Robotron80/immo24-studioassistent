@@ -1,8 +1,16 @@
+/**
+ * Das Fehler-Logbuch des Programms.
+ *
+ * Alles Wichtige landet in der Datei logs/app.log im Einstellungsordner. Wenn etwas
+ * schiefgeht, steht dort, was zuletzt passiert ist. Unerwartete Fehler bekommen
+ * zusätzlich ein Fehlerfenster.
+ */
 import fs from 'node:fs'
 import path from 'node:path'
 
 import { app, dialog } from 'electron'
 
+/** Schreibt eine Zeile mit Zeitstempel ins Logbuch und in die Konsole. */
 export function logLine(...args: unknown[]): void {
   try {
     const logDir = path.join(app.getPath('userData'), 'logs')
@@ -16,8 +24,10 @@ export function logLine(...args: unknown[]): void {
   }
 }
 
+// Merkt sich, ob gerade ein Fehlerfenster offen ist, damit sich keine stapeln.
 let errorBoxOpen = false
 
+/** Zeigt ein Fehlerfenster, außer es ist schon eines offen. */
 export function showOnceErrorBox(title: string, message: string): void {
   if (errorBoxOpen) return
   errorBoxOpen = true
@@ -28,6 +38,10 @@ export function showOnceErrorBox(title: string, message: string): void {
   }
 }
 
+/**
+ * Fängt alle Fehler auf, die sonst niemand behandelt hat, und meldet sie.
+ * Wird einmal beim Programmstart aufgerufen.
+ */
 export function installGlobalErrorHandlers(): void {
   process.on('uncaughtException', (err) => {
     logLine('[uncaughtException]', err?.stack || String(err))

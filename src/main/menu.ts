@@ -1,8 +1,13 @@
+/**
+ * Die Menüleiste des Programms.
+ * Auf dem Mac gibt es zusätzlich das übliche App-Menü, unter Windows heißt es "Datei".
+ */
 import { app, Menu, type MenuItemConstructorOptions } from 'electron'
 
 import { DEV_BACKEND } from './nodeRed'
 import { createPreferencesWindow, openDevTools } from './windows'
 
+/** Baut das Menü und setzt es. Wird einmal beim Programmstart aufgerufen. */
 export function installApplicationMenu(): void {
   const isMac = process.platform === 'darwin'
   const preferences: MenuItemConstructorOptions = {

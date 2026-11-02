@@ -117,6 +117,37 @@
     }
   },
   {
+    "step": "Pfade da, Schema fehlt",
+    "request": "GET /api/initialize",
+    "response": {
+      "status": 200,
+      "body": {
+        "ready": true,
+        "initialize": {
+          "paths_json_present": true,
+          "required_keys_ok": true,
+          "schema_ok": false,
+          "dirs_exist": null,
+          "missingKeys": [],
+          "emptyKeys": [],
+          "notFoundDirs": null,
+          "needsUserAction": true
+        },
+        "paths": {
+          "PathMitarbeiter": "<BASE>/Mitarbeiter",
+          "PathProduktionen": "<BASE>/Produktionen",
+          "PathStammdaten": "<BASE>/Stammdaten",
+          "PathPTUser": "<BASE>/ProToolsUser"
+        },
+        "schema": {
+          "sessionSchema": "",
+          "projektordnerSchema": ""
+        },
+        "modules": {}
+      }
+    }
+  },
+  {
     "step": "Schema fehlt",
     "request": "GET /api/schema",
     "response": {

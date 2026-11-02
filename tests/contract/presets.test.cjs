@@ -1,9 +1,15 @@
+/**
+ * Hält fest, was Store und Recall in Node-RED kopieren.
+ * Store: von der lokalen Pro-Tools-Ablage ins zentrale Archiv des Mitarbeiters.
+ * Recall: aus dem Archiv zurück in die lokale Ablage.
+ */
 const path = require('node:path')
 const test = require('node:test')
 const { expectReference, seedConfigured, startBackend, write } = require('./harness.cjs')
 
 const USER = 'Tester'
 
+/** Legt lokale Presets an. Dazu gehören auch fremde Dateien, die nicht mitkopiert werden dürfen. */
 function seedLocalPresets({ ptUser, soundminer }) {
   const files = {
     [`Session Templates/${USER}/Vorlage.ptxt`]: 'template',
@@ -30,6 +36,7 @@ function seedLocalPresets({ ptUser, soundminer }) {
   write(path.join(soundminer, 'andere-datei.txt'), 'x')
 }
 
+/** Eine Anfrage mit allen Kategorien, so wie die Oberfläche sie schickt. */
 const everything = (action) => ({
   action,
   categories: {

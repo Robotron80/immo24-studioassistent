@@ -1,5 +1,11 @@
 /**
- * immo24 Studioassistent - Electron Main Process
+ * immo24 Studioassistent: der Hauptprozess und Startpunkt des Programms.
+ *
+ * Eine Electron-App besteht aus zwei Teilen:
+ *   - dem Hauptprozess (dieser Ordner): darf alles, verwaltet Fenster und Dateien
+ *   - der Oberfläche (src/renderer): läuft abgeschirmt in den Fenstern
+ *
+ * Diese Datei steuert den Ablauf beim Start, siehe die Funktion startup().
  */
 import fs from 'node:fs'
 import path from 'node:path'
@@ -35,11 +41,14 @@ import {
 configureUserData()
 installGlobalErrorHandlers()
 
+// Nur eine Instanz erlauben: Wird die App erneut gestartet, beendet sich die neue
+// Instanz sofort, und die bereits laufende holt ihr Fenster nach vorn.
 if (!app.requestSingleInstanceLock()) {
   app.exit(0)
 }
 app.on('second-instance', () => focusActiveWindow())
 
+/** Legt beim ersten Start die Einstellungsdateien an, falls sie noch fehlen. */
 function ensureUserJsonFiles(): void {
   const basePath = app.getPath('userData')
   fs.mkdirSync(basePath, { recursive: true })
@@ -70,6 +79,7 @@ function installNetworkGuard(): void {
   })
 }
 
+/** Fragt wiederholt nach einem Status, bis er passt oder die Zeit abgelaufen ist. */
 async function pollUntil<T>(fetchStatus: () => Promise<T>, isDone: (status: T) => boolean, timeoutMs: number): Promise<T> {
   const start = Date.now()
   let status = await fetchStatus()
@@ -80,6 +90,13 @@ async function pollUntil<T>(fetchStatus: () => Promise<T>, isDone: (status: T) =
   return status
 }
 
+/**
+ * Der Programmstart, Schritt für Schritt:
+ *   1. Grundlagen: Netzwerksperre, Einstellungsdateien, IPC und Menü
+ *   2. Backend starten, dauert das länger, erscheint das Ladefenster
+ *   3. Warten, bis das Backend bereit ist
+ *   4. Oberfläche laden und je nach Zustand Einrichtung oder Anmeldung zeigen
+ */
 async function startup(): Promise<void> {
   logLine('[startup] begin', `v${app.getVersion()}`, DEV_BACKEND ? 'DEV_BACKEND' : 'PROD_READONLY')
   installNetworkGuard()

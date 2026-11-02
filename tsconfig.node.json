@@ -1,8 +1,12 @@
 {
   "compilerOptions": {
     "target": "es2023",
-    "lib": ["ES2023"],
-    "types": ["node"],
+    "lib": [
+      "ES2023"
+    ],
+    "types": [
+      "node"
+    ],
     "strict": true,
     "skipLibCheck": true,
     "module": "esnext",
@@ -13,7 +17,12 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "allowImportingTsExtensions": true
   },
-  "include": ["src/main/**/*.ts"]
+  "include": [
+    "src/main/**/*.ts",
+    "src/core/**/*.ts",
+    "tests/core/**/*.ts"
+  ]
 }

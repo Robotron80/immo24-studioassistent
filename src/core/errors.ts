@@ -24,6 +24,16 @@ export type CoreErrorCode =
   | 'password_mismatch'
   | 'mitarbeiter_required'
   | 'mitarbeiter_path_missing'
+  | 'not_logged_in'
+  | 'produktionen_path_missing'
+  | 'kunde_required'
+  | 'kunde_ohne_unterordner'
+  | 'stufe_unbekannt'
+  | 'template_missing'
+  | 'project_fields_missing'
+  | 'validation_failed'
+  | 'project_exists'
+  | 'not_found'
 
 export class CoreError extends Error {
   /** Fester Code, z. B. "version_conflict". */

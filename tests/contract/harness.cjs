@@ -67,7 +67,11 @@ function createNormalizer(base) {
 
 /** Wendet die Platzhalter auf eine ganze Antwort an, auch auf verschachtelte Werte. */
 function normalizeValue(value, normalizeText) {
-  if (typeof value === 'string') return normalizeText(value)
+  if (typeof value === 'string') {
+    // Ein ganzer Wert, der ein Pfad ist: Windows-Trenner vereinheitlichen, auch nach Leerzeichen
+    const text = normalizeText(value)
+    return text.startsWith('<BASE>') ? text.replaceAll('\\', '/') : text
+  }
   if (Array.isArray(value)) return value.map((item) => normalizeValue(item, normalizeText))
   if (value && typeof value === 'object') {
     return Object.fromEntries(Object.entries(value).map(([key, item]) => [

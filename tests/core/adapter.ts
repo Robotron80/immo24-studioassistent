@@ -2,13 +2,15 @@
  * Übersetzer zwischen den Vergleichstests und dem neuen Backend.
  *
  * Die Szenarien in tests/contract/scenarios sprechen die alten Web-Adressen an,
- * z. B. "GET /api/paths". Das neue Backend hat keine Web-Adressen, sondern
- * normale Funktionen. Diese Datei übersetzt zwischen beiden. Sie gehört nur zu
- * den Tests und kommt nicht in die App.
+ * z. B. "GET /api/paths". Das neue Backend hat keine Web-Adressen, sondern normale
+ * Funktionen. Diese Datei übersetzt zwischen beiden und gehört nur zu den Tests.
  */
 import { createConfigService } from '../../src/core/config.ts'
 import { CoreError } from '../../src/core/errors.ts'
 import { createPasswordService } from '../../src/core/password.ts'
+import { createProjectService } from '../../src/core/projects.ts'
+import { createSessionService } from '../../src/core/session.ts'
+import { createStammdatenService } from '../../src/core/stammdaten.ts'
 import { createUserService } from '../../src/core/users.ts'
 
 export interface AdapterResponse {
@@ -17,7 +19,7 @@ export interface AdapterResponse {
 }
 
 /** Übersetzt einen gemeldeten Fehler in die Antwort, die Node-RED gegeben hat. */
-function toResponse(error: CoreError): AdapterResponse {
+function toResponse(error: CoreError, key: string): AdapterResponse {
   switch (error.code) {
     case 'version_conflict':
     case 'version_required':
@@ -29,6 +31,19 @@ function toResponse(error: CoreError): AdapterResponse {
       return { status: 422, body: { ok: false, error: error.code } }
     case 'mitarbeiter_required':
       return { status: 400, body: { error: 'mitarbeiter array required' } }
+    case 'project_fields_missing':
+      return {
+        status: 400,
+        body: { error: key.includes('resolve-existing') ? 'missing' : 'missing fields', ...error.details },
+      }
+    case 'validation_failed':
+      return { status: 422, body: { error: error.code, ...error.details } }
+    case 'project_exists':
+      return { status: 409, body: { error: 'Das Projekt existiert bereits.', ...error.details } }
+    case 'not_found':
+      return { status: 404, body: { error: error.code } }
+    case 'kunde_required':
+      return { status: 400, body: { error: 'kunde required' } }
     default:
       return { status: 400, body: { error: error.code } }
   }
@@ -39,9 +54,11 @@ export function createCoreRequest(userDataDir: string) {
   const config = createConfigService(userDataDir)
   const passwords = createPasswordService(userDataDir)
   const users = createUserService(config)
+  const session = createSessionService(config)
+  const stammdaten = createStammdatenService(config)
+  const projects = createProjectService(config, stammdaten, session)
 
-  /** Ordnet jeder Web-Adresse den passenden Funktionsaufruf zu. */
-  async function route(key: string, body: any): Promise<AdapterResponse> {
+  async function route(key: string, url: URL, body: any): Promise<AdapterResponse> {
     switch (key) {
       case 'GET /api/ping':
         return { status: 200, body: { ok: true } }
@@ -74,16 +91,39 @@ export function createCoreRequest(userDataDir: string) {
         return { status: 200, body: await users.listUsers() }
       case 'POST /api/user':
         return { status: 200, body: await users.saveUsers(body) }
+      case 'POST /api/login':
+        return { status: 200, body: await session.login(body?.user) }
+      case 'POST /api/logout':
+        session.logout()
+        return { status: 200, body: '' }
+      case 'GET /api/activeUser':
+        return { status: 200, body: session.getActiveUserName() }
+      case 'GET /api/pb/snapshot':
+        return { status: 200, body: await stammdaten.getSnapshot() }
+      case 'PUT /api/pb/snapshot':
+        return { status: 200, body: await stammdaten.saveSnapshot(body) }
+      case 'GET /api/projektanlage/kunden':
+        return { status: 200, body: await stammdaten.listForSelection() }
+      case 'GET /api/projektanlage/templates':
+        return { status: 200, body: await projects.listTemplates() }
+      case 'GET /api/projektanlage/projekte':
+        return { status: 200, body: await projects.listProjects(url.searchParams.get('kunde')) }
+      case 'POST /api/projektanlage/projekte':
+        return { status: 200, body: await projects.createProject(body) }
+      case 'POST /api/projektanlage/resolve-existing':
+        return { status: 200, body: await projects.addSession(body) }
       default:
         throw new Error(`Im Adapter noch nicht vorhanden: ${key}`)
     }
   }
 
-  return async function request(method: string, url: string, body?: unknown): Promise<AdapterResponse> {
+  return async function request(method: string, target: string, body?: unknown): Promise<AdapterResponse> {
+    const url = new URL(target, 'http://adapter')
+    const key = `${method} ${url.pathname}`
     try {
-      return await route(`${method} ${url}`, body)
+      return await route(key, url, body)
     } catch (error) {
-      if (error instanceof CoreError) return toResponse(error)
+      if (error instanceof CoreError) return toResponse(error, key)
       throw error
     }
   }

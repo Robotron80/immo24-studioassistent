@@ -20,6 +20,7 @@ import path from 'node:path'
 import type { ConfigService } from './config.ts'
 import { CoreError } from './errors.ts'
 import { exists, isPlainObject, readTextOrNull, writeFileAtomic } from './files.ts'
+import { comparableName } from './names.ts'
 
 export interface User {
   name: string
@@ -45,15 +46,6 @@ const PRESET_FOLDERS = [
 ]
 /** Dieser Ordner kommt nur dazu, wenn das Soundminer-Modul aktiv ist. */
 const SOUNDMINER_FOLDER = 'soundminer'
-
-/**
- * Vereinheitlicht einen Namen für den Vergleich.
- * macOS und Windows speichern Umlaute intern unterschiedlich. Ohne normalize()
- * würde "Ärger" vom Mac nicht als "Ärger" von Windows erkannt.
- */
-function comparableName(name: string): string {
-  return name.normalize('NFC').toLowerCase()
-}
 
 /** Liest einen Ordner aus. Gibt eine leere Liste zurück, wenn es ihn nicht gibt. */
 async function listDirectory(dir: string) {

@@ -19,9 +19,6 @@ import pinia from '@/stores'
 // Stores
 import { useProjektanlage } from '@/stores/Projektanlage'
 
-// Styles
-import 'unfonts.css'
-
 const app = createApp(App)
 app.use(pinia)
 const projektanlage = useProjektanlage(pinia)

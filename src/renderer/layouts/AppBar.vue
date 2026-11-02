@@ -28,13 +28,13 @@
   </v-app-bar>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { backend } from '@/lib/backend'
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
-const activeUser  = ref(null)
+const activeUser  = ref<any>(null)
 const loggingOut  = ref(false)
-let stopListening = null
+let stopListening: any = null
 const isLoggedIn  = computed(() => !!activeUser.value)
 const displayName = computed(() => activeUser.value || 'Nicht angemeldet')
 const soundminerEnabled = ref(false)
@@ -58,7 +58,7 @@ async function fetchActiveUser() {
 
 async function fetchModuleStatus() {
   try {
-    const modules = await backend.getModules()
+    const modules: any = await backend.getModules()
     soundminerEnabled.value = !!modules?.data?.soundminer?.enabled
   } catch {
     soundminerEnabled.value = false

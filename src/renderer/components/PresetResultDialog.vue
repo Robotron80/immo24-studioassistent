@@ -18,24 +18,24 @@
   </v-dialog>
 </template>
 
-<script setup>
+<script setup lang="ts">
 /**
  * Zeigt nach Store oder Recall, was pro Kategorie passiert ist.
  * Erscheint nur, wenn nicht alles glatt lief, sonst reicht die kurze Meldung.
  */
-defineProps({
-  modelValue: Boolean,
-  result: { type: Object, default: null },
-})
+defineProps<{
+  modelValue: boolean
+  result: any
+}>()
 const emit = defineEmits(['update:modelValue'])
 
-const STATUS = {
+const STATUS: Record<string, { color: string; icon: string; text: string }> = {
   ok: { color: 'success', icon: 'mdi-check-circle', text: 'Erfolgreich kopiert' },
   partial: { color: 'warning', icon: 'mdi-alert', text: 'Nichts zu kopieren' },
   error: { color: 'error', icon: 'mdi-close-circle', text: 'Fehler beim Kopieren' },
 }
 
-const LABELS = {
+const LABELS: Record<string, string> = {
   templates: 'Templates',
   trackpresets: 'Track Presets',
   pluginsettings: 'Plug-In Settings',

@@ -6,8 +6,13 @@
   </v-footer>
 </template>
 
-<script setup>
-const appVersion = __APP_VERSION__
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+
+const appVersion = ref('')
+onMounted(async () => {
+  appVersion.value = await window.electronAPI.getAppVersion()
+})
 
 </script>
 

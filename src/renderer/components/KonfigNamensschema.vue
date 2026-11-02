@@ -69,7 +69,7 @@
   </v-card>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, reactive, computed, onMounted } from 'vue'
 
 import { backend } from '@/lib/backend'
@@ -123,7 +123,7 @@ const previewSession       = computed(() => renderPreview(staged.sessionSchema))
 async function loadSnapshot() {
   loading.value = true; error.value = ''
   try {
-    const snap = await backend.getSchema()
+    const snap: any = await backend.getSchema()
     // unterstützt: {schema:{…}}, {data:{…}} oder flach
     const src =
       (snap && typeof snap === 'object' && typeof snap.schema === 'object' && snap.schema) ||

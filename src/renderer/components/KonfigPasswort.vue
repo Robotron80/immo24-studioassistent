@@ -26,7 +26,7 @@
   </v-card>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { reactive, ref } from 'vue'
 
 import { backend } from '@/lib/backend'

@@ -1,0 +1,24 @@
+/**
+ * Beschreibt für die Typprüfung, was preload.ts im Fenster bereitstellt.
+ */
+interface BackendResponse {
+  ok: boolean
+  data?: unknown
+  error: { code: string; details?: Record<string, any>; message?: string }
+}
+
+interface Window {
+  electronAPI: {
+    getAppVersion(): Promise<string>
+    backend(method: string, arg?: unknown): Promise<BackendResponse>
+    openSession(file: string): Promise<string>
+    pickFolder(title?: string, defaultPath?: string): Promise<string | null>
+    onActiveUser(callback: (user: string) => void): () => void
+    onConfigChanged(callback: () => void): () => void
+    refreshUsers(): Promise<string[]>
+    hideAndOpenPicker(options?: { doLogout?: boolean }): Promise<{ ok: boolean }>
+    closeInitWindow(): Promise<boolean>
+  }
+}
+
+declare module 'vuetify/styles'

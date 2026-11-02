@@ -115,14 +115,14 @@
   </v-dialog>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 
 import { backend } from '@/lib/backend'
 
 // Server-Snapshot (Original) + lokale Arbeitskopie (staged)
-const original = ref({ customers: [], version: '' })
-const staged   = ref([])           // = customers array (deep copy)
+const original = ref({ customers: [] as any[], version: '' })
+const staged   = ref<any[]>([])           // = customers array (deep copy)
 const dirty    = ref(false)
 
 const selectedKunde = ref('')
@@ -260,7 +260,7 @@ async function confirmDeleteFolder(f){
 // ---- Confirm helper ----
 const confirmOpen = ref(false)
 const confirmTitle = ref(''); const confirmText = ref('')
-let confirmCb = null
+let confirmCb: any = null
 function confirm(title, text){ confirmTitle.value=title; confirmText.value=text; confirmOpen.value=true; return new Promise(res => confirmCb = res) }
 function confirmResolve(val){ confirmOpen.value=false; confirmCb?.(val) }
 </script>

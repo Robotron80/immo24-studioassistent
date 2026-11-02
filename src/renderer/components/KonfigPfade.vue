@@ -66,7 +66,7 @@
   </v-card>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, reactive, computed, onMounted } from 'vue'
 
 import { backend } from '@/lib/backend'
@@ -90,7 +90,7 @@ const isPfadeValid = computed(() => {
 async function loadSnapshot() {
   loading.value = true; error.value = ''
   try {
-    const snap = await backend.getPaths() // {data:{...}, version:"..."}
+    const snap: any = await backend.getPaths() // {data:{...}, version:"..."}
     original.value = {
       data: {
         PathMitarbeiter: snap?.data?.PathMitarbeiter || '',

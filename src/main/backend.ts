@@ -52,31 +52,31 @@ export function backend() {
 }
 
 /** Alle Funktionen, die die Oberfläche aufrufen darf. */
-function exposedMethods(): Record<string, (arg: any) => unknown> {
+function exposedMethods() {
   const { config, passwords, presets, projects, rename, session, stammdaten, users } = backend()
   return {
     getInitializeStatus: () => config.getInitializeStatus(),
     getPaths: () => config.getPaths(),
-    savePaths: (input) => config.savePaths(input),
+    savePaths: (input: Parameters<typeof config.savePaths>[0]) => config.savePaths(input),
     getSchema: () => config.getSchema(),
-    saveSchema: (input) => config.saveSchema(input),
+    saveSchema: (input: Parameters<typeof config.saveSchema>[0]) => config.saveSchema(input),
     getModules: () => config.getModules(),
-    saveModules: (input) => config.saveModules(input),
+    saveModules: (input: Parameters<typeof config.saveModules>[0]) => config.saveModules(input),
 
     isPasswordSet: () => passwords.isSet(),
-    checkPassword: (password) => passwords.check(password),
-    setPassword: (input) => passwords.set(input),
+    checkPassword: (password: unknown) => passwords.check(password),
+    setPassword: (input: Parameters<typeof passwords.set>[0]) => passwords.set(input),
 
     listUsers: () => users.listUsers(),
-    saveUsers: (input) => users.saveUsers(input),
+    saveUsers: (input: Parameters<typeof users.saveUsers>[0]) => users.saveUsers(input),
     getActiveUser: () => session.getActiveUserName(),
 
     getSnapshot: () => stammdaten.getSnapshot(),
-    saveSnapshot: (input) => stammdaten.saveSnapshot(input),
+    saveSnapshot: (input: Parameters<typeof stammdaten.saveSnapshot>[0]) => stammdaten.saveSnapshot(input),
     listCustomers: () => stammdaten.listForSelection(),
 
     listTemplates: () => projects.listTemplates(),
-    listProjects: (kunde) => projects.listProjects(kunde),
+    listProjects: (kunde: unknown) => projects.listProjects(kunde),
     createProject: async (input: ProjectInput) => {
       const result = await projects.createProject(input)
       if (result.kundenordnerAngelegt) logLine(`[projekt] Kundenordner angelegt: ${input.kunde}`)
@@ -93,11 +93,14 @@ function exposedMethods(): Record<string, (arg: any) => unknown> {
     },
 
     proToolsStatus: () => presets.proToolsStatus(),
-    runProToolsPresets: (input) => presets.runProTools(input),
+    runProToolsPresets: (input: Parameters<typeof presets.runProTools>[0]) => presets.runProTools(input),
     soundminerStatus: () => presets.soundminerStatus(),
-    runSoundminerPresets: (input) => presets.runSoundminer(input),
+    runSoundminerPresets: (input: Parameters<typeof presets.runSoundminer>[0]) => presets.runSoundminer(input),
   }
 }
+
+/** Der Vertrag zwischen Oberfläche und Backend, genutzt von src/renderer/lib/backend.ts. */
+export type BackendMethods = ReturnType<typeof exposedMethods>
 
 // Mit dem Startparameter --immo24-debug wird jeder Aufruf protokolliert, zur Fehlersuche
 const DEBUG = process.argv.includes('--immo24-debug')
@@ -113,7 +116,7 @@ function debugCall(method: string, arg: unknown, startedAt: number, outcome: str
 
 /** Nimmt die Aufrufe der Oberfläche entgegen. Einmal beim Programmstart aufrufen. */
 export function registerBackendIpc(): void {
-  const methods = exposedMethods()
+  const methods: Record<string, (arg: any) => unknown> = exposedMethods()
 
   ipcMain.handle('backend', async (_event, method: string, arg: unknown) => {
     if (!Object.hasOwn(methods, method)) {

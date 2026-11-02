@@ -78,7 +78,7 @@
   </v-container>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, nextTick, onMounted } from 'vue'
 import KonfigProduktionsbuch from '@/components/KonfigProduktionsbuch.vue'
 import KonfigMitarbeiter from '@/components/KonfigMitarbeiter.vue'
@@ -103,12 +103,12 @@ async function saveVersioned (save, reload, conflictText) {
   return true
 }
 
-const pbRef = ref(null)
-const mitarbeiterRef = ref(null)
-const pfadeRef = ref(null)
-const pwRef = ref(null)
-const schemaRef = ref(null)
-const moduleRef = ref(null)
+const pbRef = ref<any>(null)
+const mitarbeiterRef = ref<any>(null)
+const pfadeRef = ref<any>(null)
+const pwRef = ref<any>(null)
+const schemaRef = ref<any>(null)
+const moduleRef = ref<any>(null)
 const tab = ref('prod')
 const saving = ref(false)
 
@@ -238,7 +238,7 @@ const authError = ref('')
 const authLoading = ref(false)
 const showPw = ref(false)
 const capsOn = ref(false)
-const pwField = ref(null)
+const pwField = ref<any>(null)
 
 const canSubmit = computed(() => !!authPassword.value && !authLoading.value)
 function focusPw(){ nextTick(() => pwField.value?.focus()) }

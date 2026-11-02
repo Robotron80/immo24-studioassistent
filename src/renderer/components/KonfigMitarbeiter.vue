@@ -69,14 +69,14 @@
   </v-dialog>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 
 import { backend } from '@/lib/backend'
 
 // Server-Snapshot + lokale Arbeitskopie
-const original = ref({ mitarbeiter: [], version: '' })
-const staged   = ref([]) // = mitarbeiter array (deep copy)
+const original = ref({ mitarbeiter: [] as any[], version: '' })
+const staged   = ref<any[]>([]) // = mitarbeiter array (deep copy)
 const dirty    = ref(false)
 
 const error = ref('')
@@ -100,7 +100,7 @@ const filteredMitarbeiter = computed(() => {
 async function loadSnapshot() {
   error.value = ''
   try {
-    let arr = await backend.listUsers()
+    let arr: any[] = await backend.listUsers()
     // Falls die API ein Array von Strings liefert, umwandeln:
     if (Array.isArray(arr) && typeof arr[0] === 'string') {
       arr = arr.map(name => ({ name, kuerzel: '' }))

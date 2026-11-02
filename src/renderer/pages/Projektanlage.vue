@@ -189,8 +189,9 @@
 </template>
 
 
-<script setup>
+<script setup lang="ts">
 import { computed, ref, onMounted, reactive } from 'vue'
+import RenameProjectDialog from '@/components/RenameProjectDialog.vue'
 import { useProjektanlage } from '@/stores/Projektanlage'
 
 const store = useProjektanlage()
@@ -203,7 +204,7 @@ const stufen = computed(() => store.stufen)
 const rows = computed(() => store.rows)
 const loading = computed(() => store.loading)
 const isVorhanden = computed(() => form.value.vorhanden === 'vorhanden')
-const formRef = ref(null)
+const formRef = ref<any>(null)
 
 
 // Tabelle / Suche
@@ -251,7 +252,7 @@ async function onCreateClick(){
   const fehlende = store.validateRequired()
   const winDetails = store.validateWindows()
   if ((validation && validation.valid === false) || fehlende.length || winDetails.length) {
-    const lines = []
+    const lines: string[] = []
     if (fehlende.length) lines.push(`• Fehlend: ${fehlende.join(', ')}`)
     lines.push(...store.formatValidationDetails(winDetails))
     toast(`Bitte Eingaben korrigieren:\n${lines.join('\n')}`,'error')
@@ -292,7 +293,7 @@ async function launchProject() {
 
 
 function resetForm(){ store.resetForm() }
-const selectedRow = ref(null)
+const selectedRow = ref<any>(null)
 
 function onRowClick(row) {
   selectedRow.value = row.moid
@@ -313,7 +314,7 @@ onMounted(() => {
   })
 })
 const openDialog = ref(false)
-const lastCreatedProject = ref(null)
+const lastCreatedProject = ref<any>(null)
 </script>
 
 <style scoped>

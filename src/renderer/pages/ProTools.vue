@@ -92,13 +92,14 @@
   </v-container>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { reactive, ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
+import PresetResultDialog from '@/components/PresetResultDialog.vue'
 import { backend } from '@/lib/backend'
 const POLL_MS = 5000
 const isOnline = ref(false)
-let pollTimer = null
+let pollTimer: any = null
 
 const cat1 = reactive([
   { key: 'templates', label: 'Templates', selected: false },
@@ -121,12 +122,12 @@ const anySelected = computed(() =>
 )
 
 const snack = reactive({ open: false, text: '', color: 'success' })
-const resultDialog = reactive({ open: false, data: null })
+const resultDialog = reactive({ open: false, data: null as any })
 const confirm = reactive({
   open: false,
   title: '',
   text: '',
-  cb: null
+  cb: null as any
 })
 
 async function onRecallAll() {

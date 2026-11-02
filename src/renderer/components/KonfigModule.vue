@@ -54,7 +54,7 @@
   </v-card>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, reactive, computed, onMounted } from 'vue'
 
 import { backend } from '@/lib/backend'
@@ -94,7 +94,7 @@ const isSoundminerValid = computed(() => {
 async function loadSnapshot() {
   loading.value = true; error.value = ''
   try {
-    const snap = await backend.getModules() // {data:{...}, version:"..."}
+    const snap: any = await backend.getModules() // {data:{...}, version:"..."}
     // Mapping Backend -> UI
     const sm = snap?.data?.soundminer || {}
 

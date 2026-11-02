@@ -319,7 +319,7 @@
   </v-container>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { reactive, ref, onMounted, computed } from 'vue'
 
 import { backend } from '@/lib/backend'
@@ -345,7 +345,7 @@ const password2 = ref('')
 const showPw = ref(false)
 const showPw2 = ref(false)
 
-const users = ref([])
+const users = ref<any[]>([])
 const error = ref('')
 
 // Mitarbeiter-Dialoge und Logik
@@ -433,7 +433,7 @@ async function pick(title, key) {
 }
 
 // Backend laden
-const lastInit = ref(null)
+const lastInit = ref<any>(null)
 async function loadFromInitialize() {
   checking.value = true
   try {
@@ -450,7 +450,7 @@ async function loadFromInitialize() {
 const userApiReady = ref(true)
 async function loadUsersSnapshot() {
   try {
-    let arr = await backend.listUsers()
+    let arr: any[] = await backend.listUsers()
     if (Array.isArray(arr) && typeof arr[0] === 'string') {
       arr = arr.map(name => ({ name, kuerzel: '' }))
     }

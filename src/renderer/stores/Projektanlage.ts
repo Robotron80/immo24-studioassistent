@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
 
-import { backend } from '@/lib/backend'
+import { backend, BackendError } from '@/lib/backend'
 // Windows-Dateinamen-Regeln
 const WINDOWS_FORBIDDEN_RE = /[<>:"/\\|?*\u0000-\u001F]/g
 function windowsNameReport(input) {
   const s = String(input ?? '').trim()
-  const res = { valid: true, errors: [] }
+  const res = { valid: true, errors: [] as any[] }
   const bad = s.match(WINDOWS_FORBIDDEN_RE)
   if (bad) {
     res.valid = false
@@ -40,7 +40,7 @@ function windowsFieldReports({ projektname, moid, kunde }) {
   }
 }
 function collectValidationDetails(reports) {
-  return Object.entries(reports)
+  return Object.entries<any>(reports)
     .filter(([, rep]) => !rep.valid)
     .map(([field, rep]) => ({ field, errors: rep.errors }))
 }
@@ -54,10 +54,10 @@ const FIELD_LABELS = {
 
 export const useProjektanlage = defineStore('Projektanlage', {
   state: () => ({
-    kunden: [],
-    templates: [],
-    rows: [],
-    stufen: [],
+    kunden: [] as any[],
+    templates: [] as any[],
+    rows: [] as any[],
+    stufen: [] as any[],
     form: {
       kunde: '',
       vorhanden: 'neu',
@@ -68,8 +68,8 @@ export const useProjektanlage = defineStore('Projektanlage', {
       template: '',
     },
     loading: { kunden:false, templates:false, rows:false, stufen:false, create:false },
-    error: null,
-    activeUser: null,
+    error: null as string | null,
+    activeUser: null as string | null,
     renameEnabled: false,
   }),
 
@@ -149,7 +149,7 @@ export const useProjektanlage = defineStore('Projektanlage', {
     },
 
     validateRequired() {
-      const f = this.form, fehlende = []
+      const f = this.form, fehlende: string[] = []
       if (!f.kunde) fehlende.push('Kunde')
       if (!f.datum) fehlende.push('Datum')
       if (!f.moid) fehlende.push('Mo-ID')
@@ -166,11 +166,8 @@ export const useProjektanlage = defineStore('Projektanlage', {
     throwIfWindowsInvalid() {
       const details = this.validateWindows()
       if (details.length) {
-        const e = new Error('validation_failed')
-        e.status = 422
-        e.error = 'validation_failed'
-        e.details = details
-        throw e
+        // Gleicher Aufbau wie ein Fehler aus dem Backend, die Seite behandelt beide gleich
+        throw new BackendError({ code: 'validation_failed', details: { details } })
       }
     },
 

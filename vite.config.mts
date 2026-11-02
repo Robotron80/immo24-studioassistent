@@ -1,27 +1,13 @@
 import { fileURLToPath, URL } from 'node:url'
 
 import Vue from '@vitejs/plugin-vue'
-import AutoImport from 'unplugin-auto-import/vite'
-import Fonts from 'unplugin-fonts/vite'
-import Components from 'unplugin-vue-components/vite'
-import { VueRouterAutoImports } from 'unplugin-vue-router'
-import VueRouter from 'unplugin-vue-router/vite'
 import { defineConfig } from 'vite'
 import electron from 'vite-plugin-electron'
-import Layouts from 'vite-plugin-vue-layouts-next'
 import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 export default defineConfig({
   base: './',
   plugins: [
-    VueRouter({
-      routesFolder: 'src/renderer/pages',
-      dts: 'src/renderer/typed-router.d.ts',
-    }),
-    Layouts({
-      layoutsDirs: 'src/renderer/layouts',
-      pagesDirs: 'src/renderer/pages',
-    }),
     Vue({
       template: { transformAssetUrls },
     }),
@@ -30,22 +16,6 @@ export default defineConfig({
       styles: {
         configFile: 'src/renderer/styles/settings.scss',
       },
-    }),
-    Components({
-      dirs: ['src/renderer/components'],
-      dts: 'src/renderer/components.d.ts',
-    }),
-    Fonts({}),
-    AutoImport({
-      imports: [
-        'vue',
-        VueRouterAutoImports,
-        {
-          pinia: ['defineStore', 'storeToRefs'],
-        },
-      ],
-      dts: 'src/renderer/auto-imports.d.ts',
-      vueTemplate: true,
     }),
     electron([
       {
@@ -66,13 +36,7 @@ export default defineConfig({
     ]),
   ],
   optimizeDeps: {
-    exclude: [
-      'vuetify',
-      'vue-router',
-      'unplugin-vue-router/runtime',
-      'unplugin-vue-router/data-loaders',
-      'unplugin-vue-router/data-loaders/basic',
-    ],
+    exclude: ['vuetify'],
   },
   define: {
     'process.env': {},

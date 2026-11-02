@@ -62,7 +62,7 @@
   </v-dialog>
 </template>
 
-<script setup>
+<script setup lang="ts">
 /**
  * Führt in zwei Schritten durchs Umbenennen: neue Werte, dann Vorschau.
  * Die eigentliche Arbeit und alle Prüfungen passieren in src/core/rename.ts.
@@ -71,17 +71,17 @@ import { computed, ref, watch } from 'vue'
 
 import { backend } from '@/lib/backend'
 
-const props = defineProps({
-  modelValue: Boolean,
-  kunde: { type: String, default: '' },
-  project: { type: Object, default: null },
-})
+const props = defineProps<{
+  modelValue: boolean
+  kunde: string
+  project: any
+}>()
 const emit = defineEmits(['update:modelValue', 'renamed'])
 
 const step = ref('form')
 const neuerName = ref('')
 const neueMoid = ref('')
-const preview = ref(null)
+const preview = ref<any>(null)
 const ignoreLocks = ref(false)
 const confirmed = ref(false)
 const error = ref('')

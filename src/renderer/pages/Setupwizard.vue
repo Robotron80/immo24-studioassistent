@@ -508,8 +508,9 @@ async function finish() {
     // 1) Pfade speichern
     await savePaths()
 
-    // 2) Schemas speichern. Es gibt noch keine Version, der Wert wird nicht geprüft.
-    await backend.saveSchema({ schema: { ...schema }, version: '0' })
+    // 2) Schemas speichern. Auf einem weiteren Rechner gibt es die Datei schon.
+    const { version: schemaVersion } = await backend.getSchema()
+    await backend.saveSchema({ schema: { ...schema }, version: schemaVersion ?? '' })
 
     // 3) Passwort speichern
     await backend.setPassword({ newPassword: password.value, repeatPassword: password2.value })
@@ -527,11 +528,8 @@ async function finish() {
 
     toast('Konfiguration gespeichert.')
 
-    // InitWindow schließen
+    // Assistent schließen, danach erscheint die Anmeldung
     await window.electronAPI?.closeInitWindow?.()
-
-    // Picker öffnen
-    await window.electronAPI?.hideAndOpenPicker?.({ doLogout: true })
   } catch (e) {
     toast(e.message || String(e), 'error')
   } finally {

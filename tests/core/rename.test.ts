@@ -73,7 +73,7 @@ test('die nächste Session trägt den neuen Namen und zählt die Version weiter'
   const { projects, service } = await setup(t)
   await service.rename(rename)
 
-  const next = await projects.addSession({ ...project, projektname: 'Neu', moid: 'CD34' })
+  const next = await projects.addSession({ ...project, projektname: 'Neu', moid: 'CD34', ordner: NEW })
 
   assert.match(next.filename, /Neu CD34 - Dialog TE v2\.ptx$/)
 })

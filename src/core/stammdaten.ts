@@ -5,16 +5,16 @@
  * dieselben Daten sehen. Jeder Kunde hat zusätzlich einen Ordner unter Produktionen.
  *
  * Die Datei wird bei jedem Zugriff frisch gelesen. Wer sie von Hand oder auf einem
- * anderen Rechner ändert, wird also sofort berücksichtigt.
+ * anderen Rechner ändert, wird also sofort berücksichtigt. Speichern zwei Rechner kurz
+ * nacheinander, erkennt der zweite das am Änderungszeitpunkt der Datei und überschreibt nicht.
  */
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
 import type { ConfigService } from './config.ts'
 import { CoreError } from './errors.ts'
-import { exists, readJsonOrNull, writeJsonAtomic } from './files.ts'
+import { exists, fileVersion, readJsonOrNull, writeJsonAtomic } from './files.ts'
 import { comparableName } from './names.ts'
-import { createVersionTracker } from './versions.ts'
 
 /** Ein Unterordner in jedem Projekt eines Kunden. */
 export interface Unterordner {
@@ -42,8 +42,6 @@ function customerFolderName(name: unknown): string {
 export type StammdatenService = ReturnType<typeof createStammdatenService>
 
 export function createStammdatenService(config: ConfigService) {
-  const version = createVersionTracker()
-
   async function file(): Promise<string> {
     const { data } = await config.getPaths()
     return path.join(String(data.PathStammdaten ?? ''), 'kunden_stammdaten.json')
@@ -80,7 +78,7 @@ export function createStammdatenService(config: ConfigService) {
 
     /** Für die Konfiguration: alle Kunden samt Version. */
     async getSnapshot() {
-      return { customers: await readCustomers(), version: version.current() }
+      return { customers: await readCustomers(), version: await fileVersion(await file()) }
     },
 
     /** Speichert die Kunden alphabetisch sortiert und legt fehlende Kundenordner an. */
@@ -88,7 +86,10 @@ export function createStammdatenService(config: ConfigService) {
       if (typeof input?.version !== 'string' || !Array.isArray(input.customers)) {
         throw new CoreError('bad_payload')
       }
-      version.assertCurrent(input.version)
+      // Hat ein anderer Rechner die Datei seit dem Laden geändert, nicht überschreiben
+      const target = await file()
+      const currentVersion = await fileVersion(target)
+      if (input.version !== currentVersion) throw new CoreError('version_conflict', { currentVersion })
 
       const collator = new Intl.Collator('de', { sensitivity: 'base', numeric: true })
       const sorted = [...(input.customers as Kunde[])].sort((a, b) => collator.compare(
@@ -97,8 +98,8 @@ export function createStammdatenService(config: ConfigService) {
       ))
 
       await createCustomerFolders(sorted)
-      await writeJsonAtomic(await file(), sorted)
-      return { ok: true, version: version.bump() }
+      await writeJsonAtomic(target, sorted)
+      return { ok: true, version: await fileVersion(target) }
     },
 
     /** Für die Projektanlage: Kunden mit ihren Produktionsstufen als Auswahlliste. */

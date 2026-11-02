@@ -11,7 +11,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-import { app, session } from 'electron'
+import { app, BrowserWindow, session } from 'electron'
 
 import { backend } from './backend'
 import { registerIpc } from './ipc'
@@ -21,12 +21,10 @@ import { assetPath, configureUserData, devServerUrl } from './paths'
 import {
   closeSplashWindow,
   createInitWindow,
-  createMainWindow,
   createSplashWindow,
   createUserPickerWindow,
   focusActiveWindow,
   listUserNames,
-  loadMainWindow,
   sendUsersToPicker,
 } from './windows'
 
@@ -39,6 +37,14 @@ if (!app.requestSingleInstanceLock()) {
   app.exit(0)
 }
 app.on('second-instance', () => focusActiveWindow())
+
+// Fensterwechsel (z. B. Anmeldung zu Hauptfenster) sollen die App nicht beenden. Deshalb
+// erst kurz warten und nur beenden, wenn dann wirklich kein Fenster mehr offen ist.
+app.on('window-all-closed', () => {
+  setTimeout(() => {
+    if (BrowserWindow.getAllWindows().length === 0) app.quit()
+  }, 200)
+})
 
 /** Legt beim ersten Start die Einstellungsdateien an, falls sie noch fehlen. */
 function ensureUserJsonFiles(): void {
@@ -69,7 +75,8 @@ function installNetworkGuard(): void {
  * Der Programmstart, Schritt für Schritt:
  *   1. Grundlagen: Netzwerksperre, Einstellungsdateien, IPC und Menü
  *   2. Einrichtung prüfen. Das liest vom Speicher: Dauert es länger, erscheint das Ladefenster.
- *   3. Oberfläche laden und je nach Zustand Einrichtung oder Anmeldung zeigen
+ *   3. Je nach Zustand den Einrichtungsassistenten oder die Anmeldung zeigen
+ * Das Hauptfenster entsteht erst nach der Anmeldung.
  */
 async function startup(): Promise<void> {
   const startedAt = Date.now()
@@ -81,18 +88,14 @@ async function startup(): Promise<void> {
   installApplicationMenu()
 
   const splashTimer = setTimeout(createSplashWindow, 250)
-  createMainWindow()
   const status = await backend().config.getInitializeStatus()
-  await loadMainWindow()
+
+  if (status.initialize.needsUserAction) createInitWindow()
+  else sendUsersToPicker(createUserPickerWindow(), await listUserNames())
+
   clearTimeout(splashTimer)
   closeSplashWindow()
   logLine('[startup] fertig nach', `${Date.now() - startedAt} ms`)
-
-  if (status.initialize.needsUserAction) {
-    createInitWindow()
-    return
-  }
-  sendUsersToPicker(createUserPickerWindow(), await listUserNames())
 }
 
 app.whenReady().then(async () => {

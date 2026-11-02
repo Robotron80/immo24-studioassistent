@@ -148,8 +148,8 @@ export function closeSplashWindow(): void {
   splashWindow = null
 }
 
-/** Erstellt das Hauptfenster. Es bleibt unsichtbar, bis sich jemand angemeldet hat. */
-export function createMainWindow(): void {
+/** Erstellt das Hauptfenster. Es bleibt unsichtbar, bis die Oberfläche geladen ist. */
+function createMainWindow(): BrowserWindow {
   const win = new BrowserWindow({
     width: 1200,
     height: 900,
@@ -162,31 +162,26 @@ export function createMainWindow(): void {
   attachCrashGuards(win, 'main')
   restrictNavigation(win, (u) => isRendererUrl(u) || u.origin === devServerUrl())
   openHttpsExternally(win)
-}
-
-/** Lädt die Oberfläche ins Hauptfenster: vom Entwicklungsserver oder aus der gebauten App. */
-export async function loadMainWindow(): Promise<void> {
-  if (!isOpen(mainWindow)) return
-  const devUrl = devServerUrl()
-  if (devUrl) await mainWindow.loadURL(devUrl)
-  else await mainWindow.loadFile(rendererIndexPath())
+  win.on('closed', () => {
+    mainWindow = null
+  })
+  return win
 }
 
 /**
- * Nach der Anmeldung: Zeigt das Hauptfenster und schließt das Anmeldefenster.
- * Die Oberfläche wird neu geladen, damit sie die Daten des neuen Nutzers zeigt.
+ * Nach der Anmeldung: Öffnet das Hauptfenster und schließt das Anmeldefenster.
+ * Das Fenster entsteht erst jetzt, die Oberfläche lädt also genau einmal und kennt
+ * von Anfang an den angemeldeten Nutzer.
  */
-export function showMainWindowForUser(user: string): void {
-  if (isOpen(mainWindow)) {
-    const win = mainWindow
-    win.webContents.once('did-finish-load', () => win.webContents.send('active-user', user))
-    win.show()
-    win.focus()
-    win.webContents.reload()
-  }
+export async function showMainWindow(): Promise<void> {
+  const win = createMainWindow()
+  const devUrl = devServerUrl()
+  if (devUrl) await win.loadURL(devUrl)
+  else await win.loadFile(rendererIndexPath())
+  win.show()
+  win.focus()
   if (isOpen(pickerWindow)) pickerWindow.close()
   pickerWindow = null
-  closeSplashWindow()
 }
 
 /** Holt das aktuell wichtigste Fenster nach vorn, wenn die App ein zweites Mal gestartet wird. */
@@ -200,26 +195,6 @@ export function focusActiveWindow(): void {
 /** Öffnet die Entwicklerkonsole des Hauptfensters (nur im Entwicklermodus erreichbar). */
 export function openDevTools(): void {
   if (isOpen(mainWindow)) mainWindow.webContents.openDevTools({ mode: 'detach' })
-}
-
-/**
- * Versteckt das Hauptfenster zuverlässig beim Abmelden.
- * Manche Fenstermodi (z. B. Vollbild) müssen dafür erst verlassen werden. Klappt es
- * nach kurzer Wartezeit trotzdem nicht, wird das Fenster minimiert.
- */
-async function hideMainWindow(win: BrowserWindow, maxWaitMs = 900): Promise<void> {
-  win.setFullScreen(false)
-  win.setKiosk(false)
-  win.unmaximize()
-  win.setAlwaysOnTop(false)
-  win.setVisibleOnAllWorkspaces(false)
-  win.blur()
-  win.hide()
-  const start = Date.now()
-  while (win.isVisible() && Date.now() - start < maxWaitMs) {
-    await new Promise((resolve) => setTimeout(resolve, 40))
-  }
-  if (win.isVisible()) win.minimize()
 }
 
 /** Die Namen aller Mitarbeiter für das Anmeldefenster. */
@@ -239,16 +214,19 @@ export function refreshPickerUsers(users: string[]): void {
   if (isOpen(pickerWindow)) pickerWindow.webContents.send('users', users)
 }
 
-/** Der Ablauf beim Abmelden: Fenster schließen, abmelden und wieder zur Anmeldung. */
+/**
+ * Der Ablauf beim Abmelden: zurück zur Anmeldung und das Hauptfenster schließen.
+ * Bei der nächsten Anmeldung entsteht es neu, so bleibt nichts vom vorherigen Nutzer übrig.
+ */
 export async function openPickerFlow({ doLogout = true }: { doLogout?: boolean } = {}): Promise<{ ok: boolean }> {
-  if (isOpen(prefWindow)) prefWindow.close()
-  prefWindow = null
-  if (isOpen(mainWindow)) await hideMainWindow(mainWindow)
   if (doLogout) backend().session.logout()
   const picker = createUserPickerWindow()
   picker.show()
   picker.focus()
   sendUsersToPicker(picker, await listUserNames())
+  if (isOpen(prefWindow)) prefWindow.close()
+  prefWindow = null
+  if (isOpen(mainWindow)) mainWindow.close()
   return { ok: true }
 }
 
@@ -265,8 +243,6 @@ export function createPreferencesWindow(): void {
     prefWindow.focus()
     return
   }
-  if (isOpen(pickerWindow)) pickerWindow.close()
-  pickerWindow = null
   const parent = isOpen(mainWindow) && mainWindow.isVisible() ? mainWindow : undefined
   const win = new BrowserWindow({
     width: 900,
@@ -280,6 +256,9 @@ export function createPreferencesWindow(): void {
   })
   prefWindow = win
   win.setMenu(null)
+  // Ohne Anmeldung ersetzt die Konfiguration das Anmeldefenster, beim Schließen kommt es wieder
+  if (isOpen(pickerWindow)) pickerWindow.close()
+  pickerWindow = null
   const devUrl = devServerUrl()
   if (devUrl) void win.loadURL(`${devUrl}/#/konfiguration`)
   else void win.loadFile(rendererIndexPath(), { hash: '/konfiguration' })
@@ -318,9 +297,10 @@ export function createInitWindow(): void {
   })
 }
 
-/** Schließt den Assistenten nach erfolgreicher Einrichtung, ohne das Programm zu beenden. */
-export function closeInitWindow(): boolean {
+/** Nach erfolgreicher Einrichtung: Weiter zur Anmeldung und den Assistenten schließen. */
+export async function closeInitWindow(): Promise<boolean> {
   if (!isOpen(initWindow)) return false
+  sendUsersToPicker(createUserPickerWindow(), await listUserNames())
   initWindowClosedByApp = true
   initWindow.close()
   initWindow = null

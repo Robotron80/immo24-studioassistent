@@ -57,6 +57,20 @@ export async function writeJsonAtomic(file: string, value: unknown): Promise<voi
   await writeFileAtomic(file, JSON.stringify(value, null, 2))
 }
 
+/**
+ * Der Stand einer Datei auf dem Speicher: ihr Änderungszeitpunkt.
+ * Für Dateien, die sich mehrere Rechner teilen. Wer sie speichern will, schickt den
+ * Stand mit, den er gelesen hat. Hat sich die Datei seitdem geändert, passt er nicht mehr.
+ * Gibt es die Datei noch nicht, ist der Stand '0'.
+ */
+export async function fileVersion(file: string): Promise<string> {
+  try {
+    return String(Math.trunc((await fs.stat(file)).mtimeMs))
+  } catch {
+    return '0'
+  }
+}
+
 /** Prüft, ob es einen Ordner oder eine Datei unter diesem Pfad gibt. */
 export async function exists(target: string): Promise<boolean> {
   try {

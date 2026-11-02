@@ -300,6 +300,7 @@ function onRowClick(row) {
   form.value.datum = row.date
   form.value.projektname = row.projektname
   form.value.moid = row.moid
+  form.value.ordner = row.ordner
   form.value.stufe = (typeof row.stufe === 'string' && row.stufe) ? row.stufe : ''
   // ggf. weitere Felder ergänzen
 }
@@ -309,9 +310,7 @@ function refreshRows() {
 
 // Init
 onMounted(() => {
-  store.init().then(() => {
-    console.log('Aktiver Nutzer:', store.activeUser)
-  })
+  store.init()
 })
 const openDialog = ref(false)
 const lastCreatedProject = ref<any>(null)

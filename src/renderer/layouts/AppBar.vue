@@ -30,9 +30,11 @@
 
 <script setup lang="ts">
 import { backend } from '@/lib/backend'
+import { useProjektanlage } from '@/stores/Projektanlage'
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
-const activeUser  = ref<any>(null)
+const store = useProjektanlage()
+const activeUser = computed(() => store.activeUser)
 const loggingOut  = ref(false)
 let stopListening: any = null
 const isLoggedIn  = computed(() => !!activeUser.value)
@@ -41,20 +43,11 @@ const soundminerEnabled = ref(false)
 
 
 onMounted(() => {
-  fetchActiveUser()
   fetchModuleStatus()
   // Ein in der Konfiguration eingeschaltetes Modul soll sofort als Tab erscheinen
   stopListening = window.electronAPI?.onConfigChanged?.(fetchModuleStatus)
 })
 onBeforeUnmount(() => stopListening?.())
-
-async function fetchActiveUser() {
-  try {
-    activeUser.value = await backend.getActiveUser()
-  } catch {
-    activeUser.value = null
-  }
-}
 
 async function fetchModuleStatus() {
   try {
@@ -68,7 +61,6 @@ async function fetchModuleStatus() {
 async function onLogout() {
   loggingOut.value = true
   try {
-    activeUser.value = null
     // Abmelden und zurück zur Anmeldung
     if (window.electronAPI?.hideAndOpenPicker) {
       await window.electronAPI.hideAndOpenPicker({ doLogout: true })

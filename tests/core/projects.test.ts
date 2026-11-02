@@ -18,7 +18,7 @@ import { createStammdatenService } from '../../src/core/stammdaten.ts'
 import { createCoreRequest } from './adapter.ts'
 
 const require = createRequire(import.meta.url)
-const { createEnvironment, loadReference, seedConfigured } = require('../contract/harness.cjs')
+const { createEnvironment, loadReference, seedConfigured, write } = require('../contract/harness.cjs')
 const { runProjectsScenario, seed } = require('../contract/scenarios/projects.cjs')
 
 const PROJECT_FOLDER = '2026-01-15 Testprojekt AB12'
@@ -76,7 +76,13 @@ test('verhält sich wie die Referenz, bis auf die bewussten Korrekturen', async 
     })
   }
 
+  // Neu: Die Projektliste nennt zusätzlich den Ordner
   const actual = JSON.parse(JSON.stringify(env.steps))
+  for (const step of actual) {
+    if (step.request?.startsWith('GET /api/projektanlage/projekte') && Array.isArray(step.response.body)) {
+      for (const row of step.response.body) delete row.ordner
+    }
+  }
   assert.deepEqual(actual, expected)
 })
 
@@ -110,7 +116,7 @@ test('Punkte im Projektnamen kürzen den Sessionnamen nicht ab', async (t) => {
   const created = await projects.createProject({ ...project, projektname: 'Spot v1.2' })
   assert.equal(created.filename, '2026-01-15 Spot v1.2 AB12 - Dialog TE v1.ptx')
 
-  const next = await projects.addSession({ ...project, projektname: 'Spot v1.2' })
+  const next = await projects.addSession({ ...project, projektname: 'Spot v1.2', ordner: '2026-01-15 Spot v1.2 AB12' })
   assert.match(next.filename, /Spot v1\.2 AB12 - Dialog TE v2\.ptx$/)
 })
 
@@ -132,10 +138,12 @@ test('nur aus Leerzeichen bestehende Eingaben gelten als fehlend', async (t) => 
 test('vorhandene Projekte mit kleingeschriebener MoID werden weiter gefunden', async (t) => {
   // Solche Ordner kann Version 0.4 angelegt haben
   const { dirs, projects } = await setup(t)
-  const folder = path.join(dirs.produktionen, 'Kunde A', '2026-01-15 Testprojekt ab12', '02_Dialogschnitt')
+  const ordner = '2026-01-15 Testprojekt ab12'
+  const folder = path.join(dirs.produktionen, 'Kunde A', ordner)
   fs.mkdirSync(folder, { recursive: true })
+  fs.writeFileSync(path.join(folder, 'immo24-proj.json'), '{}')
 
-  const next = await projects.addSession({ ...project, moid: 'ab12 ' })
+  const next = await projects.addSession({ ...project, moid: 'ab12 ', ordner })
   assert.match(next.filename, /Testprojekt ab12 - Dialog TE v1\.ptx$/)
 })
 
@@ -147,6 +155,56 @@ test('die Projektliste zeigt die neuesten Projekte zuerst', async (t) => {
 
   const rows = await projects.listProjects('Kunde A')
   assert.deepEqual(rows.map((row) => row.projektname), ['Neu', 'Mittel', 'Alt'])
+})
+
+test('überschreibt keine Stammdaten, die ein anderer Rechner geändert hat', async (t) => {
+  const { dirs, stammdaten } = await setup(t)
+  const file = path.join(dirs.stammdaten, 'kunden_stammdaten.json')
+  const { version, customers } = await stammdaten.getSnapshot()
+
+  // Ein anderer Rechner speichert: Der Änderungszeitpunkt der Datei springt weiter
+  const later = new Date(Date.now() + 60000)
+  fs.utimesSync(file, later, later)
+
+  await assert.rejects(stammdaten.saveSnapshot({ version, customers }), hasCode('version_conflict'))
+
+  // Mit frisch gelesenem Stand klappt es, auch zweimal hintereinander
+  const fresh = await stammdaten.getSnapshot()
+  const saved = await stammdaten.saveSnapshot({ version: fresh.version, customers })
+  await stammdaten.saveSnapshot({ version: saved.version, customers })
+})
+
+test('das Label der Stufe kommt bei Folgeversionen aus den Stammdaten', async (t) => {
+  const { projects } = await setup(t)
+  await projects.createProject(project)
+  const { stufeLabel: _ignored, ...withoutLabel } = project
+  const next = await projects.addSession({ ...withoutLabel, ordner: PROJECT_FOLDER })
+  assert.match(next.filename, / - Dialog TE v2\.ptx$/)
+})
+
+test('vorhandene Projekte funktionieren auch nach einer Änderung des Namensschemas', async (t) => {
+  const { dirs, projects } = await setup(t)
+  await projects.createProject(project)
+  write(path.join(dirs.stammdaten, 'schemes.json'), {
+    projektordnerSchema: '{{moid}} {{projektname}}',
+    sessionSchema: '{{datum}} {{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}',
+  })
+
+  const [row] = await projects.listProjects('Kunde A')
+  assert.equal(row.ordner, PROJECT_FOLDER)
+  const next = await projects.addSession({ ...project, ordner: row.ordner })
+
+  assert.match(next.filename, /Testprojekt AB12 - Dialog TE v2\.ptx$/)
+  assert.ok(fs.existsSync(path.join(next.templateDest, next.filename)))
+})
+
+test('Folgeversion nimmt nur echte Projektordner direkt unter dem Kunden', async (t) => {
+  const { projects } = await setup(t)
+  await projects.createProject(project)
+  await assert.rejects(projects.addSession(project), hasCode('not_found'))
+  await assert.rejects(projects.addSession({ ...project, ordner: 'Gibtsnicht' }), hasCode('not_found'))
+  await assert.rejects(projects.addSession({ ...project, ordner: `../Kunde A/${PROJECT_FOLDER}` }), hasCode('not_found'))
+  await assert.rejects(projects.addSession({ ...project, ordner: 'Fremder Ordner' }), hasCode('not_found'))
 })
 
 test('legt nichts an, wenn der Produktionen-Ordner fehlt', async (t) => {

@@ -12,7 +12,7 @@
 import path from 'node:path'
 
 import { CoreError } from './errors.ts'
-import { isPlainObject, readJsonOrNull, writeJsonAtomic } from './files.ts'
+import { fileVersion, isPlainObject, readJsonOrNull, writeJsonAtomic } from './files.ts'
 import { createVersionTracker } from './versions.ts'
 
 /** Die vier konfigurierbaren Ordner. */
@@ -84,9 +84,8 @@ export function createConfigService(userDataDir: string) {
   const pathsFile = path.join(userDataDir, 'path.json')
   const configFile = path.join(userDataDir, 'config.json')
 
-  // Für jede Datenart ein eigener Versionszähler, siehe versions.ts
+  // Pfade und Module liegen lokal, dafür reicht ein Versionszähler, siehe versions.ts
   const pathsVersion = createVersionTracker()
-  const schemaVersion = createVersionTracker()
   const modulesVersion = createVersionTracker()
 
   /** Liest die Pfade. Ältere Dateien können sie in einem Feld "data" verpacken. */
@@ -140,7 +139,7 @@ export function createConfigService(userDataDir: string) {
     /** Für den Einstellungsdialog: Namensschema samt Version. */
     async getSchema() {
       const data = await readSchema()
-      if (data) return { data, version: schemaVersion.current() }
+      if (data) return { data, version: await fileVersion(await schemaFile()) }
       // Noch kein Schema vorhanden: Der Einrichtungsassistent muss es abfragen
       return {
         data: {},
@@ -159,9 +158,8 @@ export function createConfigService(userDataDir: string) {
     },
 
     /**
-     * Speichert das Namensschema.
-     * Es wird absichtlich keine Version geprüft: Der Einrichtungsassistent
-     * speichert es, wenn es noch gar keine Version gibt.
+     * Speichert das Namensschema. Die Datei teilen sich alle Rechner: Hat ein anderer
+     * sie seit dem Laden geändert, wird nicht überschrieben.
      */
     async saveSchema(input: Record<string, unknown>) {
       // Die Daten dürfen in "schema" oder "data" verpackt sein oder direkt vorliegen
@@ -172,7 +170,12 @@ export function createConfigService(userDataDir: string) {
         throw new CoreError('bad_payload')
       }
       const schema: Schema = { projektordnerSchema, sessionSchema }
-      await writeJsonAtomic(await schemaFile(), schema)
+      const file = await schemaFile()
+      const currentVersion = await fileVersion(file)
+      if (currentVersion !== '0' && input.version !== currentVersion) {
+        throw new CoreError('version_conflict', { currentVersion })
+      }
+      await writeJsonAtomic(file, schema)
       return schema
     },
 

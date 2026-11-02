@@ -1,36 +1,11 @@
 import { defineStore } from 'pinia'
 
+import { checkWindowsName } from '../../core/names'
 import { backend, BackendError } from '@/lib/backend'
-// Windows-Dateinamen-Regeln
-const WINDOWS_FORBIDDEN_RE = /[<>:"/\\|?*\u0000-\u001F]/g
+// Dieselben Regeln wie im Backend, damit Formular und Prüfung nie auseinanderlaufen
 function windowsNameReport(input) {
-  const s = String(input ?? '').trim()
-  const res = { valid: true, errors: [] as any[] }
-  const bad = s.match(WINDOWS_FORBIDDEN_RE)
-  if (bad) {
-    res.valid = false
-    const uniq = [...new Set(bad)]
-    res.errors.push({
-      code: 'forbidden_chars',
-      chars: uniq,
-      message: `Unzulässige Zeichen: ${uniq.join(' ')}`
-    })
-  }
-  if (/[. ]$/.test(s)) {
-    res.valid = false
-    res.errors.push({
-      code: 'trailing_dot_or_space',
-      message: 'Darf nicht mit Punkt oder Leerzeichen enden'
-    })
-  }
-  if (/^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\..*)?$/i.test(s)) {
-    res.valid = false
-    res.errors.push({
-      code: 'reserved_name',
-      message: 'Reservierter Windows-Name'
-    })
-  }
-  return res
+  const errors = checkWindowsName(input)
+  return { valid: errors.length === 0, errors }
 }
 function windowsFieldReports({ projektname, moid, kunde }) {
   return {
@@ -66,6 +41,8 @@ export const useProjektanlage = defineStore('Projektanlage', {
       datum: new Date().toISOString().slice(0,10),
       stufe: '',
       template: '',
+      // Bei vorhandenen Projekten: der in der Liste gewählte Projektordner
+      ordner: '',
     },
     loading: { kunden:false, templates:false, rows:false, stufen:false, create:false },
     error: null as string | null,
@@ -83,7 +60,6 @@ export const useProjektanlage = defineStore('Projektanlage', {
     },
 
     async init() {
-      try { await this.fetchActiveUser() } catch {}
       await Promise.allSettled([ this.loadKunden(), this.loadTemplates(), this.loadRenameEnabled() ])
     },
 
@@ -123,6 +99,8 @@ export const useProjektanlage = defineStore('Projektanlage', {
     },
 
     async selectKunde(kunde) {
+      // Ein gewähltes Projekt gehört zum bisherigen Kunden
+      if (kunde !== this.form.kunde) this.form.ordner = ''
       this.form.kunde = kunde
       await Promise.all([this.loadRows(kunde), this.loadStufenForKunde(kunde)])
     },
@@ -188,16 +166,15 @@ export const useProjektanlage = defineStore('Projektanlage', {
       if (fehlende.length) throw new Error(`Bitte ausfüllen: ${fehlende.join(', ')}`)
       this.throwIfWindowsInvalid()
 
-      const stufeValue = this.form.stufe
-      const stufeLabel =
-        this.stufen.find(s => s.value === stufeValue)?.label
-        || (stufeValue || '').replace(/^\d+_/, '').replace(/_/g, ' ').trim()
-
       // Bei neuen Projekten die Eingaben bereinigen, damit das Formular zeigt, was entsteht
       if (this.form.vorhanden === 'neu') this.normalizeNames()
 
-      const { kunde, vorhanden, projektname, moid, datum, template, stufe } = this.form
-      const payload = { kunde, vorhanden, projektname, moid, datum, template, stufe, stufeLabel }
+      if (this.form.vorhanden !== 'neu' && !this.form.ordner) {
+        throw new Error('Bitte in der Liste ein Projekt auswählen.')
+      }
+
+      const { kunde, projektname, moid, datum, template, stufe, ordner } = this.form
+      const payload = { kunde, projektname, moid, datum, template, stufe, ordner }
 
       this.loading.create = true
       try {
@@ -218,13 +195,13 @@ export const useProjektanlage = defineStore('Projektanlage', {
 
     // Nach dem Umbenennen: Liste neu laden, die alten Werte im Formular passen nicht mehr
     async resetAfterRename() {
-      Object.assign(this.form, { projektname: '', moid: '', datum: new Date().toISOString().slice(0, 10) })
+      Object.assign(this.form, { projektname: '', moid: '', ordner: '', datum: new Date().toISOString().slice(0, 10) })
       await this.loadRows(this.form.kunde)
     },
 
     resetForm() {
       const today = new Date().toISOString().slice(0,10)
-      this.form = { kunde:'', vorhanden:'neu', projektname:'', moid:'', datum: today, stufe:'', template:'' }
+      this.form = { kunde:'', vorhanden:'neu', projektname:'', moid:'', datum: today, stufe:'', template:'', ordner:'' }
       this.rows = []
       this.stufen = []
     },

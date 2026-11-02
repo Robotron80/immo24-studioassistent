@@ -13,7 +13,7 @@
 import { app, BrowserWindow, dialog, ipcMain, shell } from 'electron'
 
 import { backend, registerBackendIpc } from './backend'
-import { closeInitWindow, listUserNames, openPickerFlow, refreshPickerUsers, showMainWindowForUser } from './windows'
+import { closeInitWindow, listUserNames, openPickerFlow, refreshPickerUsers, showMainWindow } from './windows'
 
 /** Meldet alle Nachrichten an. Wird einmal beim Programmstart aufgerufen. */
 export function registerIpc(): void {
@@ -21,7 +21,7 @@ export function registerIpc(): void {
 
   ipcMain.on('user-picked', async (_event, user: string) => {
     await backend().session.login(user)
-    showMainWindowForUser(user)
+    await showMainWindow()
   })
 
   ipcMain.on('app-quit', () => app.quit())

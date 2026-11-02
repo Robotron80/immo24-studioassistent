@@ -81,6 +81,27 @@ test('liest die Dateiformate früherer Versionen', async (t) => {
   }
 })
 
+test('überschreibt kein Namensschema, das ein anderer Rechner geändert hat', async (t) => {
+  const dir = tempDir(t)
+  fs.writeFileSync(path.join(dir, 'path.json'), JSON.stringify({ PathStammdaten: dir }))
+  const file = path.join(dir, 'schemes.json')
+  fs.writeFileSync(file, JSON.stringify({ projektordnerSchema: 'a', sessionSchema: 'b {{version}}' }))
+  const config = createConfigService(dir)
+  const data = { projektordnerSchema: 'neu', sessionSchema: 'neu {{version}}' }
+
+  const { version } = await config.getSchema()
+  const later = new Date(Date.now() + 60000)
+  fs.utimesSync(file, later, later)
+
+  await assert.rejects(
+    config.saveSchema({ version: version as string, data }),
+    (error: unknown) => error instanceof CoreError && error.code === 'version_conflict',
+  )
+  const fresh = await config.getSchema()
+  await config.saveSchema({ version: fresh.version as string, data })
+  assert.equal(JSON.parse(fs.readFileSync(file, 'utf8')).projektordnerSchema, 'neu')
+})
+
 test('hinterlässt beim Speichern keine temporären Dateien', async (t) => {
   const dir = tempDir(t)
   const config = createConfigService(dir)

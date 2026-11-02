@@ -28,8 +28,9 @@ export interface ProjectInput {
   moid?: string
   projektname?: string
   stufe?: string
-  stufeLabel?: string
   template?: string
+  /** Bei vorhandenen Projekten: der Projektordner aus der Projektliste */
+  ordner?: string
 }
 
 const DEFAULT_SESSION_SCHEMA = '{{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}'
@@ -148,7 +149,7 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
       const rows = await Promise.all(entries.filter((entry) => entry.isDirectory()).map(async (entry) => {
         const meta = await readJsonOrNull(path.join(root, entry.name, 'immo24-proj.json')) as Record<string, string> | null
         if (!meta?.erstellt_am || !meta.projektname || !meta.mo_id || !meta.user) return null
-        return { date: meta.erstellt_am, projektname: meta.projektname, moid: meta.mo_id, user: meta.user }
+        return { date: meta.erstellt_am, projektname: meta.projektname, moid: meta.mo_id, user: meta.user, ordner: entry.name }
       }))
       // Neueste zuerst, bei gleichem Datum alphabetisch
       return rows
@@ -230,48 +231,43 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
 
     /**
      * Legt in einem vorhandenen Projekt die nächste Session an.
-     * Den Projektordner finden wir über das Namensschema. Sein Name enthält das
-     * ursprüngliche Datum und Kürzel, die Session bekommt aber das heutige Datum.
+     * Der Ordner kommt direkt aus der Projektliste. So finden wir das Projekt auch, wenn
+     * das Namensschema inzwischen geändert wurde. Die Session bekommt das heutige Datum.
      */
     async addSession(input: ProjectInput) {
-      // Die MoID bleibt hier unverändert: Ältere Projekte können sie kleingeschrieben
-      // im Ordnernamen tragen und würden sonst nicht mehr gefunden.
+      // Die MoID bleibt hier unverändert: Sie muss zum vorhandenen Projekt passen.
       const data = validate(trimNames(input))
       const user = session.requireUser()
-      const { produktionen, mitarbeiter, projektordnerSchema, sessionSchema } = await settings()
+      const { produktionen, mitarbeiter, sessionSchema } = await settings()
 
-      // Schritt 1: Projektordner per Schema suchen. Der Benutzer ist dabei egal.
-      const root = path.join(produktionen, data.kunde)
+      // Schritt 1: Projektordner prüfen. Er muss direkt unter dem Kunden liegen und ein
+      // Projekt von uns sein, erkennbar an der Metadatei.
+      const folderName = String(input?.ordner ?? '')
+      if (!folderName || folderName !== path.basename(folderName)) throw new CoreError('not_found')
+      const zielPfad = path.join(produktionen, data.kunde, folderName)
+      if (!(await exists(path.join(zielPfad, 'immo24-proj.json')))) throw new CoreError('not_found')
+
       const values: Record<string, string> = {
-        datum: data.datum.normalize('NFC'),
         projektname: data.projektname.normalize('NFC'),
         moid: data.moid.normalize('NFC'),
         kunde: data.kunde.normalize('NFC'),
       }
-      const pattern = escapeRegExp(projektordnerSchema.normalize('NFC'))
-        .replace(/\\{\\{benutzer\\}\\}/g, '.+')
-        .replace(/\\{\\{(\w+)\\}\\}/g, (_match, key: string) => (values[key] ? escapeRegExp(values[key]) : '.*'))
-        .replace(/ /g, '\\s+')
-      const regex = new RegExp(`^${pattern}$`)
-      const entries = await fs.readdir(root, { withFileTypes: true }).catch(() => [])
-      const folder = entries.find((entry) => (
-        entry.isDirectory() && !entry.name.startsWith('.') && regex.test(entry.name.normalize('NFC'))
-      ))
-      if (!folder) throw new CoreError('not_found')
 
       // Schritt 2: Stufenordner sicherstellen und Vorlage prüfen
-      const zielPfad = path.join(root, folder.name)
       const stageDir = path.join(zielPfad, data.stufe)
       const sources = templateSources(mitarbeiter, user.name, data.template)
       if (!(await exists(sources.ptxt))) throw new CoreError('template_missing', { template: data.template })
       await fs.mkdir(stageDir, { recursive: true })
 
-      // Schritt 3: Nächste Version bestimmen und anlegen
+      // Schritt 3: Nächste Version bestimmen und anlegen. Das Label der Stufe kommt aus
+      // den Stammdaten. Fehlt der Eintrag dort inzwischen, nehmen wir den Ordnernamen.
+      const customers: Kunde[] = await stammdaten.readCustomers()
+      const stage = customers.find((customer) => customer.kunde === data.kunde)?.ordner?.find((item) => item.name === data.stufe)
       const filename = nextSessionName(await fs.readdir(stageDir), sessionSchema, {
         ...values,
         datum: new Date().toISOString().slice(0, 10),
         benutzer: user.kuerzel.normalize('NFC'),
-        produktionsstufe: String(input.stufeLabel ?? '').normalize('NFC'),
+        produktionsstufe: (stage?.label ?? data.stufe).normalize('NFC'),
         // Auch Name und MoID zählen nicht: Nach dem Umbenennen zählt die Version weiter
       }, ['datum', 'benutzer', 'projektname', 'moid'])
       await copySession(sources, stageDir, filename)

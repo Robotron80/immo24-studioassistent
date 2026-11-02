@@ -13,7 +13,6 @@ interface Window {
     backend(method: string, arg?: unknown): Promise<BackendResponse>
     openSession(file: string): Promise<string>
     pickFolder(title?: string, defaultPath?: string): Promise<string | null>
-    onActiveUser(callback: (user: string) => void): () => void
     onConfigChanged(callback: () => void): () => void
     refreshUsers(): Promise<string[]>
     hideAndOpenPicker(options?: { doLogout?: boolean }): Promise<{ ok: boolean }>

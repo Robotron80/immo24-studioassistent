@@ -161,19 +161,23 @@ async function onSave() {
   }
 
   saving.value = true
+  // Für die Fehlermeldung: Welcher Bereich wird gerade gespeichert?
+  let section = ''
   try {
     // Produktionsbuch speichern
     if (pbRef.value?.isDirty()) {
+      section = 'Produktionsbuch'
       const saved = await saveVersioned(
         () => backend.saveSnapshot(pbRef.value.getSnapshotForSave()),
         () => pbRef.value.resetToServer(),
-        'Produktionsbuch wurde zwischenzeitlich geändert. Ansicht aktualisiert.',
+        'Das Produktionsbuch wurde zwischenzeitlich geändert, auch ein anderer Rechner kann das sein. Ansicht aktualisiert.',
       )
       if (!saved) return
     }
 
     // Pfade speichern
     if (pfadeRef.value?.isDirty()) {
+      section = 'Pfade'
       const saved = await saveVersioned(
         () => backend.savePaths(pfadeRef.value.getSnapshotForSave()),
         () => pfadeRef.value.resetToServer(),
@@ -184,23 +188,31 @@ async function onSave() {
 
     // Mitarbeiter speichern
     if (mitarbeiterRef.value?.isDirty()) {
+      section = 'Mitarbeiter'
       await backend.saveUsers(mitarbeiterRef.value.getSnapshotForSave())
       await mitarbeiterRef.value.resetToServer()
       await window.electronAPI?.refreshUsers?.() // User-Liste in main aktualisieren
     }
     // Passwort
     if (pwRef.value?.isDirty()) {
+      section = 'Passwort'
       await pwRef.value.saveToServer()
     }
 
     // Schema
     if (schemaRef.value?.isDirty()) {
-      await backend.saveSchema(schemaRef.value.getSnapshotForSave())
-      await schemaRef.value.resetToServer()
+      section = 'Namensschema'
+      const saved = await saveVersioned(
+        () => backend.saveSchema(schemaRef.value.getSnapshotForSave()),
+        () => schemaRef.value.resetToServer(),
+        'Das Namensschema wurde zwischenzeitlich geändert, auch ein anderer Rechner kann das sein. Ansicht aktualisiert.',
+      )
+      if (!saved) return
     }
 
     // Module
     if (moduleRef.value?.isDirty()) {
+      section = 'Module'
       const saved = await saveVersioned(
         () => backend.saveModules(moduleRef.value.getSnapshotForSave()),
         () => moduleRef.value.resetToServer(),
@@ -214,7 +226,7 @@ async function onSave() {
 
   } catch (e) {
     console.error(e)
-    alert(`Speichern fehlgeschlagen: ${e.message}`)
+    alert(`Speichern fehlgeschlagen (${section}): ${e.message}`)
   } finally {
     saving.value = false
   }

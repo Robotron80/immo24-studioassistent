@@ -29,7 +29,7 @@
     "@mdi/font": "7.4.47",
     "@types/node": "^24.13.2",
     "@vitejs/plugin-vue": "^5.2.3",
-    "electron": "^45.2.0",
+    "electron": "^45.2.1",
     "electron-builder": "^26.0.12",
     "express": "4.22.3",
     "node-red": "^5.0.9",

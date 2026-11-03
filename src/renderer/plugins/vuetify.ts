@@ -31,6 +31,7 @@ export default createVuetify({
     VTextField: fieldDefaults,
     VSelect: fieldDefaults,
     VAutocomplete: fieldDefaults,
+    VCombobox: fieldDefaults,
     VCard: { flat: true, border: true },
     VCheckbox: { density: 'comfortable', hideDetails: 'auto', color: 'primary' },
     VBtn: { variant: 'flat' },

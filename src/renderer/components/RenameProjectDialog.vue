@@ -7,7 +7,7 @@
       <v-card-text v-if="step === 'form'">
         <v-text-field v-model="neuerName" label="Neuer Projektname" />
         <div class="moid-row">
-          <v-text-field v-model="neueMoid" label="Neue Mo-ID" maxlength="4" hide-details="auto" :disabled="ohneMoid" />
+          <MoidFeld v-model="neueMoid" label="Neue Mo-ID" :disabled="ohneMoid" />
           <v-checkbox v-model="ohneMoid" class="moid-keine" label="keine Mo-ID" />
         </div>
         <v-alert v-if="error" type="error" density="compact" variant="tonal">{{ error }}</v-alert>
@@ -72,6 +72,7 @@
  */
 import { computed, ref, watch } from 'vue'
 
+import MoidFeld from '@/components/MoidFeld.vue'
 import { backend } from '@/lib/backend'
 
 const props = defineProps<{

@@ -9,13 +9,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 
 import { isPlainObject, readJsonOrNull } from './files.ts'
-import { comparableName } from './names.ts'
-
-/** Ist das eine echte MoID oder nur ein Platzhalter wie NOID oder xxxx? */
-export function isPlaceholderMoid(moid: unknown): boolean {
-  const text = String(moid ?? '').trim()
-  return text === '' || /^(no[ _-]?id|x{2,})$/i.test(text)
-}
+import { comparableName, isPlaceholderMoid, moidList } from './names.ts'
 
 export interface ExistingProject {
   kunde: string
@@ -26,7 +20,8 @@ export interface ExistingProject {
 }
 
 /**
- * Sucht im Ordner eines Kunden ein Projekt mit dieser MoID.
+ * Sucht im Ordner eines Kunden ein Projekt, das eine dieser MoIDs trägt.
+ * Im Ergebnis steht unter moid nur die MoID, die übereinstimmt, nicht alle des Projekts.
  *
  * Bewusst nur beim Kunden: Den ganzen Speicher zu durchsuchen dauert im Studio viel zu
  * lange. Bei verschiedenen Kunden kann eine MoID deshalb doppelt vorkommen.
@@ -38,8 +33,8 @@ export async function findProjectByMoid(
   moid: string,
   ignoreOrdner?: string,
 ): Promise<ExistingProject | null> {
-  if (isPlaceholderMoid(moid)) return null
-  const wanted = comparableName(moid)
+  const wanted = new Set(moidList(moid).filter((item) => !isPlaceholderMoid(item)).map(comparableName))
+  if (wanted.size === 0) return null
   const customerDir = path.join(produktionen, kunde)
   const entries = await fs.readdir(customerDir, { withFileTypes: true }).catch(() => [])
   const folders = entries
@@ -49,12 +44,13 @@ export async function findProjectByMoid(
   const metas = await Promise.all(folders.map((ordner) => readJsonOrNull(path.join(customerDir, ordner, 'immo24-proj.json'))))
   for (const [index, meta] of metas.entries()) {
     if (!isPlainObject(meta) || typeof meta.mo_id !== 'string') continue
-    if (comparableName(meta.mo_id) !== wanted) continue
+    const match = moidList(meta.mo_id).find((item) => wanted.has(comparableName(item)))
+    if (!match) continue
     return {
       kunde,
       ordner: folders[index],
       projektname: String(meta.projektname ?? ''),
-      moid: meta.mo_id,
+      moid: match,
       date: String(meta.erstellt_am ?? ''),
     }
   }

@@ -6,7 +6,7 @@
 import { defineStore } from 'pinia'
 
 import { localDate } from '../../core/dates'
-import { checkWindowsName } from '../../core/names'
+import { checkMoids, checkWindowsName, formatMoids } from '../../core/names'
 import { backend, BackendError } from '@/lib/backend'
 // Dieselben Regeln wie im Backend, damit Formular und Prüfung nie auseinanderlaufen
 function windowsNameReport(input) {
@@ -127,9 +127,9 @@ export const useProjektanlage = defineStore('Projektanlage', {
       } finally { this.loading.stufen = false }
     },
 
-    // MoID immer groß, keine Leerzeichen am Rand. Läuft auch beim Verlassen der Felder.
+    // MoIDs groß und einheitlich getrennt, etwa AB12+CD34. Läuft auch beim Verlassen der Felder.
     normalizeNames() {
-      this.form.moid = this.form.ohneMoid ? '' : String(this.form.moid ?? '').trim().toUpperCase()
+      this.form.moid = this.form.ohneMoid ? '' : formatMoids(this.form.moid)
       this.form.projektname = String(this.form.projektname ?? '').trim()
     },
 
@@ -162,6 +162,10 @@ export const useProjektanlage = defineStore('Projektanlage', {
       if (rep.valid) return true
       const first = (rep.errors || [])[0]
       return first?.message || 'Ungültiger Name'
+    },
+    // Prüfung für das Feld Mo-ID: jede höchstens vier Stellen, keine doppelt
+    moidRule(value) {
+      return checkMoids(value)[0]?.message ?? true
     },
     windowsRule(field) {
       // Factory für Vuetify :rules → (v) => true|string

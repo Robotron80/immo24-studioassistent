@@ -267,6 +267,41 @@ test('andere Kundenordner werden nicht durchsucht', async (t) => {
   assert.ok(fs.existsSync(path.join(dirs.produktionen, 'Ohne Ordner', '2026-01-15 Gleiche MoID AB12')))
 })
 
+test('ein Projekt kann mehrere MoIDs tragen, jede ist einzeln vergeben', async (t) => {
+  const { dirs, projects } = await setup(t)
+
+  const created = await projects.createProject({ ...project, moid: ' ab12, cd34 EF56 ', projektname: 'Fassungen' })
+  assert.match(created.zielPfad, /Fassungen AB12\+CD34\+EF56$/)
+  assert.match(created.filename, /Fassungen AB12\+CD34\+EF56 .* v1\.ptx$/)
+
+  // Jede einzelne MoID ist damit vergeben, gemeldet wird genau die übereinstimmende
+  await assert.rejects(projects.createProject({ ...project, moid: 'ZZ99 cd34', projektname: 'Andere' }), (error: unknown) => {
+    assert.ok(error instanceof CoreError && error.code === 'moid_vergeben')
+    assert.equal((error.details.projekt as { moid: string }).moid, 'CD34')
+    return true
+  })
+  // Nur ganze MoIDs zählen, ein Teil davon ist kein Treffer
+  await projects.createProject({ ...project, moid: 'CD3', projektname: 'Kurz' })
+
+  // Die nächste Session zählt weiter, die Liste zeigt alle MoIDs
+  const next = await projects.addSession({ ...project, moid: 'AB12+CD34+EF56', projektname: 'Fassungen', ordner: path.basename(created.zielPfad) })
+  assert.match(next.filename, / v2\.ptx$/)
+  const row = (await projects.listProjects('Kunde A')).find((item) => item.projektname === 'Fassungen')
+  assert.equal(row?.moid, 'AB12+CD34+EF56')
+  assert.equal(row?.ohneMoid, false)
+  assert.ok(fs.existsSync(path.join(dirs.produktionen, 'Kunde A', path.basename(created.zielPfad), 'immo24-proj.json')))
+})
+
+test('prüft jede MoID: höchstens vier Stellen und keine doppelt', async (t) => {
+  const { projects } = await setup(t)
+  const failsWith = (code: string) => (error: unknown) => (
+    error instanceof CoreError && error.code === 'validation_failed'
+    && (error.details.details as Array<{ errors: Array<{ code: string }> }>)[0].errors[0].code === code
+  )
+  await assert.rejects(projects.createProject({ ...project, moid: 'AB12 ABCDE' }), failsWith('moid_too_long'))
+  await assert.rejects(projects.createProject({ ...project, moid: 'AB12 ab12' }), failsWith('moid_duplicate'))
+})
+
 test('legt nichts an, wenn der Produktionen-Ordner fehlt', async (t) => {
   // So sieht es aus, wenn der Share nicht eingehängt ist
   const { dirs, projects, stammdaten } = await setup(t)

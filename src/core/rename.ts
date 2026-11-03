@@ -20,7 +20,7 @@ import type { ConfigService } from './config.ts'
 import { CoreError } from './errors.ts'
 import { exists, isPlainObject, readJsonOrNull, writeFileAtomic } from './files.ts'
 import { findProjectByMoid } from './moid.ts'
-import { checkWindowsName, comparableName, escapeRegExp, fillTemplate, looseSpaces, tidyName } from './names.ts'
+import { checkMoids, checkWindowsName, comparableName, escapeRegExp, fillTemplate, formatMoids, looseSpaces, tidyName } from './names.ts'
 import type { IsProcessRunning } from './presets.ts'
 import type { SessionService } from './session.ts'
 
@@ -116,13 +116,13 @@ export function createRenameService(config: ConfigService, session: SessionServi
   async function plan(input: RenameInput) {
     session.requireUser()
     const neuerName = String(input?.neuerName ?? '').trim()
-    const neueMoid = input?.ohneMoid ? '' : String(input?.neueMoid ?? '').trim().toUpperCase()
+    const neueMoid = input?.ohneMoid ? '' : formatMoids(input?.neueMoid)
     const missing = [!neuerName && 'projektname', !neueMoid && !input?.ohneMoid && 'moid'].filter(Boolean)
     if (missing.length) throw new CoreError('project_fields_missing', { fields: missing })
 
     const details = [
       { field: 'projektname', errors: checkWindowsName(neuerName) },
-      { field: 'moid', errors: checkWindowsName(neueMoid) },
+      { field: 'moid', errors: [...checkWindowsName(neueMoid), ...checkMoids(neueMoid)] },
     ].filter((report) => report.errors.length > 0)
     if (details.length) throw new CoreError('validation_failed', { details })
 

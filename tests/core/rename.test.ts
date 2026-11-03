@@ -196,6 +196,20 @@ test('trifft bei gleichen Angaben genau das gewählte Projekt', async (t) => {
   assert.ok(fs.existsSync(path.join(customerDir, '2026-01-15 Zwilling NOID AA')), 'das andere Projekt bleibt unberührt')
 })
 
+test('eine weitere MoID lässt sich nachträglich ergänzen', async (t) => {
+  const { projects, service, customerDir } = await setup(t)
+
+  const result = await service.rename({ ...rename, neuerName: 'Alt', neueMoid: 'ab12 cd34' })
+
+  assert.equal(result.nach, '2026-01-15 Alt AB12+CD34')
+  const meta = JSON.parse(fs.readFileSync(path.join(customerDir, result.nach, 'immo24-proj.json'), 'utf8'))
+  assert.equal(meta.mo_id, 'AB12+CD34')
+  // Auch nach dem Ergänzen zählt jede einzeln als vergeben
+  await assert.rejects(projects.createProject({ ...project, moid: 'CD34', projektname: 'Neu2' }), hasCode('moid_vergeben'))
+  // Und mit mehreren MoIDs lässt sich weiter umbenennen
+  assert.equal((await service.rename({ ...rename, ordner: result.nach, neuerName: 'Fassungen', neueMoid: 'AB12+CD34' })).nach, '2026-01-15 Fassungen AB12+CD34')
+})
+
 test('ist standardmäßig aus und lässt sich einschalten', async (t) => {
   const { config, service } = await setup(t)
   assert.equal(await service.isEnabled(), false)

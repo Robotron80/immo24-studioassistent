@@ -12,7 +12,7 @@ export function comparableName(name: string): string {
 }
 
 export interface NameError {
-  code: 'forbidden_chars' | 'trailing_dot_or_space' | 'reserved_name'
+  code: 'forbidden_chars' | 'trailing_dot_or_space' | 'reserved_name' | 'moid_too_long' | 'moid_duplicate'
   message: string
   chars?: string[]
 }
@@ -36,6 +36,39 @@ export function checkWindowsName(input: unknown): NameError[] {
   }
   if (/^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\..*)?$/i.test(name)) {
     errors.push({ code: 'reserved_name', message: 'Reservierter Windows-Name' })
+  }
+  return errors
+}
+
+/** Ist das eine echte MoID oder nur ein Platzhalter wie NOID oder xxxx? */
+export function isPlaceholderMoid(moid: unknown): boolean {
+  const text = String(moid ?? '').trim()
+  return text === '' || /^(no[ _-]?id|x{2,})$/i.test(text)
+}
+
+/**
+ * Bringt die Eingabe ins gespeicherte Format: Aus "ab12 cd34" wird "AB12+CD34".
+ * Ein Projekt kann mehrere MoIDs haben, etwa bei Kurz- und Langfassung in einer Session.
+ * Gespeichert bleibt ein einziger Text, so kann auch Version 0.4 damit umgehen.
+ */
+export function formatMoids(input: unknown): string {
+  return moidList(String(input ?? '').toUpperCase()).join('+')
+}
+
+/** Zerlegt eine oder mehrere MoIDs in eine Liste. Getrennt wird an Leerzeichen, Komma oder Plus. */
+export function moidList(moids: unknown): string[] {
+  return String(moids ?? '').split(/[\s,+]+/).filter(Boolean)
+}
+
+/** Prüft jede MoID einer Eingabe: höchstens vier Stellen und keine doppelt. Platzhalter sind frei. */
+export function checkMoids(input: unknown): NameError[] {
+  const list = moidList(formatMoids(input))
+  const errors: NameError[] = []
+  if (list.some((moid) => moid.length > 4 && !isPlaceholderMoid(moid))) {
+    errors.push({ code: 'moid_too_long', message: 'Eine Mo-ID hat höchstens vier Stellen' })
+  }
+  if (new Set(list).size < list.length) {
+    errors.push({ code: 'moid_duplicate', message: 'Eine Mo-ID steht doppelt in der Eingabe' })
   }
   return errors
 }

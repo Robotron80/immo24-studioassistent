@@ -34,15 +34,12 @@
               <v-col cols="12">
                 <div class="moid-row">
                   <!-- Der key baut das Feld beim Umschalten neu auf, damit keine alte Fehlermeldung stehen bleibt -->
-                  <v-text-field
+                  <MoidFeld
                     :key="form.ohneMoid ? 'ohne' : 'mit'"
                     v-model="form.moid"
                     label="Mo-ID"
-                    maxlength="4"
-                    hide-details="auto"
                     :disabled="isVorhanden || form.ohneMoid"
-                    :rules="[(v)=> form.ohneMoid || (v && String(v).trim().length) || 'Pflichtfeld', store.windowsRule('moid')]"
-                    @blur="store.normalizeNames()"
+                    :rules="[(v)=> form.ohneMoid || !!v || 'Pflichtfeld', store.moidRule, store.windowsRule('moid')]"
                   />
                   <v-checkbox
                     v-model="form.ohneMoid"
@@ -131,7 +128,12 @@
                 >
                   <td class="text-no-wrap">{{ item.date }}</td>
                   <td>{{ item.projektname }}</td>
-                  <td class="text-no-wrap">{{ item.ohneMoid ? '–' : item.moid }}</td>
+                  <td>
+                    <template v-if="item.ohneMoid">–</template>
+                    <div v-else class="d-flex flex-wrap ga-1 py-1">
+                      <v-chip v-for="moid in moidList(item.moid)" :key="moid" size="small">{{ moid }}</v-chip>
+                    </div>
+                  </td>
                   <td>{{ item.user }}</td>
                   <td v-if="store.renameEnabled" class="text-right px-1">
                     <v-btn
@@ -197,7 +199,9 @@
  * vorhandenen. Die Regeln dafür stehen im Backend (src/core/projects.ts), hier nur die Bedienung.
  */
 import { computed, nextTick, ref, onMounted, reactive, watch } from 'vue'
+import { moidList } from '../../core/names'
 import DatumFeld from '@/components/DatumFeld.vue'
+import MoidFeld from '@/components/MoidFeld.vue'
 import RenameProjectDialog from '@/components/RenameProjectDialog.vue'
 import { useProjektanlage } from '@/stores/Projektanlage'
 
@@ -219,7 +223,7 @@ const lastCreatedProject = ref<any>(null)
 const headers = computed(() => [
   { title: 'Datum', key: 'date', nowrap: true },
   { title: 'Projektname', key: 'projektname' },
-  { title: 'Mo-ID', key: 'moid', nowrap: true },
+  { title: 'Mo-ID', key: 'moid' },
   { title: 'Mitarbeiter*in', key: 'user' },
   ...(store.renameEnabled ? [{ title: '', key: 'aktionen', sortable: false }] : []),
 ])

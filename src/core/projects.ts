@@ -19,8 +19,8 @@ import type { ConfigService } from './config.ts'
 import { localDate } from './dates.ts'
 import { CoreError } from './errors.ts'
 import { exists, readJsonOrNull, writeFileAtomic } from './files.ts'
-import { findProjectByMoid, isPlaceholderMoid } from './moid.ts'
-import { checkWindowsName, escapeRegExp, fillTemplate, looseSpaces, tidyName } from './names.ts'
+import { findProjectByMoid } from './moid.ts'
+import { checkMoids, checkWindowsName, escapeRegExp, fillTemplate, formatMoids, isPlaceholderMoid, looseSpaces, tidyName } from './names.ts'
 import type { SessionService } from './session.ts'
 import type { Kunde, StammdatenService } from './stammdaten.ts'
 
@@ -177,9 +177,10 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
      * Projekt zurückbleibt, das eine Wiederholung blockiert.
      */
     async createProject(input: ProjectInput) {
-      // Die MoID schreiben wir bei neuen Projekten immer groß
-      const trimmed = trimNames(input)
-      const data = validate({ ...trimmed, moid: input?.ohneMoid ? '' : trimmed.moid?.toUpperCase() })
+      // Die MoIDs schreiben wir bei neuen Projekten immer groß und einheitlich getrennt
+      const data = validate({ ...trimNames(input), moid: input?.ohneMoid ? '' : formatMoids(input?.moid) })
+      const moidErrors = checkMoids(data.moid)
+      if (moidErrors.length) throw new CoreError('validation_failed', { details: [{ field: 'moid', errors: moidErrors }] })
       const user = session.requireUser()
       const { produktionen, mitarbeiter, projektordnerSchema, sessionSchema } = await settings()
 

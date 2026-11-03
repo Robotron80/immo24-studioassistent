@@ -1,6 +1,6 @@
 {
   "name": "immo24-studioassistent",
-  "version": "1.0.0-next.12",
+  "version": "1.0.0-next.13",
   "main": "dist-electron/index.js",
   "description": "Applikation zur Dateiorganisation auf vernetzten Avid Pro Tools Systemen",
   "author": "Philipp Menzel",

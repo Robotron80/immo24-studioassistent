@@ -69,7 +69,7 @@
 
 <script setup lang="ts">
 /**
- * Konfiguration, Bereich Namensschema: Wie heißen Projektordner und Sessions?
+ * Wie heißen Projektordner und Sessions? Für Konfiguration und Einrichtungsassistent.
  * Die Datei teilen sich alle Rechner, Änderungen wirken also überall.
  */
 import { ref, reactive, computed, onMounted } from 'vue'
@@ -140,7 +140,7 @@ async function loadSnapshot() {
 }
 onMounted(loadSnapshot)
 
-// Das nutzt Konfiguration.vue beim Speichern und Abbrechen
+// Das nutzen Konfiguration und Assistent beim Speichern und Abbrechen
 defineExpose({
   isDirty: () => isDirty.value,
   isSchemaValid: () => isSchemaValid.value,

@@ -71,7 +71,7 @@
 
 <script setup lang="ts">
 /**
- * Konfiguration, Bereich Mitarbeiter: Mitarbeiter anlegen und Kürzel ändern.
+ * Mitarbeiter anlegen und Kürzel ändern, für Konfiguration und Einrichtungsassistent.
  * Löschen geht hier bewusst nicht, ein Mitarbeiter ist ein Ordner auf dem Speicher.
  */
 import { ref, computed, onMounted } from 'vue'
@@ -107,9 +107,10 @@ async function loadSnapshot() {
 }
 onMounted(loadSnapshot)
 
-// Das nutzt Konfiguration.vue beim Speichern und Abbrechen
+// Das nutzen Konfiguration und Assistent beim Speichern und Abbrechen
 defineExpose({
   isDirty: () => dirty.value,
+  hasUsers: () => staged.value.length > 0,
   getSnapshotForSave: () => ({ mitarbeiter: staged.value }),
   resetToServer: async () => { await loadSnapshot() }
 })

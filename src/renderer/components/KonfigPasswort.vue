@@ -13,6 +13,7 @@
         v-model="form.repeatPassword"
         :type="show2 ? 'text' : 'password'"
         label="Neues Passwort wiederholen"
+        :error-messages="mismatch ? ['Passwörter stimmen nicht überein.'] : []"
         :append-inner-icon="show2 ? 'mdi-eye-off' : 'mdi-eye'"
         @click:append-inner="show2 = !show2"
         class="mb-3"
@@ -26,10 +27,10 @@
 
 <script setup lang="ts">
 /**
- * Konfiguration, Bereich Passwort: legt ein neues Passwort für dieses Menü fest.
+ * Legt das Passwort für die Konfiguration fest, dort und im Einrichtungsassistenten.
  * Das alte Passwort wird nie angezeigt, das Formular beginnt deshalb immer leer.
  */
-import { reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 
 import { backend } from '@/lib/backend'
 
@@ -40,7 +41,15 @@ const okMsg = ref('')
 const show1 = ref(false)
 const show2 = ref(false)
 
+const MIN_LENGTH = 4
 const deepEqual = (a,b) => JSON.stringify(a) === JSON.stringify(b)
+
+const mismatch = computed(() => !!form.repeatPassword && form.repeatPassword !== form.newPassword)
+
+/** Darf dieses Passwort gespeichert werden? */
+function isValid() {
+  return form.newPassword.trim().length >= MIN_LENGTH && form.newPassword === form.repeatPassword
+}
 
 function isDirty() {
   return !deepEqual(form, original)
@@ -57,6 +66,10 @@ async function saveToServer() {
   }
   if (newPassword !== repeatPassword) {
     error.value = 'Passwörter stimmen nicht überein.'
+    throw new Error('validation')
+  }
+  if (newPassword.length < MIN_LENGTH) {
+    error.value = `Das Passwort braucht mindestens ${MIN_LENGTH} Zeichen.`
     throw new Error('validation')
   }
 
@@ -78,5 +91,5 @@ async function resetToServer() {
   error.value = ''; okMsg.value = ''
 }
 
-defineExpose({ isDirty, saveToServer, resetToServer })
+defineExpose({ isDirty, isValid, saveToServer, resetToServer })
 </script>

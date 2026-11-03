@@ -22,6 +22,8 @@ export interface Unterordner {
   label: string
   /** Produktionsstufen sind die Ordner, in denen Pro Tools Sessions entstehen. */
   ist_Produktionsstufe?: boolean
+  /** Hier entsteht der Export der immo24 EventPipe. Pro Kunde höchstens einer. */
+  ist_EventpipeZiel?: boolean
 }
 
 export interface Kunde {

@@ -43,6 +43,7 @@
             <th class="text-left">Name</th>
             <th class="text-left">Label</th>
             <th class="text-left">Produktionsstufe</th>
+            <th class="text-left">EventPipe-Ziel</th>
             <th class="text-right"></th>
           </tr>
         </thead>
@@ -51,16 +52,17 @@
             <td>{{ f.name }}</td>
             <td>{{ f.label }}</td>
             <td><v-icon v-if="f.ist_Produktionsstufe">mdi-check</v-icon></td>
+            <td><v-icon v-if="f.ist_EventpipeZiel">mdi-check</v-icon></td>
             <td class="text-right">
               <v-btn icon="mdi-pencil" size="small" variant="text" @click="openEditFolder(f)" />
               <v-btn icon="mdi-delete" size="small" variant="text" @click="confirmDeleteFolder(f)" />
             </td>
           </tr>
           <tr v-if="selectedKunde && folders.length === 0">
-            <td colspan="4"><em>Noch keine Ordner vorhanden.</em></td>
+            <td colspan="5"><em>Noch keine Ordner vorhanden.</em></td>
           </tr>
           <tr v-if="!selectedKunde">
-            <td colspan="4"><em>Bitte einen Kunden auswählen.</em></td>
+            <td colspan="5"><em>Bitte einen Kunden auswählen.</em></td>
           </tr>
         </tbody>
       </v-table>
@@ -91,6 +93,7 @@
         <v-text-field v-model="folderForm.name"  label="Name" />
         <v-text-field v-model="folderForm.label" label="Label" />
         <v-switch v-model="folderForm.ist_Produktionsstufe" label="Produktionsstufe" />
+        <v-switch v-model="folderForm.ist_EventpipeZiel" label="EventPipe-Ziel (hier entsteht der Export, pro Kunde nur einer)" />
         <v-alert v-if="dialogError" type="error" class="mt-2">{{ dialogError }}</v-alert>
       </v-card-text>
       <v-card-actions class="justify-end">
@@ -206,16 +209,16 @@ function selectCustomer(k) { selectedKunde.value = k }
 
 // Dialog: Ordner anlegen oder bearbeiten
 const folderDialogOpen = ref(false)
-const folderForm = ref({ mode:'new', originalName:'', name:'', label:'', ist_Produktionsstufe:false })
+const folderForm = ref({ mode:'new', originalName:'', name:'', label:'', ist_Produktionsstufe:false, ist_EventpipeZiel:false })
 
 function openNewFolder(){
   if (!selectedKunde.value) return
-  folderForm.value = { mode:'new', originalName:'', name:'', label:'', ist_Produktionsstufe:false }
+  folderForm.value = { mode:'new', originalName:'', name:'', label:'', ist_Produktionsstufe:false, ist_EventpipeZiel:false }
   dialogError.value=''; folderDialogOpen.value = true
 }
 
 function openEditFolder(f){
-  folderForm.value = { mode:'edit', originalName:f.name, name:f.name, label:f.label, ist_Produktionsstufe: !!f.ist_Produktionsstufe }
+  folderForm.value = { mode:'edit', originalName:f.name, name:f.name, label:f.label, ist_Produktionsstufe: !!f.ist_Produktionsstufe, ist_EventpipeZiel: !!f.ist_EventpipeZiel }
   dialogError.value=''; folderDialogOpen.value = true
 }
 
@@ -225,13 +228,14 @@ function saveFolder(){
   const name = (folderForm.value.name || '').trim()
   const label = folderForm.value.label || ''
   const flag = !!folderForm.value.ist_Produktionsstufe
+  const eventpipe = !!folderForm.value.ist_EventpipeZiel
   if (!name) { dialogError.value = 'Name darf nicht leer sein.'; return }
 
   if (folderForm.value.mode === 'new') {
     const exists = (cust.ordner || []).some(o => (o.name || '').toLowerCase() === name.toLowerCase())
     if (exists) { dialogError.value = 'Ordnername existiert bereits'; return }
     cust.ordner = cust.ordner || []
-    cust.ordner.push({ name, label, ist_Produktionsstufe: flag })
+    cust.ordner.push({ name, label, ist_Produktionsstufe: flag, ist_EventpipeZiel: eventpipe })
   } else {
     const old = (folderForm.value.originalName || '').toLowerCase()
     const idx = (cust.ordner || []).findIndex(o => (o.name || '').toLowerCase() === old)
@@ -243,7 +247,13 @@ function saveFolder(){
       )
       if (conflict) { dialogError.value = 'Ordnername existiert bereits'; return }
     }
-    cust.ordner[idx] = { name, label, ist_Produktionsstufe: flag }
+    cust.ordner[idx] = { name, label, ist_Produktionsstufe: flag, ist_EventpipeZiel: eventpipe }
+  }
+  // Der Export hat genau einen Ort: Ein neu markierter Ordner löst den bisherigen ab
+  if (eventpipe) {
+    for (const ordner of cust.ordner) {
+      if ((ordner.name || '').toLowerCase() !== name.toLowerCase()) ordner.ist_EventpipeZiel = false
+    }
   }
   dirty.value = true
   folderDialogOpen.value = false

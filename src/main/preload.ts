@@ -19,7 +19,7 @@ function on<T>(channel: string, callback: (value: T) => void): () => void {
 contextBridge.exposeInMainWorld('electronAPI', {
   getAppVersion: () => ipcRenderer.invoke('get-app-version'),
 
-  // Aufrufe ins Backend (siehe src/renderer/lib/backend.js und src/main/backend.ts)
+  // Aufrufe ins Backend (siehe src/renderer/lib/backend.ts und src/main/backend.ts)
   backend: (method: string, arg?: unknown) => ipcRenderer.invoke('backend', method, arg),
 
   // Session im zugehörigen Programm öffnen
@@ -37,9 +37,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // Meldet, dass die Konfiguration geschlossen wurde und sich Daten geändert haben können
   onConfigChanged: (callback: () => void) => on<void>('config-changed', callback),
 
-  // Fenster verstecken + Picker öffnen (optional Logout)
-  hideAndOpenPicker: (options?: { doLogout?: boolean }) =>
-    ipcRenderer.invoke('renderer-hide-and-pick', options ?? { doLogout: true }),
+  logout: () => ipcRenderer.invoke('logout'),
 
   closeInitWindow: () => ipcRenderer.invoke('close-init-window'),
 })

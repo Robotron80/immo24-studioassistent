@@ -1,33 +1,20 @@
 /**
- * main.js
- *
- * Bootstraps Vuetify and other plugins then mounts the App`
+ * Startpunkt der Oberfläche: baut die Vue-App zusammen und zeigt sie im Fenster an.
  */
-
-// Plugins
-import { registerPlugins } from '@/plugins'
-
-// Components
-import App from './App.vue'
-
-// Styles
-import './styles/app.css'
-
-// Composables
 import { createApp } from 'vue'
 
-// Pinia: derselbe Speicher wie in plugins/index.js, sonst gäbe es den Store zweimal
+import App from './App.vue'
+import { registerPlugins } from '@/plugins'
 import pinia from '@/stores'
-
-// Stores
 import { useProjektanlage } from '@/stores/Projektanlage'
+import './styles/app.css'
 
 const app = createApp(App)
 app.use(pinia)
 const projektanlage = useProjektanlage(pinia)
 
 // Nach der Konfiguration: Kunden und Vorlagen neu laden, ohne neue Anmeldung
-window.electronAPI?.onConfigChanged?.(() => {
+window.electronAPI.onConfigChanged(() => {
   projektanlage.refreshAfterConfig()
 })
 

@@ -14,7 +14,7 @@ interface Window {
     openSession(file: string): Promise<string>
     pickFolder(title?: string, defaultPath?: string): Promise<string | null>
     onConfigChanged(callback: () => void): () => void
-    hideAndOpenPicker(options?: { doLogout?: boolean }): Promise<{ ok: boolean }>
+    logout(): Promise<void>
     closeInitWindow(): Promise<boolean>
   }
   picker: {

@@ -32,6 +32,17 @@ html {
   width: 10px;
 }
 
+/* Schmale Spalte für einen einzelnen Knopf am Zeilenende */
+.action-col {
+  width: 60px;
+}
+
+/* Die Soundminer-Version braucht nur wenig Platz */
+.module-version {
+  max-width: 160px;
+  min-width: 120px;
+}
+
 /* Zeilen der Projektliste */
 .project-row:hover {
   background: rgba(var(--v-theme-primary), 0.06);

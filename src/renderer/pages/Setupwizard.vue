@@ -114,7 +114,7 @@
                   <tr>
                     <th>Name</th>
                     <th>Kürzel</th>
-                    <th style="width: 60px;"></th>
+                    <th class="action-col"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -152,9 +152,6 @@
                   <v-btn variant="text" @click="newDialogOpen=false">Abbrechen</v-btn>
                   <v-btn color="primary" @click="createMitarbeiter">Anlegen</v-btn>
                 </v-card-actions>
-            
-            
-
               </v-card>
             </v-dialog>
 
@@ -176,7 +173,7 @@
             <div class="d-flex ga-2 mt-2">
               <v-btn variant="text" @click="prev">Zurück</v-btn>
               <v-spacer />
-              <v-btn color="primary" :disabled="!stepUsersOk" @click="next">Weiter</v-btn>
+              <v-btn color="primary" :disabled="!usersOk" @click="next">Weiter</v-btn>
             </div>
 
           </v-card>
@@ -192,7 +189,7 @@
             <v-card class="pa-4 mb-4">
               <div class="text-subtitle-1 font-weight-medium mb-2">Projektordner-Schema</div>
               <div class="mb-2 text-body-2 text-medium-emphasis">Verfügbare Parameter</div>
-              <div class="mb-3" style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <div class="d-flex flex-wrap ga-2 mb-3">
                 <span
                   v-for="ph in projektordnerPlaceholders"
                   :key="ph"
@@ -215,7 +212,7 @@
             <v-card class="pa-4 mb-4">
               <div class="text-subtitle-1 font-weight-medium mb-2">Session-Schema</div>
               <div class="mb-2 text-body-2 text-medium-emphasis">Verfügbare Parameter</div>
-              <div class="mb-3" style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <div class="d-flex flex-wrap ga-2 mb-3">
                 <span
                   v-for="ph in sessionPlaceholders"
                   :key="ph"
@@ -249,7 +246,7 @@
               <v-spacer />
               <v-btn
                 color="primary"
-                :disabled="!step3Ok || !schema.sessionSchema.includes('{{version}}')"
+                :disabled="!schemaOk || !schema.sessionSchema.includes('{{version}}')"
                 @click="next"
               >Weiter</v-btn>
             </div>
@@ -285,7 +282,7 @@
             <div class="d-flex ga-2 mt-2">
               <v-btn variant="text" @click="prev">Zurück</v-btn>
               <v-spacer />
-              <v-btn color="primary" :disabled="!step4Ok" @click="next">Weiter</v-btn>
+              <v-btn color="primary" :disabled="!passwordOk" @click="next">Weiter</v-btn>
             </div>
           </v-card>
         </v-stepper-window-item>
@@ -320,13 +317,16 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * Der Einrichtungsassistent beim allerersten Start: Pfade, Mitarbeiter, Namensschema und Passwort.
+ * Gespeichert wird am Ende auf einmal, nur die Pfade schon vorher, weil der Rest davon abhängt.
+ */
 import { reactive, ref, onMounted, computed } from 'vue'
 
 import { backend } from '@/lib/backend'
 
 const step = ref(1)
 const saving = ref(false)
-const checking = ref(false)
 const snack = reactive({ show: false, text: '', color: 'success' })
 
 const paths = reactive({
@@ -348,7 +348,7 @@ const showPw2 = ref(false)
 const users = ref<any[]>([])
 const error = ref('')
 
-// Mitarbeiter-Dialoge und Logik
+// Dialog: Neuer Mitarbeiter
 const newDialogOpen = ref(false)
 const newName = ref('')
 const newKuerzel = ref('')
@@ -374,7 +374,7 @@ function createMitarbeiter() {
   newDialogOpen.value = false
 }
 
-// Kürzel bearbeiten Dialog
+// Dialog: Kürzel bearbeiten
 const editDialogOpen = ref(false)
 const editName = ref('')
 const editKuerzel = ref('')
@@ -395,7 +395,7 @@ function saveEditKuerzel() {
     editDialogError.value = 'Bitte Kürzel eingeben.'
     return
   }
-  // Prüfe auf Duplikate (außer für den aktuellen Eintrag)
+  // Dasselbe Kürzel darf kein anderer Mitarbeiter haben
   const existsKuerzel = users.value.some((m, idx) =>
     idx !== editIndex && (m.kuerzel || '').toLowerCase() === kuerzel.toLowerCase()
   )
@@ -409,80 +409,59 @@ function saveEditKuerzel() {
   }
 }
 
-// Schritt-Checks
-const stepUsersOk = computed(() => users.value.length >= 1)
-const step2Ok = computed(() =>
+// Sind die Schritte vollständig ausgefüllt?
+const usersOk = computed(() => users.value.length >= 1)
+const pathsOk = computed(() =>
   !!paths.PathMitarbeiter && !!paths.PathProduktionen && !!paths.PathStammdaten && !!paths.PathPTUser
 )
-const step3Ok = computed(() =>
+const schemaOk = computed(() =>
   !!schema.projektordnerSchema && !!schema.sessionSchema
 )
-const step4Ok = computed(() =>
+const passwordOk = computed(() =>
   !!password.value && password.value.length >= 4 && password.value === password2.value
 )
 
-// Snackbar
 function toast(text, color = 'success') {
   snack.text = text; snack.color = color; snack.show = true
 }
 
-// Pfad-Auswahl
+/** Öffnet die Ordnerauswahl des Systems. */
 async function pick(title, key) {
-  const dir = await window.electronAPI?.pickFolder?.(title, paths[key] || undefined)
+  const dir = await window.electronAPI.pickFolder(title, paths[key] || undefined)
   if (dir) paths[key] = dir
 }
 
-// Backend laden
-const lastInit = ref<any>(null)
+/** Übernimmt Pfade und Schema, falls schon etwas eingerichtet ist, etwa auf einem weiteren Rechner. */
 async function loadFromInitialize() {
-  checking.value = true
   try {
     const data = await backend.getInitializeStatus()
-    lastInit.value = data
     if (data?.paths) Object.assign(paths, data.paths)
     if (data?.schema) Object.assign(schema, data.schema)
   } catch (e) {
     toast(`Fehler beim Laden: ${String(e)}`, 'error')
-  } finally { checking.value = false }
+  }
 }
 
-// Mitarbeiter laden
-const userApiReady = ref(true)
+/** Liest vorhandene Mitarbeiter, damit sie in der Liste stehen. */
 async function loadUsersSnapshot() {
   try {
-    let arr: any[] = await backend.listUsers()
-    if (Array.isArray(arr) && typeof arr[0] === 'string') {
-      arr = arr.map(name => ({ name, kuerzel: '' }))
-    }
-    arr = arr.map(m => ({
-      name: m.name,
-      kuerzel: m.kuerzel || ''
-    }))
-    users.value = arr || []
-    userApiReady.value = true
-  } catch (e) {
-    userApiReady.value = false
+    users.value = await backend.listUsers()
+  } catch {
     toast('Mitarbeiter konnten nicht geladen werden.', 'error')
   }
 }
 
-// Mitarbeiter speichern
-async function saveUsersSnapshot() {
-  await backend.saveUsers({ mitarbeiter: users.value })
-}
-
-// Pfade speichern: Die aktuelle Version kommt direkt aus dem Backend
+/** Speichert die Pfade. Die aktuelle Version kommt direkt aus dem Backend. */
 async function savePaths() {
   const { version } = await backend.getPaths()
   await backend.savePaths({ data: { ...paths }, version })
 }
 
-// Schrittwechsel
 function prev() { step.value = Math.max(1, step.value - 1) }
 function next() { step.value = Math.min(6, step.value + 1) }
 
 async function nextFromPaths() {
-  if (!step2Ok.value) {
+  if (!pathsOk.value) {
     toast('Bitte alle vier Pfade setzen.', 'warning')
     return
   }
@@ -492,16 +471,16 @@ async function nextFromPaths() {
     toast(`Pfade speichern fehlgeschlagen: ${e.message}`, 'error')
     return
   }
-  // Werte laden
+  // Erst jetzt sind die Ordner bekannt, in denen Schema und Mitarbeiter liegen
   await loadFromInitialize()
   await loadUsersSnapshot()
   next()
 }
 
 async function finish() {
-  if (!step2Ok.value) { toast('Bitte alle vier Pfade setzen.', 'warning'); step.value = 2; return }
-  if (!step3Ok.value) { toast('Namensschema unvollständig.', 'warning'); step.value = 4; return }
-  if (!step4Ok.value) { toast('Passwort unvollständig/ungleich.', 'warning'); step.value = 5; return }
+  if (!pathsOk.value) { toast('Bitte alle vier Pfade setzen.', 'warning'); step.value = 2; return }
+  if (!schemaOk.value) { toast('Namensschema unvollständig.', 'warning'); step.value = 4; return }
+  if (!passwordOk.value) { toast('Passwort unvollständig/ungleich.', 'warning'); step.value = 5; return }
 
   saving.value = true
   try {
@@ -517,11 +496,11 @@ async function finish() {
 
     // 4) Benutzer speichern (mindestens einer)
     if (!users.value.length) throw new Error('Es muss mindestens ein Benutzer angelegt sein.')
-    await saveUsersSnapshot()
+    await backend.saveUsers({ mitarbeiter: users.value })
 
-    // Backend erneut prüfen
-    lastInit.value = await backend.getInitializeStatus()
-    if (!(lastInit.value?.ready && lastInit.value?.initialize?.paths_json_present && lastInit.value?.initialize?.required_keys_ok && lastInit.value?.initialize?.schema_ok) || users.value.length < 1) {
+    // Das Backend prüft selbst noch einmal, ob alles vollständig ist
+    const { initialize } = await backend.getInitializeStatus()
+    if (!initialize.paths_json_present || !initialize.required_keys_ok || !initialize.schema_ok) {
       toast('Konfiguration unvollständig. Bitte Eingaben prüfen.', 'warning')
       return
     }
@@ -529,7 +508,7 @@ async function finish() {
     toast('Konfiguration gespeichert.')
 
     // Assistent schließen, danach erscheint die Anmeldung
-    await window.electronAPI?.closeInitWindow?.()
+    await window.electronAPI.closeInitWindow()
   } catch (e) {
     toast(e.message || String(e), 'error')
   } finally {
@@ -537,7 +516,7 @@ async function finish() {
   }
 }
 
-// Vorschau für Schemas
+// Beispielwerte für die Vorschau der Namen
 const demoValues = {
   datum: '1997-01-23',
   projektname: 'Faszination Falten',

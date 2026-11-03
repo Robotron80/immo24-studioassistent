@@ -214,15 +214,14 @@ export function openDevTools(): void {
  * Der Ablauf beim Abmelden: zurück zur Anmeldung und das Hauptfenster schließen.
  * Bei der nächsten Anmeldung entsteht es neu, so bleibt nichts vom vorherigen Nutzer übrig.
  */
-export async function openPickerFlow({ doLogout = true }: { doLogout?: boolean } = {}): Promise<{ ok: boolean }> {
-  if (doLogout) backend().session.logout()
+export function logout(): void {
+  backend().session.logout()
   const picker = createUserPickerWindow()
   picker.show()
   picker.focus()
   if (isOpen(prefWindow)) prefWindow.close()
   prefWindow = null
   if (isOpen(mainWindow)) mainWindow.close()
-  return { ok: true }
 }
 
 /** Öffnet die Konfiguration. Während der Ersteinrichtung ist sie gesperrt. */

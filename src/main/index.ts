@@ -17,7 +17,7 @@ import { backend } from './backend'
 import { registerIpc } from './ipc'
 import { installGlobalErrorHandlers, logLine, rotateLog, showOnceErrorBox } from './logger'
 import { installApplicationMenu } from './menu'
-import { assetPath, configureUserData, devServerUrl } from './paths'
+import { configureUserData, devServerUrl } from './paths'
 import {
   closeSplashWindow,
   createInitWindow,
@@ -44,16 +44,13 @@ app.on('window-all-closed', () => {
   }, 200)
 })
 
-/** Legt beim ersten Start die Einstellungsdateien an, falls sie noch fehlen. */
+/** Legt beim ersten Start die leeren Einstellungsdateien an, falls sie noch fehlen. */
 function ensureUserJsonFiles(): void {
   const basePath = app.getPath('userData')
   fs.mkdirSync(basePath, { recursive: true })
   for (const file of ['path.json', 'adminpw.json', 'config.json']) {
     const dest = path.join(basePath, file)
-    if (fs.existsSync(dest)) continue
-    const src = assetPath(file)
-    if (fs.existsSync(src)) fs.writeFileSync(dest, fs.readFileSync(src))
-    else fs.writeFileSync(dest, '{}')
+    if (!fs.existsSync(dest)) fs.writeFileSync(dest, '{}')
   }
 }
 

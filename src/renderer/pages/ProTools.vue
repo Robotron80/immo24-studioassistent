@@ -89,6 +89,10 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * Die Seite Pro Tools: Presets zwischen diesem Rechner und dem Archiv kopieren (Store und Recall).
+ * Alle 5 Sekunden wird geprüft, ob Pro Tools läuft. Das ist nur eine Anzeige, gesperrt wird nichts.
+ */
 import { reactive, ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
 import PresetResultDialog from '@/components/PresetResultDialog.vue'
@@ -110,7 +114,6 @@ const cat2 = reactive([
 ])
 const cat3 = reactive([
   { key: 'keyboardShortcuts', label: 'Keyboard Shortcuts', selected: false }
-//  { key: 'pluginMaps', label: 'Plug-In Maps', selected: false }
 ])
 
 const anySelected = computed(() =>

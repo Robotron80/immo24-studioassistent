@@ -5,7 +5,6 @@
         v-model="form.newPassword"
         :type="show1 ? 'text' : 'password'"
         label="Neues Passwort"
-        density="comfortable"
         :append-inner-icon="show1 ? 'mdi-eye-off' : 'mdi-eye'"
         @click:append-inner="show1 = !show1"
         class="mb-3"
@@ -14,7 +13,6 @@
         v-model="form.repeatPassword"
         :type="show2 ? 'text' : 'password'"
         label="Neues Passwort wiederholen"
-        density="comfortable"
         :append-inner-icon="show2 ? 'mdi-eye-off' : 'mdi-eye'"
         @click:append-inner="show2 = !show2"
         class="mb-3"
@@ -27,6 +25,10 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * Konfiguration, Bereich Passwort: legt ein neues Passwort für dieses Menü fest.
+ * Das alte Passwort wird nie angezeigt, das Formular beginnt deshalb immer leer.
+ */
 import { reactive, ref } from 'vue'
 
 import { backend } from '@/lib/backend'
@@ -49,7 +51,6 @@ async function saveToServer() {
   const newPassword = (form.newPassword || '').trim()
   const repeatPassword = (form.repeatPassword || '').trim()
 
-  // einfache Client-Validierung
   if (!newPassword || !repeatPassword) {
     error.value = 'Bitte beide Felder ausfüllen.'
     throw new Error('validation')
@@ -72,7 +73,6 @@ async function saveToServer() {
 }
 
 async function resetToServer() {
-  // Für Passwort gibt es keinen „load“ – wir leeren einfach das Formular.
   form.newPassword = ''
   form.repeatPassword = ''
   error.value = ''; okMsg.value = ''

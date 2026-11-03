@@ -28,6 +28,10 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * Die Kopfleiste: Programmname, Tabs der Seiten, angemeldeter Nutzer und Abmelden.
+ * Der Soundminer-Tab erscheint nur, wenn das Modul in der Konfiguration eingeschaltet ist.
+ */
 import { backend } from '@/lib/backend'
 import { useProjektanlage } from '@/stores/Projektanlage'
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
@@ -44,7 +48,7 @@ const soundminerEnabled = ref(false)
 onMounted(() => {
   fetchModuleStatus()
   // Ein in der Konfiguration eingeschaltetes Modul soll sofort als Tab erscheinen
-  stopListening = window.electronAPI?.onConfigChanged?.(fetchModuleStatus)
+  stopListening = window.electronAPI.onConfigChanged(fetchModuleStatus)
 })
 onBeforeUnmount(() => stopListening?.())
 
@@ -60,12 +64,7 @@ async function fetchModuleStatus() {
 async function onLogout() {
   loggingOut.value = true
   try {
-    // Abmelden und zurück zur Anmeldung
-    if (window.electronAPI?.hideAndOpenPicker) {
-      await window.electronAPI.hideAndOpenPicker({ doLogout: true })
-    }
-  } catch (e) {
-    console.error('[Renderer] Logout failed', e)
+    await window.electronAPI.logout()
   } finally {
     loggingOut.value = false
   }

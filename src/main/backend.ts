@@ -1,7 +1,7 @@
 /**
  * Verbindet die Oberfläche mit der Fachlogik in src/core.
  *
- * Die Oberfläche ruft eine Funktion über ihren Namen auf (siehe src/renderer/lib/backend.js),
+ * Die Oberfläche ruft eine Funktion über ihren Namen auf (siehe src/renderer/lib/backend.ts),
  * die Anfrage kommt hier an und landet beim passenden Dienst. Nur Funktionen aus der
  * Liste unten sind von der Oberfläche aus erreichbar.
  *

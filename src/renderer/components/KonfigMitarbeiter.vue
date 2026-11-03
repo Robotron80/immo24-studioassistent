@@ -11,7 +11,7 @@
         <tr>
           <th>Name</th>
           <th>Kürzel</th>
-          <th style="width: 60px;"></th>
+          <th class="action-col"></th>
         </tr>
       </thead>
       <tbody>
@@ -70,45 +70,36 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * Konfiguration, Bereich Mitarbeiter: Mitarbeiter anlegen und Kürzel ändern.
+ * Löschen geht hier bewusst nicht, ein Mitarbeiter ist ein Ordner auf dem Speicher.
+ */
 import { ref, computed, onMounted } from 'vue'
 
 import { backend } from '@/lib/backend'
 
-// Server-Snapshot + lokale Arbeitskopie
-const original = ref({ mitarbeiter: [] as any[], version: '' })
-const staged   = ref<any[]>([]) // = mitarbeiter array (deep copy)
-const dirty    = ref(false)
+// Die Arbeitskopie: Gespeichert wird erst, wenn in der Konfiguration "Speichern" gedrückt wird
+const staged = ref<any[]>([])
+const dirty = ref(false)
 
 const error = ref('')
 const dialogError = ref('')
 
 const search = ref('')
 
-// ---- Helpers ----
-const deepClone = (x) => JSON.parse(JSON.stringify(x ?? null))
-
-const mitarbeiter = computed(() => staged.value)
 const filteredMitarbeiter = computed(() => {
   const q = (search.value || '').toLowerCase()
-  return mitarbeiter.value.filter(m =>
-    (m.name || '').toLowerCase().includes(q) ||
-    (m.kuerzel || '').toLowerCase().includes(q)
+  return staged.value.filter(m =>
+    m.name.toLowerCase().includes(q) ||
+    m.kuerzel.toLowerCase().includes(q)
   )
 })
 
-// ---- API: Snapshot laden ----
+/** Lädt die Mitarbeiter vom Speicher und verwirft die Arbeitskopie. */
 async function loadSnapshot() {
   error.value = ''
   try {
-    let arr: any[] = await backend.listUsers()
-    // Falls die API ein Array von Strings liefert, umwandeln:
-    if (Array.isArray(arr) && typeof arr[0] === 'string') {
-      arr = arr.map(name => ({ name, kuerzel: '' }))
-    }
-    // Falls Kürzel fehlt, mit leerem String auffüllen
-    arr = arr.map(m => ({ name: m.name, kuerzel: m.kuerzel || '' }))
-    original.value = { mitarbeiter: arr || [], version: '' }
-    staged.value   = deepClone(original.value.mitarbeiter)
+    staged.value = await backend.listUsers()
     dirty.value = false
   } catch (e) {
     error.value = e.message || 'Mitarbeiter konnten nicht geladen werden.'
@@ -116,14 +107,14 @@ async function loadSnapshot() {
 }
 onMounted(loadSnapshot)
 
-// ---- expose für Eltern (Konfiguration.vue) ----
+// Das nutzt Konfiguration.vue beim Speichern und Abbrechen
 defineExpose({
   isDirty: () => dirty.value,
-  getSnapshotForSave: () => ({ mitarbeiter: staged.value, version: original.value.version }),
+  getSnapshotForSave: () => ({ mitarbeiter: staged.value }),
   resetToServer: async () => { await loadSnapshot() }
 })
 
-// ---- UI: Mitarbeiter ----
+// Dialog: Neuer Mitarbeiter
 const newDialogOpen = ref(false)
 const newName = ref('')
 const newKuerzel = ref('')
@@ -149,7 +140,7 @@ function createMitarbeiter() {
   newDialogOpen.value = false
 }
 
-// ---- Kürzel bearbeiten ----
+// Dialog: Kürzel bearbeiten
 const editDialogOpen = ref(false)
 const editName = ref('')
 const editKuerzel = ref('')
@@ -170,7 +161,7 @@ function saveEditKuerzel() {
     editDialogError.value = 'Bitte Kürzel eingeben.'
     return
   }
-  // Prüfe auf Duplikate (außer für den aktuellen Eintrag)
+  // Dasselbe Kürzel darf kein anderer Mitarbeiter haben
   const existsKuerzel = staged.value.some((m, idx) =>
     idx !== editIndex && (m.kuerzel || '').toLowerCase() === kuerzel.toLowerCase()
   )

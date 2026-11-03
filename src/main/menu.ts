@@ -4,7 +4,7 @@
  */
 import { app, Menu, type MenuItemConstructorOptions } from 'electron'
 
-import { createPreferencesWindow, openDevTools, openPickerFlow } from './windows'
+import { createPreferencesWindow, logout as logoutUser, openDevTools } from './windows'
 
 /** Baut das Menü und setzt es. Wird einmal beim Programmstart aufgerufen. */
 export function installApplicationMenu(): void {
@@ -20,7 +20,7 @@ export function installApplicationMenu(): void {
     label: 'Abmelden',
     // Nur solange das Hauptfenster offen ist, siehe windows.ts
     enabled: false,
-    click: () => void openPickerFlow(),
+    click: () => logoutUser(),
   }
 
   const template: MenuItemConstructorOptions[] = [

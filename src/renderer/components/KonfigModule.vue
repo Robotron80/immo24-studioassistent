@@ -1,13 +1,11 @@
 <template>
   <v-card class="pa-4 mb-4">
     <div class="text-subtitle-1 font-weight-medium mb-2">Soundminer</div>
-    <div class="d-flex align-center mb-4" style="gap: 24px;">
+    <div class="d-flex align-center ga-6 mb-4">
       <v-checkbox
         v-model="staged.soundminerEnabled"
         label="Modul aktivieren"
-        density="comfortable"
         class="ma-0"
-        style="min-width: 0;"
       />
       <v-spacer />
       <v-select
@@ -15,10 +13,8 @@
         :items="soundminerVersions"
         label="Version"
         :disabled="!staged.soundminerEnabled"
-        density="comfortable"
-        style="max-width: 160px; min-width: 120px;"
         hide-details
-        class="ma-0"
+        class="module-version ma-0"
       />
     </div>
     <div class="d-flex align-center ga-2 mb-3">
@@ -28,7 +24,6 @@
         label="Soundminer Support Folder"
         :disabled="!staged.soundminerEnabled"
         class="flex-grow-1"
-        density="comfortable"
       />
       <v-btn
         :disabled="!staged.soundminerEnabled"
@@ -45,7 +40,6 @@
     <v-checkbox
       v-model="staged.renameEnabled"
       label="Umbenennen vorhandener Projekte erlauben"
-      density="comfortable"
       hide-details
       class="ma-0"
     />
@@ -53,20 +47,17 @@
       Erst einschalten, wenn das Umbenennen auf dem gemeinsamen Speicher getestet wurde.
     </div>
   </v-card>
+
+  <v-alert v-if="error" type="error">{{ error }}</v-alert>
 </template>
 
 <script setup lang="ts">
+/**
+ * Konfiguration, Bereich Module: Soundminer und das Umbenennen von Projekten einschalten.
+ */
 import { ref, reactive, computed, onMounted } from 'vue'
 
 import { backend } from '@/lib/backend'
-
-
-
-const soundminer = ref({
-  enabled: false,
-  path: '',
-  version: null,
-})
 
 const soundminerVersions = [
   'V6 Pro'
@@ -75,14 +66,8 @@ const soundminerVersions = [
 // Serverzustand + Arbeitskopie (UI-Felder bleiben flach: soundminerEnabled/Path/Version)
 const original = ref({ data:{ soundminerEnabled:false, soundminerPath:'', soundminerVersion:'', renameEnabled:false }, version:'' })
 const staged   = reactive({ soundminerEnabled:false, soundminerPath:'', soundminerVersion:'', renameEnabled:false })
-const loading  = ref(false)
 const error    = ref('')
 
-
-
-
-
-// Helpers
 const deepEqual = (a,b) => JSON.stringify(a) === JSON.stringify(b)
 const isDirty   = computed(() => !deepEqual(staged, original.value.data))
 const isSoundminerValid = computed(() => {
@@ -93,53 +78,41 @@ const isSoundminerValid = computed(() => {
 })
 
 async function loadSnapshot() {
-  loading.value = true; error.value = ''
+  error.value = ''
   try {
-    const snap: any = await backend.getModules() // {data:{...}, version:"..."}
-    // Mapping Backend -> UI
+    const snap: any = await backend.getModules()
+    // Die Oberfläche arbeitet mit flachen Feldern, das Backend mit verschachtelten
     const sm = snap?.data?.soundminer || {}
-
-
     original.value = {
       data: {
         soundminerEnabled: !!sm.enabled,
         soundminerPath:    typeof sm.supportPath === 'string' ? sm.supportPath : '',
         soundminerVersion: typeof sm.version === 'string' ? sm.version : '',
         renameEnabled: !!snap?.data?.umbenennen?.enabled
-          },
+      },
       version: snap?.version || ''
     }
     Object.assign(staged, original.value.data)
   } catch (e) {
     error.value = e.message || 'Module laden fehlgeschlagen'
-    console.error(e)
-  } finally {
-    loading.value = false
   }
 }
 onMounted(loadSnapshot)
 
-// Browsing functionality
-const canBrowse = typeof window !== 'undefined' && !!window.electronAPI?.pickFolder;
-
+/** Öffnet die Ordnerauswahl des Systems und übernimmt den gewählten Ordner. */
 async function browseInto(key, title) {
-  if (!canBrowse) return;
-  const defaultPath = staged[key] || undefined;
-  const picked = await window.electronAPI.pickFolder(title, defaultPath);
-  // DEBUG console.debug('[browseInto] picked:', picked, 'for', key, 'defaultPath:', defaultPath);
+  const picked = await window.electronAPI.pickFolder(title, staged[key] || undefined)
   if (typeof picked === 'string' && picked.length > 0) {
-    staged[key] = picked.replace(/\\/g, '/'); // Windows: Backslashes normalisieren
+    staged[key] = picked.replace(/\\/g, '/') // Windows: einheitlich mit Schrägstrich
   }
 }
 
-
-
-// Methoden für Elternkomponente exponieren
+// Das nutzt Konfiguration.vue beim Speichern und Abbrechen
 defineExpose({
   isDirty: () => isDirty.value,
   isSoundminerValid: () => isSoundminerValid.value,
   getSnapshotForSave: () => ({
-    // Mapping UI -> Backend
+    // Zurück ins Format des Backends
     version: original.value.version,
     data: {
       soundminer: {
@@ -152,5 +125,4 @@ defineExpose({
   }),
   resetToServer: async () => { await loadSnapshot() }
 })
-
 </script>

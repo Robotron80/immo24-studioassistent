@@ -82,6 +82,10 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * Die Seite Soundminer: Tab-Layouts zwischen diesem Rechner und dem Archiv kopieren.
+ * Alle 5 Sekunden wird geprüft, ob Soundminer läuft. Solange es läuft, lehnt das Backend das Kopieren ab.
+ */
 import { reactive, ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
 import PresetResultDialog from '@/components/PresetResultDialog.vue'

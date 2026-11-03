@@ -5,6 +5,9 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * Die Fußzeile mit Programmname und Version.
+ */
 import { onMounted, ref } from 'vue'
 
 const appVersion = ref('')

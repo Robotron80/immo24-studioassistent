@@ -22,6 +22,10 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * Das Grundgerüst aller Seiten. Anmeldung, Konfiguration und Assistent laufen in eigenen
+ * Fenstern und zeigen deshalb weder Kopf- noch Fußzeile.
+ */
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import AppBar from './AppBar.vue'

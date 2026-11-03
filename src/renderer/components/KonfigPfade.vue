@@ -6,7 +6,6 @@
           <v-text-field
             v-model="staged.PathMitarbeiter"
             label="Pfad Mitarbeiter"
-            density="comfortable"
             class="flex-grow-1"
           />
           <v-btn
@@ -20,7 +19,6 @@
           <v-text-field
             v-model="staged.PathProduktionen"
             label="Pfad Produktionen"
-            density="comfortable"
             class="flex-grow-1"
           />
           <v-btn
@@ -34,7 +32,6 @@
           <v-text-field
             v-model="staged.PathStammdaten"
             label="Pfad Stammdaten"
-            density="comfortable"
             class="flex-grow-1"
           />
           <v-btn
@@ -48,7 +45,6 @@
           <v-text-field
             v-model="staged.PathPTUser"
             label="Pfad Pro Tools User"
-            density="comfortable"
             class="flex-grow-1"
           />
           <v-btn
@@ -67,17 +63,18 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * Konfiguration, Bereich Pfade: die vier Ordner, mit denen das Programm arbeitet.
+ */
 import { ref, reactive, computed, onMounted } from 'vue'
 
 import { backend } from '@/lib/backend'
 
-// Serverzustand + Arbeitskopie
+// Stand vom Speicher und Arbeitskopie: Der Unterschied zeigt, ob etwas geändert wurde
 const original = ref({ data:{ PathMitarbeiter:'', PathProduktionen:'', PathStammdaten:'', PathPTUser:'' }, version:'' })
 const staged   = reactive({ PathMitarbeiter:'', PathProduktionen:'', PathStammdaten:'', PathPTUser:'' })
-const loading  = ref(false)
 const error    = ref('')
 
-// Helpers
 const deepEqual = (a,b) => JSON.stringify(a) === JSON.stringify(b)
 const isDirty   = computed(() => !deepEqual(staged, original.value.data))
 const isPfadeValid = computed(() => {
@@ -88,9 +85,9 @@ const isPfadeValid = computed(() => {
 });
 
 async function loadSnapshot() {
-  loading.value = true; error.value = ''
+  error.value = ''
   try {
-    const snap: any = await backend.getPaths() // {data:{...}, version:"..."}
+    const snap: any = await backend.getPaths()
     original.value = {
       data: {
         PathMitarbeiter: snap?.data?.PathMitarbeiter || '',
@@ -103,27 +100,19 @@ async function loadSnapshot() {
     Object.assign(staged, original.value.data)
   } catch (e) {
     error.value = e.message || 'Pfade laden fehlgeschlagen'
-  } finally {
-    loading.value = false
   }
 }
 onMounted(loadSnapshot)
 
-// Browsing functionality
-const canBrowse = typeof window !== 'undefined' && !!window.electronAPI?.pickFolder;
-
+/** Öffnet die Ordnerauswahl des Systems und übernimmt den gewählten Ordner. */
 async function browseInto(key, title) {
-  if (!canBrowse) return;
-  const defaultPath = staged[key] || undefined;
-  const picked = await window.electronAPI.pickFolder(title, defaultPath);
-  // DEBUG console.debug('[browseInto] picked:', picked, 'for', key, 'defaultPath:', defaultPath);
+  const picked = await window.electronAPI.pickFolder(title, staged[key] || undefined)
   if (typeof picked === 'string' && picked.length > 0) {
-    staged[key] = picked.replace(/\\/g, '/'); // Windows: Backslashes normalisieren
+    staged[key] = picked.replace(/\\/g, '/') // Windows: einheitlich mit Schrägstrich
   }
 }
 
-
-// Methoden für Elternkomponente exponieren
+// Das nutzt Konfiguration.vue beim Speichern und Abbrechen
 defineExpose({
   isDirty: () => isDirty.value,
   isPfadeValid: () => isPfadeValid.value,

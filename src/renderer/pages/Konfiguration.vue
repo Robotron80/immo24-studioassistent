@@ -80,6 +80,10 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * Das Fenster Konfiguration: hält die sechs Bereiche als Tabs zusammen und speichert sie gemeinsam.
+ * Jeder Bereich verwaltet seine Daten selbst und meldet über isDirty(), ob sich etwas geändert hat.
+ */
 import { ref, computed, nextTick, onMounted } from 'vue'
 import KonfigProduktionsbuch from '@/components/KonfigProduktionsbuch.vue'
 import KonfigMitarbeiter from '@/components/KonfigMitarbeiter.vue'
@@ -113,7 +117,7 @@ const moduleRef = ref<any>(null)
 const tab = ref('prod')
 const saving = ref(false)
 
-/* Speichern */
+/** Speichert alle Bereiche mit Änderungen und schließt danach das Fenster. */
 async function onSave() {
   let dirtySomething = false
 
@@ -127,7 +131,6 @@ async function onSave() {
   if (pfadeRef.value?.isDirty()) {
     if (!pfadeRef.value.isPfadeValid()) {
       alert('Bitte alle Pfade ausfüllen.')
-      saving.value = false
       return
     }
     dirtySomething = true
@@ -139,7 +142,6 @@ async function onSave() {
   if (schemaRef.value?.isDirty()) {
     if (!schemaRef.value.isSchemaValid()) {
       alert('Bitte alle Felder im Schema ausfüllen.')
-      saving.value = false
       return
     }
     dirtySomething = true
@@ -149,7 +151,6 @@ async function onSave() {
   if (moduleRef.value?.isDirty()) {
     if (!moduleRef.value.isSoundminerValid()) {
       alert('Bitte Pfad und Version für Soundminer angeben.')
-      saving.value = false
       return
     }
     dirtySomething = true
@@ -232,7 +233,7 @@ async function onSave() {
   }
 }
 
-/* Abbrechen = lokale Änderungen verwerfen */
+/** Abbrechen: lokale Änderungen verwerfen und das Fenster schließen. */
 async function onCancel() {
   await pbRef.value?.resetToServer()
   await pfadeRef.value?.resetToServer()
@@ -243,7 +244,7 @@ async function onCancel() {
   window.close?.()
 }
 
-/* Passwort-Dialog (gegen /api/check-password) */
+/* Passwort-Dialog */
 const authOpen = ref(true)
 const authPassword = ref('')
 const authError = ref('')
@@ -281,6 +282,3 @@ async function authenticate() {
   }
 }
 </script>
-<route lang="json">
-{ "meta": { "hideChrome": true } }
-</route>

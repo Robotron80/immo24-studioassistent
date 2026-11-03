@@ -13,7 +13,7 @@
 import { app, BrowserWindow, dialog, ipcMain, shell } from 'electron'
 
 import { backend, registerBackendIpc } from './backend'
-import { closeInitWindow, openPickerFlow, showMainWindow } from './windows'
+import { closeInitWindow, logout, showMainWindow } from './windows'
 
 /** Meldet alle Nachrichten an. Wird einmal beim Programmstart aufgerufen. */
 export function registerIpc(): void {
@@ -26,13 +26,7 @@ export function registerIpc(): void {
 
   ipcMain.on('app-quit', () => app.quit())
 
-  ipcMain.handle('renderer-hide-and-pick', async (_event, args?: { doLogout?: boolean }) => {
-    try {
-      return await openPickerFlow(args ?? { doLogout: true })
-    } catch (error) {
-      return { ok: false, error: String(error) }
-    }
-  })
+  ipcMain.handle('logout', () => logout())
 
   ipcMain.handle('close-init-window', () => closeInitWindow())
 

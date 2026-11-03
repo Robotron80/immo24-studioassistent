@@ -1,3 +1,8 @@
+/**
+ * Der Speicher der Seite Produktionsbuch: Formular, Auswahllisten und Projektliste.
+ * Hier steht auch der angemeldete Nutzer, den die Kopfleiste anzeigt.
+ * Die eigentliche Arbeit macht das Backend, dieser Speicher ruft es nur auf.
+ */
 import { defineStore } from 'pinia'
 
 import { localDate } from '../../core/dates'
@@ -48,7 +53,6 @@ export const useProjektanlage = defineStore('Projektanlage', {
       ohneMoid: false,
     },
     loading: { kunden:false, templates:false, rows:false, stufen:false, create:false },
-    error: null as string | null,
     activeUser: null as string | null,
     renameEnabled: false,
   }),

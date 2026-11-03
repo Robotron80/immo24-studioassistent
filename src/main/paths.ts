@@ -22,7 +22,7 @@ export function configureUserData(): void {
   }
 }
 
-/** Pfad zu einer Datei im Ordner assets, z. B. zum Anmeldefenster login.html. */
+/** Pfad zu einer Datei im Ordner assets, z. B. zum Ladefenster loading.html. */
 export function assetPath(...segments: string[]): string {
   return path.join(app.getAppPath(), 'assets', ...segments)
 }

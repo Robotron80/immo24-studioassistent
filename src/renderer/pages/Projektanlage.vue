@@ -8,9 +8,9 @@
       </v-btn-toggle>
     </div>
 
-    <!-- Card 2 + Card 3 in einer Zeile, mit Abstand dazwischen -->
+    <!-- Formular und Projektliste nebeneinander -->
     <v-row align="stretch">
-      <!-- Card 2: Formular (links) -->
+      <!-- Formular (links) -->
       <v-col cols="12" md="5">
         <v-card class="h-100">
           <v-card-text>
@@ -83,8 +83,6 @@
                   label="Template"
                   :disabled="!form.kunde"
                   :loading="loading.templates"
-
-                
                 />
               </v-col>
 
@@ -102,11 +100,10 @@
         </v-card>
       </v-col>
 
-      <!-- Card 3: Tabelle (rechts) -->
+      <!-- Projektliste (rechts) -->
       <v-col cols="12" md="7">
         <v-card class="h-100">
           <v-card-text>
-            <!-- Suchleiste volle Breite, kompakt -->
             <div class="d-flex align-center ga-2 mb-3">
               <v-text-field
                 v-model="search"
@@ -122,8 +119,6 @@
               :items="filteredRows"
               :headers="headers"
               :loading="loading.rows"
-              density="comfortable"
-                            item-key="moid"
               :items-per-page="10"
               show-current-page
               :hide-default-footer="filteredRows.length <= 10"
@@ -197,6 +192,10 @@
 
 
 <script setup lang="ts">
+/**
+ * Die Seite Produktionsbuch: ein neues Projekt anlegen oder eine weitere Session in einem
+ * vorhandenen. Die Regeln dafür stehen im Backend (src/core/projects.ts), hier nur die Bedienung.
+ */
 import { computed, nextTick, ref, onMounted, reactive, watch } from 'vue'
 import DatumFeld from '@/components/DatumFeld.vue'
 import RenameProjectDialog from '@/components/RenameProjectDialog.vue'
@@ -204,7 +203,7 @@ import { useProjektanlage } from '@/stores/Projektanlage'
 
 const store = useProjektanlage()
 
-// Bindings
+// Kurzformen für die Daten aus dem Speicher
 const form = computed(() => store.form)
 const kunden = computed(() => store.kunden)
 const templates = computed(() => store.templates)
@@ -213,9 +212,10 @@ const rows = computed(() => store.rows)
 const loading = computed(() => store.loading)
 const isVorhanden = computed(() => form.value.vorhanden === 'vorhanden')
 const formRef = ref<any>(null)
+const openDialog = ref(false)
+const lastCreatedProject = ref<any>(null)
 
-
-// Tabelle / Suche
+// Spalten der Projektliste
 const headers = computed(() => [
   { title: 'Datum', key: 'date', nowrap: true },
   { title: 'Projektname', key: 'projektname' },
@@ -266,11 +266,10 @@ const filteredRows = computed(() => {
   )
 })
 
-// Snackbar (lokal, simpel)
+// Kurze Meldung am unteren Rand
 const snack = reactive({ show:false, text:'', color:'primary' })
 function toast(msg, color='primary'){ Object.assign(snack, {show:true, text:msg, color}) }
 
-// Events
 function onKundeChange(k) {
   store.selectKunde(k)
   form.value.stufe = '' // Feld immer leeren!
@@ -310,7 +309,6 @@ async function onCreateClick(){
       toast(`Bitte ausfüllen: ${e.details.fields.join(', ')}`, 'error')
       return
     }
-    // Fallback
     toast(e.message || String(e) || 'Unbekannter Fehler', 'error')
   }
 }
@@ -323,7 +321,6 @@ async function launchProject() {
     toast('Projekt konnte nicht geöffnet werden: ' + (e.message || String(e)), 'error')
   }
 }
-
 
 
 function resetForm(){ store.resetForm() }
@@ -343,16 +340,12 @@ async function onRowClick(row) {
   form.value.ordner = row.ordner
   form.value.ohneMoid = !!row.ohneMoid
   form.value.stufe = (typeof row.stufe === 'string' && row.stufe) ? row.stufe : ''
-  // ggf. weitere Felder ergänzen
 }
 function refreshRows() {
   store.selectKunde(form.value.kunde)
 }
 
-// Init
 onMounted(() => {
   store.init()
 })
-const openDialog = ref(false)
-const lastCreatedProject = ref<any>(null)
 </script>

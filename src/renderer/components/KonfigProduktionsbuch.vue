@@ -116,13 +116,17 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * Konfiguration, Bereich Kunden: die Kunden und die Unterordner ihrer Projekte.
+ * Für neue Kunden entsteht beim Speichern der Ordner unter Produktionen.
+ */
 import { ref, computed, onMounted } from 'vue'
 
 import { backend } from '@/lib/backend'
 
-// Server-Snapshot (Original) + lokale Arbeitskopie (staged)
+// Stand vom Speicher und Arbeitskopie: Gespeichert wird erst in der Konfiguration
 const original = ref({ customers: [] as any[], version: '' })
-const staged   = ref<any[]>([])           // = customers array (deep copy)
+const staged   = ref<any[]>([])
 const dirty    = ref(false)
 
 const selectedKunde = ref('')
@@ -132,20 +136,18 @@ const loading = ref(false)
 const error = ref('')
 const dialogError = ref('')
 
-// ---- Helpers ----
 const deepClone = (x) => JSON.parse(JSON.stringify(x ?? null))
 
-const customers = computed(() => staged.value)
 const filteredCustomers = computed(() => {
   const q = (search.value || '').toLowerCase()
-  return customers.value.filter(c => (c.kunde || '').toLowerCase().includes(q))
+  return staged.value.filter(c => (c.kunde || '').toLowerCase().includes(q))
 })
 const currentCustomer = computed(() =>
-  customers.value.find(c => c.kunde === selectedKunde.value)
+  staged.value.find(c => c.kunde === selectedKunde.value)
 )
 const folders = computed(() => currentCustomer.value?.ordner || [])
 
-// ---- API: Snapshot laden ----
+/** Lädt die Kunden vom Speicher und verwirft die Arbeitskopie. */
 async function loadSnapshot() {
   loading.value = true; error.value = ''
   try {
@@ -158,21 +160,21 @@ async function loadSnapshot() {
     }
     dirty.value = false
   } catch (e) {
-    error.value = e.message || 'Snapshot laden fehlgeschlagen'
+    error.value = e.message || 'Kunden konnten nicht geladen werden.'
   } finally {
     loading.value = false
   }
 }
 onMounted(loadSnapshot)
 
-// ---- expose für Eltern (Konfiguration.vue) ----
+// Das nutzt Konfiguration.vue beim Speichern und Abbrechen
 defineExpose({
   isDirty: () => dirty.value,
   getSnapshotForSave: () => ({ customers: staged.value, version: original.value.version }),
   resetToServer: async () => { await loadSnapshot() }
 })
 
-// ---- UI: Kunden ----
+// Dialog: Neuer Kunde
 const newCustomerOpen = ref(false)
 const newCustomerName = ref('')
 
@@ -202,7 +204,7 @@ async function confirmDeleteCustomer(kunde) {
 
 function selectCustomer(k) { selectedKunde.value = k }
 
-// ---- UI: Ordner ----
+// Dialog: Ordner anlegen oder bearbeiten
 const folderDialogOpen = ref(false)
 const folderForm = ref({ mode:'new', originalName:'', name:'', label:'', ist_Produktionsstufe:false })
 
@@ -257,7 +259,7 @@ async function confirmDeleteFolder(f){
   if (cust.ordner.length !== before) { dirty.value = true }
 }
 
-// ---- Confirm helper ----
+// Sicherheitsabfrage vor dem Löschen, wartet auf die Antwort
 const confirmOpen = ref(false)
 const confirmTitle = ref(''); const confirmText = ref('')
 let confirmCb: any = null

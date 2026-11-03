@@ -28,16 +28,14 @@ const project = {
   stufeLabel: 'Dialog',
   template: 'Einzeln.ptxt',
 }
+const OLD = '2026-01-15 Alt AB12'
+const NEW = '2026-01-15 Neu CD34'
 const rename = {
   kunde: 'Kunde A',
-  date: '2026-01-15',
-  moid: 'AB12',
-  projektname: 'Alt',
+  ordner: OLD,
   neuerName: 'Neu',
   neueMoid: 'CD34',
 }
-const OLD = '2026-01-15 Alt AB12'
-const NEW = '2026-01-15 Neu CD34'
 
 const hasCode = (code: string) => (error: unknown) => error instanceof CoreError && error.code === code
 
@@ -127,14 +125,15 @@ test('prüft die neuen Namen', async (t) => {
   await assert.rejects(service.rename({ ...rename, neuerName: 'a:b' }), hasCode('validation_failed'))
   await assert.rejects(service.rename({ ...rename, neueMoid: '  ' }), hasCode('project_fields_missing'))
   await assert.rejects(service.rename({ ...rename, neuerName: 'Alt', neueMoid: 'AB12' }), hasCode('nichts_geaendert'))
-  await assert.rejects(service.rename({ ...rename, moid: 'ZZ99' }), hasCode('not_found'))
+  await assert.rejects(service.rename({ ...rename, ordner: 'Gibt es nicht' }), hasCode('not_found'))
+  await assert.rejects(service.rename({ ...rename, ordner: '../Fremd' }), hasCode('not_found'))
 })
 
 test('MoID wird großgeschrieben, reine Änderung der Schreibweise funktioniert', async (t) => {
   const { projects, service, customerDir } = await setup(t)
   await projects.createProject({ ...project, moid: 'XY01', projektname: 'Klein' })
 
-  const result = await service.rename({ ...rename, projektname: 'Klein', moid: 'XY01', neuerName: 'klein', neueMoid: 'xy01' })
+  const result = await service.rename({ ...rename, ordner: '2026-01-15 Klein XY01', neuerName: 'klein', neueMoid: 'xy01' })
 
   assert.equal(result.nach, '2026-01-15 klein XY01')
   assert.ok(fs.readdirSync(customerDir).includes('2026-01-15 klein XY01'))
@@ -173,8 +172,28 @@ test('ein Projekt lässt sich auf "keine MoID" umstellen und zurück', async (t)
   assert.equal(first.nach, '2026-01-15 Alt')
   assert.ok(fs.existsSync(path.join(customerDir, '2026-01-15 Alt')))
 
-  const back = await service.rename({ ...rename, moid: '', neuerName: 'Alt', neueMoid: 'AB99' })
+  const back = await service.rename({ ...rename, ordner: first.nach, neuerName: 'Alt', neueMoid: 'AB99' })
   assert.equal(back.nach, '2026-01-15 Alt AB99')
+})
+
+test('trifft bei gleichen Angaben genau das gewählte Projekt', async (t) => {
+  const { config, service, customerDir } = await setup(t)
+  const { version } = await config.getSchema()
+  await config.saveSchema({
+    version: version as string,
+    data: { projektordnerSchema: '{{datum}} {{projektname}} {{moid}} {{benutzer}}', sessionSchema: '{{projektname}} {{version}}' },
+  })
+  // Zwei Kollegen, gleicher Name, gleiches Datum, beide mit dem alten Platzhalter NOID
+  const meta = { erstellt_am: '2026-01-15', kunde: 'Kunde A', projektname: 'Zwilling', mo_id: 'NOID', user: 'Tester' }
+  for (const kuerzel of ['AA', 'ZZ']) {
+    fs.mkdirSync(path.join(customerDir, `2026-01-15 Zwilling NOID ${kuerzel}`))
+    fs.writeFileSync(path.join(customerDir, `2026-01-15 Zwilling NOID ${kuerzel}`, 'immo24-proj.json'), JSON.stringify(meta))
+  }
+
+  const result = await service.rename({ ...rename, ordner: '2026-01-15 Zwilling NOID ZZ', neuerName: 'Neu', neueMoid: 'EF56' })
+
+  assert.equal(result.nach, '2026-01-15 Neu EF56 ZZ')
+  assert.ok(fs.existsSync(path.join(customerDir, '2026-01-15 Zwilling NOID AA')), 'das andere Projekt bleibt unberührt')
 })
 
 test('ist standardmäßig aus und lässt sich einschalten', async (t) => {

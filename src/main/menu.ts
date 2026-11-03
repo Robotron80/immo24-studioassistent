@@ -16,7 +16,10 @@ export function installApplicationMenu(): void {
   }
 
   const logout: MenuItemConstructorOptions = {
+    id: 'logout',
     label: 'Abmelden',
+    // Nur solange das Hauptfenster offen ist, siehe windows.ts
+    enabled: false,
     click: () => void openPickerFlow(),
   }
 

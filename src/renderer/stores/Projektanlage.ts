@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 
+import { localDate } from '../../core/dates'
 import { checkWindowsName } from '../../core/names'
 import { backend, BackendError } from '@/lib/backend'
 // Dieselben Regeln wie im Backend, damit Formular und Prüfung nie auseinanderlaufen
@@ -38,7 +39,7 @@ export const useProjektanlage = defineStore('Projektanlage', {
       vorhanden: 'neu',
       projektname: '',
       moid: '',
-      datum: new Date().toISOString().slice(0,10),
+      datum: localDate(),
       stufe: '',
       template: '',
       // Bei vorhandenen Projekten: der in der Liste gewählte Projektordner
@@ -199,13 +200,12 @@ export const useProjektanlage = defineStore('Projektanlage', {
 
     // Nach dem Umbenennen: Liste neu laden, die alten Werte im Formular passen nicht mehr
     async resetAfterRename() {
-      Object.assign(this.form, { projektname: '', moid: '', ordner: '', ohneMoid: false, datum: new Date().toISOString().slice(0, 10) })
+      Object.assign(this.form, { projektname: '', moid: '', ordner: '', ohneMoid: false, datum: localDate() })
       await this.loadRows(this.form.kunde)
     },
 
     resetForm() {
-      const today = new Date().toISOString().slice(0,10)
-      this.form = { kunde:'', vorhanden:'neu', projektname:'', moid:'', datum: today, stufe:'', template:'', ordner:'', ohneMoid:false }
+      this.form = { kunde:'', vorhanden:'neu', projektname:'', moid:'', datum: localDate(), stufe:'', template:'', ordner:'', ohneMoid:false }
       this.rows = []
       this.stufen = []
     },

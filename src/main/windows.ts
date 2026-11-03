@@ -11,7 +11,7 @@
  * Die Variablen unten merken sich jeweils das offene Fenster. Geschlossene
  * Fenster werden auf null gesetzt, damit niemand mehr auf sie zugreift.
  */
-import { app, BrowserWindow, dialog, shell, type WebPreferences } from 'electron'
+import { app, BrowserWindow, dialog, Menu, shell, type WebPreferences } from 'electron'
 
 import { backend } from './backend'
 import { logLine, showOnceErrorBox } from './logger'
@@ -94,6 +94,19 @@ function isRendererUrl(url: URL): boolean {
   return url.protocol === 'file:' && url.pathname.endsWith('/dist/index.html')
 }
 
+/** Der Grundschutz der Fenster mit unserer Oberfläche. Jedes davon bekommt genau diesen. */
+function protectWindow(win: BrowserWindow, name: string): void {
+  attachCrashGuards(win, name)
+  restrictNavigation(win, (u) => isRendererUrl(u) || u.origin === devServerUrl())
+  openHttpsExternally(win)
+}
+
+/** "Abmelden" im Menü gibt es nur, solange jemand angemeldet ist, also das Hauptfenster offen ist. */
+function setLogoutEnabled(enabled: boolean): void {
+  const item = Menu.getApplicationMenu()?.getMenuItemById('logout')
+  if (item) item.enabled = enabled
+}
+
 // ────────────────────────────── Fenster ──────────────────────────────
 /** Öffnet das Anmeldefenster. Ist es schon offen, wird das vorhandene zurückgegeben. */
 export function createUserPickerWindow(): BrowserWindow {
@@ -107,9 +120,7 @@ export function createUserPickerWindow(): BrowserWindow {
     webPreferences: securePreferences(),
   })
   pickerWindow = win
-  attachCrashGuards(win, 'picker')
-  restrictNavigation(win, (u) => isRendererUrl(u) || u.origin === devServerUrl())
-  openHttpsExternally(win)
+  protectWindow(win, 'picker')
   win.once('ready-to-show', () => win.show())
   const devUrl = devServerUrl()
   if (devUrl) void win.loadURL(`${devUrl}/#/anmeldung`)
@@ -161,11 +172,10 @@ function createMainWindow(): BrowserWindow {
     webPreferences: securePreferences(),
   })
   mainWindow = win
-  attachCrashGuards(win, 'main')
-  restrictNavigation(win, (u) => isRendererUrl(u) || u.origin === devServerUrl())
-  openHttpsExternally(win)
+  protectWindow(win, 'main')
   win.on('closed', () => {
     mainWindow = null
+    setLogoutEnabled(false)
   })
   return win
 }
@@ -182,6 +192,7 @@ export async function showMainWindow(): Promise<void> {
   else await win.loadFile(rendererIndexPath())
   win.show()
   win.focus()
+  setLogoutEnabled(true)
   if (isOpen(pickerWindow)) pickerWindow.close()
   pickerWindow = null
 }
@@ -239,6 +250,7 @@ export function createPreferencesWindow(): void {
     webPreferences: securePreferences(),
   })
   prefWindow = win
+  protectWindow(win, 'konfiguration')
   win.setMenu(null)
   // Ohne Anmeldung ersetzt die Konfiguration das Anmeldefenster, beim Schließen kommt es wieder
   if (isOpen(pickerWindow)) pickerWindow.close()
@@ -247,7 +259,7 @@ export function createPreferencesWindow(): void {
   if (devUrl) void win.loadURL(`${devUrl}/#/konfiguration`)
   else void win.loadFile(rendererIndexPath(), { hash: '/konfiguration' })
   win.once('ready-to-show', () => win.show())
-  win.on('closed', async () => {
+  win.on('closed', () => {
     prefWindow = null
     // Das Hauptfenster soll geänderte Kunden, Vorlagen und Module gleich anzeigen
     if (isOpen(mainWindow)) mainWindow.webContents.send('config-changed')
@@ -267,9 +279,7 @@ export function createInitWindow(): void {
     webPreferences: securePreferences(),
   })
   initWindow = win
-  attachCrashGuards(win, 'init')
-  restrictNavigation(win, (u) => isRendererUrl(u) || u.origin === devServerUrl())
-  openHttpsExternally(win)
+  protectWindow(win, 'init')
   win.once('ready-to-show', () => win.show())
   const devUrl = devServerUrl()
   if (devUrl) void win.loadURL(`${devUrl}/#/Setupwizard`)

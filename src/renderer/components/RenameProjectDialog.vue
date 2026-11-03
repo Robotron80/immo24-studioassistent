@@ -113,9 +113,7 @@ watch(() => props.modelValue, (open) => {
 function request (extra = {}) {
   return {
     kunde: props.kunde,
-    date: props.project.date,
-    projektname: props.project.projektname,
-    moid: props.project.moid,
+    ordner: props.project.ordner,
     neuerName: neuerName.value,
     neueMoid: neueMoid.value,
     ohneMoid: ohneMoid.value,

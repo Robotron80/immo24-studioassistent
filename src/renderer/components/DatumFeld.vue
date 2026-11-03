@@ -34,6 +34,8 @@
  */
 import { computed, ref } from 'vue'
 
+import { localDate } from '../../core/dates'
+
 const props = defineProps<{
   modelValue: string
   label: string
@@ -59,10 +61,7 @@ const asDate = computed(() => parse(props.modelValue))
 
 /** Übernimmt den Tag aus dem Kalender, in Ortszeit, damit sich das Datum nicht verschiebt. */
 function pick (date: unknown) {
-  const value = date as Date
-  const month = String(value.getMonth() + 1).padStart(2, '0')
-  const day = String(value.getDate()).padStart(2, '0')
-  emit('update:modelValue', `${value.getFullYear()}-${month}-${day}`)
+  emit('update:modelValue', localDate(date as Date))
   open.value = false
 }
 </script>

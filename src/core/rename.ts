@@ -26,10 +26,8 @@ import type { SessionService } from './session.ts'
 
 export interface RenameInput {
   kunde?: string
-  /** Der bisherige Stand, so wie ihn die Projektliste zeigt */
-  date?: string
-  projektname?: string
-  moid?: string
+  /** Der Projektordner aus der Projektliste */
+  ordner?: string
   /** Die gewünschten neuen Werte */
   neuerName?: string
   neueMoid?: string
@@ -70,22 +68,20 @@ async function findLockFiles(projectDir: string): Promise<string[]> {
 }
 
 export function createRenameService(config: ConfigService, session: SessionService, isRunning: IsProcessRunning) {
-  /** Findet den Projektordner über die Metadaten, das ist unabhängig vom Namensschema. */
+  /**
+   * Der Ordner kommt direkt aus der Projektliste und bestimmt das Projekt eindeutig.
+   * Er muss direkt unter dem Kunden liegen und ein Projekt von uns sein.
+   */
   async function findProject(input: RenameInput) {
     const { data: paths } = await config.getPaths()
     const root = path.join(String(paths.PathProduktionen ?? ''), String(input.kunde ?? ''))
-    const entries = await fs.readdir(root, { withFileTypes: true }).catch(() => [])
-    for (const entry of entries) {
-      if (!entry.isDirectory()) continue
-      const meta = await readJsonOrNull(path.join(root, entry.name, 'immo24-proj.json'))
-      if (isPlainObject(meta)
-        && meta.projektname === input.projektname
-        && meta.mo_id === input.moid
-        && meta.erstellt_am === input.date) {
-        return { root, folder: entry.name, meta: meta as ProjectMeta }
-      }
+    const folder = String(input.ordner ?? '')
+    if (!folder || folder !== path.basename(folder)) throw new CoreError('not_found')
+    const meta = await readJsonOrNull(path.join(root, folder, 'immo24-proj.json'))
+    if (!isPlainObject(meta) || typeof meta.projektname !== 'string' || typeof meta.mo_id !== 'string') {
+      throw new CoreError('not_found')
     }
-    throw new CoreError('not_found')
+    return { root, folder, meta: meta as ProjectMeta }
   }
 
   /**

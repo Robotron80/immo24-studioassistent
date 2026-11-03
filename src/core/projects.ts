@@ -16,6 +16,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 
 import type { ConfigService } from './config.ts'
+import { localDate } from './dates.ts'
 import { CoreError } from './errors.ts'
 import { exists, readJsonOrNull, writeFileAtomic } from './files.ts'
 import { findProjectByMoid, isPlaceholderMoid } from './moid.ts'
@@ -282,7 +283,7 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
       const stage = customers.find((customer) => customer.kunde === data.kunde)?.ordner?.find((item) => item.name === data.stufe)
       const filename = nextSessionName(await fs.readdir(stageDir), sessionSchema, {
         ...values,
-        datum: new Date().toISOString().slice(0, 10),
+        datum: localDate(),
         benutzer: user.kuerzel.normalize('NFC'),
         produktionsstufe: (stage?.label ?? data.stufe).normalize('NFC'),
         // Auch Name und MoID zählen nicht: Nach dem Umbenennen zählt die Version weiter

@@ -1,0 +1,24 @@
+# Sucht einmal pro Woche nach neuen Versionen und schlägt sie als Pull Request gegen "next" vor.
+# Große Versionssprünge kommen nicht von selbst, die entscheiden wir von Hand.
+# GitHub liest diese Datei nur vom Standard-Branch, sie liegt deshalb auch auf "main".
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    target-branch: next
+    schedule:
+      interval: weekly
+    ignore:
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
+    groups:
+      abhaengigkeiten:
+        patterns: ['*']
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: next
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ['*']

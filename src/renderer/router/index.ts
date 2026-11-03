@@ -6,6 +6,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 import DefaultLayout from '@/layouts/default.vue'
+import Anmeldung from '@/pages/Anmeldung.vue'
 import Konfiguration from '@/pages/Konfiguration.vue'
 import Projektanlage from '@/pages/Projektanlage.vue'
 import ProTools from '@/pages/ProTools.vue'
@@ -20,6 +21,7 @@ export default createRouter({
       component: DefaultLayout,
       children: [
         { path: '', redirect: '/projektanlage' },
+        { path: 'anmeldung', component: Anmeldung },
         { path: 'projektanlage', component: Projektanlage },
         { path: 'protools', component: ProTools },
         { path: 'soundminer', component: Soundminer },

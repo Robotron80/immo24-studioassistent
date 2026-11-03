@@ -4,7 +4,7 @@
       <AppBar />
       <v-main>
         <router-view v-slot="{ Component }">
-          <component :is="Component" class="page-root" />
+          <component :is="Component" />
         </router-view>
       </v-main>
       <AppFooter />
@@ -14,7 +14,7 @@
     <template v-else>
       <v-main>
         <router-view v-slot="{ Component }">
-          <component :is="Component" class="page-root" />
+          <component :is="Component" />
         </router-view>
       </v-main>
     </template>
@@ -29,13 +29,8 @@ import AppFooter from '@/components/AppFooter.vue'
 
 const route = useRoute()
 
-// Routen ohne AppBar/Footer
-const HIDE_CHROME = new Set(['/konfiguration', '/Setupwizard'])
+// Seiten ohne Kopf- und Fußzeile
+const HIDE_CHROME = new Set(['/anmeldung', '/konfiguration', '/Setupwizard'])
 
 const showChrome = computed(() => !HIDE_CHROME.has(route.path))
 </script>
-
-<style scoped>
-:deep(.v-main) { min-height: calc(100vh - 64px); }
-:deep(.page-root) { height: 100%; }
-</style>

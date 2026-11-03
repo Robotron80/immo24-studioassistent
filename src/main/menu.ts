@@ -4,7 +4,7 @@
  */
 import { app, Menu, type MenuItemConstructorOptions } from 'electron'
 
-import { createPreferencesWindow, openDevTools } from './windows'
+import { createPreferencesWindow, openDevTools, openPickerFlow } from './windows'
 
 /** Baut das Menü und setzt es. Wird einmal beim Programmstart aufgerufen. */
 export function installApplicationMenu(): void {
@@ -15,6 +15,11 @@ export function installApplicationMenu(): void {
     click: () => createPreferencesWindow(),
   }
 
+  const logout: MenuItemConstructorOptions = {
+    label: 'Abmelden',
+    click: () => void openPickerFlow(),
+  }
+
   const template: MenuItemConstructorOptions[] = [
     isMac
       ? {
@@ -23,6 +28,7 @@ export function installApplicationMenu(): void {
             { role: 'about' },
             { type: 'separator' },
             preferences,
+            logout,
             { type: 'separator' },
             { role: 'hide' },
             { role: 'hideOthers' },
@@ -33,7 +39,7 @@ export function installApplicationMenu(): void {
         }
       : {
           label: 'Datei',
-          submenu: [preferences, { type: 'separator' }, { role: 'quit' }],
+          submenu: [preferences, logout, { type: 'separator' }, { role: 'quit' }],
         },
     {
       label: 'Bearbeiten',

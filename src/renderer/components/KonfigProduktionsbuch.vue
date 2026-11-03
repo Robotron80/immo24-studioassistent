@@ -264,11 +264,3 @@ let confirmCb: any = null
 function confirm(title, text){ confirmTitle.value=title; confirmText.value=text; confirmOpen.value=true; return new Promise(res => confirmCb = res) }
 function confirmResolve(val){ confirmOpen.value=false; confirmCb?.(val) }
 </script>
-
-<style scoped>
-.pb-single-col {
-  max-width: 700px;
-  margin: 0 auto;
-  padding-bottom: 32px;
-}
-</style>

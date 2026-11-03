@@ -1,6 +1,6 @@
 <template>
-  <v-card class="pa-4 mb-4 shadow-card" variant="text">
-    <div class="schema-title mb-2">Soundminer</div>
+  <v-card class="pa-4 mb-4">
+    <div class="text-subtitle-1 font-weight-medium mb-2">Soundminer</div>
     <div class="d-flex align-center mb-4" style="gap: 24px;">
       <v-checkbox
         v-model="staged.soundminerEnabled"
@@ -24,6 +24,7 @@
     <div class="d-flex align-center ga-2 mb-3">
       <v-text-field
         v-model="staged.soundminerPath"
+        hide-details
         label="Soundminer Support Folder"
         :disabled="!staged.soundminerEnabled"
         class="flex-grow-1"
@@ -39,8 +40,8 @@
     </div>
   </v-card>
 
-  <v-card class="pa-4 mb-4 shadow-card" variant="text">
-    <div class="schema-title mb-2">Projekte umbenennen</div>
+  <v-card class="pa-4 mb-4">
+    <div class="text-subtitle-1 font-weight-medium mb-2">Projekte umbenennen</div>
     <v-checkbox
       v-model="staged.renameEnabled"
       label="Umbenennen vorhandener Projekte erlauben"
@@ -153,16 +154,3 @@ defineExpose({
 })
 
 </script>
-
-<style scoped>
-.shadow-card {
-  box-shadow: 0 2px 8px 0 rgba(60,60,60,0.07);
-  border-radius: 10px;
-  border: none;
-}
-.schema-title {
-  font-size: 1.05rem;
-  font-weight: 500;
-  color: #444;
-}
-</style>

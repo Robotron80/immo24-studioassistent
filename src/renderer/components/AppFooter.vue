@@ -1,8 +1,6 @@
 <template>
-  <v-footer app elevation="0">
-    <v-container class="py-1 text-caption opacity-70">
-      <span>immo24 Studioassistent v{{ appVersion }}</span>
-    </v-container>
+  <v-footer app class="text-caption text-medium-emphasis py-1">
+    immo24 Studioassistent v{{ appVersion }}
   </v-footer>
 </template>
 
@@ -13,9 +11,4 @@ const appVersion = ref('')
 onMounted(async () => {
   appVersion.value = await window.electronAPI.getAppVersion()
 })
-
 </script>
-
-<style scoped>
-.opacity-70 { opacity: .7 }
-</style>

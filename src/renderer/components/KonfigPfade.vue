@@ -1,8 +1,8 @@
 <template>
   <v-card flat>
     <v-card-text>
-      <div class="pfade-fields">
-        <div class="pfade-row">
+      <div class="d-flex flex-column ga-4">
+        <div class="d-flex align-center ga-2 w-100">
           <v-text-field
             v-model="staged.PathMitarbeiter"
             label="Pfad Mitarbeiter"
@@ -16,7 +16,7 @@
             Durchsuchen
           </v-btn>
         </div>
-        <div class="pfade-row">
+        <div class="d-flex align-center ga-2 w-100">
           <v-text-field
             v-model="staged.PathProduktionen"
             label="Pfad Produktionen"
@@ -30,7 +30,7 @@
             Durchsuchen
           </v-btn>
         </div>
-        <div class="pfade-row">
+        <div class="d-flex align-center ga-2 w-100">
           <v-text-field
             v-model="staged.PathStammdaten"
             label="Pfad Stammdaten"
@@ -44,7 +44,7 @@
             Durchsuchen
           </v-btn>
         </div>
-        <div class="pfade-row">
+        <div class="d-flex align-center ga-2 w-100">
           <v-text-field
             v-model="staged.PathPTUser"
             label="Pfad Pro Tools User"
@@ -134,20 +134,3 @@ defineExpose({
   resetToServer: async () => { await loadSnapshot() }
 })
 </script>
-
-<style scoped>
-.pfade-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-.pfade-row {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  width: 100%;
-}
-.flex-grow-1 {
-  flex-grow: 1;
-}
-</style>

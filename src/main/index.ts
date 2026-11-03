@@ -11,7 +11,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-import { app, BrowserWindow, session } from 'electron'
+import { app, BrowserWindow, nativeTheme, session } from 'electron'
 
 import { backend } from './backend'
 import { registerIpc } from './ipc'
@@ -24,8 +24,6 @@ import {
   createSplashWindow,
   createUserPickerWindow,
   focusActiveWindow,
-  listUserNames,
-  sendUsersToPicker,
 } from './windows'
 
 configureUserData()
@@ -91,7 +89,7 @@ async function startup(): Promise<void> {
   const status = await backend().config.getInitializeStatus()
 
   if (status.initialize.needsUserAction) createInitWindow()
-  else sendUsersToPicker(createUserPickerWindow(), await listUserNames())
+  else createUserPickerWindow()
 
   clearTimeout(splashTimer)
   closeSplashWindow()
@@ -99,6 +97,8 @@ async function startup(): Promise<void> {
 }
 
 app.whenReady().then(async () => {
+  // Die App ist immer hell, auch Titelleiste und Systemdialoge folgen nicht dem Dunkelmodus des Rechners
+  nativeTheme.themeSource = 'light'
   try {
     await startup()
   } catch (err) {

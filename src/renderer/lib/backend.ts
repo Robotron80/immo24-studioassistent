@@ -38,6 +38,7 @@ const MESSAGES: Record<string, string> = {
   schema_passt_nicht: 'Der Projektordner passt nicht zum aktuellen Namensschema und wird deshalb nicht angefasst.',
   protools_laeuft: 'Pro Tools läuft auf diesem Rechner. Bitte zuerst schließen.',
   session_offen: 'Im Projekt liegt eine Sperrdatei, vermutlich ist eine Session geöffnet.',
+  moid_vergeben: 'Diese Mo-ID ist schon vergeben.',
   umbenennen_blockiert: 'Der Ordner ließ sich nicht umbenennen, vermutlich ist darin eine Datei geöffnet.',
 }
 

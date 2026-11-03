@@ -100,7 +100,7 @@ export function createUserPickerWindow(): BrowserWindow {
   if (isOpen(pickerWindow)) return pickerWindow
   const win = new BrowserWindow({
     width: 420,
-    height: 300,
+    height: 340,
     resizable: false,
     frame: false,
     show: false,
@@ -108,10 +108,12 @@ export function createUserPickerWindow(): BrowserWindow {
   })
   pickerWindow = win
   attachCrashGuards(win, 'picker')
-  restrictNavigation(win, (u) => u.protocol === 'file:' && u.pathname.endsWith('/assets/login.html'))
+  restrictNavigation(win, (u) => isRendererUrl(u) || u.origin === devServerUrl())
   openHttpsExternally(win)
   win.once('ready-to-show', () => win.show())
-  void win.loadFile(assetPath('login.html'))
+  const devUrl = devServerUrl()
+  if (devUrl) void win.loadURL(`${devUrl}/#/anmeldung`)
+  else void win.loadFile(rendererIndexPath(), { hash: '/anmeldung' })
   win.on('closed', () => {
     pickerWindow = null
   })
@@ -197,23 +199,6 @@ export function openDevTools(): void {
   if (isOpen(mainWindow)) mainWindow.webContents.openDevTools({ mode: 'detach' })
 }
 
-/** Die Namen aller Mitarbeiter für das Anmeldefenster. */
-export async function listUserNames(): Promise<string[]> {
-  return (await backend().users.listUsers()).map((user) => user.name)
-}
-
-/** Schickt die Mitarbeiterliste ans Anmeldefenster und wartet nötigenfalls, bis es geladen ist. */
-export function sendUsersToPicker(win: BrowserWindow, users: string[]): void {
-  const send = () => win.webContents.send('users', users)
-  if (win.webContents.isLoading()) win.webContents.once('did-finish-load', send)
-  else send()
-}
-
-/** Aktualisiert die Liste im Anmeldefenster, falls es gerade offen ist. */
-export function refreshPickerUsers(users: string[]): void {
-  if (isOpen(pickerWindow)) pickerWindow.webContents.send('users', users)
-}
-
 /**
  * Der Ablauf beim Abmelden: zurück zur Anmeldung und das Hauptfenster schließen.
  * Bei der nächsten Anmeldung entsteht es neu, so bleibt nichts vom vorherigen Nutzer übrig.
@@ -223,7 +208,6 @@ export async function openPickerFlow({ doLogout = true }: { doLogout?: boolean }
   const picker = createUserPickerWindow()
   picker.show()
   picker.focus()
-  sendUsersToPicker(picker, await listUserNames())
   if (isOpen(prefWindow)) prefWindow.close()
   prefWindow = null
   if (isOpen(mainWindow)) mainWindow.close()
@@ -268,7 +252,7 @@ export function createPreferencesWindow(): void {
     // Das Hauptfenster soll geänderte Kunden, Vorlagen und Module gleich anzeigen
     if (isOpen(mainWindow)) mainWindow.webContents.send('config-changed')
     if (!isOpen(mainWindow) || !mainWindow.isVisible()) {
-      sendUsersToPicker(createUserPickerWindow(), await listUserNames())
+      createUserPickerWindow()
     }
   })
 }
@@ -298,9 +282,9 @@ export function createInitWindow(): void {
 }
 
 /** Nach erfolgreicher Einrichtung: Weiter zur Anmeldung und den Assistenten schließen. */
-export async function closeInitWindow(): Promise<boolean> {
+export function closeInitWindow(): boolean {
   if (!isOpen(initWindow)) return false
-  sendUsersToPicker(createUserPickerWindow(), await listUserNames())
+  createUserPickerWindow()
   initWindowClosedByApp = true
   initWindow.close()
   initWindow = null

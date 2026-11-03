@@ -1,0 +1,135 @@
+/*
+ * Das Design der ganzen App an einer Stelle.
+ *
+ * Grundregel: Wir nutzen die Bausteine und Hilfsklassen von Vuetify. Standardwerte wie
+ * Feldart und Kartenstil stehen in plugins/vuetify.ts. Hier steht nur, was Vuetify nicht
+ * von selbst kann. Bitte keine eigenen Stile in einzelnen Seiten anlegen.
+ */
+
+/* Scrollbalken nur, wenn die Seite wirklich scrollt */
+html {
+  overflow-y: auto;
+}
+
+/* Knöpfe und Tabs in normaler Schreibweise statt in Großbuchstaben */
+.v-btn,
+.v-tab {
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+/* Der gewählte Tab fällt auch über die Schrift auf, nicht nur über den Strich darunter */
+.v-tab--selected {
+  color: rgb(var(--v-theme-primary));
+  font-weight: 600;
+}
+
+/* Statuspunkt: grün oder rot, der Text daneben sagt dasselbe auch ohne Farbe */
+.status-dot {
+  border-radius: 50%;
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+}
+
+/* Zeilen der Projektliste */
+.project-row:hover {
+  background: rgba(var(--v-theme-primary), 0.06);
+}
+.project-row--selected,
+.project-row--selected:hover {
+  background: rgba(var(--v-theme-primary), 0.14);
+}
+
+/* Platzhalter im Namensschema und Vorschau eines Namens */
+.chip {
+  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  border-radius: 16px;
+  display: inline-block;
+  font-size: 0.875rem;
+  margin: 2px 0;
+  padding: 2px 8px;
+  user-select: none;
+}
+.preview-box,
+code {
+  background: rgba(var(--v-theme-on-surface), 0.06);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+.preview-box {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 6px 10px;
+}
+
+/* Lange Pfade umbrechen statt abschneiden */
+.path-text {
+  font-family: monospace;
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+}
+.wrap-subtitle {
+  -webkit-line-clamp: unset;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+/* Fenster ohne Titelleiste (Anmeldung) lassen sich an der Fläche verschieben */
+.drag-region {
+  -webkit-app-region: drag;
+}
+.drag-region .v-input,
+.drag-region .v-btn {
+  -webkit-app-region: no-drag;
+}
+
+/* Konfiguration: volle Fensterhöhe, Tabs oben und Knöpfe unten bleiben beim Scrollen stehen */
+.konfig-root {
+  height: 100vh;
+  width: 100vw;
+}
+.konfig-root .v-container {
+  max-width: none;
+}
+.sticky-top-bar,
+.sticky-bottom-bar {
+  background: rgb(var(--v-theme-surface));
+  position: sticky;
+  z-index: 2;
+}
+.sticky-top-bar {
+  top: 0;
+}
+.sticky-bottom-bar {
+  border-top: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  bottom: 0;
+  padding: 12px 16px;
+}
+
+/* Mo-ID-Zeile: zwei Drittel Feld, ein Drittel Knopf, rechts bündig mit den anderen Feldern */
+.moid-row {
+  align-items: start;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 2fr 1fr;
+  margin-bottom: 22px;
+}
+
+/* Die Checkbox sitzt in einem Rahmen wie die Felder daneben und schließt so rechts bündig ab */
+.moid-keine {
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.38);
+  border-radius: 4px;
+  height: 48px;
+  padding-left: 4px;
+}
+.moid-keine.v-input--disabled {
+  border-color: rgba(var(--v-theme-on-surface), 0.2);
+}
+.moid-keine .v-selection-control {
+  min-height: 46px;
+}
+.moid-keine .v-label {
+  height: 100%;
+  width: 100%;
+}

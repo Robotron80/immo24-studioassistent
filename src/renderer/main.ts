@@ -10,6 +10,9 @@ import { registerPlugins } from '@/plugins'
 // Components
 import App from './App.vue'
 
+// Styles
+import './styles/app.css'
+
 // Composables
 import { createApp } from 'vue'
 

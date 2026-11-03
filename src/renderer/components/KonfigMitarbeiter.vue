@@ -1,5 +1,5 @@
 <template>
-  <div class="mitarbeiter-fullwidth">
+  <div class="w-100 pb-8">
     <div class="d-flex align-center justify-end mb-2">
       <v-btn size="small" @click="openNewDialog">Neuer Mitarbeiter</v-btn>
     </div>
@@ -185,12 +185,3 @@ function saveEditKuerzel() {
   }
 }
 </script>
-
-<style scoped>
-.mitarbeiter-fullwidth {
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  padding-bottom: 32px;
-}
-</style>

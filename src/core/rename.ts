@@ -19,7 +19,8 @@ import path from 'node:path'
 import type { ConfigService } from './config.ts'
 import { CoreError } from './errors.ts'
 import { exists, isPlainObject, readJsonOrNull, writeFileAtomic } from './files.ts'
-import { checkWindowsName, comparableName, escapeRegExp, fillTemplate } from './names.ts'
+import { findProjectByMoid } from './moid.ts'
+import { checkWindowsName, comparableName, escapeRegExp, fillTemplate, looseSpaces, tidyName } from './names.ts'
 import type { IsProcessRunning } from './presets.ts'
 import type { SessionService } from './session.ts'
 
@@ -32,6 +33,8 @@ export interface RenameInput {
   /** Die gewünschten neuen Werte */
   neuerName?: string
   neueMoid?: string
+  /** Das Projekt soll keine MoID mehr tragen */
+  ohneMoid?: boolean
   /** true: Sperrdateien wurden geprüft und sind verwaist */
   trotzSperre?: boolean
 }
@@ -98,26 +101,27 @@ export function createRenameService(config: ConfigService, session: SessionServi
       moid: meta.mo_id.normalize('NFC'),
       kunde: String(input.kunde).normalize('NFC'),
     }
-    const pattern = escapeRegExp(schema)
+    const pattern = looseSpaces(escapeRegExp(schema)
       .replace(/\\{\\{benutzer\\}\\}/g, '(?<benutzer>.+)')
-      .replace(/\\{\\{(\w+)\\}\\}/g, (_match, key: string) => (oldValues[key] ? escapeRegExp(oldValues[key]) : '.*'))
+      .replace(/\\{\\{(\w+)\\}\\}/g, (_match, key: string) => (oldValues[key] ? escapeRegExp(oldValues[key]) : '.*')))
     const match = new RegExp(`^${pattern}$`).exec(folder.normalize('NFC'))
     // Passt der Ordner nicht zum Schema, wurde es geändert. Dann lieber nichts anfassen.
     if (!match) throw new CoreError('schema_passt_nicht', { folder })
-    return fillTemplate(schema, {
+    const name = fillTemplate(schema, {
       ...oldValues,
       projektname: neuerName,
       moid: neueMoid,
       benutzer: match.groups?.benutzer ?? '',
     })
+    return neueMoid ? name : tidyName(name)
   }
 
   /** Alles, was Vorschau und Umbenennen gemeinsam brauchen. */
   async function plan(input: RenameInput) {
     session.requireUser()
     const neuerName = String(input?.neuerName ?? '').trim()
-    const neueMoid = String(input?.neueMoid ?? '').trim().toUpperCase()
-    const missing = [!neuerName && 'projektname', !neueMoid && 'moid'].filter(Boolean)
+    const neueMoid = input?.ohneMoid ? '' : String(input?.neueMoid ?? '').trim().toUpperCase()
+    const missing = [!neuerName && 'projektname', !neueMoid && !input?.ohneMoid && 'moid'].filter(Boolean)
     if (missing.length) throw new CoreError('project_fields_missing', { fields: missing })
 
     const details = [
@@ -135,6 +139,11 @@ export function createRenameService(config: ConfigService, session: SessionServi
     if (!sameFolder && (await exists(path.join(root, target)))) {
       throw new CoreError('project_exists', { zielPfad: path.join(root, target) })
     }
+
+    // Eine MoID soll es beim Kunden nur einmal geben, das Projekt selbst zählt dabei nicht
+    const { data: paths } = await config.getPaths()
+    const existing = await findProjectByMoid(String(paths.PathProduktionen ?? ''), String(input.kunde ?? ''), neueMoid, folder)
+    if (existing) throw new CoreError('moid_vergeben', { projekt: existing })
 
     return {
       root,

@@ -1,9 +1,9 @@
 <template>
-  <v-container fluid class="pa-0 ma-0 settings-root">
+  <v-container fluid class="pa-0 ma-0 konfig-root">
     <div class="d-flex flex-column h-100 w-100">
 
       <!-- Tab-Leiste ganz oben, außerhalb des scrollbaren Inhalts -->
-      <div class="tabs-sticky">
+      <div class="sticky-top-bar">
         <v-tabs v-model="tab" class="mb-4">
           <v-tab value="prod">Produktionsbuch</v-tab>
           <v-tab value="mitarbeiter">Mitarbeiter</v-tab>
@@ -39,7 +39,7 @@
       </div>
 
       <!-- sticky actions unten -->
-      <div class="actions-sticky d-flex justify-end ga-2">
+      <div class="sticky-bottom-bar d-flex justify-end ga-2">
         <v-btn variant="outlined" @click="onCancel">Abbrechen</v-btn>
         <v-btn color="primary" :loading="saving" :disabled="authOpen" @click="onSave">Speichern</v-btn>
       </div>
@@ -47,7 +47,7 @@
 
     <!-- Passwort-Dialog -->
     <v-dialog v-model="authOpen" persistent max-width="420">
-      <v-card>
+      <v-card @keydown.esc="cancelAuth">
         <v-card-title class="text-h6">Konfiguration entsperren</v-card-title>
         <v-card-text>
           <v-alert v-if="authError" type="error" class="mb-3">{{ authError }}</v-alert>
@@ -68,6 +68,7 @@
           </div>
         </v-card-text>
         <v-card-actions class="justify-end">
+          <v-btn variant="text" @click="cancelAuth">Abbrechen</v-btn>
           <v-btn color="primary" :loading="authLoading" :disabled="!canSubmit" @click="authenticate">
             Entsperren
           </v-btn>
@@ -191,7 +192,6 @@ async function onSave() {
       section = 'Mitarbeiter'
       await backend.saveUsers(mitarbeiterRef.value.getSnapshotForSave())
       await mitarbeiterRef.value.resetToServer()
-      await window.electronAPI?.refreshUsers?.() // User-Liste in main aktualisieren
     }
     // Passwort
     if (pwRef.value?.isDirty()) {
@@ -263,6 +263,11 @@ onMounted(async () => {
 
 function onPwKey(ev){ try { capsOn.value = !!ev.getModifierState?.('CapsLock') } catch {} }
 
+/** Abbrechen oder Esc im Passwort-Dialog: Ohne Passwort gibt es hier nichts zu tun, das Fenster schließt. */
+function cancelAuth() {
+  window.close?.()
+}
+
 async function authenticate() {
   authError.value = ''; authLoading.value = true
   try {
@@ -276,27 +281,6 @@ async function authenticate() {
   }
 }
 </script>
-
-<style scoped>
-.settings-root { height: 100vh; width: 100vw; }
-.actions-sticky {
-  position: sticky;
-  bottom: 0;
-  padding: 12px 16px;
-  background: rgb(var(--v-theme-surface));
-  border-top: 1px solid rgba(0,0,0,.08);
-}
-.tabs-sticky {
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  background: rgb(var(--v-theme-surface), 1);
-  /* Optional: Schatten für bessere Sichtbarkeit */
-  box-shadow: 0 2px 8px -6px rgba(0,0,0,0.08);
-}
-:deep(.v-container) { max-width: none; }
-</style>
-
 <route lang="json">
 { "meta": { "hideChrome": true } }
 </route>

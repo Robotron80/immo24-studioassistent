@@ -107,8 +107,9 @@ Unterschieden wird zwischen **Neuem Projekt** und **Vorhandenem Projekt**.
 #### Neues Projekt
 Formularfelder:
 - **Kunde** → aus Konfiguration  
-- **Datum** → Standard = aktuelles Datum  
+- **Datum** → Standard = aktuelles Datum, immer im Format JJJJ-MM-TT  
 - **Mo-ID** → Medienorganisations-ID, eindeutige vierstellige ID  
+  Eine Mo-ID soll es nur einmal geben. Ist sie bei diesem Kunden schon vergeben, führt das Programm zum vorhandenen Projekt. Andere Kunden werden dabei nicht durchsucht, weil das auf dem gemeinsamen Speicher zu lange dauert. Hat ein Projekt keine Mo-ID, wird neben dem Feld **keine** angehakt. Ältere Projekte mit `NOID` oder `xxxx` gelten ebenfalls als Projekte ohne Mo-ID.
 - **Projektname** → Arbeitstitel/Klarname  
 - **Produktionsstufe** → Unterordner, in dem die Pro Tools Session angelegt wird. Verfügbare Stufen werden im Konfigurations-Menü angelegt.  
 - **Template** → Vorlagen aus `Mitarbeiter/<Name>/immo24/templates/*.ptxt`  

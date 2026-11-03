@@ -8,7 +8,7 @@
             <v-icon :color="STATUS[detail.status].color" :icon="STATUS[detail.status].icon" />
           </template>
           <v-list-item-title>{{ LABELS[detail.category] || detail.category }}</v-list-item-title>
-          <v-list-item-subtitle class="note">{{ detail.note || STATUS[detail.status].text }}</v-list-item-subtitle>
+          <v-list-item-subtitle class="wrap-subtitle">{{ detail.note || STATUS[detail.status].text }}</v-list-item-subtitle>
         </v-list-item>
       </v-list>
       <v-card-actions class="justify-end">
@@ -48,12 +48,3 @@ const LABELS: Record<string, string> = {
   preflight: 'Prüfung vor dem Start',
 }
 </script>
-
-<style scoped>
-/* Pfade sind lang: Text umbrechen statt abschneiden */
-.note {
-  white-space: normal;
-  overflow-wrap: anywhere;
-  -webkit-line-clamp: unset;
-}
-</style>

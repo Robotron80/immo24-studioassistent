@@ -37,9 +37,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // Meldet, dass die Konfiguration geschlossen wurde und sich Daten geändert haben können
   onConfigChanged: (callback: () => void) => on<void>('config-changed', callback),
 
-  // Mitarbeiterliste neu laden und an Picker senden
-  refreshUsers: () => ipcRenderer.invoke('refresh-users'),
-
   // Fenster verstecken + Picker öffnen (optional Logout)
   hideAndOpenPicker: (options?: { doLogout?: boolean }) =>
     ipcRenderer.invoke('renderer-hide-and-pick', options ?? { doLogout: true }),
@@ -47,9 +44,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   closeInitWindow: () => ipcRenderer.invoke('close-init-window'),
 })
 
-// Funktionen für das Anmeldefenster (assets/login.html)
+// Funktionen für das Anmeldefenster (pages/Anmeldung.vue)
 contextBridge.exposeInMainWorld('picker', {
-  onUsers: (callback: (users: string[]) => void) => on<string[]>('users', callback),
   choose: (user: string) => ipcRenderer.send('user-picked', user),
   quit: () => ipcRenderer.send('app-quit'),
 })

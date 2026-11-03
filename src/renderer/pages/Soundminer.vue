@@ -4,21 +4,19 @@
     <!-- Kopf: Titel + Ampel -->
     <div class="d-flex align-center justify-space-between mb-4">
       <div class="d-flex align-center ga-3">
-        <v-icon size="24">mdi-dots-grid</v-icon>
         <div>
           <div class="text-subtitle-1 font-weight-medium">Soundminer Presets</div>
           <div class="text-caption text-medium-emphasis">Auswahl unten, dann Store/Recall</div>
         </div>
       </div>
-      <div class="d-flex align-center ga-2">
-        <span :class="['status-dot', isOnline ? 'online' : 'offline']"></span>
-        <span class="text-body-2">{{ isOnline ? 'Soundminer läuft' : 'Soundminer nicht geöffnet' }}</span>
+      <div class="d-flex align-center ga-2 text-body-2">
+        <span class="status-dot" :class="isOnline ? 'bg-success' : 'bg-error'" />
+        {{ isOnline ? 'Soundminer läuft' : 'Soundminer nicht geöffnet' }}
       </div>
     </div>
 
     <!-- Kategorie 1 -->
-    <v-card class="mb-3" outlined>
-      <v-divider />
+    <v-card class="mb-3">
       <v-list density="compact">
         <v-list-item v-for="item in cat1" :key="item.key">
           <template #prepend>
@@ -31,8 +29,7 @@
 
     
     <!-- Kategorie 2 
-    <v-card class="mb-3" outlined>
-      <v-divider />
+    <v-card class="mb-3">
       <v-list density="compact">
         <v-list-item v-for="item in cat2" :key="item.key">
           <template #prepend>
@@ -43,8 +40,7 @@
     </v-card> -->
 
     <!-- Kategorie 3 
-    <v-card class="mb-3" outlined>
-      <v-divider />
+    <v-card class="mb-3">
       <v-list density="compact">
         <v-list-item v-for="item in cat3" :key="item.key">
           <template #prepend>
@@ -55,10 +51,10 @@
     </v-card> -->
 
     <!-- Sticky Action-Bar -->
-    <div class="actions-sticky d-flex justify-space-between align-center ga-2">
+    <div class="sticky-bottom-bar d-flex justify-space-between align-center ga-2">
       <div class="d-flex ga-2">
         <v-btn size="small" variant="outlined" @click="selectAllPresets">Alles auswählen</v-btn>
-        <v-btn size="small" variant="text" @click="deselectAllPresets">Alles abwählen</v-btn>
+        <v-btn size="small" variant="outlined" @click="deselectAllPresets">Alles abwählen</v-btn>
       </div>
       <div class="d-flex ga-2">
         <v-btn variant="outlined" :disabled="!anySelected" @click="onRecallAll">Recall</v-btn>
@@ -196,24 +192,3 @@ onBeforeUnmount(() => {
   if (pollTimer) clearInterval(pollTimer)
 })
 </script>
-
-<style scoped>
-.status-dot {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  margin-right: 6px;
-  background: #bbb;
-  border: 1px solid #888;
-  vertical-align: middle;
-}
-.status-dot.online {
-  background: #43a047; /* grün */
-  border-color: #388e3c;
-}
-.status-dot.offline {
-  background: #e53935; /* rot */
-  border-color: #b71c1c;
-}
-</style>

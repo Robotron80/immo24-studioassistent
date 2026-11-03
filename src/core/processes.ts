@@ -22,9 +22,11 @@ export const isProcessRunning: IsProcessRunning = async (app) => {
       return stdout.toLowerCase().includes(WINDOWS_EXE[app].toLowerCase())
     }
     if (process.platform === 'darwin') {
-      const script = `tell application "System Events" to (exists process "${MAC_PROCESS[app]}")`
-      const { stdout } = await run('osascript', ['-e', script], { timeout: 5000 })
-      return stdout.trim().toLowerCase() === 'true'
+      // pgrep braucht keine Berechtigung, anders als eine Abfrage über "System Events".
+      // -x heißt: exakter Name, die Hilfsprozesse wie "Pro Tools Helper" zählen also nicht.
+      // Findet es nichts, endet es mit einem Fehlercode und wir landen unten im catch.
+      await run('/usr/bin/pgrep', ['-x', MAC_PROCESS[app]], { timeout: 5000 })
+      return true
     }
   } catch {
     // Abfrage nicht möglich: gilt als "läuft nicht"

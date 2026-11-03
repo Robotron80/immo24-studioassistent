@@ -1,23 +1,19 @@
 <template>
-  <v-container fluid class="page-bg py-6">
-    <!-- Card 1: Auswahl neu / vorhanden (volle Breite) -->
-    <v-card class="mb-6 card" elevation="2">
-      <v-card-text class="py-4">
-        <div class="text-subtitle-1 font-weight-medium mb-2">Produktionsbuch</div>
-        <v-radio-group v-model="form.vorhanden" inline>
-          <v-radio label="neues Projekt" value="neu" />
-          <v-radio label="vorhandenes Projekt" value="vorhanden" />
-        </v-radio-group>
-      </v-card-text>
-    </v-card>
+  <v-container fluid>
+    <!-- Umschalter: neues oder vorhandenes Projekt -->
+    <div class="d-flex justify-center mb-4">
+      <v-btn-toggle v-model="form.vorhanden" mandatory color="primary" variant="outlined" divided density="comfortable">
+        <v-btn value="neu">Neues Projekt</v-btn>
+        <v-btn value="vorhanden">Vorhandenes Projekt</v-btn>
+      </v-btn-toggle>
+    </div>
 
     <!-- Card 2 + Card 3 in einer Zeile, mit Abstand dazwischen -->
-    <v-row class="g-6" align="stretch">
+    <v-row align="stretch">
       <!-- Card 2: Formular (links) -->
-      <v-col cols="12" md="6">
-        <v-card class="card h-100" elevation="2">
+      <v-col cols="12" md="5">
+        <v-card class="h-100">
           <v-card-text>
-            <!-- ==== Dein Formular-Inhalt ==== -->
             <v-form ref="formRef">
               <v-row dense>
               <v-col cols="12">
@@ -26,33 +22,36 @@
                   :items="kunden"
                   item-title="label" item-value="value"
                   label="Kunde"
-                  prepend-inner-icon="mdi-office-building-outline"
-                  variant="outlined" density="comfortable"
                   :loading="loading.kunden"
                   @update:modelValue="onKundeChange"
                 />
               </v-col>
 
               <v-col cols="12">
-                <v-text-field
-                  v-model="form.datum"
-                  label="Datum" type="date"
-                  :disabled="isVorhanden"
-                  prepend-inner-icon="mdi-calendar"
-                  variant="outlined" density="comfortable"
-                />
+                <DatumFeld v-model="form.datum" label="Datum" :disabled="isVorhanden" />
               </v-col>
 
               <v-col cols="12">
-                <v-text-field
-                  v-model="form.moid"
-                  label="Mo-ID" 
-                  @blur="store.normalizeNames()"
-                  :disabled ="isVorhanden"
-                  prepend-inner-icon="mdi-identifier"
-                  variant="outlined" density="comfortable"
-                  :rules="[(v)=> (v && String(v).trim().length) || 'Pflichtfeld', store.windowsRule('moid')]"
+                <div class="moid-row">
+                  <!-- Der key baut das Feld beim Umschalten neu auf, damit keine alte Fehlermeldung stehen bleibt -->
+                  <v-text-field
+                    :key="form.ohneMoid ? 'ohne' : 'mit'"
+                    v-model="form.moid"
+                    label="Mo-ID"
+                    maxlength="4"
+                    hide-details="auto"
+                    :disabled="isVorhanden || form.ohneMoid"
+                    :rules="[(v)=> form.ohneMoid || (v && String(v).trim().length) || 'Pflichtfeld', store.windowsRule('moid')]"
+                    @blur="store.normalizeNames()"
                   />
+                  <v-checkbox
+                    v-model="form.ohneMoid"
+                    class="moid-keine"
+                    label="keine Mo-ID"
+                    :disabled="isVorhanden"
+                    @update:model-value="store.normalizeNames()"
+                  />
+                </div>
               </v-col>
 
               <v-col cols="12">
@@ -60,8 +59,6 @@
                   v-model="form.projektname"
                   @blur="store.normalizeNames()"
                   label="Projektname" :disabled="isVorhanden"
-                  prepend-inner-icon="mdi-file-document-edit-outline"
-                  variant="outlined" density="comfortable"
                   clearable
                   :rules="[(v)=> (v && String(v).trim().length) || 'Pflichtfeld', store.windowsRule('projektname')]"
                 />
@@ -73,8 +70,6 @@
                   :items="stufen"
                   item-title="label" item-value="value"
                   label="Produktionsstufe"
-                  prepend-inner-icon="mdi-map-marker-outline"
-                  variant="outlined" density="comfortable"
                   :disabled="!form.kunde"
                   :loading="loading.stufen"
                 />
@@ -86,8 +81,6 @@
                   :items="templates"
                   item-title="label" item-value="value"
                   label="Template"
-                  prepend-inner-icon="mdi-file-outline"
-                  variant="outlined" density="comfortable"
                   :disabled="!form.kunde"
                   :loading="loading.templates"
 
@@ -99,7 +92,7 @@
                 <v-btn color="primary" :loading="loading.create" @click="onCreateClick">
                   Projekt anlegen
                 </v-btn>
-                <v-btn color="error" variant="elevated" @click="resetForm">
+                <v-btn variant="text" @click="resetForm">
                   Zurücksetzen
                 </v-btn>
               </v-col>
@@ -110,19 +103,18 @@
       </v-col>
 
       <!-- Card 3: Tabelle (rechts) -->
-      <v-col cols="12" md="6" v-if="isVorhanden">
-        <v-card class="card h-100" elevation="2">
+      <v-col cols="12" md="7">
+        <v-card class="h-100">
           <v-card-text>
             <!-- Suchleiste volle Breite, kompakt -->
-            <div class="d-flex align-center mb-3" style="gap: 8px;">
+            <div class="d-flex align-center ga-2 mb-3">
               <v-text-field
                 v-model="search"
-                placeholder="Search"
+                placeholder="Suchen"
                 prepend-inner-icon="mdi-magnify"
-                variant="outlined"
                 density="compact"
+                hide-details
                 class="flex-grow-1"
-                style="min-width:0;"
               />
               <v-btn icon="mdi-refresh" @click="refreshRows" :loading="loading.rows" variant="text" aria-label="Tabelle aktualisieren" />
             </div>
@@ -131,23 +123,22 @@
               :headers="headers"
               :loading="loading.rows"
               density="comfortable"
-              class="rounded-lg"
-              item-key="moid"
-              :items-per-page="5"
+                            item-key="moid"
+              :items-per-page="10"
               show-current-page
+              :hide-default-footer="filteredRows.length <= 10"
             >
               <template #item="{ item }">
                 <tr
-                  class="v-data-table__tr v-data-table__tr--hover"
-                  :class="{ 'selected-row': selectedRow === item.moid }"
+                  class="project-row cursor-pointer"
+                  :class="{ 'project-row--selected': selectedRow === item.ordner }"
                   @click="onRowClick(item)"
-                  style="cursor:pointer"
                 >
-                  <td>{{ item.date }}</td>
+                  <td class="text-no-wrap">{{ item.date }}</td>
                   <td>{{ item.projektname }}</td>
-                  <td>{{ item.moid }}</td>
+                  <td class="text-no-wrap">{{ item.ohneMoid ? '–' : item.moid }}</td>
                   <td>{{ item.user }}</td>
-                  <td v-if="store.renameEnabled" class="text-right">
+                  <td v-if="store.renameEnabled" class="text-right px-1">
                     <v-btn
                       icon="mdi-pencil"
                       size="x-small"
@@ -159,7 +150,7 @@
                 </tr>
               </template>
               <template #no-data>
-                <div class="text-body-2 text-medium-emphasis py-8">No data available</div>
+                <div class="text-body-2 text-medium-emphasis py-8">{{ form.kunde ? 'Keine Projekte' : 'Bitte einen Kunden wählen' }}</div>
               </template>
             </v-data-table>
           </v-card-text>
@@ -170,6 +161,22 @@
     <v-snackbar v-model="snack.show" :color="snack.color" timeout="3500">
       {{ snack.text }}
     </v-snackbar>
+
+    <!-- Mo-ID ist schon vergeben: anbieten, zum vorhandenen Projekt zu springen -->
+    <v-dialog v-model="conflict.open" max-width="480">
+      <v-card>
+        <v-card-title class="text-h6">Mo-ID schon vergeben</v-card-title>
+        <v-card-text>
+          Die Mo-ID <strong>{{ conflict.project?.moid }}</strong> gehört schon zum Projekt
+          <strong>{{ conflict.project?.projektname }}</strong> vom {{ conflict.project?.date }}
+          bei {{ conflict.project?.kunde }}.
+        </v-card-text>
+        <v-card-actions class="justify-end">
+          <v-btn variant="text" @click="conflict.open = false">Abbrechen</v-btn>
+          <v-btn color="primary" @click="jumpToConflict">Zum Projekt</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
     <RenameProjectDialog v-model="rename.open" :kunde="form.kunde" :project="rename.project" @renamed="onRenamed" />
 
@@ -190,7 +197,8 @@
 
 
 <script setup lang="ts">
-import { computed, ref, onMounted, reactive } from 'vue'
+import { computed, nextTick, ref, onMounted, reactive, watch } from 'vue'
+import DatumFeld from '@/components/DatumFeld.vue'
 import RenameProjectDialog from '@/components/RenameProjectDialog.vue'
 import { useProjektanlage } from '@/stores/Projektanlage'
 
@@ -209,12 +217,27 @@ const formRef = ref<any>(null)
 
 // Tabelle / Suche
 const headers = computed(() => [
-  { title: 'Datum', key: 'date' },
+  { title: 'Datum', key: 'date', nowrap: true },
   { title: 'Projektname', key: 'projektname' },
-  { title: 'Mo-ID', key: 'moid' },
+  { title: 'Mo-ID', key: 'moid', nowrap: true },
   { title: 'Mitarbeiter*in', key: 'user' },
   ...(store.renameEnabled ? [{ title: '', key: 'aktionen', sortable: false }] : []),
 ])
+
+// Mo-ID vergeben: zum vorhandenen Projekt wechseln und es in der Liste auswählen
+const conflict = reactive({ open: false, project: null as any })
+async function jumpToConflict() {
+  const target = conflict.project
+  conflict.open = false
+  // Die Eingaben gehörten zum neuen Projekt und passen nicht mehr
+  store.resetForm()
+  form.value.vorhanden = 'vorhanden'
+  await store.selectKunde(target.kunde)
+  await nextTick()
+  search.value = target.moid
+  const row = rows.value.find(r => r.ordner === target.ordner)
+  if (row) onRowClick(row)
+}
 
 // Umbenennen
 const rename = reactive({ open: false, project: null })
@@ -227,6 +250,11 @@ async function onRenamed({ nach }) {
   await store.resetAfterRename()
 }
 const search = ref('')
+// Ein neuer Modus oder Kunde beginnt ohne Suchfilter, sonst wirken Projekte wie verschwunden
+watch(() => [form.value.vorhanden, form.value.kunde], () => {
+  search.value = ''
+  selectedRow.value = null
+})
 const filteredRows = computed(() => {
   const q = search.value?.toLowerCase() || ''
   if (!q) return rows.value
@@ -266,6 +294,12 @@ async function onCreateClick(){
       openDialog.value = true
     }
   } catch(e) {
+    // Mo-ID vergeben: Dialog mit Sprung zum vorhandenen Projekt
+    if (e?.code === 'moid_vergeben') {
+      conflict.project = e.details.projekt
+      conflict.open = true
+      return
+    }
     // Ungültige Namen und fehlende Felder verständlich auflisten
     if (e?.code === 'validation_failed' && Array.isArray(e.details?.details)) {
       const lines = store.formatValidationDetails(e.details.details)
@@ -295,12 +329,19 @@ async function launchProject() {
 function resetForm(){ store.resetForm() }
 const selectedRow = ref<any>(null)
 
-function onRowClick(row) {
-  selectedRow.value = row.moid
+// Klick auf ein Projekt: Auch bei "Neues Projekt" geht es damit zum vorhandenen Projekt.
+// Erst den Modus wechseln, denn der Wechsel leert die Auswahl.
+async function onRowClick(row) {
+  if (!isVorhanden.value) {
+    form.value.vorhanden = 'vorhanden'
+    await nextTick()
+  }
+  selectedRow.value = row.ordner
   form.value.datum = row.date
   form.value.projektname = row.projektname
   form.value.moid = row.moid
   form.value.ordner = row.ordner
+  form.value.ohneMoid = !!row.ohneMoid
   form.value.stufe = (typeof row.stufe === 'string' && row.stufe) ? row.stufe : ''
   // ggf. weitere Felder ergänzen
 }
@@ -315,14 +356,3 @@ onMounted(() => {
 const openDialog = ref(false)
 const lastCreatedProject = ref<any>(null)
 </script>
-
-<style scoped>
-.v-data-table__tr--hover:hover {
-  background: #e3f2fd !important;
-  transition: background 0.15s;
-}
-
-.selected-row {
-  background: #bbdefb !important;
-}
-</style>

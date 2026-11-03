@@ -45,6 +45,19 @@ export function fillTemplate(template: string, values: Record<string, string>): 
   return template.replace(/{{(\w+)}}/g, (_match, key: string) => values[key] || '')
 }
 
+/**
+ * Räumt einen Namen auf, wenn ein Platzhalter leer geblieben ist, etwa die MoID:
+ * "Spot  - Dialog" wird zu "Spot - Dialog", und übrig gebliebene Trenner am Rand fallen weg.
+ */
+export function tidyName(name: string): string {
+  return name.replace(/\s+/g, ' ').replace(/^[\s_-]+|[\s_-]+$/g, '')
+}
+
+/** Macht aus einem Text mit Leerzeichen und " - " ein Suchmuster, das auch aufgeräumte Namen findet. */
+export function looseSpaces(pattern: string): string {
+  return pattern.replace(/ - /g, '\\s*-?\\s*').replace(/ /g, '\\s*')
+}
+
 /** Macht einen Text sicher für die Verwendung in einem regulären Ausdruck (Suchmuster). */
 export function escapeRegExp(text: string): string {
   return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')

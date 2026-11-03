@@ -77,7 +77,7 @@ async function runProjectsScenario({ call, dirs, snapshot }) {
   await call('Neu: Umlaute', 'POST', '/api/projektanlage/projekte', project({ moid: 'EF56', projektname: 'Größe äöü' }))
 
   // Bekannte Fehler: Node-RED antwortet nie, das neue Backend meldet einen Fehler
-  await call('Hänger: Kundenordner fehlt', 'POST', '/api/projektanlage/projekte', project({ kunde: 'Ohne Ordner' }))
+  await call('Hänger: Kundenordner fehlt', 'POST', '/api/projektanlage/projekte', project({ kunde: 'Ohne Ordner', moid: 'GH78' }))
   await call('Hänger: Kunde ohne Unterordner', 'POST', '/api/projektanlage/projekte', project({ kunde: 'Ohne Unterordner', stufe: 'x' }))
   snapshot('Nach Neuanlage', dirs.produktionen)
 

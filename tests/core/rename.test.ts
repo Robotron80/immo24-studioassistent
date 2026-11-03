@@ -158,6 +158,25 @@ test('stellt den alten Namen wieder her, wenn die Metadaten nicht geschrieben we
   assert.equal(movedToNew, false)
 })
 
+test('die neue MoID darf nicht vergeben sein, das Projekt selbst zählt nicht', async (t) => {
+  const { projects, service } = await setup(t)
+  await projects.createProject({ ...project, moid: 'ZZ01', projektname: 'Fremd' })
+
+  await assert.rejects(service.rename({ ...rename, neueMoid: 'ZZ01' }), hasCode('moid_vergeben'))
+  assert.equal((await service.rename({ ...rename, neueMoid: 'AB12', neuerName: 'Nur Name' })).nach, '2026-01-15 Nur Name AB12')
+})
+
+test('ein Projekt lässt sich auf "keine MoID" umstellen und zurück', async (t) => {
+  const { service, customerDir } = await setup(t)
+
+  const first = await service.rename({ ...rename, neuerName: 'Alt', neueMoid: '', ohneMoid: true })
+  assert.equal(first.nach, '2026-01-15 Alt')
+  assert.ok(fs.existsSync(path.join(customerDir, '2026-01-15 Alt')))
+
+  const back = await service.rename({ ...rename, moid: '', neuerName: 'Alt', neueMoid: 'AB99' })
+  assert.equal(back.nach, '2026-01-15 Alt AB99')
+})
+
 test('ist standardmäßig aus und lässt sich einschalten', async (t) => {
   const { config, service } = await setup(t)
   assert.equal(await service.isEnabled(), false)

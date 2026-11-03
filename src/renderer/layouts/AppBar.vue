@@ -1,6 +1,6 @@
 <template>
-  <v-app-bar app flat density="comfortable" height="64" class="border-b">
-    <v-toolbar-title class="toolbar-title">immo24 Studioassistent</v-toolbar-title>
+  <v-app-bar app flat height="64" class="border-b">
+    <div class="text-h6 text-no-wrap flex-shrink-0 px-4">immo24 Studioassistent</div>
 
     <v-tabs
       :model-value="$route.path"
@@ -10,21 +10,20 @@
       height="64"
       slider-color="primary"
     >
-      <v-tab :value="'/projektanlage'" :to="{ path: '/projektanlage' }">Projektanlage</v-tab>
+      <v-tab :value="'/projektanlage'" :to="{ path: '/projektanlage' }">Produktionsbuch</v-tab>
       <v-tab :value="'/protools'" :to="{ path: '/protools' }">Pro Tools</v-tab>
       <v-tab v-if="soundminerEnabled" :value="'/soundminer'" :to="{ path: '/soundminer' }">Soundminer</v-tab>
     </v-tabs>
 
     <v-spacer />
 
-    <div class="d-flex align-center ga-2">
-      <v-chip :color="isLoggedIn ? 'primary' : undefined" variant="outlined" size="small">
-        {{ displayName }}
-      </v-chip>
-      <v-btn size="small" variant="text" :disabled="!isLoggedIn || loggingOut" @click="onLogout">
+    <!-- Name und Abmelden bilden einen Block: der Name ist nur Anzeige, Abmelden der Knopf -->
+    <v-btn-group border divided density="compact" class="me-4 flex-shrink-0">
+      <v-btn tag="div" readonly variant="text">{{ displayName }}</v-btn>
+      <v-btn color="primary" variant="tonal" :disabled="!isLoggedIn || loggingOut" @click="onLogout">
         Abmelden
       </v-btn>
-    </div>
+    </v-btn-group>
   </v-app-bar>
 </template>
 
@@ -72,15 +71,3 @@ async function onLogout() {
   }
 }
 </script>
-
-<style scoped>
-.border-b { border-bottom: 1px solid rgba(0,0,0,0.08); }
-.toolbar-title {
-  min-width: 240px;
-  max-width: 100vw;
-  flex-shrink: 0;
-  white-space: nowrap;
-  overflow: visible;
-  text-overflow: unset;
-}
-</style>

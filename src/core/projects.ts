@@ -18,7 +18,8 @@ import path from 'node:path'
 import type { ConfigService } from './config.ts'
 import { CoreError } from './errors.ts'
 import { exists, readJsonOrNull, writeFileAtomic } from './files.ts'
-import { checkWindowsName, escapeRegExp, fillTemplate } from './names.ts'
+import { findProjectByMoid, isPlaceholderMoid } from './moid.ts'
+import { checkWindowsName, escapeRegExp, fillTemplate, looseSpaces, tidyName } from './names.ts'
 import type { SessionService } from './session.ts'
 import type { Kunde, StammdatenService } from './stammdaten.ts'
 
@@ -26,6 +27,8 @@ export interface ProjectInput {
   kunde?: string
   datum?: string
   moid?: string
+  /** Das Projekt hat keine MoID, etwa weil es nicht in der Datenbank steht */
+  ohneMoid?: boolean
   projektname?: string
   stufe?: string
   template?: string
@@ -47,7 +50,7 @@ function trimNames(input: ProjectInput): ProjectInput {
 
 /** Prüft Pflichtfelder und alle Namen, die später zu Ordnern oder Dateien werden. */
 function validate(input: ProjectInput): Required<Pick<ProjectInput, (typeof REQUIRED_FIELDS)[number]>> {
-  const missing = REQUIRED_FIELDS.filter((field) => !input?.[field])
+  const missing = REQUIRED_FIELDS.filter((field) => !input?.[field] && !(field === 'moid' && input?.ohneMoid))
   if (missing.length) throw new CoreError('project_fields_missing', { fields: missing })
 
   const details = (['projektname', 'moid', 'kunde'] as const)
@@ -66,11 +69,11 @@ function validate(input: ProjectInput): Required<Pick<ProjectInput, (typeof REQU
  */
 function nextSessionName(existingFiles: string[], schema: string, values: Record<string, string>, wildcards: string[]): string {
   const normalized = schema.normalize('NFC')
-  const pattern = escapeRegExp(normalized)
+  const pattern = looseSpaces(escapeRegExp(normalized)
     .replace(/\\{\\{version\\}\\}/g, 'v(\\d+)')
     .replace(/\\{\\{(\w+)\\}\\}/g, (_match, key: string) => (
       wildcards.includes(key) || !values[key] ? '.*' : escapeRegExp(values[key])
-    ))
+    )))
   const regex = new RegExp(`^${pattern}\\.ptx$`)
 
   let highest = 0
@@ -78,7 +81,8 @@ function nextSessionName(existingFiles: string[], schema: string, values: Record
     const match = regex.exec(file.normalize('NFC'))
     if (match?.[1]) highest = Math.max(highest, parseInt(match[1], 10))
   }
-  return `${fillTemplate(normalized, { ...values, version: `v${highest + 1}` })}.ptx`
+  const name = fillTemplate(normalized, { ...values, version: `v${highest + 1}` })
+  return `${values.moid ? name : tidyName(name)}.ptx`
 }
 
 export function createProjectService(config: ConfigService, stammdaten: StammdatenService, session: SessionService) {
@@ -148,8 +152,16 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
 
       const rows = await Promise.all(entries.filter((entry) => entry.isDirectory()).map(async (entry) => {
         const meta = await readJsonOrNull(path.join(root, entry.name, 'immo24-proj.json')) as Record<string, string> | null
-        if (!meta?.erstellt_am || !meta.projektname || !meta.mo_id || !meta.user) return null
-        return { date: meta.erstellt_am, projektname: meta.projektname, moid: meta.mo_id, user: meta.user, ordner: entry.name }
+        if (!meta?.erstellt_am || !meta.projektname || typeof meta.mo_id !== 'string' || !meta.user) return null
+        return {
+          date: meta.erstellt_am,
+          projektname: meta.projektname,
+          moid: meta.mo_id,
+          user: meta.user,
+          ordner: entry.name,
+          // Auch alte Projekte mit NOID oder xxxx gelten als "ohne MoID"
+          ohneMoid: isPlaceholderMoid(meta.mo_id),
+        }
       }))
       // Neueste zuerst, bei gleichem Datum alphabetisch
       return rows
@@ -166,7 +178,7 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
     async createProject(input: ProjectInput) {
       // Die MoID schreiben wir bei neuen Projekten immer groß
       const trimmed = trimNames(input)
-      const data = validate({ ...trimmed, moid: trimmed.moid?.toUpperCase() })
+      const data = validate({ ...trimmed, moid: input?.ohneMoid ? '' : trimmed.moid?.toUpperCase() })
       const user = session.requireUser()
       const { produktionen, mitarbeiter, projektordnerSchema, sessionSchema } = await settings()
 
@@ -193,8 +205,13 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
         benutzer: user.kuerzel,
         kunde: data.kunde,
       }
-      const zielPfad = path.join(customerDir, fillTemplate(projektordnerSchema, values))
+      const folderName = fillTemplate(projektordnerSchema, values)
+      const zielPfad = path.join(customerDir, data.moid ? folderName : tidyName(folderName))
       if (await exists(zielPfad)) throw new CoreError('project_exists', { zielPfad })
+
+      // Eine MoID soll es beim Kunden nur einmal geben: Die Oberfläche führt dann zum Projekt
+      const existing = await findProjectByMoid(produktionen, data.kunde, data.moid)
+      if (existing) throw new CoreError('moid_vergeben', { projekt: existing })
 
       // Schritt 4: Anlegen. Ein fehlender Kundenordner wird dabei ergänzt.
       const customerFolderCreated = !(await exists(customerDir))

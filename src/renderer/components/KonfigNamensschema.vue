@@ -13,9 +13,9 @@
       <v-alert v-if="error" type="error" class="mb-4">{{ error }}</v-alert>
 
       <!-- Projektordner-Schema Card -->
-      <v-card class="pa-4 mb-4 shadow-card" variant="text">
-        <div class="schema-title mb-2">Projektordner-Schema</div>
-        <div class="mb-2 param-label">Verfügbare Parameter</div>
+      <v-card class="pa-4 mb-4">
+        <div class="text-subtitle-1 font-weight-medium mb-2">Projektordner-Schema</div>
+        <div class="mb-2 text-body-2 text-medium-emphasis">Verfügbare Parameter</div>
         <div class="mb-3" style="display: flex; gap: 8px; flex-wrap: wrap;">
           <span
             v-for="ph in projektordnerPlaceholders"
@@ -40,9 +40,9 @@
       </v-card>
 
       <!-- Session-Schema Card -->
-      <v-card class="pa-4 mb-4 shadow-card" variant="text">
-        <div class="schema-title mb-2">Session-Schema</div>
-        <div class="mb-2 param-label">Verfügbare Parameter</div>
+      <v-card class="pa-4 mb-4">
+        <div class="text-subtitle-1 font-weight-medium mb-2">Session-Schema</div>
+        <div class="mb-2 text-body-2 text-medium-emphasis">Verfügbare Parameter</div>
         <div class="mb-3" style="display: flex; gap: 8px; flex-wrap: wrap;">
           <span
             v-for="ph in sessionPlaceholders"
@@ -171,51 +171,3 @@ const sessionSchemaValid = computed(() =>
   staged.sessionSchema.includes('{{version}}')
 )
 </script>
-
-<style scoped>
-.shadow-card {
-  box-shadow: 0 2px 8px 0 rgba(60,60,60,0.07);
-  border-radius: 10px;
-  border: none;
-}
-.schema-title {
-  font-size: 1.05rem;
-  font-weight: 500;
-  color: #444;
-}
-.param-label {
-  font-size: 0.95rem;
-  font-weight: 400;
-  color: #666;
-}
-.chip {
-  display: inline-block;
-  padding: 2px 8px;
-  margin: 2px 0;
-  background: #f5f5f5;
-  color: #333;
-  border: 1px solid #ccc;
-  border-radius: 16px;
-  font-size: 0.95em;
-  font-weight: 500;
-  user-select: none;
-}
-.preview-box {
-  background: #f4f6f8;
-  border-radius: 6px;
-  padding: 6px 10px;
-  margin-top: 4px;
-  display: inline-block;
-}
-.text-body-1 {
-  font-size: 1.08rem;
-  font-weight: 300;
-  color: #222;
-  margin-bottom: 1.5rem;
-}
-code {
-  background: #f4f6f8;
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-</style>

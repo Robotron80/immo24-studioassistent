@@ -43,6 +43,8 @@ export const useProjektanlage = defineStore('Projektanlage', {
       template: '',
       // Bei vorhandenen Projekten: der in der Liste gewählte Projektordner
       ordner: '',
+      // Projekt ohne Mo-ID, etwa weil es nicht in der Datenbank steht
+      ohneMoid: false,
     },
     loading: { kunden:false, templates:false, rows:false, stufen:false, create:false },
     error: null as string | null,
@@ -122,7 +124,7 @@ export const useProjektanlage = defineStore('Projektanlage', {
 
     // MoID immer groß, keine Leerzeichen am Rand. Läuft auch beim Verlassen der Felder.
     normalizeNames() {
-      this.form.moid = String(this.form.moid ?? '').trim().toUpperCase()
+      this.form.moid = this.form.ohneMoid ? '' : String(this.form.moid ?? '').trim().toUpperCase()
       this.form.projektname = String(this.form.projektname ?? '').trim()
     },
 
@@ -130,7 +132,7 @@ export const useProjektanlage = defineStore('Projektanlage', {
       const f = this.form, fehlende: string[] = []
       if (!f.kunde) fehlende.push('Kunde')
       if (!f.datum) fehlende.push('Datum')
-      if (!f.moid) fehlende.push('Mo-ID')
+      if (!f.moid && !f.ohneMoid) fehlende.push('Mo-ID')
       if (!f.projektname) fehlende.push('Projektname')
       if (!f.stufe) fehlende.push('Produktionsstufe')
       if (!f.template) fehlende.push('Template')
@@ -173,8 +175,10 @@ export const useProjektanlage = defineStore('Projektanlage', {
         throw new Error('Bitte in der Liste ein Projekt auswählen.')
       }
 
-      const { kunde, projektname, moid, datum, template, stufe, ordner } = this.form
-      const payload = { kunde, projektname, moid, datum, template, stufe, ordner }
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(this.form.datum)) throw new Error('Das Datum muss das Format JJJJ-MM-TT haben.')
+
+      const { kunde, projektname, moid, datum, template, stufe, ordner, ohneMoid } = this.form
+      const payload = { kunde, projektname, moid, datum, template, stufe, ordner, ohneMoid }
 
       this.loading.create = true
       try {
@@ -195,13 +199,13 @@ export const useProjektanlage = defineStore('Projektanlage', {
 
     // Nach dem Umbenennen: Liste neu laden, die alten Werte im Formular passen nicht mehr
     async resetAfterRename() {
-      Object.assign(this.form, { projektname: '', moid: '', ordner: '', datum: new Date().toISOString().slice(0, 10) })
+      Object.assign(this.form, { projektname: '', moid: '', ordner: '', ohneMoid: false, datum: new Date().toISOString().slice(0, 10) })
       await this.loadRows(this.form.kunde)
     },
 
     resetForm() {
       const today = new Date().toISOString().slice(0,10)
-      this.form = { kunde:'', vorhanden:'neu', projektname:'', moid:'', datum: today, stufe:'', template:'', ordner:'' }
+      this.form = { kunde:'', vorhanden:'neu', projektname:'', moid:'', datum: today, stufe:'', template:'', ordner:'', ohneMoid:false }
       this.rows = []
       this.stufen = []
     },

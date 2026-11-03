@@ -14,9 +14,12 @@ interface Window {
     openSession(file: string): Promise<string>
     pickFolder(title?: string, defaultPath?: string): Promise<string | null>
     onConfigChanged(callback: () => void): () => void
-    refreshUsers(): Promise<string[]>
     hideAndOpenPicker(options?: { doLogout?: boolean }): Promise<{ ok: boolean }>
     closeInitWindow(): Promise<boolean>
+  }
+  picker: {
+    choose(user: string): void
+    quit(): void
   }
 }
 

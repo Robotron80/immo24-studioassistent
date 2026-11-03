@@ -35,13 +35,14 @@ test('verhält sich wie die Referenz, bis auf die bewussten Korrekturen', async 
   const base = '<BASE>/Produktionen/Ohne Ordner'
 
   // Korrektur: Ein fehlender Kundenordner wird angelegt, das Projekt entsteht
+  const NO_FOLDER_PROJECT = '2026-01-15 Testprojekt GH78'
   stepNamed('Hänger: Kundenordner fehlt').response = {
     status: 200,
     body: {
       ok: true,
-      zielPfad: `${base}/${PROJECT_FOLDER}`,
-      templateDest: `${base}/${PROJECT_FOLDER}/02_Dialogschnitt`,
-      filename: '2026-01-15 Testprojekt AB12 - Dialog TE v1.ptx',
+      zielPfad: `${base}/${NO_FOLDER_PROJECT}`,
+      templateDest: `${base}/${NO_FOLDER_PROJECT}/02_Dialogschnitt`,
+      filename: `${NO_FOLDER_PROJECT} - Dialog TE v1.ptx`,
       kundenordnerAngelegt: true,
     },
   }
@@ -66,13 +67,13 @@ test('verhält sich wie die Referenz, bis auf die bewussten Korrekturen', async 
     delete files[`Produktionen/Ohne Unterordner/${PROJECT_FOLDER}/immo24-proj.json`]
     Object.assign(files, {
       [`Produktionen/Ohne Ordner/`]: null,
-      [`Produktionen/Ohne Ordner/${PROJECT_FOLDER}/`]: null,
-      [`Produktionen/Ohne Ordner/${PROJECT_FOLDER}/01_Material/`]: null,
-      [`Produktionen/Ohne Ordner/${PROJECT_FOLDER}/02_Dialogschnitt/`]: null,
-      [`Produktionen/Ohne Ordner/${PROJECT_FOLDER}/02_Dialogschnitt/${PROJECT_FOLDER} - Dialog TE v1.ptx`]: 'einzeln',
-      [`Produktionen/Ohne Ordner/${PROJECT_FOLDER}/10_Mischung/`]: null,
-      [`Produktionen/Ohne Ordner/${PROJECT_FOLDER}/immo24-proj.json`]:
-        files[`Produktionen/Kunde A/${PROJECT_FOLDER}/immo24-proj.json`].replace('Kunde A', 'Ohne Ordner'),
+      [`Produktionen/Ohne Ordner/${NO_FOLDER_PROJECT}/`]: null,
+      [`Produktionen/Ohne Ordner/${NO_FOLDER_PROJECT}/01_Material/`]: null,
+      [`Produktionen/Ohne Ordner/${NO_FOLDER_PROJECT}/02_Dialogschnitt/`]: null,
+      [`Produktionen/Ohne Ordner/${NO_FOLDER_PROJECT}/02_Dialogschnitt/${NO_FOLDER_PROJECT} - Dialog TE v1.ptx`]: 'einzeln',
+      [`Produktionen/Ohne Ordner/${NO_FOLDER_PROJECT}/10_Mischung/`]: null,
+      [`Produktionen/Ohne Ordner/${NO_FOLDER_PROJECT}/immo24-proj.json`]:
+        files[`Produktionen/Kunde A/${PROJECT_FOLDER}/immo24-proj.json`].replace('Kunde A', 'Ohne Ordner').replace('AB12', 'GH78'),
     })
   }
 
@@ -80,7 +81,10 @@ test('verhält sich wie die Referenz, bis auf die bewussten Korrekturen', async 
   const actual = JSON.parse(JSON.stringify(env.steps))
   for (const step of actual) {
     if (step.request?.startsWith('GET /api/projektanlage/projekte') && Array.isArray(step.response.body)) {
-      for (const row of step.response.body) delete row.ordner
+      for (const row of step.response.body) {
+        delete row.ordner
+        delete row.ohneMoid
+      }
     }
   }
   assert.deepEqual(actual, expected)
@@ -205,6 +209,62 @@ test('Folgeversion nimmt nur echte Projektordner direkt unter dem Kunden', async
   await assert.rejects(projects.addSession({ ...project, ordner: 'Gibtsnicht' }), hasCode('not_found'))
   await assert.rejects(projects.addSession({ ...project, ordner: `../Kunde A/${PROJECT_FOLDER}` }), hasCode('not_found'))
   await assert.rejects(projects.addSession({ ...project, ordner: 'Fremder Ordner' }), hasCode('not_found'))
+})
+
+test('Projekt ohne MoID: Namen bleiben aufgeräumt, Versionen zählen weiter', async (t) => {
+  const { dirs, projects } = await setup(t)
+  const input = { ...project, moid: 'wird ignoriert', ohneMoid: true }
+
+  const created = await projects.createProject(input)
+  assert.equal(created.filename, '2026-01-15 Testprojekt - Dialog TE v1.ptx')
+  const ordner = '2026-01-15 Testprojekt'
+  assert.ok(fs.existsSync(path.join(dirs.produktionen, 'Kunde A', ordner)))
+
+  const [row] = await projects.listProjects('Kunde A')
+  assert.deepEqual([row.moid, row.ohneMoid, row.ordner], ['', true, ordner])
+
+  const next = await projects.addSession({ ...input, moid: '', ordner })
+  assert.match(next.filename, /Testprojekt - Dialog TE v2\.ptx$/)
+})
+
+test('alte Projekte mit NOID oder xxxx gelten als ohne MoID und dürfen mehrfach vorkommen', async (t) => {
+  const { projects } = await setup(t)
+  await projects.createProject({ ...project, moid: 'NOID', projektname: 'Eins' })
+  await projects.createProject({ ...project, moid: 'noid', projektname: 'Zwei' })
+  await projects.createProject({ ...project, moid: 'xxxx', projektname: 'Drei' })
+
+  const rows = await projects.listProjects('Kunde A')
+  assert.equal(rows.length, 3)
+  assert.ok(rows.every((row) => row.ohneMoid))
+})
+
+test('eine beim Kunden vergebene MoID wird gemeldet', async (t) => {
+  const { dirs, projects } = await setup(t)
+  await projects.createProject(project)
+  const before = fs.readdirSync(path.join(dirs.produktionen, 'Kunde A')).length
+
+  await assert.rejects(
+    projects.createProject({ ...project, projektname: 'Anderes', moid: 'ab12' }),
+    (error: unknown) => {
+      assert.ok(error instanceof CoreError && error.code === 'moid_vergeben')
+      const found = error.details.projekt as { kunde: string; ordner: string; projektname: string }
+      assert.deepEqual([found.kunde, found.ordner, found.projektname], ['Kunde A', PROJECT_FOLDER, 'Testprojekt'])
+      return true
+    },
+  )
+  assert.equal(fs.readdirSync(path.join(dirs.produktionen, 'Kunde A')).length, before)
+})
+
+test('andere Kundenordner werden nicht durchsucht', async (t) => {
+  // Den ganzen Speicher zu lesen dauert im Studio zu lange. Dubletten bei
+  // verschiedenen Kunden nehmen wir dafür in Kauf.
+  const { dirs, projects } = await setup(t)
+  await projects.createProject(project)
+
+  const created = await projects.createProject({ ...project, kunde: 'Ohne Ordner', projektname: 'Gleiche MoID' })
+
+  assert.equal(created.ok, true)
+  assert.ok(fs.existsSync(path.join(dirs.produktionen, 'Ohne Ordner', '2026-01-15 Gleiche MoID AB12')))
 })
 
 test('legt nichts an, wenn der Produktionen-Ordner fehlt', async (t) => {

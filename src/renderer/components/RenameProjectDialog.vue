@@ -5,24 +5,27 @@
 
       <!-- Schritt 1: neue Werte -->
       <v-card-text v-if="step === 'form'">
-        <v-text-field v-model="neuerName" label="Neuer Projektname" variant="outlined" density="comfortable" />
-        <v-text-field v-model="neueMoid" label="Neue Mo-ID" variant="outlined" density="comfortable" />
+        <v-text-field v-model="neuerName" label="Neuer Projektname" />
+        <div class="moid-row">
+          <v-text-field v-model="neueMoid" label="Neue Mo-ID" maxlength="4" hide-details="auto" :disabled="ohneMoid" />
+          <v-checkbox v-model="ohneMoid" class="moid-keine" label="keine Mo-ID" />
+        </div>
         <v-alert v-if="error" type="error" density="compact" variant="tonal">{{ error }}</v-alert>
       </v-card-text>
 
       <!-- Schritt 2: Vorschau und Bestätigung -->
       <v-card-text v-else>
         <div class="text-caption text-medium-emphasis">Projektordner</div>
-        <div class="path">{{ preview.von }}</div>
+        <div class="path-text">{{ preview.von }}</div>
         <div class="text-caption text-medium-emphasis mt-2">wird zu</div>
-        <div class="path font-weight-medium mb-3">{{ preview.nach }}</div>
+        <div class="path-text font-weight-medium mb-3">{{ preview.nach }}</div>
 
         <v-alert v-if="preview.proToolsLaeuft" type="error" density="compact" variant="tonal" class="mb-3">
           Pro Tools läuft auf diesem Rechner. Bitte zuerst schließen und erneut prüfen.
         </v-alert>
         <v-alert v-if="preview.gesperrt.length" type="warning" density="compact" variant="tonal" class="mb-3">
           Im Projekt liegen Sperrdateien, vermutlich ist dort eine Session geöffnet:
-          <div v-for="file in preview.gesperrt" :key="file" class="path">{{ file }}</div>
+          <div v-for="file in preview.gesperrt" :key="file" class="path-text">{{ file }}</div>
           <v-checkbox
             v-model="ignoreLocks"
             label="Ich habe geprüft, dass die Session nirgends geöffnet ist"
@@ -81,6 +84,7 @@ const emit = defineEmits(['update:modelValue', 'renamed'])
 const step = ref('form')
 const neuerName = ref('')
 const neueMoid = ref('')
+const ohneMoid = ref(false)
 const preview = ref<any>(null)
 const ignoreLocks = ref(false)
 const confirmed = ref(false)
@@ -96,7 +100,8 @@ const canRename = computed(() => {
 watch(() => props.modelValue, (open) => {
   if (!open) return
   neuerName.value = props.project?.projektname ?? ''
-  neueMoid.value = props.project?.moid ?? ''
+  ohneMoid.value = !!props.project?.ohneMoid
+  neueMoid.value = ohneMoid.value ? '' : (props.project?.moid ?? '')
   preview.value = null
   ignoreLocks.value = false
   confirmed.value = false
@@ -113,6 +118,7 @@ function request (extra = {}) {
     moid: props.project.moid,
     neuerName: neuerName.value,
     neueMoid: neueMoid.value,
+    ohneMoid: ohneMoid.value,
     ...extra,
   }
 }
@@ -125,7 +131,9 @@ async function run (action) {
     await action()
   } catch (e) {
     const lines = e.details?.details?.flatMap(report => report.errors.map(item => item.message))
-    error.value = lines?.length ? lines.join(' ') : e.message
+    const taken = e.details?.projekt
+    if (taken) error.value = `${e.message} Sie gehört zum Projekt ${taken.projektname} bei ${taken.kunde}.`
+    else error.value = lines?.length ? lines.join(' ') : e.message
   } finally {
     busy.value = false
   }
@@ -150,11 +158,3 @@ function close () {
   emit('update:modelValue', false)
 }
 </script>
-
-<style scoped>
-.path {
-  overflow-wrap: anywhere;
-  font-family: monospace;
-  font-size: 0.85rem;
-}
-</style>

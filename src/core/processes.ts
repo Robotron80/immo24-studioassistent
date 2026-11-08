@@ -5,12 +5,15 @@
  * Fehlschlag der Abfrage zählt als "läuft nicht", damit sie niemanden aussperrt.
  */
 import { execFile } from 'node:child_process'
+import path from 'node:path'
 import { promisify } from 'node:util'
 
 import type { IsProcessRunning } from './presets.ts'
 
 const run = promisify(execFile)
 
+// Voller Pfad, damit keine gleichnamige Datei an anderer Stelle (z. B. im Programmordner) startet
+const TASKLIST = path.join(process.env.SystemRoot ?? 'C:\\Windows', 'System32', 'tasklist.exe')
 const WINDOWS_EXE = { protools: 'ProTools.exe', soundminer: 'Soundminer v6.exe' }
 const MAC_PROCESS = { protools: 'Pro Tools', soundminer: 'Soundminer' }
 
@@ -18,7 +21,7 @@ const MAC_PROCESS = { protools: 'Pro Tools', soundminer: 'Soundminer' }
 export const isProcessRunning: IsProcessRunning = async (app) => {
   try {
     if (process.platform === 'win32') {
-      const { stdout } = await run('tasklist', ['/FI', `IMAGENAME eq ${WINDOWS_EXE[app]}`, '/NH'], { timeout: 5000 })
+      const { stdout } = await run(TASKLIST, ['/FI', `IMAGENAME eq ${WINDOWS_EXE[app]}`, '/NH'], { timeout: 5000 })
       return stdout.toLowerCase().includes(WINDOWS_EXE[app].toLowerCase())
     }
     if (process.platform === 'darwin') {

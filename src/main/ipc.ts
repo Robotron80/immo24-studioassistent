@@ -13,6 +13,7 @@
 import { app, BrowserWindow, dialog, ipcMain, shell } from 'electron'
 
 import { backend, registerBackendIpc } from './backend'
+import { logLine } from './logger'
 import { closeInitWindow, logout, showMainWindow } from './windows'
 
 /** Meldet alle Nachrichten an. Wird einmal beim Programmstart aufgerufen. */
@@ -20,7 +21,13 @@ export function registerIpc(): void {
   registerBackendIpc()
 
   ipcMain.on('user-picked', async (_event, user: string) => {
-    await backend().session.login(user)
+    try {
+      await backend().session.login(user)
+    } catch {
+      // Kein bekannter Mitarbeiter: Das Anmeldefenster bleibt offen
+      logLine('[anmeldung] abgewiesen:', String(user))
+      return
+    }
     // Fehlende Ablageordner ergänzen. Klappt das nicht (Share weg), geht die Anmeldung trotzdem weiter.
     await backend().users.addMissingFolders(user).catch(() => {})
     await showMainWindow()

@@ -66,9 +66,15 @@ function installNetworkGuard(): void {
   })
 }
 
+/** Kamera, Mikrofon, Mitteilungen und Co. braucht die App nicht: Anfragen grundsätzlich ablehnen. */
+function denyPermissions(): void {
+  session.defaultSession.setPermissionRequestHandler((_webContents, _permission, callback) => callback(false))
+  session.defaultSession.setPermissionCheckHandler(() => false)
+}
+
 /**
  * Der Programmstart, Schritt für Schritt:
- *   1. Grundlagen: Netzwerksperre, Einstellungsdateien, IPC und Menü
+ *   1. Grundlagen: Netzwerk- und Berechtigungssperre, Einstellungsdateien, IPC und Menü
  *   2. Einrichtung prüfen. Das liest vom Speicher: Dauert es länger, erscheint das Ladefenster.
  *   3. Je nach Zustand den Einrichtungsassistenten oder die Anmeldung zeigen
  * Das Hauptfenster entsteht erst nach der Anmeldung.
@@ -78,6 +84,7 @@ async function startup(): Promise<void> {
   rotateLog()
   logLine('[startup] begin', `v${app.getVersion()}`)
   installNetworkGuard()
+  denyPermissions()
   ensureUserJsonFiles()
   registerIpc()
   installApplicationMenu()

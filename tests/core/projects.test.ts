@@ -442,3 +442,19 @@ test('ein Projektordner, den ein anderer Rechner gerade angelegt hat, bleibt unb
   await assert.rejects(projects.createProject(project), hasCode('project_exists'))
   assert.equal(fs.readFileSync(path.join(folder, 'fremd.txt'), 'utf8'), 'gehört dem anderen Rechner')
 })
+
+test('Vorlage, Kunde, Stufe und Ordner mit Pfadanteilen werden abgewiesen', async (t) => {
+  const { dirs, projects } = await setup(t)
+  const created = await projects.createProject(project)
+  const ordner = path.basename(created.zielPfad)
+  // Eine Datei außerhalb der Vorlagen, die wie eine Vorlage aussieht
+  fs.writeFileSync(path.join(dirs.mitarbeiter, 'Fremd.ptxt'), 'x')
+
+  await assert.rejects(projects.createProject({ ...project, moid: 'ZZ99', template: '../../Fremd.ptxt' }), hasCode('template_missing'))
+  await assert.rejects(projects.addSession({ ...project, ordner, template: '../../Fremd.ptxt' }), hasCode('template_missing'))
+  await assert.rejects(projects.addSession({ ...project, ordner, stufe: '../../Draußen' }), hasCode('not_found'))
+  await assert.rejects(projects.addSession({ ...project, ordner: '../Kunde A' }), hasCode('not_found'))
+  await assert.rejects(projects.listProjects('../Kunde A'), hasCode('not_found'))
+  assert.equal(fs.existsSync(path.join(dirs.produktionen, 'Draußen')), false)
+  assert.equal(fs.existsSync(path.join(dirs.produktionen, 'Kunde A', 'Draußen')), false)
+})

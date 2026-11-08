@@ -77,6 +77,7 @@
 import { ref, computed, onMounted } from 'vue'
 
 import { backend } from '@/lib/backend'
+import { checkWindowsName } from '../../core/names'
 
 // Die Arbeitskopie: Gespeichert wird erst, wenn in der Konfiguration "Speichern" gedrückt wird
 const staged = ref<any[]>([])
@@ -131,6 +132,9 @@ function createMitarbeiter() {
   const name = (newName.value || '').trim()
   const kuerzel = (newKuerzel.value || '').trim()
   if (!name) { dialogError.value = 'Bitte Namen eingeben.'; return }
+  // Der Name wird zum Ordnernamen, deshalb gelten dieselben Regeln wie für Projekte
+  const nameError = checkWindowsName(name)[0]
+  if (nameError) { dialogError.value = nameError.message; return }
   if (!kuerzel) { dialogError.value = 'Bitte Kürzel eingeben.'; return }
   const existsName = staged.value.some(m => (m.name || '').toLowerCase() === name.toLowerCase())
   if (existsName) { dialogError.value = 'Mitarbeiter existiert bereits.'; return }

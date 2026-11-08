@@ -20,7 +20,7 @@ import { localDate } from './dates.ts'
 import { CoreError } from './errors.ts'
 import { exists, writeFileAtomic } from './files.ts'
 import { findProjectByMoid, readCustomerProjects } from './moid.ts'
-import { checkMoids, checkWindowsName, escapeRegExp, fillSessionName, fillTemplate, formatMoids, isPlaceholderMoid, looseSpaces, tidyName } from './names.ts'
+import { checkMoids, checkWindowsName, escapeRegExp, fillSessionName, fillTemplate, formatMoids, isPlaceholderMoid, isSimpleName, looseSpaces, tidyName } from './names.ts'
 import type { SessionService } from './session.ts'
 import type { Kunde, StammdatenService } from './stammdaten.ts'
 
@@ -116,6 +116,7 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
 
   /** Findet heraus, welche Dateien zu einer gewählten Vorlage gehören. */
   function templateSources(mitarbeiter: string, userName: string, template: string) {
+    if (!isSimpleName(template)) throw new CoreError('template_missing', { template })
     const base = path.join(mitarbeiter, userName, 'immo24', 'templates')
     if (/\.ptxt$/i.test(template)) return { ptxt: path.join(base, template), audio: null }
     return {
@@ -162,6 +163,7 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
     async listProjects(kundeInput: unknown) {
       const kunde = String(kundeInput ?? '').trim()
       if (!kunde) throw new CoreError('kunde_required')
+      if (!isSimpleName(kunde)) throw new CoreError('not_found')
       const { produktionen } = await settings()
       const rows = (await readCustomerProjects(produktionen, kunde)).map(({ ordner, meta }) => {
         if (!meta.erstellt_am || !meta.projektname || typeof meta.mo_id !== 'string' || !meta.user) return null
@@ -278,7 +280,7 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
       // Schritt 1: Projektordner prüfen. Er muss direkt unter dem Kunden liegen und ein
       // Projekt von uns sein, erkennbar an der Metadatei.
       const folderName = String(input?.ordner ?? '')
-      if (!folderName || folderName !== path.basename(folderName)) throw new CoreError('not_found')
+      if (!isSimpleName(folderName) || !isSimpleName(data.stufe)) throw new CoreError('not_found')
       const zielPfad = path.join(produktionen, data.kunde, folderName)
       if (!(await exists(path.join(zielPfad, 'immo24-proj.json')))) throw new CoreError('not_found')
 

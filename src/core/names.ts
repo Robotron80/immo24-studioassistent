@@ -40,6 +40,16 @@ export function checkWindowsName(input: unknown): NameError[] {
   return errors
 }
 
+/**
+ * Ist das ein einfacher Name ohne Pfadanteile? Werte aus der Oberfläche wie Kunde,
+ * Vorlage oder Projektordner werden an Pfade gehängt. Mit "/", "\" oder ".." könnten
+ * sie aus dem vorgesehenen Ordner herausführen, deshalb lassen wir das nicht zu.
+ */
+export function isSimpleName(input: unknown): boolean {
+  const name = String(input ?? '')
+  return name.trim() !== '' && !/[\\/]/.test(name) && name !== '.' && name !== '..'
+}
+
 /** Ist das eine echte MoID oder nur ein Platzhalter wie NOID oder xxxx? */
 export function isPlaceholderMoid(moid: unknown): boolean {
   const text = String(moid ?? '').trim()

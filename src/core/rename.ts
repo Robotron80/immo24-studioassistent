@@ -20,7 +20,7 @@ import type { ConfigService } from './config.ts'
 import { CoreError } from './errors.ts'
 import { exists, isPlainObject, readJsonOrNull, writeFileAtomic } from './files.ts'
 import { findProjectByMoid } from './moid.ts'
-import { checkMoids, checkWindowsName, comparableName, escapeRegExp, fillTemplate, formatMoids, looseSpaces, tidyName } from './names.ts'
+import { checkMoids, checkWindowsName, comparableName, isSimpleName, escapeRegExp, fillTemplate, formatMoids, looseSpaces, tidyName } from './names.ts'
 import type { IsProcessRunning } from './presets.ts'
 import type { SessionService } from './session.ts'
 
@@ -76,7 +76,7 @@ export function createRenameService(config: ConfigService, session: SessionServi
     const { data: paths } = await config.getPaths()
     const root = path.join(String(paths.PathProduktionen ?? ''), String(input.kunde ?? ''))
     const folder = String(input.ordner ?? '')
-    if (!folder || folder !== path.basename(folder)) throw new CoreError('not_found')
+    if (!isSimpleName(folder) || !isSimpleName(input.kunde)) throw new CoreError('not_found')
     const meta = await readJsonOrNull(path.join(root, folder, 'immo24-proj.json'))
     if (!isPlainObject(meta) || typeof meta.projektname !== 'string' || typeof meta.mo_id !== 'string') {
       throw new CoreError('not_found')

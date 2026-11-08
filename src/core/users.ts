@@ -20,7 +20,7 @@ import path from 'node:path'
 import type { ConfigService } from './config.ts'
 import { CoreError } from './errors.ts'
 import { exists, isPlainObject, readTextOrNull, writeFileAtomic } from './files.ts'
-import { comparableName } from './names.ts'
+import { checkWindowsName, comparableName, isSimpleName } from './names.ts'
 
 export interface User {
   name: string
@@ -146,6 +146,13 @@ export function createUserService(config: ConfigService) {
     async saveUsers(input: { mitarbeiter?: unknown }) {
       const list = input?.mitarbeiter
       if (!Array.isArray(list) || list.length === 0) throw new CoreError('mitarbeiter_required')
+
+      // Jeder Name wird zu einem Ordner: erst alle prüfen, bevor irgendetwas entsteht
+      const details = list
+        .map((entry) => ({ name: String(entry?.name ?? '').trim() }))
+        .filter(({ name }) => name && (!isSimpleName(name) || checkWindowsName(name).length > 0))
+        .map(({ name }) => ({ field: 'name', name, errors: isSimpleName(name) ? checkWindowsName(name) : [{ code: 'forbidden_chars', message: 'Unzulässiger Name' }] }))
+      if (details.length) throw new CoreError('validation_failed', { details })
 
       const base = await mitarbeiterPath()
       if (!base || !(await exists(base))) throw new CoreError('mitarbeiter_path_missing')

@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self'">
   <title>Bitte warten…</title>
   <style>
     html, body { margin: 0; padding: 0; overflow: hidden; }
@@ -85,17 +86,6 @@
     Das Schnellboot macht sich bereit<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
   </div>
   <div class="version" id="version">v0.0.0</div>
-  <script>
-    const dots = document.querySelectorAll('.dot');
-    let step = 0;
-    setInterval(() => {
-      dots.forEach((d,i)=>d.classList.toggle('active', i <= step));
-      step = (step+1) % dots.length;
-    }, 400);
-
-    window.electronAPI?.getAppVersion?.().then(v => {
-      if (v) document.getElementById('version').textContent = 'v' + v;
-    });
-  </script>
+  <script src="loading.js"></script>
 </body>
 </html>

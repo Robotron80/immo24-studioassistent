@@ -14,6 +14,7 @@ import test from 'node:test'
 import { createConfigService } from '../../src/core/config.ts'
 import { CoreError } from '../../src/core/errors.ts'
 import { createPasswordService } from '../../src/core/password.ts'
+import { createSessionService } from '../../src/core/session.ts'
 import { createUserService } from '../../src/core/users.ts'
 import { createCoreRequest } from './adapter.ts'
 
@@ -169,4 +170,36 @@ test('ergänzt bei der Anmeldung fehlende Ablageordner, ohne Vorhandenes anzufas
   // Ohne immo24-Ordner (etwa Share nicht eingehängt) entsteht nichts
   await users.addMissingFolders('Niemand')
   assert.equal(fs.existsSync(path.join(staff, 'Niemand')), false)
+})
+
+test('Mitarbeiternamen mit Pfadzeichen werden abgewiesen, ohne dass Ordner entstehen', async (t) => {
+  const dir = tempDir(t)
+  const staff = path.join(dir, 'Mitarbeiter')
+  fs.mkdirSync(staff)
+  fs.writeFileSync(path.join(dir, 'path.json'), JSON.stringify({ PathMitarbeiter: staff }))
+  const users = createUserService(createConfigService(dir))
+
+  for (const name of ['../Draußen', 'Max/Test', 'Max\\Test', 'Max:Test']) {
+    await assert.rejects(
+      users.saveUsers({ mitarbeiter: [{ name: 'Gut', kuerzel: 'GU' }, { name, kuerzel: 'XX' }] }),
+      (error: unknown) => error instanceof CoreError && error.code === 'validation_failed',
+    )
+  }
+  assert.deepEqual(fs.readdirSync(dir).sort(), ['Mitarbeiter', 'path.json'])
+  assert.deepEqual(fs.readdirSync(staff), [], 'auch der gültige Name wird nicht angelegt')
+})
+
+test('anmelden kann sich nur, wer als Mitarbeiter ein Kürzel hat', async (t) => {
+  const dir = tempDir(t)
+  const staff = path.join(dir, 'Mitarbeiter')
+  fs.mkdirSync(path.join(staff, 'Max', 'immo24'), { recursive: true })
+  fs.writeFileSync(path.join(staff, 'Max', 'immo24', 'immo24-user.json'), 'MM')
+  fs.mkdirSync(path.join(staff, 'Leer'))
+  fs.writeFileSync(path.join(dir, 'path.json'), JSON.stringify({ PathMitarbeiter: staff }))
+  const session = createSessionService(createConfigService(dir))
+
+  assert.equal(await session.login('Max'), 'MM')
+  for (const name of ['Leer', 'Gibtsnicht', '../Mitarbeiter/Max', '..']) {
+    await assert.rejects(session.login(name), (error: unknown) => error instanceof CoreError && error.code === 'not_found')
+  }
 })

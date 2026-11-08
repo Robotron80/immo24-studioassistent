@@ -1,7 +1,6 @@
 <template>
   <v-container fluid class="pa-0 ma-0 konfig-root">
     <div class="d-flex flex-column h-100 w-100">
-
       <!-- Tab-Leiste ganz oben, außerhalb des scrollbaren Inhalts -->
       <div class="sticky-top-bar">
         <v-tabs v-model="tab" class="mb-4">
@@ -57,15 +56,13 @@
             :type="showPw ? 'text' : 'password'"
             label="Passwort"
             autofocus
+            :append-inner-icon="showPw ? 'mdi-eye-off' : 'mdi-eye'"
             @keyup.enter="authenticate"
             @keydown="onPwKey"
             @keyup="onPwKey"
-            :append-inner-icon="showPw ? 'mdi-eye-off' : 'mdi-eye'"
             @click:append-inner="showPw = !showPw"
           />
-          <div v-if="capsOn" class="text-warning text-caption mt-1">
-            Achtung: Feststelltaste (Caps Lock) ist aktiv
-          </div>
+          <div v-if="capsOn" class="text-warning text-caption mt-1">Achtung: Feststelltaste (Caps Lock) ist aktiv</div>
         </v-card-text>
         <v-card-actions class="justify-end">
           <v-btn variant="text" @click="cancelAuth">Abbrechen</v-btn>
@@ -75,7 +72,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
   </v-container>
 </template>
 
@@ -95,7 +91,7 @@ import KonfigModule from '@/components/KonfigModule.vue'
 import { backend } from '@/lib/backend'
 
 /** Speichert einen Bereich. Hat jemand die Daten zwischenzeitlich geändert, wird neu geladen. */
-async function saveVersioned (save, reload, conflictText) {
+async function saveVersioned(save, reload, conflictText) {
   try {
     await save()
   } catch (e) {
@@ -224,7 +220,6 @@ async function onSave() {
 
     // Wenn alles erfolgreich war → Fenster schließen
     window.close?.()
-
   } catch (e) {
     console.error(e)
     alert(`Speichern fehlgeschlagen (${section}): ${e.message}`)
@@ -254,7 +249,9 @@ const capsOn = ref(false)
 const pwField = ref<any>(null)
 
 const canSubmit = computed(() => !!authPassword.value && !authLoading.value)
-function focusPw(){ nextTick(() => pwField.value?.focus()) }
+function focusPw() {
+  nextTick(() => pwField.value?.focus())
+}
 onMounted(async () => {
   document.title = 'Konfiguration'
   // Ohne gesetztes Passwort ist die Konfiguration offen
@@ -262,7 +259,9 @@ onMounted(async () => {
   if (authOpen.value) focusPw()
 })
 
-function onPwKey(ev){ try { capsOn.value = !!ev.getModifierState?.('CapsLock') } catch {} }
+function onPwKey(ev) {
+  capsOn.value = !!ev.getModifierState?.('CapsLock')
+}
 
 /** Abbrechen oder Esc im Passwort-Dialog: Ohne Passwort gibt es hier nichts zu tun, das Fenster schließt. */
 function cancelAuth() {
@@ -270,13 +269,15 @@ function cancelAuth() {
 }
 
 async function authenticate() {
-  authError.value = ''; authLoading.value = true
+  authError.value = ''
+  authLoading.value = true
   try {
     if (!(await backend.checkPassword(authPassword.value))) throw new Error('Passwort falsch')
     authOpen.value = false
   } catch (e) {
     authError.value = e.message || 'Passwort falsch'
-    authPassword.value = ''; focusPw()
+    authPassword.value = ''
+    focusPw()
   } finally {
     authLoading.value = false
   }

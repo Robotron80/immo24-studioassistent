@@ -27,8 +27,6 @@ const GROUPS = [
     { key: 'memoryLocation', label: 'Memory Location Presets', quick: false },
     { key: 'trackDataToRecall', label: 'Track Data to Recall Presets', quick: false },
   ],
-  [
-    { key: 'keyboardShortcuts', label: 'Keyboard Shortcuts' },
-  ],
+  [{ key: 'keyboardShortcuts', label: 'Keyboard Shortcuts' }],
 ]
 </script>

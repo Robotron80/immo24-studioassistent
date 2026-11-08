@@ -23,15 +23,20 @@ interface ExistingProject {
  * Liest die Projektdateien (immo24-proj.json) aller Projekte eines Kunden, alle gleichzeitig.
  * Ordner ohne lesbare Projektdatei fallen weg. Nutzen die Projektliste und die MoID-Prüfung.
  */
-export async function readCustomerProjects(produktionen: string, kunde: string): Promise<Array<{ ordner: string; meta: Record<string, unknown> }>> {
+export async function readCustomerProjects(
+  produktionen: string,
+  kunde: string,
+): Promise<Array<{ ordner: string; meta: Record<string, unknown> }>> {
   const customerDir = path.join(produktionen, kunde)
   const entries = await fs.readdir(customerDir, { withFileTypes: true }).catch(() => [])
-  const projects = await Promise.all(entries
-    .filter((entry) => entry.isDirectory() && !entry.name.startsWith('.'))
-    .map(async (entry) => {
-      const meta = await readJsonOrNull(path.join(customerDir, entry.name, 'immo24-proj.json'))
-      return isPlainObject(meta) ? { ordner: entry.name, meta } : null
-    }))
+  const projects = await Promise.all(
+    entries
+      .filter((entry) => entry.isDirectory() && !entry.name.startsWith('.'))
+      .map(async (entry) => {
+        const meta = await readJsonOrNull(path.join(customerDir, entry.name, 'immo24-proj.json'))
+        return isPlainObject(meta) ? { ordner: entry.name, meta } : null
+      }),
+  )
   return projects.filter((project) => project !== null)
 }
 
@@ -49,7 +54,11 @@ export async function findProjectByMoid(
   moid: string,
   ignoreOrdner?: string,
 ): Promise<ExistingProject | null> {
-  const wanted = new Set(moidList(moid).filter((item) => !isPlaceholderMoid(item)).map(comparableName))
+  const wanted = new Set(
+    moidList(moid)
+      .filter((item) => !isPlaceholderMoid(item))
+      .map(comparableName),
+  )
   if (wanted.size === 0) return null
   for (const { ordner, meta } of await readCustomerProjects(produktionen, kunde)) {
     if (ordner === ignoreOrdner || typeof meta.mo_id !== 'string') continue

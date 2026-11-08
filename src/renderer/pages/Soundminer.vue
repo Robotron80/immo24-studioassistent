@@ -15,9 +15,5 @@
 import PresetSeite from '@/components/PresetSeite.vue'
 import { backend } from '@/lib/backend'
 
-const GROUPS = [
-  [
-    { key: 'tablayouts', label: 'Tab Layouts' },
-  ],
-]
+const GROUPS = [[{ key: 'tablayouts', label: 'Tab Layouts' }]]
 </script>

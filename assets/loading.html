@@ -1,91 +1,122 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self'">
-  <title>Bitte warten…</title>
-  <style>
-    html, body { margin: 0; padding: 0; overflow: hidden; }
-    /* optional: Scrollbar komplett ausblenden */
-    ::-webkit-scrollbar { width: 0; height: 0; display: none; }
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      font-family: sans-serif;
-      background: #f7f8fa;
-      position: relative;
-    }
-    .plane-wrapper {
-      width: 340px;
-      height: 90px;
-      margin-bottom: 2em;
-      position: relative;
-      overflow: visible;
-      text-align: center;
-    }
-    .plane-anim {
-      width: 80px;
-      height: auto;
-      position: absolute;
-      left: 0;
-      top: 0;
-      animation: flugkurve 3s linear infinite;
-      filter: drop-shadow(0 2px 8px rgba(34,34,34,0.13));
-    }
-    @keyframes flugkurve {
-      0% { opacity: 0; transform: translate(-100px, 18px) rotate(20deg) scale(1);}
-      8% { opacity: 1;}
-      30% { transform: translate(-20px, 10px) rotate(20deg) scale(1.04); opacity: 1;}
-      60% { transform: translate(80px, 18px) rotate(35deg) scale(1.09); opacity: 1;}
-      80% { transform: translate(180px, 38px) rotate(70deg) scale(1.12); opacity: 1;}
-      92% { opacity: 1;}
-      100% { opacity: 0; transform: translate(230px, 70px) rotate(90deg) scale(1.13);}
-    }
-    .title {
-      font-size: 2em;
-      font-weight: 600;
-      color: #2a2a2a;
-      margin-bottom: 0.5em;
-      letter-spacing: 0.01em;
-      text-align: center;
-    }
-    .msg {
-      font-size: 1.4em;
-      color: #444;
-      letter-spacing: 0.01em;
-      text-align: center;
-    }
-    .dot {
-      opacity: 0.2;
-      transition: opacity 0.2s;
-    }
-    .dot.active {
-      opacity: 1;
-    }
-    .version {
-      position: absolute;
-      bottom: 18px;
-      right: 24px;
-      font-size: 0.85em;
-      color: #888;
-      opacity: 0.7;
-      letter-spacing: 0.03em;
-      user-select: none;
-    }
-  </style>
-</head>
-<body>
-  <div class="title">immo24 Studioassistent</div>
-  <div class="plane-wrapper">
-    <img class="plane-anim" src="flieger.png" alt="Papierflieger">
-  </div>
-  <div class="msg">
-    Das Schnellboot macht sich bereit<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
-  </div>
-  <div class="version" id="version">v0.0.0</div>
-  <script src="loading.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self'"
+    />
+    <title>Bitte warten…</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+      /* optional: Scrollbar komplett ausblenden */
+      ::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+        display: none;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        font-family: sans-serif;
+        background: #f7f8fa;
+        position: relative;
+      }
+      .plane-wrapper {
+        width: 340px;
+        height: 90px;
+        margin-bottom: 2em;
+        position: relative;
+        overflow: visible;
+        text-align: center;
+      }
+      .plane-anim {
+        width: 80px;
+        height: auto;
+        position: absolute;
+        left: 0;
+        top: 0;
+        animation: flugkurve 3s linear infinite;
+        filter: drop-shadow(0 2px 8px rgba(34, 34, 34, 0.13));
+      }
+      @keyframes flugkurve {
+        0% {
+          opacity: 0;
+          transform: translate(-100px, 18px) rotate(20deg) scale(1);
+        }
+        8% {
+          opacity: 1;
+        }
+        30% {
+          transform: translate(-20px, 10px) rotate(20deg) scale(1.04);
+          opacity: 1;
+        }
+        60% {
+          transform: translate(80px, 18px) rotate(35deg) scale(1.09);
+          opacity: 1;
+        }
+        80% {
+          transform: translate(180px, 38px) rotate(70deg) scale(1.12);
+          opacity: 1;
+        }
+        92% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+          transform: translate(230px, 70px) rotate(90deg) scale(1.13);
+        }
+      }
+      .title {
+        font-size: 2em;
+        font-weight: 600;
+        color: #2a2a2a;
+        margin-bottom: 0.5em;
+        letter-spacing: 0.01em;
+        text-align: center;
+      }
+      .msg {
+        font-size: 1.4em;
+        color: #444;
+        letter-spacing: 0.01em;
+        text-align: center;
+      }
+      .dot {
+        opacity: 0.2;
+        transition: opacity 0.2s;
+      }
+      .dot.active {
+        opacity: 1;
+      }
+      .version {
+        position: absolute;
+        bottom: 18px;
+        right: 24px;
+        font-size: 0.85em;
+        color: #888;
+        opacity: 0.7;
+        letter-spacing: 0.03em;
+        user-select: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="title">immo24 Studioassistent</div>
+    <div class="plane-wrapper">
+      <img class="plane-anim" src="flieger.png" alt="Papierflieger" />
+    </div>
+    <div class="msg">
+      Das Schnellboot macht sich bereit<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+    </div>
+    <div class="version" id="version">v0.0.0</div>
+    <script src="loading.js"></script>
+  </body>
 </html>

@@ -26,6 +26,8 @@ export function checkWindowsName(input: unknown): NameError[] {
   const name = String(input ?? '').trim()
   const errors: NameError[] = []
 
+  // Steuerzeichen (\u0000 bis \u001F) sind in Dateinamen verboten, deshalb stehen sie bewusst im Muster
+  // eslint-disable-next-line no-control-regex
   const forbidden = name.match(/[<>:"/\\|?*\u0000-\u001F]/g)
   if (forbidden) {
     const chars = [...new Set(forbidden)]
@@ -67,7 +69,9 @@ export function formatMoids(input: unknown): string {
 
 /** Zerlegt eine oder mehrere MoIDs in eine Liste. Getrennt wird an Leerzeichen, Komma oder Plus. */
 export function moidList(moids: unknown): string[] {
-  return String(moids ?? '').split(/[\s,+]+/).filter(Boolean)
+  return String(moids ?? '')
+    .split(/[\s,+]+/)
+    .filter(Boolean)
 }
 
 /** Prüft jede MoID einer Eingabe: höchstens vier Stellen und keine doppelt. Platzhalter sind frei. */

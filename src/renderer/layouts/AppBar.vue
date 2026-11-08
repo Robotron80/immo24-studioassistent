@@ -20,9 +20,7 @@
     <!-- Name und Abmelden bilden einen Block: der Name ist nur Anzeige, Abmelden der Knopf -->
     <v-btn-group border divided density="compact" class="me-4 flex-shrink-0">
       <v-btn tag="div" readonly variant="text">{{ displayName }}</v-btn>
-      <v-btn color="primary" variant="tonal" :disabled="!isLoggedIn || loggingOut" @click="onLogout">
-        Abmelden
-      </v-btn>
+      <v-btn color="primary" variant="tonal" :disabled="!isLoggedIn || loggingOut" @click="onLogout"> Abmelden </v-btn>
     </v-btn-group>
   </v-app-bar>
 </template>
@@ -38,12 +36,11 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 
 const store = useProjektanlage()
 const activeUser = computed(() => store.activeUser)
-const loggingOut  = ref(false)
+const loggingOut = ref(false)
 let stopListening: any = null
-const isLoggedIn  = computed(() => !!activeUser.value)
+const isLoggedIn = computed(() => !!activeUser.value)
 const displayName = computed(() => activeUser.value || 'Nicht angemeldet')
 const soundminerEnabled = ref(false)
-
 
 onMounted(() => {
   fetchModuleStatus()

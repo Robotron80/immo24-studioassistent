@@ -94,10 +94,16 @@ export function createStammdatenService(config: ConfigService) {
       if (input.version !== currentVersion) throw new CoreError('version_conflict', { currentVersion })
 
       const collator = new Intl.Collator('de', { sensitivity: 'base', numeric: true })
-      const sorted = [...(input.customers as Kunde[])].sort((a, b) => collator.compare(
-        String(a?.kunde ?? '').normalize('NFC').trim(),
-        String(b?.kunde ?? '').normalize('NFC').trim(),
-      ))
+      const sorted = [...(input.customers as Kunde[])].sort((a, b) =>
+        collator.compare(
+          String(a?.kunde ?? '')
+            .normalize('NFC')
+            .trim(),
+          String(b?.kunde ?? '')
+            .normalize('NFC')
+            .trim(),
+        ),
+      )
 
       await createCustomerFolders(sorted)
       await writeJsonAtomic(target, sorted)

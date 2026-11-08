@@ -6,8 +6,8 @@
         :type="show1 ? 'text' : 'password'"
         label="Neues Passwort"
         :append-inner-icon="show1 ? 'mdi-eye-off' : 'mdi-eye'"
-        @click:append-inner="show1 = !show1"
         class="mb-3"
+        @click:append-inner="show1 = !show1"
       />
       <v-text-field
         v-model="form.repeatPassword"
@@ -15,8 +15,8 @@
         label="Neues Passwort wiederholen"
         :error-messages="mismatch ? ['Passwörter stimmen nicht überein.'] : []"
         :append-inner-icon="show2 ? 'mdi-eye-off' : 'mdi-eye'"
-        @click:append-inner="show2 = !show2"
         class="mb-3"
+        @click:append-inner="show2 = !show2"
       />
 
       <v-alert v-if="error" type="error" class="mt-3">{{ error }}</v-alert>
@@ -42,7 +42,7 @@ const show1 = ref(false)
 const show2 = ref(false)
 
 const MIN_LENGTH = 4
-const deepEqual = (a,b) => JSON.stringify(a) === JSON.stringify(b)
+const deepEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b)
 
 const mismatch = computed(() => !!form.repeatPassword && form.repeatPassword !== form.newPassword)
 
@@ -56,7 +56,8 @@ function isDirty() {
 }
 
 async function saveToServer() {
-  error.value = ''; okMsg.value = ''
+  error.value = ''
+  okMsg.value = ''
   const newPassword = (form.newPassword || '').trim()
   const repeatPassword = (form.repeatPassword || '').trim()
 
@@ -88,7 +89,8 @@ async function saveToServer() {
 async function resetToServer() {
   form.newPassword = ''
   form.repeatPassword = ''
-  error.value = ''; okMsg.value = ''
+  error.value = ''
+  okMsg.value = ''
 }
 
 defineExpose({ isDirty, isValid, saveToServer, resetToServer })

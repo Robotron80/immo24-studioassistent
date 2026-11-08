@@ -1,7 +1,5 @@
 <template>
-  <v-footer app class="text-caption text-medium-emphasis py-1">
-    immo24 Studioassistent v{{ appVersion }}
-  </v-footer>
+  <v-footer app class="text-caption text-medium-emphasis py-1"> immo24 Studioassistent v{{ appVersion }} </v-footer>
 </template>
 
 <script setup lang="ts">

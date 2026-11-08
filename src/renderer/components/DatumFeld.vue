@@ -46,21 +46,21 @@ const emit = defineEmits(['update:modelValue'])
 const open = ref(false)
 
 /** Prüft das Format und ob es den Tag wirklich gibt, der 31.02. fällt also durch. */
-function parse (text: string): Date | null {
+function parse(text: string): Date | null {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(text ?? '')
   if (!match) return null
   const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]))
   return date.getMonth() === Number(match[2]) - 1 ? date : null
 }
 
-function isValidDate (text: string) {
+function isValidDate(text: string) {
   return parse(text) !== null || 'Format: JJJJ-MM-TT'
 }
 
 const asDate = computed(() => parse(props.modelValue))
 
 /** Übernimmt den Tag aus dem Kalender, in Ortszeit, damit sich das Datum nicht verschiebt. */
-function pick (date: unknown) {
+function pick(date: unknown) {
   emit('update:modelValue', localDate(date as Date))
   open.value = false
 }

@@ -2,11 +2,7 @@
   <v-card class="pa-4 mb-4">
     <div class="text-subtitle-1 font-weight-medium mb-2">Soundminer</div>
     <div class="d-flex align-center ga-6 mb-4">
-      <v-checkbox
-        v-model="staged.soundminerEnabled"
-        label="Modul aktivieren"
-        class="ma-0"
-      />
+      <v-checkbox v-model="staged.soundminerEnabled" label="Modul aktivieren" class="ma-0" />
       <v-spacer />
       <v-select
         v-model="staged.soundminerVersion"
@@ -27,8 +23,8 @@
       />
       <v-btn
         :disabled="!staged.soundminerEnabled"
-        @click="browseInto('soundminerPath', 'Soundminer Support Folder auswählen')"
         variant="outlined"
+        @click="browseInto('soundminerPath', 'Soundminer Support Folder auswählen')"
       >
         Durchsuchen
       </v-btn>
@@ -52,74 +48,61 @@
 /**
  * Konfiguration, Bereich Module: Soundminer und das Umbenennen von Projekten einschalten.
  */
-import { ref, reactive, computed, onMounted } from 'vue'
+import { computed } from 'vue'
 
+import { useKonfigBereich } from '@/composables/useKonfigBereich'
 import { backend } from '@/lib/backend'
 
-const soundminerVersions = [
-  'V6 Pro'
-]
+const soundminerVersions = ['V6 Pro']
 
-// Serverzustand + Arbeitskopie (UI-Felder bleiben flach: soundminerEnabled/Path/Version)
-const original = ref({ data:{ soundminerEnabled:false, soundminerPath:'', soundminerVersion:'', renameEnabled:false }, version:'' })
-const staged   = reactive({ soundminerEnabled:false, soundminerPath:'', soundminerVersion:'', renameEnabled:false })
-const error    = ref('')
-
-const deepEqual = (a,b) => JSON.stringify(a) === JSON.stringify(b)
-const isDirty   = computed(() => !deepEqual(staged, original.value.data))
-const isSoundminerValid = computed(() => {
-  if (!staged.soundminerEnabled) return true
-  // soundminerEnabled ist true: beide Felder müssen ausgefüllt sein (nicht leer, nicht nur Whitespace)
-  return !!(staged.soundminerPath && staged.soundminerPath.trim()) &&
-         !!(staged.soundminerVersion && staged.soundminerVersion.trim())
-})
-
-async function loadSnapshot() {
-  error.value = ''
-  try {
+// Die Oberfläche arbeitet mit flachen Feldern, das Backend mit verschachtelten
+const { original, staged, error, exposed } = useKonfigBereich({
+  empty: () => ({ soundminerEnabled: false, soundminerPath: '', soundminerVersion: '', renameEnabled: false }),
+  errorText: 'Module laden fehlgeschlagen',
+  load: async () => {
     const snap: any = await backend.getModules()
-    // Die Oberfläche arbeitet mit flachen Feldern, das Backend mit verschachtelten
     const sm = snap?.data?.soundminer || {}
-    original.value = {
+    return {
       data: {
         soundminerEnabled: !!sm.enabled,
-        soundminerPath:    typeof sm.supportPath === 'string' ? sm.supportPath : '',
+        soundminerPath: typeof sm.supportPath === 'string' ? sm.supportPath : '',
         soundminerVersion: typeof sm.version === 'string' ? sm.version : '',
-        renameEnabled: !!snap?.data?.umbenennen?.enabled
+        renameEnabled: !!snap?.data?.umbenennen?.enabled,
       },
-      version: snap?.version || ''
+      version: snap?.version,
     }
-    Object.assign(staged, original.value.data)
-  } catch (e) {
-    error.value = e.message || 'Module laden fehlgeschlagen'
-  }
-}
-onMounted(loadSnapshot)
+  },
+})
+
+/** Mit eingeschaltetem Soundminer müssen Pfad und Version ausgefüllt sein. */
+const isSoundminerValid = computed(() => {
+  const { soundminerEnabled, soundminerPath, soundminerVersion } = staged.value
+  return !soundminerEnabled || (!!soundminerPath.trim() && !!soundminerVersion.trim())
+})
 
 /** Öffnet die Ordnerauswahl des Systems und übernimmt den gewählten Ordner. */
 async function browseInto(key, title) {
-  const picked = await window.electronAPI.pickFolder(title, staged[key] || undefined)
+  const picked = await window.electronAPI.pickFolder(title, staged.value[key] || undefined)
   if (typeof picked === 'string' && picked.length > 0) {
-    staged[key] = picked.replace(/\\/g, '/') // Windows: einheitlich mit Schrägstrich
+    staged.value[key] = picked.replace(/\\/g, '/') // Windows: einheitlich mit Schrägstrich
   }
 }
 
 // Das nutzt Konfiguration.vue beim Speichern und Abbrechen
 defineExpose({
-  isDirty: () => isDirty.value,
+  ...exposed,
   isSoundminerValid: () => isSoundminerValid.value,
   getSnapshotForSave: () => ({
     // Zurück ins Format des Backends
     version: original.value.version,
     data: {
       soundminer: {
-        enabled: !!staged.soundminerEnabled,
-        supportPath: staged.soundminerPath || '',
-        version: staged.soundminerVersion || ''
+        enabled: staged.value.soundminerEnabled,
+        supportPath: staged.value.soundminerPath,
+        version: staged.value.soundminerVersion,
       },
-      umbenennen: { enabled: !!staged.renameEnabled }
-    }
+      umbenennen: { enabled: staged.value.renameEnabled },
+    },
   }),
-  resetToServer: async () => { await loadSnapshot() }
 })
 </script>

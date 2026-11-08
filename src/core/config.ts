@@ -51,9 +51,11 @@ function normalizeModule(name: string, value: unknown): Record<string, unknown> 
       supportPath: asString(source.supportPath),
     }
   }
-  return Object.fromEntries(Object.entries(source).filter(([, item]) => (
-    ['string', 'number', 'boolean'].includes(typeof item) || isPlainObject(item)
-  )))
+  return Object.fromEntries(
+    Object.entries(source).filter(
+      ([, item]) => ['string', 'number', 'boolean'].includes(typeof item) || isPlainObject(item),
+    ),
+  )
 }
 
 export type ConfigService = ReturnType<typeof createConfigService>
@@ -132,7 +134,11 @@ export function createConfigService(userDataDir: string) {
       const container = isPlainObject(input?.schema) ? input.schema : isPlainObject(input?.data) ? input.data : input
       const projektordnerSchema = container?.projektordnerSchema
       const sessionSchema = container?.sessionSchema
-      if (typeof input?.version !== 'string' || typeof projektordnerSchema !== 'string' || typeof sessionSchema !== 'string') {
+      if (
+        typeof input?.version !== 'string' ||
+        typeof projektordnerSchema !== 'string' ||
+        typeof sessionSchema !== 'string'
+      ) {
         throw new CoreError('bad_payload')
       }
       const schema: Schema = { projektordnerSchema, sessionSchema }

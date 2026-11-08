@@ -11,12 +11,14 @@ import Vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
  * Code in eine Seite gelangt. Stile dürfen inline sein, weil Vuetify sie so setzt.
  * Nur beim Bauen, der Entwicklungsserver braucht mehr Freiheiten.
  */
-const CSP = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"
+const CSP =
+  "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"
 
 const contentSecurityPolicy: Plugin = {
   name: 'content-security-policy',
   apply: 'build',
-  transformIndexHtml: (html) => html.replace('<head>', `<head>\n    <meta http-equiv="Content-Security-Policy" content="${CSP}">`),
+  transformIndexHtml: (html) =>
+    html.replace('<head>', `<head>\n    <meta http-equiv="Content-Security-Policy" content="${CSP}">`),
 }
 
 export default defineConfig({

@@ -20,7 +20,17 @@ import type { ConfigService } from './config.ts'
 import { CoreError } from './errors.ts'
 import { exists, isPlainObject, readJsonOrNull, writeFileAtomic } from './files.ts'
 import { findProjectByMoid } from './moid.ts'
-import { checkMoids, checkWindowsName, comparableName, isSimpleName, escapeRegExp, fillTemplate, formatMoids, looseSpaces, tidyName } from './names.ts'
+import {
+  checkMoids,
+  checkWindowsName,
+  comparableName,
+  isSimpleName,
+  escapeRegExp,
+  fillTemplate,
+  formatMoids,
+  looseSpaces,
+  tidyName,
+} from './names.ts'
 import type { IsProcessRunning } from './presets.ts'
 import type { SessionService } from './session.ts'
 
@@ -60,7 +70,8 @@ async function findLockFiles(projectDir: string): Promise<string[]> {
     for (const entry of entries) {
       const rel = relative ? `${relative}/${entry.name}` : entry.name
       if (entry.isFile() && /\.tmp$/i.test(entry.name)) found.push(rel)
-      else if (entry.isDirectory() && deeper && !NOT_SCANNED.has(entry.name)) await scan(path.join(dir, entry.name), rel, false)
+      else if (entry.isDirectory() && deeper && !NOT_SCANNED.has(entry.name))
+        await scan(path.join(dir, entry.name), rel, false)
     }
   }
   await scan(projectDir, '', true)
@@ -88,7 +99,13 @@ export function createRenameService(config: ConfigService, session: SessionServi
    * Berechnet den neuen Ordnernamen aus dem Namensschema.
    * Das Kürzel im Ordnernamen gehört dem, der das Projekt angelegt hat, und bleibt erhalten.
    */
-  async function newFolderName(input: RenameInput, folder: string, meta: ProjectMeta, neuerName: string, neueMoid: string) {
+  async function newFolderName(
+    input: RenameInput,
+    folder: string,
+    meta: ProjectMeta,
+    neuerName: string,
+    neueMoid: string,
+  ) {
     const { data } = await config.getSchema()
     const schema = String((data as Record<string, unknown>).projektordnerSchema ?? '').normalize('NFC')
     const oldValues: Record<string, string> = {
@@ -97,9 +114,11 @@ export function createRenameService(config: ConfigService, session: SessionServi
       moid: meta.mo_id.normalize('NFC'),
       kunde: String(input.kunde).normalize('NFC'),
     }
-    const pattern = looseSpaces(escapeRegExp(schema)
-      .replace(/\\{\\{benutzer\\}\\}/g, '(?<benutzer>.+)')
-      .replace(/\\{\\{(\w+)\\}\\}/g, (_match, key: string) => (oldValues[key] ? escapeRegExp(oldValues[key]) : '.*')))
+    const pattern = looseSpaces(
+      escapeRegExp(schema)
+        .replace(/\\{\\{benutzer\\}\\}/g, '(?<benutzer>.+)')
+        .replace(/\\{\\{(\w+)\\}\\}/g, (_match, key: string) => (oldValues[key] ? escapeRegExp(oldValues[key]) : '.*')),
+    )
     const match = new RegExp(`^${pattern}$`).exec(folder.normalize('NFC'))
     // Passt der Ordner nicht zum Schema, wurde es geändert. Dann lieber nichts anfassen.
     if (!match) throw new CoreError('schema_passt_nicht', { folder })
@@ -138,7 +157,12 @@ export function createRenameService(config: ConfigService, session: SessionServi
 
     // Eine MoID soll es beim Kunden nur einmal geben, das Projekt selbst zählt dabei nicht
     const { data: paths } = await config.getPaths()
-    const existing = await findProjectByMoid(String(paths.PathProduktionen ?? ''), String(input.kunde ?? ''), neueMoid, folder)
+    const existing = await findProjectByMoid(
+      String(paths.PathProduktionen ?? ''),
+      String(input.kunde ?? ''),
+      neueMoid,
+      folder,
+    )
     if (existing) throw new CoreError('moid_vergeben', { projekt: existing })
 
     return {

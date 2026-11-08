@@ -120,7 +120,9 @@ export function createCoreRequest(userDataDir: string) {
       case 'POST /api/projektanlage/resolve-existing': {
         // Node-RED suchte den Ordner selbst, die Oberfläche kennt ihn aus der Projektliste
         const rows = await projects.listProjects(body?.kunde).catch(() => [])
-        const row = rows.find((item) => item.projektname === body?.projektname && item.moid === body?.moid && item.date === body?.datum)
+        const row = rows.find(
+          (item) => item.projektname === body?.projektname && item.moid === body?.moid && item.date === body?.datum,
+        )
         return { status: 200, body: await projects.addSession({ ...body, ordner: row?.ordner }) }
       }
       case 'POST /api/protools/presets':

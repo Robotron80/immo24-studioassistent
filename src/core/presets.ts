@@ -152,7 +152,11 @@ async function fadePresets(ctx: Context, quick: boolean): Promise<void> {
  * key: so nennt sie die Oberfläche. category: so heißt sie im Ergebnis.
  * Die Ordnernamen im Archiv müssen bleiben, Version 0.4 nutzt dieselben.
  */
-const PRO_TOOLS_CATEGORIES: Array<{ key: string; category: string; run: (ctx: Context, quick: boolean) => Promise<void> }> = [
+const PRO_TOOLS_CATEGORIES: Array<{
+  key: string
+  category: string
+  run: (ctx: Context, quick: boolean) => Promise<void>
+}> = [
   { key: 'templates', category: 'templates', run: simpleFolder('Session Templates', 'templates') },
   { key: 'trackpresets', category: 'trackpresets', run: simpleFolder('Track Presets', 'trackpresets') },
   { key: 'pluginsettings', category: 'pluginsettings', run: pluginSettings },
@@ -165,12 +169,22 @@ const PRO_TOOLS_CATEGORIES: Array<{ key: string; category: string; run: (ctx: Co
   {
     key: 'memorylocation',
     category: 'memoryLocation',
-    run: withQuickPresets('Pro Tools Presets/Memory Location Window', 'memorylocationpresets', 'memorylocationpresets', 'ptpreset'),
+    run: withQuickPresets(
+      'Pro Tools Presets/Memory Location Window',
+      'memorylocationpresets',
+      'memorylocationpresets',
+      'ptpreset',
+    ),
   },
   {
     key: 'trackdatatorecall',
     category: 'trackdatarecall',
-    run: withQuickPresets('Pro Tools Presets/Track Data to Recall', 'trackdatapresets', 'trackdatarecallpresets', 'ptpreset'),
+    run: withQuickPresets(
+      'Pro Tools Presets/Track Data to Recall',
+      'trackdatapresets',
+      'trackdatarecallpresets',
+      'ptpreset',
+    ),
   },
   {
     key: 'keyboardshortcuts',
@@ -274,25 +288,34 @@ export function createPresetService(config: ConfigService, session: SessionServi
 
       const started = new Date().toISOString()
       if (await isRunning('soundminer')) {
-        return summarize(action, started, [{
-          category: 'preflight',
-          status: 'error',
-          note: 'Soundminer läuft – bitte zuerst Soundminer schließen.',
-        }])
+        return summarize(action, started, [
+          {
+            category: 'preflight',
+            status: 'error',
+            note: 'Soundminer läuft – bitte zuerst Soundminer schließen.',
+          },
+        ])
       }
 
       const ctx = await context(action)
       const { data: modules } = await config.getModules()
       const soundminer = isPlainObject(modules.soundminer) ? modules.soundminer : {}
-      const details = [await runCategory('tablayouts', async () => {
-        if (soundminer.version !== 'V6 Pro') throw new Error(`Soundminer-Version nicht unterstützt: ${String(soundminer.version)}`)
-        const { source, target } = direction(ctx, String(soundminer.supportPath ?? ''), path.join(ctx.archive, 'soundminer'))
-        if (!(await exists(source))) throw new SourceMissing(source)
-        await fs.mkdir(target, { recursive: true })
-        for (const name of await fs.readdir(source)) {
-          if (name.includes('tabstate')) await fs.copyFile(path.join(source, name), path.join(target, name))
-        }
-      })]
+      const details = [
+        await runCategory('tablayouts', async () => {
+          if (soundminer.version !== 'V6 Pro')
+            throw new Error(`Soundminer-Version nicht unterstützt: ${String(soundminer.version)}`)
+          const { source, target } = direction(
+            ctx,
+            String(soundminer.supportPath ?? ''),
+            path.join(ctx.archive, 'soundminer'),
+          )
+          if (!(await exists(source))) throw new SourceMissing(source)
+          await fs.mkdir(target, { recursive: true })
+          for (const name of await fs.readdir(source)) {
+            if (name.includes('tabstate')) await fs.copyFile(path.join(source, name), path.join(target, name))
+          }
+        }),
+      ]
       return summarize(action, started, details)
     },
   }

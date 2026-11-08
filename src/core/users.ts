@@ -126,17 +126,17 @@ export function createUserService(config: ConfigService) {
       const entries = await listDirectory(base)
 
       // Für jeden sichtbaren Ordner das Kürzel lesen, gleichzeitig statt nacheinander
-      const users = await Promise.all(entries
-        .filter((entry) => entry.isDirectory() && !entry.name.startsWith('.'))
-        .map(async (entry): Promise<User | null> => {
-          const text = await readTextOrNull(path.join(base, entry.name, 'immo24', 'immo24-user.json'))
-          const kuerzel = text?.trim()
-          return kuerzel ? { name: entry.name, kuerzel } : null
-        }))
+      const users = await Promise.all(
+        entries
+          .filter((entry) => entry.isDirectory() && !entry.name.startsWith('.'))
+          .map(async (entry): Promise<User | null> => {
+            const text = await readTextOrNull(path.join(base, entry.name, 'immo24', 'immo24-user.json'))
+            const kuerzel = text?.trim()
+            return kuerzel ? { name: entry.name, kuerzel } : null
+          }),
+      )
 
-      return users
-        .filter((user) => user !== null)
-        .sort((a, b) => a.name.localeCompare(b.name, 'de'))
+      return users.filter((user) => user !== null).sort((a, b) => a.name.localeCompare(b.name, 'de'))
     },
 
     /**
@@ -151,7 +151,13 @@ export function createUserService(config: ConfigService) {
       const details = list
         .map((entry) => ({ name: String(entry?.name ?? '').trim() }))
         .filter(({ name }) => name && (!isSimpleName(name) || checkWindowsName(name).length > 0))
-        .map(({ name }) => ({ field: 'name', name, errors: isSimpleName(name) ? checkWindowsName(name) : [{ code: 'forbidden_chars', message: 'Unzulässiger Name' }] }))
+        .map(({ name }) => ({
+          field: 'name',
+          name,
+          errors: isSimpleName(name)
+            ? checkWindowsName(name)
+            : [{ code: 'forbidden_chars', message: 'Unzulässiger Name' }],
+        }))
       if (details.length) throw new CoreError('validation_failed', { details })
 
       const base = await mitarbeiterPath()

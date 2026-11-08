@@ -7,12 +7,7 @@ const isNext = version.includes('-next')
 module.exports = {
   appId: isNext ? 'de.immo24.studioassistent.next' : 'de.immo24.studioassistent',
   productName: isNext ? 'immo24 Studioassistent Next' : 'immo24 Studioassistent',
-  files: [
-    'dist/**',
-    'dist-electron/**',
-    'assets/**',
-    'package.json',
-  ],
+  files: ['dist/**', 'dist-electron/**', 'assets/**', 'package.json'],
   win: {
     target: ['nsis'],
   },

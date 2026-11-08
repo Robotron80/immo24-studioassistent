@@ -73,7 +73,12 @@ test('das Passwort bleibt lesbar und lässt sich durch Löschen der Datei zurüc
 })
 
 test('liest die Dateiformate früherer Versionen', async (t) => {
-  for (const [content, isSet] of [['{"password":"geheim"}', true], ['geheim', true], ['{}', false], ['', false]] as const) {
+  for (const [content, isSet] of [
+    ['{"password":"geheim"}', true],
+    ['geheim', true],
+    ['{}', false],
+    ['', false],
+  ] as const) {
     const dir = tempDir(t)
     fs.writeFileSync(path.join(dir, 'adminpw.json'), content)
     const passwords = createPasswordService(dir)
@@ -181,7 +186,12 @@ test('Mitarbeiternamen mit Pfadzeichen werden abgewiesen, ohne dass Ordner entst
 
   for (const name of ['../Draußen', 'Max/Test', 'Max\\Test', 'Max:Test']) {
     await assert.rejects(
-      users.saveUsers({ mitarbeiter: [{ name: 'Gut', kuerzel: 'GU' }, { name, kuerzel: 'XX' }] }),
+      users.saveUsers({
+        mitarbeiter: [
+          { name: 'Gut', kuerzel: 'GU' },
+          { name, kuerzel: 'XX' },
+        ],
+      }),
       (error: unknown) => error instanceof CoreError && error.code === 'validation_failed',
     )
   }
@@ -200,6 +210,9 @@ test('anmelden kann sich nur, wer als Mitarbeiter ein Kürzel hat', async (t) =>
 
   assert.equal(await session.login('Max'), 'MM')
   for (const name of ['Leer', 'Gibtsnicht', '../Mitarbeiter/Max', '..']) {
-    await assert.rejects(session.login(name), (error: unknown) => error instanceof CoreError && error.code === 'not_found')
+    await assert.rejects(
+      session.login(name),
+      (error: unknown) => error instanceof CoreError && error.code === 'not_found',
+    )
   }
 })

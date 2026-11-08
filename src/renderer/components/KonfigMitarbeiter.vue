@@ -23,8 +23,8 @@
               icon="mdi-pencil"
               size="small"
               variant="text"
-              @click="openEditDialog(m)"
               :aria-label="`Kürzel von ${m.name} bearbeiten`"
+              @click="openEditDialog(m)"
             />
           </td>
         </tr>
@@ -46,7 +46,7 @@
         <v-alert v-if="dialogError" type="error" class="mt-2">{{ dialogError }}</v-alert>
       </v-card-text>
       <v-card-actions class="justify-end">
-        <v-btn variant="text" @click="newDialogOpen=false">Abbrechen</v-btn>
+        <v-btn variant="text" @click="newDialogOpen = false">Abbrechen</v-btn>
         <v-btn color="primary" @click="createMitarbeiter">Anlegen</v-btn>
       </v-card-actions>
     </v-card>
@@ -57,12 +57,14 @@
     <v-card>
       <v-card-title class="text-h6">Kürzel bearbeiten</v-card-title>
       <v-card-text>
-        <div class="mb-2">Mitarbeiter: <strong>{{ editName }}</strong></div>
+        <div class="mb-2">
+          Mitarbeiter: <strong>{{ editName }}</strong>
+        </div>
         <v-text-field v-model="editKuerzel" label="Neues Kürzel" maxlength="8" />
         <v-alert v-if="editDialogError" type="error" class="mt-2">{{ editDialogError }}</v-alert>
       </v-card-text>
       <v-card-actions class="justify-end">
-        <v-btn variant="text" @click="editDialogOpen=false">Abbrechen</v-btn>
+        <v-btn variant="text" @click="editDialogOpen = false">Abbrechen</v-btn>
         <v-btn color="primary" @click="saveEditKuerzel">Speichern</v-btn>
       </v-card-actions>
     </v-card>
@@ -74,46 +76,32 @@
  * Mitarbeiter anlegen und Kürzel ändern, für Konfiguration und Einrichtungsassistent.
  * Löschen geht hier bewusst nicht, ein Mitarbeiter ist ein Ordner auf dem Speicher.
  */
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 
+import { useKonfigBereich } from '@/composables/useKonfigBereich'
 import { backend } from '@/lib/backend'
 import { checkWindowsName } from '../../core/names'
 
-// Die Arbeitskopie: Gespeichert wird erst, wenn in der Konfiguration "Speichern" gedrückt wird
-const staged = ref<any[]>([])
-const dirty = ref(false)
-
-const error = ref('')
+// Gespeichert wird erst, wenn in der Konfiguration "Speichern" gedrückt wird
+const { staged, error, exposed } = useKonfigBereich({
+  empty: () => [] as any[],
+  errorText: 'Mitarbeiter konnten nicht geladen werden.',
+  load: async () => ({ data: await backend.listUsers() }),
+})
 const dialogError = ref('')
 
 const search = ref('')
 
 const filteredMitarbeiter = computed(() => {
   const q = (search.value || '').toLowerCase()
-  return staged.value.filter(m =>
-    m.name.toLowerCase().includes(q) ||
-    m.kuerzel.toLowerCase().includes(q)
-  )
+  return staged.value.filter((m) => m.name.toLowerCase().includes(q) || m.kuerzel.toLowerCase().includes(q))
 })
-
-/** Lädt die Mitarbeiter vom Speicher und verwirft die Arbeitskopie. */
-async function loadSnapshot() {
-  error.value = ''
-  try {
-    staged.value = await backend.listUsers()
-    dirty.value = false
-  } catch (e) {
-    error.value = e.message || 'Mitarbeiter konnten nicht geladen werden.'
-  }
-}
-onMounted(loadSnapshot)
 
 // Das nutzen Konfiguration und Assistent beim Speichern und Abbrechen
 defineExpose({
-  isDirty: () => dirty.value,
+  ...exposed,
   hasUsers: () => staged.value.length > 0,
   getSnapshotForSave: () => ({ mitarbeiter: staged.value }),
-  resetToServer: async () => { await loadSnapshot() }
 })
 
 // Dialog: Neuer Mitarbeiter
@@ -131,17 +119,31 @@ function openNewDialog() {
 function createMitarbeiter() {
   const name = (newName.value || '').trim()
   const kuerzel = (newKuerzel.value || '').trim()
-  if (!name) { dialogError.value = 'Bitte Namen eingeben.'; return }
+  if (!name) {
+    dialogError.value = 'Bitte Namen eingeben.'
+    return
+  }
   // Der Name wird zum Ordnernamen, deshalb gelten dieselben Regeln wie für Projekte
   const nameError = checkWindowsName(name)[0]
-  if (nameError) { dialogError.value = nameError.message; return }
-  if (!kuerzel) { dialogError.value = 'Bitte Kürzel eingeben.'; return }
-  const existsName = staged.value.some(m => (m.name || '').toLowerCase() === name.toLowerCase())
-  if (existsName) { dialogError.value = 'Mitarbeiter existiert bereits.'; return }
-  const existsKuerzel = staged.value.some(m => (m.kuerzel || '').toLowerCase() === kuerzel.toLowerCase())
-  if (existsKuerzel) { dialogError.value = 'Kürzel existiert bereits.'; return }
+  if (nameError) {
+    dialogError.value = nameError.message
+    return
+  }
+  if (!kuerzel) {
+    dialogError.value = 'Bitte Kürzel eingeben.'
+    return
+  }
+  const existsName = staged.value.some((m) => (m.name || '').toLowerCase() === name.toLowerCase())
+  if (existsName) {
+    dialogError.value = 'Mitarbeiter existiert bereits.'
+    return
+  }
+  const existsKuerzel = staged.value.some((m) => (m.kuerzel || '').toLowerCase() === kuerzel.toLowerCase())
+  if (existsKuerzel) {
+    dialogError.value = 'Kürzel existiert bereits.'
+    return
+  }
   staged.value.push({ name, kuerzel })
-  dirty.value = true
   newDialogOpen.value = false
 }
 
@@ -156,7 +158,7 @@ function openEditDialog(m) {
   editName.value = m.name
   editKuerzel.value = m.kuerzel
   editDialogError.value = ''
-  editIndex = staged.value.findIndex(x => x.name === m.name)
+  editIndex = staged.value.findIndex((x) => x.name === m.name)
   editDialogOpen.value = true
 }
 
@@ -167,8 +169,8 @@ function saveEditKuerzel() {
     return
   }
   // Dasselbe Kürzel darf kein anderer Mitarbeiter haben
-  const existsKuerzel = staged.value.some((m, idx) =>
-    idx !== editIndex && (m.kuerzel || '').toLowerCase() === kuerzel.toLowerCase()
+  const existsKuerzel = staged.value.some(
+    (m, idx) => idx !== editIndex && (m.kuerzel || '').toLowerCase() === kuerzel.toLowerCase(),
   )
   if (existsKuerzel) {
     editDialogError.value = 'Kürzel existiert bereits.'
@@ -176,7 +178,6 @@ function saveEditKuerzel() {
   }
   if (editIndex >= 0) {
     staged.value[editIndex].kuerzel = kuerzel
-    dirty.value = true
     editDialogOpen.value = false
   }
 }

@@ -14,7 +14,6 @@
  *   - seedConfigured:    Dummy-Daten wie nach dem Einrichtungsassistenten
  *   - loadReference:     liest die gespeicherte Referenz eines Szenarios
  */
-const assert = require('node:assert/strict')
 const fs = require('node:fs')
 const os = require('node:os')
 const path = require('node:path')
@@ -42,7 +41,11 @@ function createNormalizer(base) {
   const today = new Date().toISOString().slice(0, 10)
   // macOS meldet temporäre Ordner je nach Aufruf mit oder ohne /private davor.
   const realBase = fs.realpathSync(base)
-  const forms = [...new Set([base, realBase])].flatMap((b) => [b, b.replaceAll('\\', '/'), JSON.stringify(b).slice(1, -1)])
+  const forms = [...new Set([base, realBase])].flatMap((b) => [
+    b,
+    b.replaceAll('\\', '/'),
+    JSON.stringify(b).slice(1, -1),
+  ])
   return function normalizeText(text) {
     let out = String(text)
     for (const form of forms) out = out.replaceAll(form, '<BASE>')
@@ -63,10 +66,12 @@ function normalizeValue(value, normalizeText) {
   }
   if (Array.isArray(value)) return value.map((item) => normalizeValue(item, normalizeText))
   if (value && typeof value === 'object') {
-    return Object.fromEntries(Object.entries(value).map(([key, item]) => [
-      key,
-      key === 'jobId' || key === 'id' ? '<ID>' : normalizeValue(item, normalizeText),
-    ]))
+    return Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [
+        key,
+        key === 'jobId' || key === 'id' ? '<ID>' : normalizeValue(item, normalizeText),
+      ]),
+    )
   }
   return value
 }

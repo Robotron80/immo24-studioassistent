@@ -70,10 +70,14 @@ test('verhält sich wie die Referenz, bis auf die bewussten Korrekturen', async 
       [`Produktionen/Ohne Ordner/${NO_FOLDER_PROJECT}/`]: null,
       [`Produktionen/Ohne Ordner/${NO_FOLDER_PROJECT}/01_Material/`]: null,
       [`Produktionen/Ohne Ordner/${NO_FOLDER_PROJECT}/02_Dialogschnitt/`]: null,
-      [`Produktionen/Ohne Ordner/${NO_FOLDER_PROJECT}/02_Dialogschnitt/${NO_FOLDER_PROJECT} - Dialog TE v1.ptx`]: 'einzeln',
+      [`Produktionen/Ohne Ordner/${NO_FOLDER_PROJECT}/02_Dialogschnitt/${NO_FOLDER_PROJECT} - Dialog TE v1.ptx`]:
+        'einzeln',
       [`Produktionen/Ohne Ordner/${NO_FOLDER_PROJECT}/10_Mischung/`]: null,
-      [`Produktionen/Ohne Ordner/${NO_FOLDER_PROJECT}/immo24-proj.json`]:
-        files[`Produktionen/Kunde A/${PROJECT_FOLDER}/immo24-proj.json`].replace('Kunde A', 'Ohne Ordner').replace('AB12', 'GH78'),
+      [`Produktionen/Ohne Ordner/${NO_FOLDER_PROJECT}/immo24-proj.json`]: files[
+        `Produktionen/Kunde A/${PROJECT_FOLDER}/immo24-proj.json`
+      ]
+        .replace('Kunde A', 'Ohne Ordner')
+        .replace('AB12', 'GH78'),
     })
   }
 
@@ -129,7 +133,9 @@ test('neue Projekte: MoID wird großgeschrieben, Leerzeichen am Rand entfernt', 
   const created = await projects.createProject({ ...project, moid: ' ab12 ', projektname: '  Testprojekt ' })
 
   assert.equal(created.filename, '2026-01-15 Testprojekt AB12 - Dialog TE v1.ptx')
-  const meta = JSON.parse(fs.readFileSync(path.join(dirs.produktionen, 'Kunde A', PROJECT_FOLDER, 'immo24-proj.json'), 'utf8'))
+  const meta = JSON.parse(
+    fs.readFileSync(path.join(dirs.produktionen, 'Kunde A', PROJECT_FOLDER, 'immo24-proj.json'), 'utf8'),
+  )
   assert.equal(meta.mo_id, 'AB12')
   assert.equal(meta.projektname, 'Testprojekt')
 })
@@ -158,7 +164,10 @@ test('die Projektliste zeigt die neuesten Projekte zuerst', async (t) => {
   await projects.createProject({ ...project, datum: '2025-12-24', moid: 'AA03', projektname: 'Alt' })
 
   const rows = await projects.listProjects('Kunde A')
-  assert.deepEqual(rows.map((row) => row.projektname), ['Neu', 'Mittel', 'Alt'])
+  assert.deepEqual(
+    rows.map((row) => row.projektname),
+    ['Neu', 'Mittel', 'Alt'],
+  )
 })
 
 test('Stammdaten behalten zusätzliche Felder wie das EventPipe-Ziel', async (t) => {
@@ -171,7 +180,10 @@ test('Stammdaten behalten zusätzliche Felder wie das EventPipe-Ziel', async (t)
 
   const saved = JSON.parse(fs.readFileSync(path.join(dirs.stammdaten, 'kunden_stammdaten.json'), 'utf8'))
   assert.equal(saved[0].ordner[0].ist_EventpipeZiel, true)
-  assert.deepEqual((await stammdaten.listForSelection())[0].stufen.map((stufe) => stufe.value), ['02_Dialogschnitt', '10_Mischung'])
+  assert.deepEqual(
+    (await stammdaten.listForSelection())[0].stufen.map((stufe) => stufe.value),
+    ['02_Dialogschnitt', '10_Mischung'],
+  )
 })
 
 test('überschreibt keine Stammdaten, die ein anderer Rechner geändert hat', async (t) => {
@@ -220,7 +232,10 @@ test('Folgeversion nimmt nur echte Projektordner direkt unter dem Kunden', async
   await projects.createProject(project)
   await assert.rejects(projects.addSession(project), hasCode('not_found'))
   await assert.rejects(projects.addSession({ ...project, ordner: 'Gibtsnicht' }), hasCode('not_found'))
-  await assert.rejects(projects.addSession({ ...project, ordner: `../Kunde A/${PROJECT_FOLDER}` }), hasCode('not_found'))
+  await assert.rejects(
+    projects.addSession({ ...project, ordner: `../Kunde A/${PROJECT_FOLDER}` }),
+    hasCode('not_found'),
+  )
   await assert.rejects(projects.addSession({ ...project, ordner: 'Fremder Ordner' }), hasCode('not_found'))
 })
 
@@ -288,16 +303,24 @@ test('ein Projekt kann mehrere MoIDs tragen, jede ist einzeln vergeben', async (
   assert.match(created.filename, /Fassungen AB12\+CD34\+EF56 .* v1\.ptx$/)
 
   // Jede einzelne MoID ist damit vergeben, gemeldet wird genau die übereinstimmende
-  await assert.rejects(projects.createProject({ ...project, moid: 'ZZ99 cd34', projektname: 'Andere' }), (error: unknown) => {
-    assert.ok(error instanceof CoreError && error.code === 'moid_vergeben')
-    assert.equal((error.details.projekt as { moid: string }).moid, 'CD34')
-    return true
-  })
+  await assert.rejects(
+    projects.createProject({ ...project, moid: 'ZZ99 cd34', projektname: 'Andere' }),
+    (error: unknown) => {
+      assert.ok(error instanceof CoreError && error.code === 'moid_vergeben')
+      assert.equal((error.details.projekt as { moid: string }).moid, 'CD34')
+      return true
+    },
+  )
   // Nur ganze MoIDs zählen, ein Teil davon ist kein Treffer
   await projects.createProject({ ...project, moid: 'CD3', projektname: 'Kurz' })
 
   // Die nächste Session zählt weiter, die Liste zeigt alle MoIDs
-  const next = await projects.addSession({ ...project, moid: 'AB12+CD34+EF56', projektname: 'Fassungen', ordner: path.basename(created.zielPfad) })
+  const next = await projects.addSession({
+    ...project,
+    moid: 'AB12+CD34+EF56',
+    projektname: 'Fassungen',
+    ordner: path.basename(created.zielPfad),
+  })
   assert.match(next.filename, / v2\.ptx$/)
   const row = (await projects.listProjects('Kunde A')).find((item) => item.projektname === 'Fassungen')
   assert.equal(row?.moid, 'AB12+CD34+EF56')
@@ -307,10 +330,10 @@ test('ein Projekt kann mehrere MoIDs tragen, jede ist einzeln vergeben', async (
 
 test('prüft jede MoID: höchstens vier Stellen und keine doppelt', async (t) => {
   const { projects } = await setup(t)
-  const failsWith = (code: string) => (error: unknown) => (
-    error instanceof CoreError && error.code === 'validation_failed'
-    && (error.details.details as Array<{ errors: Array<{ code: string }> }>)[0].errors[0].code === code
-  )
+  const failsWith = (code: string) => (error: unknown) =>
+    error instanceof CoreError &&
+    error.code === 'validation_failed' &&
+    (error.details.details as Array<{ errors: Array<{ code: string }> }>)[0].errors[0].code === code
   await assert.rejects(projects.createProject({ ...project, moid: 'AB12 ABCDE' }), failsWith('moid_too_long'))
   await assert.rejects(projects.createProject({ ...project, moid: 'AB12 ab12' }), failsWith('moid_duplicate'))
 })
@@ -341,13 +364,19 @@ test('mit {{version}}{{anmerkung}} hängt die Anmerkung mit Leerzeichen an', asy
   const { version } = await config.getSchema()
   await config.saveSchema({
     version: version as string,
-    data: { projektordnerSchema: '{{datum}} {{projektname}} {{moid}}', sessionSchema: '{{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}{{anmerkung}}' },
+    data: {
+      projektordnerSchema: '{{datum}} {{projektname}} {{moid}}',
+      sessionSchema: '{{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}{{anmerkung}}',
+    },
   })
   const created = await projects.createProject({ ...project, anmerkung: ' Erste Fassung ' })
   assert.match(created.filename, /TE v1 Erste Fassung\.ptx$/)
   const next = await projects.addSession({ ...project, ordner: path.basename(created.zielPfad) })
   assert.match(next.filename, /TE v2\.ptx$/)
-  await assert.rejects(projects.addSession({ ...project, ordner: path.basename(created.zielPfad), anmerkung: 'a/b' }), hasCode('validation_failed'))
+  await assert.rejects(
+    projects.addSession({ ...project, ordner: path.basename(created.zielPfad), anmerkung: 'a/b' }),
+    hasCode('validation_failed'),
+  )
 })
 
 test('mit dem Platzhalter {{anmerkung}} steht sie an seiner Stelle, leer ohne Lücke', async (t) => {
@@ -356,7 +385,10 @@ test('mit dem Platzhalter {{anmerkung}} steht sie an seiner Stelle, leer ohne L�
   const { version } = await config.getSchema()
   await config.saveSchema({
     version: version as string,
-    data: { projektordnerSchema: '{{datum}} {{projektname}} {{moid}}', sessionSchema: '{{projektname}} {{anmerkung}} - {{produktionsstufe}} {{version}}' },
+    data: {
+      projektordnerSchema: '{{datum}} {{projektname}} {{moid}}',
+      sessionSchema: '{{projektname}} {{anmerkung}} - {{produktionsstufe}} {{version}}',
+    },
   })
 
   const created = await projects.createProject(project)
@@ -372,7 +404,10 @@ test('legt nichts an, wenn der Produktionen-Ordner fehlt', async (t) => {
   const { dirs, projects, stammdaten } = await setup(t)
   fs.rmSync(dirs.produktionen, { recursive: true })
 
-  await assert.rejects(projects.createProject({ ...project, kunde: 'Ohne Ordner' }), hasCode('produktionen_path_missing'))
+  await assert.rejects(
+    projects.createProject({ ...project, kunde: 'Ohne Ordner' }),
+    hasCode('produktionen_path_missing'),
+  )
   assert.equal(fs.existsSync(dirs.produktionen), false)
 
   const { version, customers } = await stammdaten.getSnapshot()
@@ -418,9 +453,13 @@ test('löscht nach einem Fehler beim Anlegen nichts und nennt den Ordner', async
   kunde.ordner.push({ ...kunde.ordner[0] })
   fs.writeFileSync(file, JSON.stringify(customers))
 
-  await assert.rejects(projects.createProject(project), (error: unknown) => (
-    error instanceof CoreError && error.code === 'projekt_unvollstaendig'
-    && String(error.details.zielPfad).endsWith(PROJECT_FOLDER)))
+  await assert.rejects(
+    projects.createProject(project),
+    (error: unknown) =>
+      error instanceof CoreError &&
+      error.code === 'projekt_unvollstaendig' &&
+      String(error.details.zielPfad).endsWith(PROJECT_FOLDER),
+  )
   // Das halbe Projekt bleibt liegen, samt Projektdatei
   assert.ok(fs.existsSync(path.join(dirs.produktionen, project.kunde, PROJECT_FOLDER, 'immo24-proj.json')))
 })
@@ -430,7 +469,9 @@ test('ein Projektordner, den ein anderer Rechner gerade angelegt hat, bleibt unb
   const folder = path.join(dirs.produktionen, project.kunde, PROJECT_FOLDER)
   // Der andere Rechner ist zwischen Prüfung und Anlegen schneller
   const original = fs.promises.mkdir
-  t.after(() => { fs.promises.mkdir = original })
+  t.after(() => {
+    fs.promises.mkdir = original
+  })
   fs.promises.mkdir = (async (target: fs.PathLike, options?: fs.MakeDirectoryOptions) => {
     if (String(target) === folder && !fs.existsSync(folder)) {
       fs.mkdirSync(folder)
@@ -450,8 +491,14 @@ test('Vorlage, Kunde, Stufe und Ordner mit Pfadanteilen werden abgewiesen', asyn
   // Eine Datei außerhalb der Vorlagen, die wie eine Vorlage aussieht
   fs.writeFileSync(path.join(dirs.mitarbeiter, 'Fremd.ptxt'), 'x')
 
-  await assert.rejects(projects.createProject({ ...project, moid: 'ZZ99', template: '../../Fremd.ptxt' }), hasCode('template_missing'))
-  await assert.rejects(projects.addSession({ ...project, ordner, template: '../../Fremd.ptxt' }), hasCode('template_missing'))
+  await assert.rejects(
+    projects.createProject({ ...project, moid: 'ZZ99', template: '../../Fremd.ptxt' }),
+    hasCode('template_missing'),
+  )
+  await assert.rejects(
+    projects.addSession({ ...project, ordner, template: '../../Fremd.ptxt' }),
+    hasCode('template_missing'),
+  )
   await assert.rejects(projects.addSession({ ...project, ordner, stufe: '../../Draußen' }), hasCode('not_found'))
   await assert.rejects(projects.addSession({ ...project, ordner: '../Kunde A' }), hasCode('not_found'))
   await assert.rejects(projects.listProjects('../Kunde A'), hasCode('not_found'))

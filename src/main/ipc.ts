@@ -29,7 +29,9 @@ export function registerIpc(): void {
       return
     }
     // Fehlende Ablageordner ergänzen. Klappt das nicht (Share weg), geht die Anmeldung trotzdem weiter.
-    await backend().users.addMissingFolders(user).catch(() => {})
+    await backend()
+      .users.addMissingFolders(user)
+      .catch(() => {})
     await showMainWindow()
   })
 

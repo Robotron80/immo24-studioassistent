@@ -39,12 +39,20 @@ test('verhält sich wie die Referenz, bis auf die bewussten Korrekturen', async 
   // Korrektur: Fade Presets ohne Quick meldeten einen Fehler, obwohl alles kopiert wurde
   const fades = stepNamed('Store alles, ohne Quick').response
   fades.status = 200
-  Object.assign(fades.body, { overall: 'ok', details: [{ category: 'fadePresets', status: 'ok' }], message: 'Store erfolgreich' })
+  Object.assign(fades.body, {
+    overall: 'ok',
+    details: [{ category: 'fadePresets', status: 'ok' }],
+    message: 'Store erfolgreich',
+  })
 
   // Korrektur: Der Recall der Keyboard Shortcuts las wegen eines Tippfehlers aus dem falschen Ordner
   const shortcuts = stepNamed('Recall keyboardShortcuts').response
   shortcuts.status = 200
-  Object.assign(shortcuts.body, { overall: 'ok', details: [{ category: 'keyboardshortcuts', status: 'ok' }], message: 'Recall erfolgreich' })
+  Object.assign(shortcuts.body, {
+    overall: 'ok',
+    details: [{ category: 'keyboardshortcuts', status: 'ok' }],
+    message: 'Recall erfolgreich',
+  })
 
   assert.deepEqual(JSON.parse(JSON.stringify(env.steps)), expected)
 })
@@ -83,10 +91,13 @@ test('eine fehlende Quelle ist ein Hinweis, die anderen Kategorien laufen weiter
     categories: { cat1: [{ key: 'trackPresets' }, { key: 'templates' }] },
   })
 
-  assert.deepEqual(result.details.map((detail) => [detail.category, detail.status]), [
-    ['templates', 'ok'],
-    ['trackpresets', 'partial'],
-  ])
+  assert.deepEqual(
+    result.details.map((detail) => [detail.category, detail.status]),
+    [
+      ['templates', 'ok'],
+      ['trackpresets', 'partial'],
+    ],
+  )
   assert.equal(result.overall, 'ok')
   assert.equal(result.message, 'Vorgang abgeschlossen – mit Hinweisen')
   // Der Hinweis nennt, was gefehlt hat, damit man damit etwas anfangen kann
@@ -131,7 +142,10 @@ test('Soundminer: bricht ab, solange das Programm läuft', async (t) => {
 test('Eingaben werden geprüft', async (t) => {
   const { presets, session } = await setup(t)
   await assert.rejects(presets.runProTools({ action: 'loeschen', categories: {} }), hasCode('invalid_action'))
-  await assert.rejects(presets.runProTools({ action: 'store', categories: { cat: [{ key: 'pluginMaps' }] } }), hasCode('nothing_selected'))
+  await assert.rejects(
+    presets.runProTools({ action: 'store', categories: { cat: [{ key: 'pluginMaps' }] } }),
+    hasCode('nothing_selected'),
+  )
 
   session.logout()
   await assert.rejects(presets.runProTools(recall('templates')), hasCode('not_logged_in'))

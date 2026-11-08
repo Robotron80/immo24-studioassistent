@@ -39,8 +39,8 @@
         </v-alert>
 
         <div class="text-body-2">
-          Vorhandene Sessions behalten ihren Namen und bleiben unverändert. Neue Sessions tragen
-          den neuen Namen, die Version zählt weiter.
+          Vorhandene Sessions behalten ihren Namen und bleiben unverändert. Neue Sessions tragen den neuen Namen, die
+          Version zählt weiter.
         </div>
         <v-checkbox
           v-if="!preview.gesperrt.length"
@@ -97,20 +97,23 @@ const canRename = computed(() => {
 })
 
 // Beim Öffnen alles zurücksetzen und mit den aktuellen Werten vorbelegen
-watch(() => props.modelValue, (open) => {
-  if (!open) return
-  neuerName.value = props.project?.projektname ?? ''
-  ohneMoid.value = !!props.project?.ohneMoid
-  neueMoid.value = ohneMoid.value ? '' : (props.project?.moid ?? '')
-  preview.value = null
-  ignoreLocks.value = false
-  confirmed.value = false
-  error.value = ''
-  step.value = 'form'
-})
+watch(
+  () => props.modelValue,
+  (open) => {
+    if (!open) return
+    neuerName.value = props.project?.projektname ?? ''
+    ohneMoid.value = !!props.project?.ohneMoid
+    neueMoid.value = ohneMoid.value ? '' : (props.project?.moid ?? '')
+    preview.value = null
+    ignoreLocks.value = false
+    confirmed.value = false
+    error.value = ''
+    step.value = 'form'
+  },
+)
 
 /** Die Angaben, an denen das Backend das Projekt und die neuen Werte erkennt. */
-function request (extra = {}) {
+function request(extra = {}) {
   return {
     kunde: props.kunde,
     ordner: props.project.ordner,
@@ -122,13 +125,13 @@ function request (extra = {}) {
 }
 
 /** Führt eine Aktion aus und zeigt Fehler im Dialog an. */
-async function run (action) {
+async function run(action) {
   busy.value = true
   error.value = ''
   try {
     await action()
   } catch (e) {
-    const lines = e.details?.details?.flatMap(report => report.errors.map(item => item.message))
+    const lines = e.details?.details?.flatMap((report) => report.errors.map((item) => item.message))
     const taken = e.details?.projekt
     if (taken) error.value = `${e.message} Sie gehört zum Projekt ${taken.projektname} bei ${taken.kunde}.`
     else error.value = lines?.length ? lines.join(' ') : e.message
@@ -137,14 +140,14 @@ async function run (action) {
   }
 }
 
-function loadPreview () {
+function loadPreview() {
   return run(async () => {
     preview.value = await backend.previewRename(request())
     step.value = 'preview'
   })
 }
 
-function doRename () {
+function doRename() {
   return run(async () => {
     const result = await backend.renameProject(request({ trotzSperre: ignoreLocks.value }))
     emit('renamed', result)
@@ -152,7 +155,7 @@ function doRename () {
   })
 }
 
-function close () {
+function close() {
   emit('update:modelValue', false)
 }
 </script>

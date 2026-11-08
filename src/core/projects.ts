@@ -20,7 +20,18 @@ import { localDate } from './dates.ts'
 import { CoreError } from './errors.ts'
 import { exists, writeFileAtomic } from './files.ts'
 import { findProjectByMoid, readCustomerProjects } from './moid.ts'
-import { checkMoids, checkWindowsName, escapeRegExp, fillSessionName, fillTemplate, formatMoids, isPlaceholderMoid, isSimpleName, looseSpaces, tidyName } from './names.ts'
+import {
+  checkMoids,
+  checkWindowsName,
+  escapeRegExp,
+  fillSessionName,
+  fillTemplate,
+  formatMoids,
+  isPlaceholderMoid,
+  isSimpleName,
+  looseSpaces,
+  tidyName,
+} from './names.ts'
 import type { SessionService } from './session.ts'
 import type { Kunde, StammdatenService } from './stammdaten.ts'
 
@@ -80,15 +91,22 @@ function validate(input: ProjectInput): Required<Pick<ProjectInput, (typeof REQU
  * auch Version 0.4 die Sessions mit Anmerkung mit (sie setzt für unbekannte
  * Platzhalter beim Suchen "beliebiger Text" ein und beim Anlegen nichts).
  */
-function nextSessionName(existingFiles: string[], schema: string, values: Record<string, string>, wildcards: string[]): string {
+function nextSessionName(
+  existingFiles: string[],
+  schema: string,
+  values: Record<string, string>,
+  wildcards: string[],
+): string {
   const normalized = schema.normalize('NFC')
   // Fürs Suchen hängen wir hinten "beliebiger Text" an, falls das Schema dort keine Anmerkung vorsieht
   const searchSchema = normalized.includes('{{anmerkung}}') ? normalized : `${normalized}{{anmerkung}}`
-  const pattern = looseSpaces(escapeRegExp(searchSchema)
-    .replace(/\\{\\{version\\}\\}/g, 'v(\\d+)')
-    .replace(/\\{\\{(\w+)\\}\\}/g, (_match, key: string) => (
-      key === 'anmerkung' || wildcards.includes(key) || !values[key] ? '.*' : escapeRegExp(values[key])
-    )))
+  const pattern = looseSpaces(
+    escapeRegExp(searchSchema)
+      .replace(/\\{\\{version\\}\\}/g, 'v(\\d+)')
+      .replace(/\\{\\{(\w+)\\}\\}/g, (_match, key: string) =>
+        key === 'anmerkung' || wildcards.includes(key) || !values[key] ? '.*' : escapeRegExp(values[key]),
+      ),
+  )
   const regex = new RegExp(`^${pattern}\\.ptx$`)
 
   let highest = 0
@@ -152,8 +170,15 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
           const folder = path.join(dir, entry.name)
           const ptxtFiles = (await fs.readdir(folder)).filter((name) => /\.ptxt$/i.test(name))
           if (ptxtFiles.length === 0 || !(await exists(path.join(folder, 'Audio Files')))) continue
-          const preferred = ptxtFiles.find((name) => name.replace(/\.ptxt$/i, '').toLowerCase() === entry.name.toLowerCase())
-          options.push({ label: `${entry.name} (mit Clips)`, value: entry.name, kind: 'package', relPtxt: preferred ?? ptxtFiles[0] })
+          const preferred = ptxtFiles.find(
+            (name) => name.replace(/\.ptxt$/i, '').toLowerCase() === entry.name.toLowerCase(),
+          )
+          options.push({
+            label: `${entry.name} (mit Clips)`,
+            value: entry.name,
+            kind: 'package',
+            relPtxt: preferred ?? ptxtFiles[0],
+          })
         }
       }
       return options.sort((a, b) => a.label.localeCompare(b.label, 'de', { sensitivity: 'base', numeric: true }))
@@ -194,7 +219,8 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
       // Die MoIDs schreiben wir bei neuen Projekten immer groß und einheitlich getrennt
       const data = validate({ ...trimNames(input), moid: input?.ohneMoid ? '' : formatMoids(input?.moid) })
       const moidErrors = checkMoids(data.moid)
-      if (moidErrors.length) throw new CoreError('validation_failed', { details: [{ field: 'moid', errors: moidErrors }] })
+      if (moidErrors.length)
+        throw new CoreError('validation_failed', { details: [{ field: 'moid', errors: moidErrors }] })
       const user = session.requireUser()
       const { produktionen, mitarbeiter, projektordnerSchema, sessionSchema } = await settings()
 
@@ -233,7 +259,10 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
       const customerFolderCreated = !(await exists(customerDir))
       const stageDir = path.join(zielPfad, data.stufe)
       try {
-        if (customerFolderCreated) await fs.mkdir(customerDir).catch((error) => { if (error.code !== 'EEXIST') throw error })
+        if (customerFolderCreated)
+          await fs.mkdir(customerDir).catch((error) => {
+            if (error.code !== 'EEXIST') throw error
+          })
         await fs.mkdir(zielPfad)
       } catch (error) {
         // Hat ein anderer Rechner den Ordner gerade eben angelegt, gehört er ihm
@@ -241,16 +270,28 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
         throw error
       }
       try {
-        await writeFileAtomic(path.join(zielPfad, 'immo24-proj.json'), `${JSON.stringify({
-          erstellt_am: data.datum,
-          kunde: data.kunde,
-          projektname: data.projektname,
-          mo_id: data.moid,
-          user: user.name,
-        }, null, 2)}\n`)
+        await writeFileAtomic(
+          path.join(zielPfad, 'immo24-proj.json'),
+          `${JSON.stringify(
+            {
+              erstellt_am: data.datum,
+              kunde: data.kunde,
+              projektname: data.projektname,
+              mo_id: data.moid,
+              user: user.name,
+            },
+            null,
+            2,
+          )}\n`,
+        )
         await Promise.all(unterordner.map((folder) => fs.mkdir(path.join(zielPfad, folder.name))))
 
-        const filename = nextSessionName([], sessionSchema, { ...values, produktionsstufe: stage.label, anmerkung: data.anmerkung ?? '' }, [])
+        const filename = nextSessionName(
+          [],
+          sessionSchema,
+          { ...values, produktionsstufe: stage.label, anmerkung: data.anmerkung ?? '' },
+          [],
+        )
         await copySession(sources, stageDir, filename)
 
         return {
@@ -262,7 +303,10 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
           ...(customerFolderCreated ? { kundenordnerAngelegt: true } : {}),
         }
       } catch (error) {
-        throw new CoreError('projekt_unvollstaendig', { zielPfad, ursache: error instanceof Error ? error.message : String(error) })
+        throw new CoreError('projekt_unvollstaendig', {
+          zielPfad,
+          ursache: error instanceof Error ? error.message : String(error),
+        })
       }
     },
 
@@ -299,15 +343,22 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
       // Schritt 3: Nächste Version bestimmen und anlegen. Das Label der Stufe kommt aus
       // den Stammdaten. Fehlt der Eintrag dort inzwischen, nehmen wir den Ordnernamen.
       const customers: Kunde[] = await stammdaten.readCustomers()
-      const stage = customers.find((customer) => customer.kunde === data.kunde)?.ordner?.find((item) => item.name === data.stufe)
-      const filename = nextSessionName(await fs.readdir(stageDir), sessionSchema, {
-        ...values,
-        datum: localDate(),
-        benutzer: user.kuerzel.normalize('NFC'),
-        produktionsstufe: (stage?.label ?? data.stufe).normalize('NFC'),
-        anmerkung: String(data.anmerkung ?? '').normalize('NFC'),
-        // Auch Name und MoID zählen nicht: Nach dem Umbenennen zählt die Version weiter
-      }, ['datum', 'benutzer', 'projektname', 'moid'])
+      const stage = customers
+        .find((customer) => customer.kunde === data.kunde)
+        ?.ordner?.find((item) => item.name === data.stufe)
+      const filename = nextSessionName(
+        await fs.readdir(stageDir),
+        sessionSchema,
+        {
+          ...values,
+          datum: localDate(),
+          benutzer: user.kuerzel.normalize('NFC'),
+          produktionsstufe: (stage?.label ?? data.stufe).normalize('NFC'),
+          anmerkung: String(data.anmerkung ?? '').normalize('NFC'),
+          // Auch Name und MoID zählen nicht: Nach dem Umbenennen zählt die Version weiter
+        },
+        ['datum', 'benutzer', 'projektname', 'moid'],
+      )
       await copySession(sources, stageDir, filename)
 
       return { ok: true, zielPfad, templateDest: stageDir, filename }

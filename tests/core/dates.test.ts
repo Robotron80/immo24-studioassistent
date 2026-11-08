@@ -8,7 +8,9 @@ import { localDate } from '../../src/core/dates.ts'
 
 test('kurz nach Mitternacht gilt in Deutschland schon der neue Tag', (t) => {
   const before = process.env.TZ
-  t.after(() => { process.env.TZ = before })
+  t.after(() => {
+    process.env.TZ = before
+  })
   process.env.TZ = 'Europe/Berlin'
 
   // In UTC ist es hier noch der 2. November

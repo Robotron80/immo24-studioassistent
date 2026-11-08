@@ -14,11 +14,10 @@
         <v-stepper-window-item :value="1">
           <v-card class="pa-6" variant="flat" :border="false">
             <p class="text-body-1 mb-4">
-              Willkommen beim immo24 Studioassistent. Das Programm wird das erste Mal gestartet und benötigt einige grundlegende Einstellungen.
+              Willkommen beim immo24 Studioassistent. Das Programm wird das erste Mal gestartet und benötigt einige
+              grundlegende Einstellungen.
             </p>
-            <p class="text-body-1">
-              Diese können später in der Konfiguration angepasst werden.
-            </p>
+            <p class="text-body-1">Diese können später in der Konfiguration angepasst werden.</p>
             <div class="d-flex ga-2 mt-4">
               <v-spacer />
               <v-btn color="primary" @click="step++">Einrichtung starten</v-btn>
@@ -31,9 +30,7 @@
             <div class="text-body-1">
               Bitte die Pfade für Mitarbeiter-, Produktionen- und Stammdatenverzeichnis festlegen.
             </div>
-            <div class="text-body-1 mb-4">
-              Anschließend den Pfad des Pro Tools User-Verzeichnis angeben.
-            </div>
+            <div class="text-body-1 mb-4">Anschließend den Pfad des Pro Tools User-Verzeichnis angeben.</div>
             <KonfigPfade ref="pathsRef" />
             <div class="d-flex ga-2 mt-4">
               <v-btn variant="text" @click="step--">Zurück</v-btn>
@@ -70,9 +67,7 @@
 
         <v-stepper-window-item :value="5">
           <v-card class="pa-4" variant="flat" :border="false">
-            <div class="text-body-1 mb-6">
-              Bitte ein Passwort für das Konfigurations-Menü vergeben.
-            </div>
+            <div class="text-body-1 mb-6">Bitte ein Passwort für das Konfigurations-Menü vergeben.</div>
             <KonfigPasswort ref="passwordRef" />
             <div class="d-flex ga-2 mt-4">
               <v-btn variant="text" @click="step--">Zurück</v-btn>
@@ -85,8 +80,8 @@
         <v-stepper-window-item :value="6">
           <v-card class="pa-4" variant="flat" :border="false">
             <p class="text-body-1 mb-4">
-              Alles bereit. Mit „Fertig“ werden die Einstellungen gespeichert. Danach prüft immo24 die
-              Konfiguration und startet mit der Benutzerwahl.
+              Alles bereit. Mit „Fertig“ werden die Einstellungen gespeichert. Danach prüft immo24 die Konfiguration und
+              startet mit der Benutzerwahl.
             </p>
             <ul class="text-body-2 mb-4">
               <li>Neue Mitarbeiter werden angelegt.</li>

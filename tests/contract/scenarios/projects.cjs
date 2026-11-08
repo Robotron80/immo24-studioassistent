@@ -50,7 +50,12 @@ async function runProjectsScenario({ call, dirs, snapshot }) {
   await call('Stammdaten: Versionskonflikt', 'PUT', '/api/pb/snapshot', { version: 'alt', customers: [] })
   await call('Stammdaten speichern, neuer Kunde legt Ordner an', 'PUT', '/api/pb/snapshot', {
     version: pb.body.version,
-    customers: [...pb.body.customers, { kunde: 'Neu: Kunde', ordner: [] }, { kunde: 'kunde a', ordner: [] }, { kunde: 'Älter', ordner: [] }],
+    customers: [
+      ...pb.body.customers,
+      { kunde: 'Neu: Kunde', ordner: [] },
+      { kunde: 'kunde a', ordner: [] },
+      { kunde: 'Älter', ordner: [] },
+    ],
   })
   await call('Stammdaten erneut lesen', 'GET', '/api/pb/snapshot')
   snapshot('Nach Stammdaten', dirs.stammdaten, dirs.produktionen)
@@ -64,27 +69,51 @@ async function runProjectsScenario({ call, dirs, snapshot }) {
 
   // Neues Projekt
   await call('Neu: Felder fehlen', 'POST', '/api/projektanlage/projekte', { kunde: 'Kunde A' })
-  await call('Neu: Windows-Namen ungültig', 'POST', '/api/projektanlage/projekte', project({ projektname: 'a:b.', moid: 'CON' }))
+  await call(
+    'Neu: Windows-Namen ungültig',
+    'POST',
+    '/api/projektanlage/projekte',
+    project({ projektname: 'a:b.', moid: 'CON' }),
+  )
   await call('Neu: einzelne Vorlage', 'POST', '/api/projektanlage/projekte', project())
   await call('Neu: Duplikat', 'POST', '/api/projektanlage/projekte', project())
-  await call('Neu: Paket mit Audio', 'POST', '/api/projektanlage/projekte', project({
-    moid: 'CD34',
-    projektname: 'Mit Clips',
-    stufe: '10_Mischung',
-    stufeLabel: 'Mischung',
-    template: 'Paket',
-  }))
+  await call(
+    'Neu: Paket mit Audio',
+    'POST',
+    '/api/projektanlage/projekte',
+    project({
+      moid: 'CD34',
+      projektname: 'Mit Clips',
+      stufe: '10_Mischung',
+      stufeLabel: 'Mischung',
+      template: 'Paket',
+    }),
+  )
   await call('Neu: Umlaute', 'POST', '/api/projektanlage/projekte', project({ moid: 'EF56', projektname: 'Größe äöü' }))
 
   // Bekannte Fehler: Node-RED antwortet nie, das neue Backend meldet einen Fehler
-  await call('Hänger: Kundenordner fehlt', 'POST', '/api/projektanlage/projekte', project({ kunde: 'Ohne Ordner', moid: 'GH78' }))
-  await call('Hänger: Kunde ohne Unterordner', 'POST', '/api/projektanlage/projekte', project({ kunde: 'Ohne Unterordner', stufe: 'x' }))
+  await call(
+    'Hänger: Kundenordner fehlt',
+    'POST',
+    '/api/projektanlage/projekte',
+    project({ kunde: 'Ohne Ordner', moid: 'GH78' }),
+  )
+  await call(
+    'Hänger: Kunde ohne Unterordner',
+    'POST',
+    '/api/projektanlage/projekte',
+    project({ kunde: 'Ohne Unterordner', stufe: 'x' }),
+  )
   snapshot('Nach Neuanlage', dirs.produktionen)
 
   // Vorhandene Projekte
   await call('Liste: Kunde fehlt', 'GET', '/api/projektanlage/projekte')
   await call('Liste', 'GET', `/api/projektanlage/projekte?kunde=${encodeURIComponent('Kunde A')}`)
-  await call('Liste: leerer Kunde', 'GET', `/api/projektanlage/projekte?kunde=${encodeURIComponent('Ohne Unterordner')}`)
+  await call(
+    'Liste: leerer Kunde',
+    'GET',
+    `/api/projektanlage/projekte?kunde=${encodeURIComponent('Ohne Unterordner')}`,
+  )
 
   const existing = (overrides) => project({ ...overrides })
   await call('Vorhanden: Felder fehlen', 'POST', '/api/projektanlage/resolve-existing', { kunde: 'Kunde A' })
@@ -92,7 +121,12 @@ async function runProjectsScenario({ call, dirs, snapshot }) {
   await call('Vorhanden: nicht gefunden', 'POST', '/api/projektanlage/resolve-existing', existing({ moid: 'ZZ99' }))
   await call('Vorhanden: nächste Version gleiche Stufe', 'POST', '/api/projektanlage/resolve-existing', existing())
   await call('Vorhanden: nächste Version erneut', 'POST', '/api/projektanlage/resolve-existing', existing())
-  await call('Vorhanden: andere Stufe', 'POST', '/api/projektanlage/resolve-existing', existing({ stufe: '10_Mischung', stufeLabel: 'Mischung' }))
+  await call(
+    'Vorhanden: andere Stufe',
+    'POST',
+    '/api/projektanlage/resolve-existing',
+    existing({ stufe: '10_Mischung', stufeLabel: 'Mischung' }),
+  )
   await call('Vorhanden: Paket', 'POST', '/api/projektanlage/resolve-existing', existing({ template: 'Paket' }))
   snapshot('Nach Folgeversionen', dirs.produktionen)
 

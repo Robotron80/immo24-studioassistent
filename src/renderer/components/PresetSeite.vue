@@ -1,6 +1,5 @@
 <template>
   <v-container fluid class="pa-4">
-
     <!-- Kopf: Titel und Statuspunkt -->
     <div class="d-flex align-center justify-space-between mb-4">
       <div class="text-subtitle-1 font-weight-medium">{{ name }} Presets</div>
@@ -120,12 +119,12 @@ function askAndRun(action: 'store' | 'recall') {
 /** Schickt die Auswahl ans Backend. Lief nicht alles glatt, zeigt ein Dialog die Einzelheiten. */
 async function runConfirmed() {
   confirm.open = false
-  const categories = Object.fromEntries(selection.map((group, index) => [
-    `cat${index + 1}`,
-    group
-      .filter((item) => item.selected)
-      .map(({ key, quick }) => (quick === undefined ? { key } : { key, quick })),
-  ]))
+  const categories = Object.fromEntries(
+    selection.map((group, index) => [
+      `cat${index + 1}`,
+      group.filter((item) => item.selected).map(({ key, quick }) => (quick === undefined ? { key } : { key, quick })),
+    ]),
+  )
 
   try {
     const data = await props.run({ action: confirm.action, categories })

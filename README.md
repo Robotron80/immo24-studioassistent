@@ -196,8 +196,11 @@ App verwendet die in Electron enthaltene Runtime.
 | Befehl | Zweck |
 |---|---|
 | `npm run dev` | App mit Dev-Server starten |
-| `npm run typecheck` | Hauptprozess prüfen |
+| `npm run typecheck` | Typen in Hauptprozess, Fachlogik und Oberfläche prüfen |
+| `npm run lint` | Code auf typische Fehler prüfen (ESLint) |
+| `npm run format` | Code einheitlich formatieren (Prettier) |
 | `npm test` | Fachlogik in `src/core` prüfen |
+| `npm run test:app` | Die gebaute App mit Beispieldaten bedienen (vorher `npm run build`) |
 | `npm run dist:mac` | DMG für Apple Silicon bauen |
 | `npm run dist:win` | Windows-Installer bauen |
 

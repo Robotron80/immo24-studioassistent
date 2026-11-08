@@ -16,9 +16,9 @@ function windowsNameReport(input) {
 function windowsFieldReports({ projektname, moid, kunde, anmerkung }) {
   return {
     projektname: windowsNameReport(projektname),
-    moid:        windowsNameReport(moid),
-    kunde:       windowsNameReport(String(kunde)),
-    anmerkung:   windowsNameReport(anmerkung),
+    moid: windowsNameReport(moid),
+    kunde: windowsNameReport(String(kunde)),
+    anmerkung: windowsNameReport(anmerkung),
   }
 }
 function collectValidationDetails(reports) {
@@ -33,7 +33,6 @@ const FIELD_LABELS = {
   moid: 'Mo-ID',
   kunde: 'Kunde',
 }
-
 
 export const useProjektanlage = defineStore('Projektanlage', {
   state: () => ({
@@ -56,7 +55,7 @@ export const useProjektanlage = defineStore('Projektanlage', {
       // Projekt ohne Mo-ID, etwa weil es nicht in der Datenbank steht
       ohneMoid: false,
     },
-    loading: { kunden:false, templates:false, rows:false, stufen:false, create:false },
+    loading: { kunden: false, templates: false, rows: false, stufen: false, create: false },
     activeUser: null as string | null,
     renameEnabled: false,
     // Das Feld Anmerkung gibt es nur, wenn das Session-Schema {{anmerkung}} enthält
@@ -73,7 +72,12 @@ export const useProjektanlage = defineStore('Projektanlage', {
     },
 
     async init() {
-      await Promise.allSettled([ this.loadKunden(), this.loadTemplates(), this.loadRenameEnabled(), this.loadNoteEnabled() ])
+      await Promise.allSettled([
+        this.loadKunden(),
+        this.loadTemplates(),
+        this.loadRenameEnabled(),
+        this.loadNoteEnabled(),
+      ])
     },
 
     // Ist das Umbenennen in der Konfiguration eingeschaltet?
@@ -91,7 +95,12 @@ export const useProjektanlage = defineStore('Projektanlage', {
     // Nach der Konfiguration: Listen neu laden. Ein gewählter Kunde bleibt gewählt,
     // seine Produktionsstufen können sich aber geändert haben.
     async refreshAfterConfig() {
-      await Promise.allSettled([ this.loadKunden(), this.loadTemplates(), this.loadRenameEnabled(), this.loadNoteEnabled() ])
+      await Promise.allSettled([
+        this.loadKunden(),
+        this.loadTemplates(),
+        this.loadRenameEnabled(),
+        this.loadNoteEnabled(),
+      ])
       if (this.form.kunde) await this.selectKunde(this.form.kunde)
     },
 
@@ -99,13 +108,15 @@ export const useProjektanlage = defineStore('Projektanlage', {
       this.loading.kunden = true
       try {
         const raw = await backend.listCustomers()
-        this.kunden = (Array.isArray(raw) ? raw : []).map(k => ({
+        this.kunden = (Array.isArray(raw) ? raw : []).map((k) => ({
           label: String(k.label ?? ''),
           value: String(k.value ?? ''),
-          stufen: Array.isArray(k.stufen) ? k.stufen.map(s => ({
-            label: String(s.label ?? ''),
-            value: String(s.value ?? ''),
-          })) : []
+          stufen: Array.isArray(k.stufen)
+            ? k.stufen.map((s) => ({
+                label: String(s.label ?? ''),
+                value: String(s.value ?? ''),
+              }))
+            : [],
         }))
       } finally {
         this.loading.kunden = false
@@ -114,8 +125,11 @@ export const useProjektanlage = defineStore('Projektanlage', {
 
     async loadTemplates() {
       this.loading.templates = true
-      try { this.templates = await backend.listTemplates() }
-      finally { this.loading.templates = false }
+      try {
+        this.templates = await backend.listTemplates()
+      } finally {
+        this.loading.templates = false
+      }
     },
 
     async selectKunde(kunde) {
@@ -126,18 +140,26 @@ export const useProjektanlage = defineStore('Projektanlage', {
     },
 
     async loadRows(kunde) {
-      if (!kunde) { this.rows = []; return }
+      if (!kunde) {
+        this.rows = []
+        return
+      }
       this.loading.rows = true
-      try { this.rows = await backend.listProjects(kunde) }
-      finally { this.loading.rows = false }
+      try {
+        this.rows = await backend.listProjects(kunde)
+      } finally {
+        this.loading.rows = false
+      }
     },
 
     async loadStufenForKunde(kunde) {
       this.loading.stufen = true
       try {
-        const entry = this.kunden.find(k => k.value === kunde || k.label === kunde)
+        const entry = this.kunden.find((k) => k.value === kunde || k.label === kunde)
         this.stufen = entry?.stufen || []
-      } finally { this.loading.stufen = false }
+      } finally {
+        this.loading.stufen = false
+      }
     },
 
     // MoIDs groß und einheitlich getrennt, etwa AB12+CD34. Läuft auch beim Verlassen der Felder.
@@ -147,7 +169,8 @@ export const useProjektanlage = defineStore('Projektanlage', {
     },
 
     validateRequired() {
-      const f = this.form, fehlende: string[] = []
+      const f = this.form,
+        fehlende: string[] = []
       if (!f.kunde) fehlende.push('Kunde')
       if (!f.datum) fehlende.push('Datum')
       if (!f.moid && !f.ohneMoid) fehlende.push('Mo-ID')
@@ -229,16 +252,27 @@ export const useProjektanlage = defineStore('Projektanlage', {
     },
 
     resetForm() {
-      this.form = { kunde:'', vorhanden:'neu', projektname:'', moid:'', datum: localDate(), stufe:'', template:'', anmerkung:'', ordner:'', ohneMoid:false }
+      this.form = {
+        kunde: '',
+        vorhanden: 'neu',
+        projektname: '',
+        moid: '',
+        datum: localDate(),
+        stufe: '',
+        template: '',
+        anmerkung: '',
+        ordner: '',
+        ohneMoid: false,
+      }
       this.rows = []
       this.stufen = []
     },
 
     formatValidationDetails(details) {
       if (!Array.isArray(details)) return []
-      return details.map(d => {
+      return details.map((d) => {
         const label = FIELD_LABELS[d.field] || d.field
-        const parts = (d.errors || []).map(err => {
+        const parts = (d.errors || []).map((err) => {
           if (err.code === 'forbidden_chars') {
             if (Array.isArray(err.chars) && err.chars.length) {
               return `Unzulässige Zeichen: ${err.chars.join(' ')}`

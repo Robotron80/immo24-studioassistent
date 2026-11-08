@@ -1,5 +1,12 @@
 // Vuetify-Einstellungen, die vor dem Bauen der Stile feststehen müssen.
 // Systemschrift statt Roboto: San Francisco auf dem Mac, Segoe unter Windows.
 @use 'vuetify/settings' with (
-  $body-font-family: (system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif)
+  $body-font-family: (
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    'Helvetica Neue',
+    Arial,
+    sans-serif,
+  )
 );

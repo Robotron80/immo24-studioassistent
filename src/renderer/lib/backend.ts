@@ -53,7 +53,7 @@ export class BackendError extends Error {
   code: string
   details: Record<string, any>
 
-  constructor ({ code, details, message }: BackendFailure) {
+  constructor({ code, details, message }: BackendFailure) {
     super(MESSAGES[code] || message || code)
     this.name = 'BackendError'
     this.code = code
@@ -65,7 +65,7 @@ type Argument<M extends keyof BackendMethods> = Parameters<BackendMethods[M]>[0]
 type Result<M extends keyof BackendMethods> = Awaited<ReturnType<BackendMethods[M]>>
 
 /** Führt einen Aufruf aus und gibt das Ergebnis zurück oder wirft einen BackendError. */
-async function call<M extends keyof BackendMethods> (method: M, arg?: Argument<M>): Promise<Result<M>> {
+async function call<M extends keyof BackendMethods>(method: M, arg?: Argument<M>): Promise<Result<M>> {
   // Vue-Daten lassen sich nicht direkt verschicken, deshalb als reine Kopie
   const plainArg = arg === undefined ? undefined : JSON.parse(JSON.stringify(arg))
   const result = await window.electronAPI.backend(method, plainArg)

@@ -50,7 +50,13 @@ async function setup(t: { after: (fn: () => void) => void }, running = false) {
   const service = createRenameService(config, session, async () => running)
   await projects.createProject(project)
   const customerDir = path.join(env.dirs.produktionen, 'Kunde A')
-  return { config, projects, service, customerDir, meta: () => JSON.parse(fs.readFileSync(path.join(customerDir, NEW, 'immo24-proj.json'), 'utf8')) }
+  return {
+    config,
+    projects,
+    service,
+    customerDir,
+    meta: () => JSON.parse(fs.readFileSync(path.join(customerDir, NEW, 'immo24-proj.json'), 'utf8')),
+  }
 }
 
 test('benennt Ordner und Metadaten um, Sessions bleiben unverändert', async (t) => {
@@ -133,36 +139,48 @@ test('MoID wird großgeschrieben, reine Änderung der Schreibweise funktioniert'
   const { projects, service, customerDir } = await setup(t)
   await projects.createProject({ ...project, moid: 'XY01', projektname: 'Klein' })
 
-  const result = await service.rename({ ...rename, ordner: '2026-01-15 Klein XY01', neuerName: 'klein', neueMoid: 'xy01' })
+  const result = await service.rename({
+    ...rename,
+    ordner: '2026-01-15 Klein XY01',
+    neuerName: 'klein',
+    neueMoid: 'xy01',
+  })
 
   assert.equal(result.nach, '2026-01-15 klein XY01')
   assert.ok(fs.readdirSync(customerDir).includes('2026-01-15 klein XY01'))
   assert.ok(!fs.readdirSync(customerDir).includes('2026-01-15 Klein XY01'))
 })
 
-test('stellt den alten Namen wieder her, wenn die Metadaten nicht geschrieben werden können', { skip: process.platform === 'win32' }, async (t) => {
-  // Eine schreibgeschützte Metadatei hindert das atomare Schreiben nicht, ein
-  // schreibgeschützter Ordner schon. Unter Windows greift dieser Schutz so nicht.
-  const { service, customerDir } = await setup(t)
-  const projectDir = path.join(customerDir, OLD)
-  fs.chmodSync(projectDir, 0o555)
+test(
+  'stellt den alten Namen wieder her, wenn die Metadaten nicht geschrieben werden können',
+  { skip: process.platform === 'win32' },
+  async (t) => {
+    // Eine schreibgeschützte Metadatei hindert das atomare Schreiben nicht, ein
+    // schreibgeschützter Ordner schon. Unter Windows greift dieser Schutz so nicht.
+    const { service, customerDir } = await setup(t)
+    const projectDir = path.join(customerDir, OLD)
+    fs.chmodSync(projectDir, 0o555)
 
-  await assert.rejects(service.rename(rename))
+    await assert.rejects(service.rename(rename))
 
-  // Zuerst die Rechte zurückgeben, sonst kann der Test den Ordner nicht aufräumen
-  const stillOld = fs.existsSync(projectDir)
-  const movedToNew = fs.existsSync(path.join(customerDir, NEW))
-  fs.chmodSync(stillOld ? projectDir : path.join(customerDir, NEW), 0o755)
-  assert.ok(stillOld)
-  assert.equal(movedToNew, false)
-})
+    // Zuerst die Rechte zurückgeben, sonst kann der Test den Ordner nicht aufräumen
+    const stillOld = fs.existsSync(projectDir)
+    const movedToNew = fs.existsSync(path.join(customerDir, NEW))
+    fs.chmodSync(stillOld ? projectDir : path.join(customerDir, NEW), 0o755)
+    assert.ok(stillOld)
+    assert.equal(movedToNew, false)
+  },
+)
 
 test('die neue MoID darf nicht vergeben sein, das Projekt selbst zählt nicht', async (t) => {
   const { projects, service } = await setup(t)
   await projects.createProject({ ...project, moid: 'ZZ01', projektname: 'Fremd' })
 
   await assert.rejects(service.rename({ ...rename, neueMoid: 'ZZ01' }), hasCode('moid_vergeben'))
-  assert.equal((await service.rename({ ...rename, neueMoid: 'AB12', neuerName: 'Nur Name' })).nach, '2026-01-15 Nur Name AB12')
+  assert.equal(
+    (await service.rename({ ...rename, neueMoid: 'AB12', neuerName: 'Nur Name' })).nach,
+    '2026-01-15 Nur Name AB12',
+  )
 })
 
 test('ein Projekt lässt sich auf "keine MoID" umstellen und zurück', async (t) => {
@@ -181,16 +199,27 @@ test('trifft bei gleichen Angaben genau das gewählte Projekt', async (t) => {
   const { version } = await config.getSchema()
   await config.saveSchema({
     version: version as string,
-    data: { projektordnerSchema: '{{datum}} {{projektname}} {{moid}} {{benutzer}}', sessionSchema: '{{projektname}} {{version}}' },
+    data: {
+      projektordnerSchema: '{{datum}} {{projektname}} {{moid}} {{benutzer}}',
+      sessionSchema: '{{projektname}} {{version}}',
+    },
   })
   // Zwei Kollegen, gleicher Name, gleiches Datum, beide mit dem alten Platzhalter NOID
   const meta = { erstellt_am: '2026-01-15', kunde: 'Kunde A', projektname: 'Zwilling', mo_id: 'NOID', user: 'Tester' }
   for (const kuerzel of ['AA', 'ZZ']) {
     fs.mkdirSync(path.join(customerDir, `2026-01-15 Zwilling NOID ${kuerzel}`))
-    fs.writeFileSync(path.join(customerDir, `2026-01-15 Zwilling NOID ${kuerzel}`, 'immo24-proj.json'), JSON.stringify(meta))
+    fs.writeFileSync(
+      path.join(customerDir, `2026-01-15 Zwilling NOID ${kuerzel}`, 'immo24-proj.json'),
+      JSON.stringify(meta),
+    )
   }
 
-  const result = await service.rename({ ...rename, ordner: '2026-01-15 Zwilling NOID ZZ', neuerName: 'Neu', neueMoid: 'EF56' })
+  const result = await service.rename({
+    ...rename,
+    ordner: '2026-01-15 Zwilling NOID ZZ',
+    neuerName: 'Neu',
+    neueMoid: 'EF56',
+  })
 
   assert.equal(result.nach, '2026-01-15 Neu EF56 ZZ')
   assert.ok(fs.existsSync(path.join(customerDir, '2026-01-15 Zwilling NOID AA')), 'das andere Projekt bleibt unberührt')
@@ -205,9 +234,15 @@ test('eine weitere MoID lässt sich nachträglich ergänzen', async (t) => {
   const meta = JSON.parse(fs.readFileSync(path.join(customerDir, result.nach, 'immo24-proj.json'), 'utf8'))
   assert.equal(meta.mo_id, 'AB12+CD34')
   // Auch nach dem Ergänzen zählt jede einzeln als vergeben
-  await assert.rejects(projects.createProject({ ...project, moid: 'CD34', projektname: 'Neu2' }), hasCode('moid_vergeben'))
+  await assert.rejects(
+    projects.createProject({ ...project, moid: 'CD34', projektname: 'Neu2' }),
+    hasCode('moid_vergeben'),
+  )
   // Und mit mehreren MoIDs lässt sich weiter umbenennen
-  assert.equal((await service.rename({ ...rename, ordner: result.nach, neuerName: 'Fassungen', neueMoid: 'AB12+CD34' })).nach, '2026-01-15 Fassungen AB12+CD34')
+  assert.equal(
+    (await service.rename({ ...rename, ordner: result.nach, neuerName: 'Fassungen', neueMoid: 'AB12+CD34' })).nach,
+    '2026-01-15 Fassungen AB12+CD34',
+  )
 })
 
 test('ist standardmäßig aus und lässt sich einschalten', async (t) => {

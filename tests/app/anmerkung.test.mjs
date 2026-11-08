@@ -7,7 +7,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import test from 'node:test'
 
-import { SESSION_SCHEMA, createEnv, launch, loginAsTester, sleep, unlockConfig } from './lib.mjs'
+import { SESSION_SCHEMA, createEnv, launch, loginAsTester, sleep, unlockConfig, waitFor } from './lib.mjs'
 
 test('Anmerkung beim Anlegen einer weiteren Session', async (t) => {
   const env = createEnv(t)
@@ -29,10 +29,10 @@ test('Anmerkung beim Anlegen einer weiteren Session', async (t) => {
   await main.clickField('Anmerkung (optional)')
   await main.keys('Kurzversion')
   await main.clickButton('Projekt anlegen')
-  await sleep(1000)
-
-  const files = fs.readdirSync(stage)
-  assert.ok(files.includes('Kakao-Produktion GB2A - Dialog TE v4 Kurzversion.ptx'), files.join(' | '))
+  const wanted = 'Kakao-Produktion GB2A - Dialog TE v4 Kurzversion.ptx'
+  assert.ok(await waitFor(() => fs.readdirSync(stage).includes(wanted)), fs.readdirSync(stage).join(' | '))
+  assert.ok(await main.waitForText('Projekt öffnen?'))
+  await sleep(500) // Einblenden des Dialogs abwarten
   await main.clickButton('Schließen')
   await sleep(300)
   assert.equal(await main.value('Anmerkung (optional)'), '', 'gilt nur für eine Session')
@@ -71,11 +71,11 @@ test('Feld Anmerkung nur mit Platzhalter im Schema', async (t) => {
   await main.ev(
     `document.querySelector('#app').__vue_app__.config.globalProperties.$pinia._s.get('Projektanlage').refreshAfterConfig().then(() => 1)`,
   )
-  await sleep(600)
-  assert.equal(await hasField(), true)
+  assert.ok(await waitFor(hasField))
 
   writeSchema(withoutNote)
   await main.ev(`location.reload(); 1`)
-  await sleep(1800)
+  await main.waitForText('Neues Projekt')
+  await sleep(500)
   assert.equal(await hasField(), false)
 })

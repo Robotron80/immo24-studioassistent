@@ -18,6 +18,19 @@ const PORT = 9344
 
 export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
+/**
+ * Wartet, bis check() etwas Wahres liefert, höchstens timeout ms, und gibt das Ergebnis zurück.
+ * Statt fester Wartezeiten: Auf langsamen Rechnern (z. B. in der Pipeline) dauert alles länger.
+ */
+export async function waitFor(check, timeout = 10000) {
+  const end = Date.now() + timeout
+  for (;;) {
+    const result = await check()
+    if (result || Date.now() > end) return result
+    await sleep(150)
+  }
+}
+
 /** Schreibt eine Datei und legt fehlende Ordner an. Objekte werden zu JSON. */
 function write(file, content) {
   fs.mkdirSync(path.dirname(file), { recursive: true })
@@ -100,7 +113,11 @@ export async function launch(t, env) {
     env: { ...process.env, IMMO24_USER_DATA: env.P.userData },
   })
   const exited = new Promise((resolve) => child.once('exit', resolve))
+  const pages = []
   t.after(async () => {
+    // Zur Fehlersuche: Am Ende jedes Tests ein Bild aller verbundenen Fenster (nur mit IMMO24_SHOTS)
+    const name = t.name.replace(/[^\w-]+/g, '_')
+    for (const [index, page] of pages.entries()) await page.shot(`${name}-ende-${index}`).catch(() => {})
     child.kill()
     await exited
   })
@@ -119,7 +136,11 @@ export async function launch(t, env) {
   async function open(match) {
     for (let i = 0; i < 150; i++) {
       const target = (await list()).find((entry) => entry.url.toLowerCase().includes(match))
-      if (target) return connect(target.webSocketDebuggerUrl)
+      if (target) {
+        const page = await connect(target.webSocketDebuggerUrl)
+        pages.push(page)
+        return page
+      }
       await sleep(200)
     }
     throw new Error(`Fenster nicht gefunden: ${match}`)
@@ -136,12 +157,21 @@ async function connect(url) {
   const pending = new Map()
   ws.onmessage = (event) => {
     const message = JSON.parse(event.data)
-    if (message.id) pending.get(message.id)?.(message)
+    pending.get(message.id)?.(message)
+    pending.delete(message.id)
   }
+  // Schließt sich das Fenster, bekommen offene Anfragen eine Fehlerantwort statt ewig zu warten
+  ws.onclose = () => {
+    for (const resolve of pending.values()) resolve({ error: 'Fenster geschlossen' })
+    pending.clear()
+  }
+  /** Schickt einen Befehl ans Fenster. Antwortet es nicht innerhalb von 15 s, gilt das als Fehler. */
   const send = (method, params = {}) =>
     new Promise((resolve) => {
+      if (ws.readyState !== WebSocket.OPEN) return resolve({ error: 'Fenster geschlossen' })
       const n = ++id
       pending.set(n, resolve)
+      setTimeout(() => pending.get(n)?.({ error: `Keine Antwort auf ${method}` }), 15000)
       ws.send(JSON.stringify({ id: n, method, params }))
     })
   // Ohne das reagieren Felder in Fenstern im Hintergrund nicht auf Fokus
@@ -152,6 +182,7 @@ async function connect(url) {
     /** Führt JavaScript im Fenster aus und liefert das Ergebnis zurück. */
     ev: async (expression) => {
       const message = await send('Runtime.evaluate', { expression, awaitPromise: true, returnByValue: true })
+      if (message.error) throw new Error(`${expression.slice(0, 80)}: ${JSON.stringify(message.error)}`)
       const failure = message.result?.exceptionDetails
       if (failure) throw new Error(`${expression.slice(0, 80)}: ${failure.exception?.description ?? 'Fehler'}`)
       return message.result?.result?.value
@@ -162,6 +193,7 @@ async function connect(url) {
       if (!dir) return
       fs.mkdirSync(dir, { recursive: true })
       const result = await send('Page.captureScreenshot', { format: 'png' })
+      if (!result.result?.data) return
       fs.writeFileSync(path.join(dir, `${name}.png`), Buffer.from(result.result.data, 'base64'))
     },
   }
@@ -173,11 +205,16 @@ function uiHelpers(page) {
   // Ein sichtbares Vuetify-Feld mit genau dieser Beschriftung (als JavaScript-Ausdruck)
   const box = (label) =>
     `[...document.querySelectorAll('.v-input')].filter(e => e.offsetParent !== null).find(e => [...e.querySelectorAll('label')].some(l => l.innerText.trim() === ${JSON.stringify(label)}))`
-  const center = async (selector) =>
-    JSON.parse(
-      await page.ev(
-        `(() => { const e = ${selector}; if (!e) return 'null'; const r = e.getBoundingClientRect(); return JSON.stringify({ x: r.left + r.width / 2, y: r.top + r.height / 2 }) })()`,
-      ),
+  // Mitte eines Elements auf dem Bildschirm. Wartet, bis es da ist (Listen laden z. B. erst nach).
+  const center = (selector) =>
+    waitFor(
+      async () =>
+        JSON.parse(
+          await page.ev(
+            `(() => { const e = ${selector}; if (!e) return 'null'; const r = e.getBoundingClientRect(); return JSON.stringify({ x: r.left + r.width / 2, y: r.top + r.height / 2 }) })()`,
+          ),
+        ),
+      5000,
     )
   const clickAt = async (position) => {
     if (!position) throw new Error('Element nicht gefunden')
@@ -193,14 +230,7 @@ function uiHelpers(page) {
     box,
     text,
     /** Wartet, bis der Text im Fenster steht (höchstens timeout ms). */
-    waitForText: async (wanted, timeout = 8000) => {
-      const end = Date.now() + timeout
-      while (Date.now() < end) {
-        if ((await text()).includes(wanted)) return true
-        await sleep(150)
-      }
-      return false
-    },
+    waitForText: (wanted, timeout = 8000) => waitFor(async () => (await text()).includes(wanted), timeout),
     clickField: async (label) => clickAt(await center(`${box(label)}?.querySelector('input')`)),
     keys: async (input) => {
       for (const ch of input) {

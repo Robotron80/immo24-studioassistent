@@ -7,7 +7,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import test from 'node:test'
 
-import { createEnv, launch, loginAsTester } from './lib.mjs'
+import { createEnv, launch, loginAsTester, waitFor } from './lib.mjs'
 
 test('ohne Einstellungen startet der Einrichtungsassistent', async (t) => {
   const env = createEnv(t, { setup: false })
@@ -26,6 +26,7 @@ test('bei der Anmeldung entstehen fehlende Ablageordner', async (t) => {
   const app = await launch(t, env)
   await loginAsTester(app)
 
+  await waitFor(() => fs.existsSync(path.join(meta, 'trackpresets')))
   const folders = fs.readdirSync(meta)
   for (const folder of [
     'clipeffectspresets',

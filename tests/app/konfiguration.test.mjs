@@ -8,7 +8,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import test from 'node:test'
 
-import { SESSION_SCHEMA, createEnv, launch, loginAsTester, sleep, unlockConfig } from './lib.mjs'
+import { SESSION_SCHEMA, createEnv, launch, loginAsTester, sleep, unlockConfig, waitFor } from './lib.mjs'
 
 test('Mitarbeiter und Namensschema ändern und speichern', async (t) => {
   const env = createEnv(t)
@@ -46,14 +46,15 @@ test('Mitarbeiter und Namensschema ändern und speichern', async (t) => {
   await sleep(200)
 
   await main.clickButton('Speichern')
-  await sleep(1500)
 
   const meta = path.join(env.P.mitarbeiter, 'Neu/immo24')
+  const schemaFile = path.join(env.P.stammdaten, 'schemes.json')
+  const readSchema = () => JSON.parse(fs.readFileSync(schemaFile, 'utf8')).sessionSchema
+  assert.ok(await waitFor(() => fs.existsSync(path.join(meta, 'trackpresets')) && readSchema() !== SESSION_SCHEMA))
   assert.equal(fs.readFileSync(path.join(meta, 'immo24-user.json'), 'utf8'), 'MT')
   assert.ok(fs.existsSync(path.join(meta, 'trackpresets')), 'Ablageordner angelegt')
   assert.equal(fs.existsSync(path.join(env.P.mitarbeiter, 'Max')), false, 'kein Ordner aus dem unzulässigen Namen')
-  const schema = JSON.parse(fs.readFileSync(path.join(env.P.stammdaten, 'schemes.json'), 'utf8'))
-  assert.equal(schema.sessionSchema, `${SESSION_SCHEMA} Test`)
+  assert.equal(readSchema(), `${SESSION_SCHEMA} Test`)
 })
 
 test('ohne Änderung schreibt Speichern nichts', async (t) => {
@@ -69,7 +70,9 @@ test('ohne Änderung schreibt Speichern nichts', async (t) => {
     await sleep(300)
   }
   await main.clickButton('Speichern')
-  await sleep(800)
+  // Ohne Änderung schließt das Fenster sofort, danach darf sich nichts getan haben
+  await waitFor(async () => !(await app.list()).some((page) => page.url.includes('projektanlage')), 5000)
+  await sleep(500)
   assert.equal(fs.statSync(schemaFile).mtimeMs, before)
   assert.deepEqual(fs.readdirSync(env.P.mitarbeiter).sort(), ['Tester', 'Zweite'])
 })

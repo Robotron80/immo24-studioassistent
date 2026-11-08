@@ -7,7 +7,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import test from 'node:test'
 
-import { createEnv, launch, loginAsTester, sleep, unlockConfig } from './lib.mjs'
+import { createEnv, launch, loginAsTester, sleep, unlockConfig, waitFor } from './lib.mjs'
 
 test('Produktionsbuch, Presets und Konfiguration', async (t) => {
   const env = createEnv(t)
@@ -26,9 +26,10 @@ test('Produktionsbuch, Presets und Konfiguration', async (t) => {
     await main.choose('Produktionsstufe', 'Dialog')
     await main.choose('Template', 'Dialog Vorlage')
     await main.clickButton('Projekt anlegen')
-    await sleep(1000)
     const session = path.join(kaba, `${today} Fassungen EF56+GH78/02_Dialog/Fassungen EF56+GH78 - Dialog TE v1.ptx`)
-    assert.ok(fs.existsSync(session))
+    assert.ok(await waitFor(() => fs.existsSync(session)))
+    assert.ok(await main.waitForText('Projekt öffnen?'))
+    await sleep(500) // Einblenden des Dialogs abwarten
     await main.clickButton('Schließen')
     await sleep(400)
   })
@@ -39,13 +40,13 @@ test('Produktionsbuch, Presets und Konfiguration', async (t) => {
     await main.clickField('Projektname')
     await main.keys('Versuch')
     await main.clickButton('Projekt anlegen')
-    await sleep(800)
-    const conflict = await main.dialog()
+    const conflict = await waitFor(async () => (await main.dialog()) || '')
+    // Dialoge blenden sich ein, ein Klick mitten in der Animation geht sonst ins Leere
+    await sleep(500)
     assert.match(conflict, /GB2A/)
     assert.match(conflict, /Kakao-Produktion/)
     await main.clickButton('Zum Projekt')
-    await sleep(900)
-    const selected = await main.ev(`document.querySelector('.project-row--selected')?.innerText ?? ''`)
+    const selected = await waitFor(() => main.ev(`document.querySelector('.project-row--selected')?.innerText ?? ''`))
     assert.match(selected, /Kakao-Produktion/)
   })
 
@@ -61,8 +62,9 @@ test('Produktionsbuch, Presets und Konfiguration', async (t) => {
     await main.choose('Produktionsstufe', 'Dialog')
     await main.choose('Template', 'Dialog Vorlage')
     await main.clickButton('Projekt anlegen')
-    await sleep(1000)
-    assert.ok(fs.existsSync(path.join(kaba, `${today} Ohne Datenbank`)))
+    assert.ok(await waitFor(() => fs.existsSync(path.join(kaba, `${today} Ohne Datenbank`))))
+    assert.ok(await main.waitForText('Projekt öffnen?'))
+    await sleep(500) // Einblenden des Dialogs abwarten
     await main.clickButton('Schließen')
     await sleep(300)
   })

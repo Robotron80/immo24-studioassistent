@@ -191,8 +191,9 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
     /**
      * Legt ein neues Projekt an.
      * Erst wird alles geprüft, was vorab prüfbar ist. Geht beim Anlegen trotzdem
-     * etwas schief, wird der neue Projektordner wieder entfernt, damit kein halbes
-     * Projekt zurückbleibt, das eine Wiederholung blockiert.
+     * etwas schief, löschen wir bewusst nichts (wie Version 0.4): Ein halbes Projekt
+     * bleibt liegen, und die Meldung nennt den Ordner. So kann das Aufräumen nie den
+     * Ordner eines anderen Rechners treffen, der zur selben Zeit dasselbe Projekt anlegt.
      */
     async createProject(input: ProjectInput) {
       // Die MoIDs schreiben wir bei neuen Projekten immer groß und einheitlich getrennt
@@ -237,8 +238,14 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
       const customerFolderCreated = !(await exists(customerDir))
       const stageDir = path.join(zielPfad, data.stufe)
       try {
-        if (customerFolderCreated) await fs.mkdir(customerDir)
+        if (customerFolderCreated) await fs.mkdir(customerDir).catch((error) => { if (error.code !== 'EEXIST') throw error })
         await fs.mkdir(zielPfad)
+      } catch (error) {
+        // Hat ein anderer Rechner den Ordner gerade eben angelegt, gehört er ihm
+        if ((error as NodeJS.ErrnoException).code === 'EEXIST') throw new CoreError('project_exists', { zielPfad })
+        throw error
+      }
+      try {
         await writeFileAtomic(path.join(zielPfad, 'immo24-proj.json'), `${JSON.stringify({
           erstellt_am: data.datum,
           kunde: data.kunde,
@@ -260,9 +267,7 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
           ...(customerFolderCreated ? { kundenordnerAngelegt: true } : {}),
         }
       } catch (error) {
-        await fs.rm(zielPfad, { recursive: true, force: true }).catch(() => {})
-        if (customerFolderCreated) await fs.rmdir(customerDir).catch(() => {})
-        throw error
+        throw new CoreError('projekt_unvollstaendig', { zielPfad, ursache: error instanceof Error ? error.message : String(error) })
       }
     },
 

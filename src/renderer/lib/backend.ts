@@ -40,6 +40,7 @@ const MESSAGES: Record<string, string> = {
   session_offen: 'Im Projekt liegt eine Sperrdatei, vermutlich ist eine Session geöffnet.',
   moid_vergeben: 'Diese Mo-ID ist schon vergeben.',
   umbenennen_blockiert: 'Der Ordner ließ sich nicht umbenennen, vermutlich ist darin eine Datei geöffnet.',
+  projekt_unvollstaendig: 'Das Projekt wurde nur teilweise angelegt. Bitte den Ordner prüfen und von Hand aufräumen.',
 }
 
 interface BackendFailure {

@@ -323,6 +323,11 @@ async function onCreateClick(){
       toast(`Bitte ausfüllen: ${e.details.fields.join(', ')}`, 'error')
       return
     }
+    // Halb angelegtes Projekt: den Ordner nennen, damit man ihn findet
+    if (e?.code === 'projekt_unvollstaendig') {
+      toast(`${e.message}\n${e.details.zielPfad}\n(${e.details.ursache})`, 'error')
+      return
+    }
     toast(e.message || String(e) || 'Unbekannter Fehler', 'error')
   }
 }

@@ -380,24 +380,6 @@ test('legt nichts an, wenn der Produktionen-Ordner fehlt', async (t) => {
   assert.equal(fs.existsSync(dirs.produktionen), false)
 })
 
-test('räumt auf, wenn beim Anlegen etwas schiefgeht', async (t) => {
-  const { dirs, projects } = await setup(t)
-  // Ein Ordner mit .ptxt-Endung besteht die Prüfung, das Kopieren schlägt aber fehl
-  fs.mkdirSync(path.join(dirs.mitarbeiter, 'Tester', 'immo24', 'templates', 'Kaputt.ptxt'))
-
-  await assert.rejects(projects.createProject({ ...project, template: 'Kaputt.ptxt' }))
-  assert.equal(fs.existsSync(path.join(dirs.produktionen, 'Kunde A', PROJECT_FOLDER)), false)
-  assert.equal(fs.existsSync(path.join(dirs.produktionen, 'Kunde A')), true, 'der Kundenordner bestand vorher schon')
-
-  // Ein extra dafür angelegter Kundenordner verschwindet wieder
-  await assert.rejects(projects.createProject({ ...project, kunde: 'Ohne Ordner', template: 'Kaputt.ptxt' }))
-  assert.equal(fs.existsSync(path.join(dirs.produktionen, 'Ohne Ordner')), false)
-
-  // Danach klappt derselbe Versuch: Kein Rest blockiert die Wiederholung
-  const retry = await projects.createProject(project)
-  assert.equal(retry.ok, true)
-})
-
 test('meldet fehlende Vorlage und unbekannte Stufe, ohne etwas anzulegen', async (t) => {
   const { dirs, projects } = await setup(t)
   await assert.rejects(projects.createProject({ ...project, template: 'Gibtsnicht.ptxt' }), hasCode('template_missing'))
@@ -425,4 +407,38 @@ test('eine fehlende Stammdaten-Datei ergibt eine leere Kundenliste', async (t) =
   fs.rmSync(path.join(env.dirs.stammdaten, 'kunden_stammdaten.json'))
   const stammdaten = createStammdatenService(createConfigService(env.dirs.userData))
   assert.deepEqual(await stammdaten.listForSelection(), [])
+})
+
+test('löscht nach einem Fehler beim Anlegen nichts und nennt den Ordner', async (t) => {
+  const { dirs, projects } = await setup(t)
+  // Ein doppelter Unterordner in den Stammdaten lässt das Anlegen mittendrin scheitern
+  const file = path.join(dirs.stammdaten, 'kunden_stammdaten.json')
+  const customers = JSON.parse(fs.readFileSync(file, 'utf8'))
+  const kunde = customers.find((entry: { kunde: string }) => entry.kunde === project.kunde)
+  kunde.ordner.push({ ...kunde.ordner[0] })
+  fs.writeFileSync(file, JSON.stringify(customers))
+
+  await assert.rejects(projects.createProject(project), (error: unknown) => (
+    error instanceof CoreError && error.code === 'projekt_unvollstaendig'
+    && String(error.details.zielPfad).endsWith(PROJECT_FOLDER)))
+  // Das halbe Projekt bleibt liegen, samt Projektdatei
+  assert.ok(fs.existsSync(path.join(dirs.produktionen, project.kunde, PROJECT_FOLDER, 'immo24-proj.json')))
+})
+
+test('ein Projektordner, den ein anderer Rechner gerade angelegt hat, bleibt unberührt', async (t) => {
+  const { dirs, projects } = await setup(t)
+  const folder = path.join(dirs.produktionen, project.kunde, PROJECT_FOLDER)
+  // Der andere Rechner ist zwischen Prüfung und Anlegen schneller
+  const original = fs.promises.mkdir
+  t.after(() => { fs.promises.mkdir = original })
+  fs.promises.mkdir = (async (target: fs.PathLike, options?: fs.MakeDirectoryOptions) => {
+    if (String(target) === folder && !fs.existsSync(folder)) {
+      fs.mkdirSync(folder)
+      fs.writeFileSync(path.join(folder, 'fremd.txt'), 'gehört dem anderen Rechner')
+    }
+    return original(target, options)
+  }) as typeof fs.promises.mkdir
+
+  await assert.rejects(projects.createProject(project), hasCode('project_exists'))
+  assert.equal(fs.readFileSync(path.join(folder, 'fremd.txt'), 'utf8'), 'gehört dem anderen Rechner')
 })

@@ -41,6 +41,7 @@ export type CoreErrorCode =
   | 'protools_laeuft'
   | 'session_offen'
   | 'umbenennen_blockiert'
+  | 'projekt_unvollstaendig'
   | 'moid_vergeben'
 
 export class CoreError extends Error {

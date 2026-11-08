@@ -232,9 +232,9 @@ const stufen = computed(() => store.stufen)
 const rows = computed(() => store.rows)
 const loading = computed(() => store.loading)
 const isVorhanden = computed(() => form.value.vorhanden === 'vorhanden')
-const formRef = ref<any>(null)
+const formRef = ref<{ validate: () => Promise<{ valid: boolean }> } | null>(null)
 const openDialog = ref(false)
-const lastCreatedProject = ref<any>(null)
+const lastCreatedProject = ref<{ fullPath: string } | null>(null)
 
 // Spalten der Projektliste
 const headers = computed(() => [
@@ -246,10 +246,15 @@ const headers = computed(() => [
 ])
 
 // Mo-ID vergeben: zum vorhandenen Projekt wechseln und es in der Liste auswählen
-const conflict = reactive({ open: false, project: null as any })
+// Das vorhandene Projekt mit derselben Mo-ID, so wie das Backend es meldet
+const conflict = reactive({
+  open: false,
+  project: null as { kunde: string; ordner: string; projektname: string; moid: string; date: string } | null,
+})
 async function jumpToConflict() {
   const target = conflict.project
   conflict.open = false
+  if (!target) return
   // Die Eingaben gehörten zum neuen Projekt und passen nicht mehr
   store.resetForm()
   form.value.vorhanden = 'vorhanden'
@@ -347,7 +352,9 @@ async function onCreateClick() {
 async function launchProject() {
   openDialog.value = false
   try {
-    const error = await window.electronAPI.openSession(lastCreatedProject.value.fullPath)
+    const file = lastCreatedProject.value?.fullPath
+    if (!file) return
+    const error = await window.electronAPI.openSession(file)
     if (error) toast('Projekt konnte nicht geöffnet werden: ' + error, 'error')
   } catch (e) {
     toast('Projekt konnte nicht geöffnet werden: ' + (e.message || String(e)), 'error')
@@ -357,7 +364,7 @@ async function launchProject() {
 function resetForm() {
   store.resetForm()
 }
-const selectedRow = ref<any>(null)
+const selectedRow = ref<string | null>(null)
 
 // Klick auf ein Projekt: Auch bei "Neues Projekt" geht es damit zum vorhandenen Projekt.
 // Erst den Modus wechseln, denn der Wechsel leert die Auswahl.

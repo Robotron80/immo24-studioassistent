@@ -7,7 +7,7 @@ import { defineStore } from 'pinia'
 
 import { localDate } from '../../core/dates'
 import { checkMoids, checkWindowsName, formatMoids } from '../../core/names'
-import { backend, BackendError } from '@/lib/backend'
+import { backend, BackendError, type Result } from '@/lib/backend'
 // Dieselben Regeln wie im Backend, damit Formular und Prüfung nie auseinanderlaufen
 function windowsNameReport(input) {
   const errors = checkWindowsName(input)
@@ -22,7 +22,7 @@ function windowsFieldReports({ projektname, moid, kunde, anmerkung }) {
   }
 }
 function collectValidationDetails(reports) {
-  return Object.entries<any>(reports)
+  return Object.entries<{ valid: boolean; errors: unknown[] }>(reports)
     .filter(([, rep]) => !rep.valid)
     .map(([field, rep]) => ({ field, errors: rep.errors }))
 }
@@ -36,10 +36,10 @@ const FIELD_LABELS = {
 
 export const useProjektanlage = defineStore('Projektanlage', {
   state: () => ({
-    kunden: [] as any[],
-    templates: [] as any[],
-    rows: [] as any[],
-    stufen: [] as any[],
+    kunden: [] as Result<'listCustomers'>,
+    templates: [] as Result<'listTemplates'>,
+    rows: [] as Result<'listProjects'>,
+    stufen: [] as Result<'listCustomers'>[number]['stufen'],
     form: {
       kunde: '',
       vorhanden: 'neu',

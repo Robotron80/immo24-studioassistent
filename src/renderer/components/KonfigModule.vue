@@ -60,16 +60,17 @@ const { original, staged, error, exposed } = useKonfigBereich({
   empty: () => ({ soundminerEnabled: false, soundminerPath: '', soundminerVersion: '', renameEnabled: false }),
   errorText: 'Module laden fehlgeschlagen',
   load: async () => {
-    const snap: any = await backend.getModules()
-    const sm = snap?.data?.soundminer || {}
+    const snap = await backend.getModules()
+    const sm = (snap.data.soundminer ?? {}) as { enabled?: boolean; supportPath?: unknown; version?: unknown }
+    const umbenennen = (snap.data.umbenennen ?? {}) as { enabled?: boolean }
     return {
       data: {
         soundminerEnabled: !!sm.enabled,
         soundminerPath: typeof sm.supportPath === 'string' ? sm.supportPath : '',
         soundminerVersion: typeof sm.version === 'string' ? sm.version : '',
-        renameEnabled: !!snap?.data?.umbenennen?.enabled,
+        renameEnabled: !!umbenennen.enabled,
       },
-      version: snap?.version,
+      version: snap.version,
     }
   },
 })

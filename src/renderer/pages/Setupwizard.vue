@@ -127,10 +127,10 @@ const step = ref(1)
 const saving = ref(false)
 const snack = reactive({ show: false, text: '', color: 'success' })
 
-const pathsRef = ref<any>(null)
-const usersRef = ref<any>(null)
-const schemaRef = ref<any>(null)
-const passwordRef = ref<any>(null)
+const pathsRef = ref<InstanceType<typeof KonfigPfade> | null>(null)
+const usersRef = ref<InstanceType<typeof KonfigMitarbeiter> | null>(null)
+const schemaRef = ref<InstanceType<typeof KonfigNamensschema> | null>(null)
+const passwordRef = ref<InstanceType<typeof KonfigPasswort> | null>(null)
 
 function toast(text, color = 'success') {
   Object.assign(snack, { show: true, text, color })
@@ -141,18 +141,16 @@ function toast(text, color = 'success') {
  * Mitarbeiter und Schema aus den alten Ordnern stammen, deshalb lesen sie dann neu.
  */
 async function savePathsAndContinue() {
-  if (!pathsRef.value.isPfadeValid()) {
+  const paths = pathsRef.value
+  if (!paths) return
+  if (!paths.isPfadeValid()) {
     toast('Bitte alle vier Pfade setzen.', 'warning')
     return
   }
   saving.value = true
   try {
-    await backend.savePaths(pathsRef.value.getSnapshotForSave())
-    await Promise.all([
-      pathsRef.value.resetToServer(),
-      usersRef.value?.resetToServer(),
-      schemaRef.value?.resetToServer(),
-    ])
+    await backend.savePaths(paths.getSnapshotForSave())
+    await Promise.all([paths.resetToServer(), usersRef.value?.resetToServer(), schemaRef.value?.resetToServer()])
     step.value++
   } catch (e) {
     toast(`Pfade speichern fehlgeschlagen: ${e.message}`, 'error')
@@ -163,11 +161,13 @@ async function savePathsAndContinue() {
 
 /** Speichert alles Übrige und prüft im Backend, ob die Einrichtung vollständig ist. */
 async function finish() {
+  const [schema, password, users] = [schemaRef.value, passwordRef.value, usersRef.value]
+  if (!schema || !password || !users) return
   saving.value = true
   try {
-    await backend.saveSchema(schemaRef.value.getSnapshotForSave())
-    await passwordRef.value.saveToServer()
-    await backend.saveUsers(usersRef.value.getSnapshotForSave())
+    await backend.saveSchema(schema.getSnapshotForSave())
+    await password.saveToServer()
+    await backend.saveUsers(users.getSnapshotForSave())
 
     const { needsSetup } = await backend.getSetupStatus()
     if (needsSetup) {

@@ -69,6 +69,7 @@
 import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 
 import PresetResultDialog from '@/components/PresetResultDialog.vue'
+import type { Result } from '@/lib/backend'
 
 const props = defineProps<{
   /** So heißt das Programm in Überschrift und Statusanzeige */
@@ -78,7 +79,7 @@ const props = defineProps<{
   /** Fragt das Backend, ob das Programm gerade läuft */
   getStatus: () => Promise<{ online: boolean }>
   /** Führt Store oder Recall im Backend aus */
-  run: (input: { action: string; categories: Record<string, unknown[]> }) => Promise<any>
+  run: (input: { action: string; categories: Record<string, unknown[]> }) => Promise<Result<'runProToolsPresets'>>
 }>()
 
 const STATUS_INTERVAL_MS = 5000
@@ -100,7 +101,7 @@ const anySelected = computed(() => allItems.value.some((item) => item.selected))
 
 const isOnline = ref(false)
 const snack = reactive({ open: false, text: '', color: 'success' })
-const resultDialog = reactive({ open: false, data: null as any })
+const resultDialog = reactive({ open: false, data: null as Result<'runProToolsPresets'> | null })
 const confirm = reactive({ open: false, title: '', text: '', action: '' })
 
 /** Wählt alles aus oder ab. Quick Presets gehen dabei immer aus, sie wählt man einzeln. */

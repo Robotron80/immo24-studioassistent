@@ -25,9 +25,11 @@
  * Zeigt nach Store oder Recall, was pro Kategorie passiert ist.
  * Erscheint nur, wenn nicht alles glatt lief, sonst reicht die kurze Meldung.
  */
+import type { Result } from '@/lib/backend'
+
 defineProps<{
   modelValue: boolean
-  result: any
+  result: Result<'runProToolsPresets'> | null
 }>()
 const emit = defineEmits(['update:modelValue'])
 

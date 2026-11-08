@@ -30,11 +30,16 @@ export default tseslint.config(
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrors: 'none' },
       ],
-      // In der Oberfläche ist "any" bewusst noch erlaubt (siehe CLAUDE.md), deshalb nur eine Warnung
-      '@typescript-eslint/no-explicit-any': 'warn',
+      // "any" schaltet die Typprüfung ab, deshalb ist es im Programmcode verboten
+      '@typescript-eslint/no-explicit-any': 'error',
       // Seitennamen wie "Anmeldung" bestehen aus einem Wort, das ist so gewollt
       'vue/multi-word-component-names': 'off',
     },
+  },
+  {
+    // Die Tests spielen frei geformte Anfragen im Stil der alten HTTP-Schnittstelle ab
+    files: ['tests/**'],
+    rules: { '@typescript-eslint/no-explicit-any': 'off' },
   },
   {
     // Die Testumgebung und Skripte sind CommonJS (require)

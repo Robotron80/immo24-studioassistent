@@ -14,7 +14,7 @@
       </v-card-text>
 
       <!-- Schritt 2: Vorschau und Bestätigung -->
-      <v-card-text v-else>
+      <v-card-text v-else-if="preview">
         <div class="text-caption text-medium-emphasis">Projektordner</div>
         <div class="path-text">{{ preview.von }}</div>
         <div class="text-caption text-medium-emphasis mt-2">wird zu</div>
@@ -72,12 +72,12 @@
 import { computed, ref, watch } from 'vue'
 
 import MoidFeld from '@/components/MoidFeld.vue'
-import { backend } from '@/lib/backend'
+import { backend, type Result } from '@/lib/backend'
 
 const props = defineProps<{
   modelValue: boolean
   kunde: string
-  project: any
+  project: Result<'listProjects'>[number] | null
 }>()
 const emit = defineEmits(['update:modelValue', 'renamed'])
 
@@ -85,7 +85,7 @@ const step = ref('form')
 const neuerName = ref('')
 const neueMoid = ref('')
 const ohneMoid = ref(false)
-const preview = ref<any>(null)
+const preview = ref<Result<'previewRename'> | null>(null)
 const ignoreLocks = ref(false)
 const confirmed = ref(false)
 const error = ref('')
@@ -116,7 +116,7 @@ watch(
 function request(extra = {}) {
   return {
     kunde: props.kunde,
-    ordner: props.project.ordner,
+    ordner: props.project?.ordner ?? '',
     neuerName: neuerName.value,
     neueMoid: neueMoid.value,
     ohneMoid: ohneMoid.value,

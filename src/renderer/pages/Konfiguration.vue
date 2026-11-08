@@ -104,12 +104,12 @@ async function saveVersioned(save, reload, conflictText) {
   return true
 }
 
-const pbRef = ref<any>(null)
-const mitarbeiterRef = ref<any>(null)
-const pfadeRef = ref<any>(null)
-const pwRef = ref<any>(null)
-const schemaRef = ref<any>(null)
-const moduleRef = ref<any>(null)
+const pbRef = ref<InstanceType<typeof KonfigProduktionsbuch> | null>(null)
+const mitarbeiterRef = ref<InstanceType<typeof KonfigMitarbeiter> | null>(null)
+const pfadeRef = ref<InstanceType<typeof KonfigPfade> | null>(null)
+const pwRef = ref<InstanceType<typeof KonfigPasswort> | null>(null)
+const schemaRef = ref<InstanceType<typeof KonfigNamensschema> | null>(null)
+const moduleRef = ref<InstanceType<typeof KonfigModule> | null>(null)
 const tab = ref('prod')
 const saving = ref(false)
 
@@ -159,60 +159,69 @@ async function onSave() {
   }
 
   saving.value = true
+  // Die Bereiche einmal festhalten: So sind sie auch in den Rückruffunktionen sicher vorhanden
+  const [pb, pfade, mitarbeiter, pw, schema, modules] = [
+    pbRef.value,
+    pfadeRef.value,
+    mitarbeiterRef.value,
+    pwRef.value,
+    schemaRef.value,
+    moduleRef.value,
+  ]
   // Für die Fehlermeldung: Welcher Bereich wird gerade gespeichert?
   let section = ''
   try {
     // Produktionsbuch speichern
-    if (pbRef.value?.isDirty()) {
+    if (pb?.isDirty()) {
       section = 'Produktionsbuch'
       const saved = await saveVersioned(
-        () => backend.saveSnapshot(pbRef.value.getSnapshotForSave()),
-        () => pbRef.value.resetToServer(),
+        () => backend.saveSnapshot(pb.getSnapshotForSave()),
+        () => pb.resetToServer(),
         'Das Produktionsbuch wurde zwischenzeitlich geändert, auch ein anderer Rechner kann das sein. Ansicht aktualisiert.',
       )
       if (!saved) return
     }
 
     // Pfade speichern
-    if (pfadeRef.value?.isDirty()) {
+    if (pfade?.isDirty()) {
       section = 'Pfade'
       const saved = await saveVersioned(
-        () => backend.savePaths(pfadeRef.value.getSnapshotForSave()),
-        () => pfadeRef.value.resetToServer(),
+        () => backend.savePaths(pfade.getSnapshotForSave()),
+        () => pfade.resetToServer(),
         'Pfade wurden zwischenzeitlich geändert. Ansicht aktualisiert.',
       )
       if (!saved) return
     }
 
     // Mitarbeiter speichern
-    if (mitarbeiterRef.value?.isDirty()) {
+    if (mitarbeiter?.isDirty()) {
       section = 'Mitarbeiter'
-      await backend.saveUsers(mitarbeiterRef.value.getSnapshotForSave())
-      await mitarbeiterRef.value.resetToServer()
+      await backend.saveUsers(mitarbeiter.getSnapshotForSave())
+      await mitarbeiter.resetToServer()
     }
     // Passwort
-    if (pwRef.value?.isDirty()) {
+    if (pw?.isDirty()) {
       section = 'Passwort'
-      await pwRef.value.saveToServer()
+      await pw.saveToServer()
     }
 
     // Schema
-    if (schemaRef.value?.isDirty()) {
+    if (schema?.isDirty()) {
       section = 'Namensschema'
       const saved = await saveVersioned(
-        () => backend.saveSchema(schemaRef.value.getSnapshotForSave()),
-        () => schemaRef.value.resetToServer(),
+        () => backend.saveSchema(schema.getSnapshotForSave()),
+        () => schema.resetToServer(),
         'Das Namensschema wurde zwischenzeitlich geändert, auch ein anderer Rechner kann das sein. Ansicht aktualisiert.',
       )
       if (!saved) return
     }
 
     // Module
-    if (moduleRef.value?.isDirty()) {
+    if (modules?.isDirty()) {
       section = 'Module'
       const saved = await saveVersioned(
-        () => backend.saveModules(moduleRef.value.getSnapshotForSave()),
-        () => moduleRef.value.resetToServer(),
+        () => backend.saveModules(modules.getSnapshotForSave()),
+        () => modules.resetToServer(),
         'Module wurden zwischenzeitlich geändert. Ansicht aktualisiert.',
       )
       if (!saved) return
@@ -246,7 +255,7 @@ const authError = ref('')
 const authLoading = ref(false)
 const showPw = ref(false)
 const capsOn = ref(false)
-const pwField = ref<any>(null)
+const pwField = ref<{ focus: () => void } | null>(null)
 
 const canSubmit = computed(() => !!authPassword.value && !authLoading.value)
 function focusPw() {

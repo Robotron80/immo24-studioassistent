@@ -116,7 +116,8 @@ function debugCall(method: string, arg: unknown, startedAt: number, outcome: str
 
 /** Nimmt die Aufrufe der Oberfläche entgegen. Einmal beim Programmstart aufrufen. */
 export function registerBackendIpc(): void {
-  const methods: Record<string, (arg: any) => unknown> = exposedMethods()
+  // Hier nur nach Namen nachschlagen. Ob die Daten passen, prüft jede Funktion in src/core selbst.
+  const methods = exposedMethods() as unknown as Record<string, (arg: unknown) => unknown>
 
   ipcMain.handle('backend', async (_event, method: string, arg: unknown) => {
     if (!Object.hasOwn(methods, method)) {

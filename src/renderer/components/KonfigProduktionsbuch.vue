@@ -123,11 +123,11 @@
 import { ref, computed, watch } from 'vue'
 
 import { useKonfigBereich } from '@/composables/useKonfigBereich'
-import { backend } from '@/lib/backend'
+import { backend, type Result } from '@/lib/backend'
 
 // Gespeichert wird erst in der Konfiguration
 const { original, staged, loading, error, exposed } = useKonfigBereich({
-  empty: () => [] as any[],
+  empty: (): Result<'getSnapshot'>['customers'] => [],
   errorText: 'Kunden konnten nicht geladen werden.',
   load: async () => {
     const snap = await backend.getSnapshot()
@@ -241,6 +241,8 @@ function openEditFolder(f) {
 function saveFolder() {
   const cust = currentCustomer.value
   if (!cust) return
+  cust.ordner ??= []
+  const ordner = cust.ordner
   const name = (folderForm.value.name || '').trim()
   const label = folderForm.value.label || ''
   const flag = !!folderForm.value.ist_Produktionsstufe
@@ -251,34 +253,34 @@ function saveFolder() {
   }
 
   if (folderForm.value.mode === 'new') {
-    const exists = (cust.ordner || []).some((o) => (o.name || '').toLowerCase() === name.toLowerCase())
+    const exists = ordner.some((o) => (o.name || '').toLowerCase() === name.toLowerCase())
     if (exists) {
       dialogError.value = 'Ordnername existiert bereits'
       return
     }
     cust.ordner = cust.ordner || []
-    cust.ordner.push({ name, label, ist_Produktionsstufe: flag, ist_EventpipeZiel: eventpipe })
+    ordner.push({ name, label, ist_Produktionsstufe: flag, ist_EventpipeZiel: eventpipe })
   } else {
     const old = (folderForm.value.originalName || '').toLowerCase()
-    const idx = (cust.ordner || []).findIndex((o) => (o.name || '').toLowerCase() === old)
+    const idx = ordner.findIndex((o) => (o.name || '').toLowerCase() === old)
     if (idx < 0) {
       dialogError.value = 'Ordner nicht gefunden.'
       return
     }
     const isRename = name.toLowerCase() !== old
     if (isRename) {
-      const conflict = cust.ordner.some((o, i) => i !== idx && (o.name || '').toLowerCase() === name.toLowerCase())
+      const conflict = ordner.some((o, i) => i !== idx && (o.name || '').toLowerCase() === name.toLowerCase())
       if (conflict) {
         dialogError.value = 'Ordnername existiert bereits'
         return
       }
     }
-    cust.ordner[idx] = { name, label, ist_Produktionsstufe: flag, ist_EventpipeZiel: eventpipe }
+    ordner[idx] = { name, label, ist_Produktionsstufe: flag, ist_EventpipeZiel: eventpipe }
   }
   // Der Export hat genau einen Ort: Ein neu markierter Ordner löst den bisherigen ab
   if (eventpipe) {
-    for (const ordner of cust.ordner) {
-      if ((ordner.name || '').toLowerCase() !== name.toLowerCase()) ordner.ist_EventpipeZiel = false
+    for (const entry of ordner) {
+      if ((entry.name || '').toLowerCase() !== name.toLowerCase()) entry.ist_EventpipeZiel = false
     }
   }
   folderDialogOpen.value = false
@@ -296,12 +298,12 @@ async function confirmDeleteFolder(f) {
 const confirmOpen = ref(false)
 const confirmTitle = ref('')
 const confirmText = ref('')
-let confirmCb: any = null
+let confirmCb: ((ok: boolean) => void) | null = null
 function confirm(title, text) {
   confirmTitle.value = title
   confirmText.value = text
   confirmOpen.value = true
-  return new Promise((res) => (confirmCb = res))
+  return new Promise<boolean>((res) => (confirmCb = res))
 }
 function confirmResolve(val) {
   confirmOpen.value = false

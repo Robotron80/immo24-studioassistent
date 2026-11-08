@@ -70,13 +70,14 @@ const { original, staged, loading, error, exposed } = useKonfigBereich({
   empty: () => ({ projektordnerSchema: '', sessionSchema: '' }),
   errorText: 'Schema laden fehlgeschlagen',
   load: async () => {
-    const snap: any = await backend.getSchema()
+    const snap = await backend.getSchema()
+    const data: Record<string, unknown> = snap.data
     return {
       data: {
-        projektordnerSchema: String(snap.data?.projektordnerSchema ?? ''),
-        sessionSchema: String(snap.data?.sessionSchema ?? ''),
+        projektordnerSchema: String(data.projektordnerSchema ?? ''),
+        sessionSchema: String(data.sessionSchema ?? ''),
       },
-      version: snap?.version,
+      version: snap.version,
     }
   },
 })

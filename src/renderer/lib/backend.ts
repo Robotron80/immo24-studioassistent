@@ -45,13 +45,13 @@ const MESSAGES: Record<string, string> = {
 
 interface BackendFailure {
   code: string
-  details?: Record<string, any>
+  details?: Record<string, unknown>
   message?: string
 }
 
 export class BackendError extends Error {
   code: string
-  details: Record<string, any>
+  details: Record<string, unknown>
 
   constructor({ code, details, message }: BackendFailure) {
     super(MESSAGES[code] || message || code)
@@ -62,7 +62,8 @@ export class BackendError extends Error {
 }
 
 type Argument<M extends keyof BackendMethods> = Parameters<BackendMethods[M]>[0]
-type Result<M extends keyof BackendMethods> = Awaited<ReturnType<BackendMethods[M]>>
+/** Was ein Backend-Aufruf zurückgibt, z. B. Result<'listProjects'> für die Projektliste */
+export type Result<M extends keyof BackendMethods> = Awaited<ReturnType<BackendMethods[M]>>
 
 /** Führt einen Aufruf aus und gibt das Ergebnis zurück oder wirft einen BackendError. */
 async function call<M extends keyof BackendMethods>(method: M, arg?: Argument<M>): Promise<Result<M>> {

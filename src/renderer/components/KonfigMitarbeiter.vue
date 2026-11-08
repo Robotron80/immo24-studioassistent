@@ -79,12 +79,12 @@
 import { ref, computed } from 'vue'
 
 import { useKonfigBereich } from '@/composables/useKonfigBereich'
-import { backend } from '@/lib/backend'
+import { backend, type Result } from '@/lib/backend'
 import { checkWindowsName } from '../../core/names'
 
 // Gespeichert wird erst, wenn in der Konfiguration "Speichern" gedrückt wird
 const { staged, error, exposed } = useKonfigBereich({
-  empty: () => [] as any[],
+  empty: (): Result<'listUsers'> => [],
   errorText: 'Mitarbeiter konnten nicht geladen werden.',
   load: async () => ({ data: await backend.listUsers() }),
 })

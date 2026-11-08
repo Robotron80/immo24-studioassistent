@@ -37,7 +37,7 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 const store = useProjektanlage()
 const activeUser = computed(() => store.activeUser)
 const loggingOut = ref(false)
-let stopListening: any = null
+let stopListening: (() => void) | null = null
 const isLoggedIn = computed(() => !!activeUser.value)
 const displayName = computed(() => activeUser.value || 'Nicht angemeldet')
 const soundminerEnabled = ref(false)
@@ -51,8 +51,8 @@ onBeforeUnmount(() => stopListening?.())
 
 async function fetchModuleStatus() {
   try {
-    const modules: any = await backend.getModules()
-    soundminerEnabled.value = !!modules?.data?.soundminer?.enabled
+    const { data } = await backend.getModules()
+    soundminerEnabled.value = !!(data.soundminer as { enabled?: boolean } | undefined)?.enabled
   } catch {
     soundminerEnabled.value = false
   }

@@ -4,7 +4,7 @@
 interface BackendResponse {
   ok: boolean
   data?: unknown
-  error: { code: string; details?: Record<string, any>; message?: string }
+  error: { code: string; details?: Record<string, unknown>; message?: string }
 }
 
 interface Window {

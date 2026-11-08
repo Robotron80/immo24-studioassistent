@@ -37,10 +37,10 @@ const { original, staged, error, exposed } = useKonfigBereich({
   empty: emptyPaths,
   errorText: 'Pfade laden fehlgeschlagen',
   load: async () => {
-    const snap: any = await backend.getPaths()
+    const snap = await backend.getPaths()
     const data = emptyPaths()
-    for (const key of Object.keys(data)) data[key] = snap?.data?.[key] || ''
-    return { data, version: snap?.version }
+    for (const key of Object.keys(data)) data[key] = String(snap.data[key] ?? '')
+    return { data, version: snap.version }
   },
 })
 

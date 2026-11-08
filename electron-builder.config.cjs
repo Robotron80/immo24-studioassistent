@@ -18,7 +18,10 @@ module.exports = {
     createDesktopShortcut: true,
     createStartMenuShortcut: true,
     license: 'assets/license.txt',
-    deleteAppDataOnUninstall: true,
+    // Beim Deinstallieren die Einstellungen löschen, wie bei 0.4. Nicht bei Next-Builds:
+    // Der Uninstaller löscht auch %APPDATA%\<Paketname>, und der ist bei Next derselbe wie
+    // bei 0.4 ("immo24-studioassistent"). Next würde sonst die Einstellungen von 0.4 löschen.
+    deleteAppDataOnUninstall: !isNext,
   },
   mac: {
     target: [{ target: 'dmg', arch: ['arm64'] }],

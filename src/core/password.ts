@@ -14,8 +14,6 @@ import path from 'node:path'
 import { CoreError } from './errors.ts'
 import { isPlainObject, readTextOrNull, writeJsonAtomic } from './files.ts'
 
-export type PasswordService = ReturnType<typeof createPasswordService>
-
 export function createPasswordService(userDataDir: string) {
   const file = path.join(userDataDir, 'adminpw.json')
 

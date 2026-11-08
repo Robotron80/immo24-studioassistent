@@ -24,7 +24,7 @@ import type { SessionService } from './session.ts'
 
 type Action = 'store' | 'recall'
 
-export interface CategoryResult {
+interface CategoryResult {
   category: string
   status: 'ok' | 'partial' | 'error'
   note?: string

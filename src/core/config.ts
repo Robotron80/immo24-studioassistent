@@ -16,7 +16,7 @@ import { fileVersion, isPlainObject, readJsonOrNull, writeJsonAtomic } from './f
 import { createVersionTracker } from './versions.ts'
 
 /** Die vier konfigurierbaren Ordner. */
-export interface Paths {
+interface Paths {
   PathMitarbeiter: string
   PathProduktionen: string
   PathStammdaten: string
@@ -27,27 +27,6 @@ export interface Paths {
 export interface Schema {
   projektordnerSchema: string
   sessionSchema: string
-}
-
-/** Das Ergebnis der Prüfung, ob die Einrichtung vollständig ist. */
-export interface InitializeInfo {
-  paths_json_present: boolean
-  required_keys_ok: boolean
-  schema_ok: boolean
-  dirs_exist: null
-  missingKeys: string[]
-  emptyKeys: string[]
-  notFoundDirs: null
-  needsUserAction: boolean
-}
-
-export interface InitializeStatus {
-  ready: true
-  initialize: InitializeInfo
-  // Die folgenden Felder fehlen, solange die Pfade nicht eingerichtet sind
-  paths?: Record<string, unknown>
-  schema?: Schema
-  modules?: Record<string, unknown>
 }
 
 /** Mindestens diese Pfade müssen gesetzt sein, sonst startet der Einrichtungsassistent. */
@@ -141,20 +120,7 @@ export function createConfigService(userDataDir: string) {
       const data = await readSchema()
       if (data) return { data, version: await fileVersion(await schemaFile()) }
       // Noch kein Schema vorhanden: Der Einrichtungsassistent muss es abfragen
-      return {
-        data: {},
-        version: null,
-        initialize: {
-          paths_json_present: true,
-          required_keys_ok: true,
-          schema_ok: false,
-          dirs_exist: null,
-          missingKeys: [],
-          emptyKeys: [],
-          notFoundDirs: null,
-          needsUserAction: true,
-        } satisfies InitializeInfo,
-      }
+      return { data: {}, version: null }
     },
 
     /**
@@ -207,67 +173,21 @@ export function createConfigService(userDataDir: string) {
     },
 
     /**
-     * Beim Programmstart: Ist alles eingerichtet?
-     * Ein fehlender Pfad führt zum Einrichtungsassistenten.
+     * Beim Programmstart und am Ende des Einrichtungsassistenten: Fehlt noch etwas?
+     * Nötig sind die Pfade zu Produktionen und Mitarbeitern und ein Namensschema.
      */
-    async getInitializeStatus(): Promise<InitializeStatus> {
-      const parsed = await readJsonOrNull(pathsFile)
+    async getSetupStatus(): Promise<{ needsSetup: boolean }> {
       const paths = await readPaths()
-      const isEmpty = !isPlainObject(parsed) || Object.keys(paths).length === 0
-      const missingKeys = isEmpty ? REQUIRED_PATH_KEYS : REQUIRED_PATH_KEYS.filter((key) => !(key in paths))
-      const emptyKeys = isEmpty
-        ? REQUIRED_PATH_KEYS
-        : REQUIRED_PATH_KEYS.filter((key) => asString(paths[key]).trim() === '')
-      const requiredKeysOk = !isEmpty && missingKeys.length === 0 && emptyKeys.length === 0
+      if (REQUIRED_PATH_KEYS.some((key) => asString(paths[key]).trim() === '')) return { needsSetup: true }
 
-      // Schritt 1: Pfade unvollständig, dann brauchen wir den Rest gar nicht zu lesen
-      if (!requiredKeysOk) {
-        return {
-          ready: true,
-          initialize: {
-            paths_json_present: !isEmpty,
-            required_keys_ok: requiredKeysOk,
-            schema_ok: false,
-            dirs_exist: null,
-            missingKeys,
-            emptyKeys,
-            notFoundDirs: null,
-            needsUserAction: true,
-          },
-        }
-      }
-
-      // Schritt 2: Schema lesen. Ohne Stammdaten-Pfad gilt es als nicht vorhanden,
-      // der Assistent startet dann aber nicht, wie bisher auch.
-      let schemaData: Record<string, unknown> | null = null
-      let schemaMissing = false
+      // Ohne Stammdaten-Pfad lässt sich das Schema nicht lesen. Der Assistent startet
+      // dann trotzdem nicht, wie bei Version 0.4.
       try {
-        schemaData = await readSchema()
-        schemaMissing = schemaData === null
+        const schema = await readSchema()
+        return { needsSetup: !schema || !(asString(schema.sessionSchema) || asString(schema.projektordnerSchema)) }
       } catch (error) {
-        if (!(error instanceof CoreError && error.code === 'no_stammdaten_path')) throw error
-      }
-      const schema: Schema = {
-        sessionSchema: asString(schemaData?.sessionSchema),
-        projektordnerSchema: asString(schemaData?.projektordnerSchema),
-      }
-
-      // Schritt 3: Gesamtergebnis zusammensetzen
-      return {
-        ready: true,
-        initialize: {
-          paths_json_present: true,
-          required_keys_ok: true,
-          schema_ok: !schemaMissing && !!(schema.sessionSchema || schema.projektordnerSchema),
-          dirs_exist: null,
-          missingKeys: [],
-          emptyKeys: [],
-          notFoundDirs: null,
-          needsUserAction: schemaMissing,
-        },
-        paths,
-        schema,
-        modules: await readModules(),
+        if (error instanceof CoreError && error.code === 'no_stammdaten_path') return { needsSetup: false }
+        throw error
       }
     },
   }

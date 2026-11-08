@@ -18,9 +18,9 @@ import path from 'node:path'
 import type { ConfigService } from './config.ts'
 import { localDate } from './dates.ts'
 import { CoreError } from './errors.ts'
-import { exists, readJsonOrNull, writeFileAtomic } from './files.ts'
-import { findProjectByMoid } from './moid.ts'
-import { checkMoids, checkWindowsName, escapeRegExp, fillTemplate, formatMoids, isPlaceholderMoid, looseSpaces, tidyName } from './names.ts'
+import { exists, writeFileAtomic } from './files.ts'
+import { findProjectByMoid, readCustomerProjects } from './moid.ts'
+import { checkMoids, checkWindowsName, escapeRegExp, fillSessionName, fillTemplate, formatMoids, isPlaceholderMoid, looseSpaces, tidyName } from './names.ts'
 import type { SessionService } from './session.ts'
 import type { Kunde, StammdatenService } from './stammdaten.ts'
 
@@ -96,10 +96,7 @@ function nextSessionName(existingFiles: string[], schema: string, values: Record
     const match = regex.exec(file.normalize('NFC'))
     if (match?.[1]) highest = Math.max(highest, parseInt(match[1], 10))
   }
-  const note = values.anmerkung ? ` ${values.anmerkung}` : ''
-  let name = fillTemplate(normalized, { ...values, version: `v${highest + 1}`, anmerkung: note })
-  // Steht im Schema ein Leerzeichen vor {{anmerkung}}, entsteht keine doppelte Lücke
-  if (normalized.includes('{{anmerkung}}')) name = name.replace(/ {2,}/g, ' ')
+  const name = fillSessionName(normalized, { ...values, version: `v${highest + 1}` })
   // Leere Platzhalter hinterlassen doppelte Leerzeichen oder Trenner am Rand, die kommen weg
   return `${values.moid ? name : tidyName(name)}.ptx`
 }
@@ -166,22 +163,18 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
       const kunde = String(kundeInput ?? '').trim()
       if (!kunde) throw new CoreError('kunde_required')
       const { produktionen } = await settings()
-      const root = path.join(produktionen, kunde)
-      const entries = await fs.readdir(root, { withFileTypes: true }).catch(() => [])
-
-      const rows = await Promise.all(entries.filter((entry) => entry.isDirectory()).map(async (entry) => {
-        const meta = await readJsonOrNull(path.join(root, entry.name, 'immo24-proj.json')) as Record<string, string> | null
-        if (!meta?.erstellt_am || !meta.projektname || typeof meta.mo_id !== 'string' || !meta.user) return null
+      const rows = (await readCustomerProjects(produktionen, kunde)).map(({ ordner, meta }) => {
+        if (!meta.erstellt_am || !meta.projektname || typeof meta.mo_id !== 'string' || !meta.user) return null
         return {
-          date: meta.erstellt_am,
-          projektname: meta.projektname,
+          date: String(meta.erstellt_am),
+          projektname: String(meta.projektname),
           moid: meta.mo_id,
-          user: meta.user,
-          ordner: entry.name,
+          user: String(meta.user),
+          ordner,
           // Auch alte Projekte mit NOID oder xxxx gelten als "ohne MoID"
           ohneMoid: isPlaceholderMoid(meta.mo_id),
         }
-      }))
+      })
       // Neueste zuerst, bei gleichem Datum alphabetisch
       return rows
         .filter((row) => row !== null)

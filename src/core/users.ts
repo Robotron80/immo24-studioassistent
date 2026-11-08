@@ -27,7 +27,7 @@ export interface User {
   kuerzel: string
 }
 
-export interface SaveUserResult {
+interface SaveUserResult {
   name: string
   action: 'written' | 'skipped:name-missing'
 }

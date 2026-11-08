@@ -55,7 +55,7 @@ export function backend() {
 function exposedMethods() {
   const { config, passwords, presets, projects, rename, session, stammdaten, users } = backend()
   return {
-    getInitializeStatus: () => config.getInitializeStatus(),
+    getSetupStatus: () => config.getSetupStatus(),
     getPaths: () => config.getPaths(),
     savePaths: (input: Parameters<typeof config.savePaths>[0]) => config.savePaths(input),
     getSchema: () => config.getSchema(),

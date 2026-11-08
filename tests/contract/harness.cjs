@@ -174,8 +174,23 @@ function seedConfigured(dirs) {
 }
 
 /** Lädt die gespeicherte Referenz eines Szenarios. */
+/**
+ * Liest die Antworten von Version 0.4. Eine bewusste Vereinfachung gilt für alle Tests:
+ * Die Einrichtungsprüfung antwortet nur noch mit needsSetup (ja/nein) statt mit acht
+ * Feldern, und "Schema fehlt" nennt keinen Einrichtungsstatus mehr.
+ */
 function loadReference(name) {
-  return JSON.parse(fs.readFileSync(path.join(REFERENCE_DIR, `${name}.json`), 'utf8'))
+  const steps = JSON.parse(fs.readFileSync(path.join(REFERENCE_DIR, `${name}.json`), 'utf8'))
+  for (const step of steps) {
+    const info = step.response?.body?.initialize
+    if (!info) continue
+    if (step.request === 'GET /api/initialize') {
+      step.response = { status: 200, body: { needsSetup: info.needsUserAction } }
+    } else {
+      delete step.response.body.initialize
+    }
+  }
+  return steps
 }
 
 module.exports = { createEnvironment, loadReference, seedConfigured, write }

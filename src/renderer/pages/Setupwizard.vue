@@ -174,8 +174,8 @@ async function finish() {
     await passwordRef.value.saveToServer()
     await backend.saveUsers(usersRef.value.getSnapshotForSave())
 
-    const { initialize } = await backend.getInitializeStatus()
-    if (!initialize.paths_json_present || !initialize.required_keys_ok || !initialize.schema_ok) {
+    const { needsSetup } = await backend.getSetupStatus()
+    if (needsSetup) {
       toast('Konfiguration unvollständig. Bitte Eingaben prüfen.', 'warning')
       return
     }

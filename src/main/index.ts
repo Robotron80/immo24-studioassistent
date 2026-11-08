@@ -83,9 +83,9 @@ async function startup(): Promise<void> {
   installApplicationMenu()
 
   const splashTimer = setTimeout(createSplashWindow, 250)
-  const status = await backend().config.getInitializeStatus()
+  const { needsSetup } = await backend().config.getSetupStatus()
 
-  if (status.initialize.needsUserAction) createInitWindow()
+  if (needsSetup) createInitWindow()
   else createUserPickerWindow()
 
   clearTimeout(splashTimer)

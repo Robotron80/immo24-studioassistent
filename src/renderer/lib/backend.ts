@@ -74,7 +74,7 @@ async function call<M extends keyof BackendMethods> (method: M, arg?: Argument<M
 }
 
 export const backend = {
-  getInitializeStatus: () => call('getInitializeStatus'),
+  getSetupStatus: () => call('getSetupStatus'),
   getPaths: () => call('getPaths'),
   savePaths: (input: Argument<'savePaths'>) => call('savePaths', input),
   getSchema: () => call('getSchema'),

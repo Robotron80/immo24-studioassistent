@@ -1,23 +1,11 @@
 <template>
   <v-app>
-    <template v-if="showChrome">
-      <AppBar />
-      <v-main>
-        <router-view v-slot="{ Component }">
-          <component :is="Component" />
-        </router-view>
-      </v-main>
-      <AppFooter />
-    </template>
-
-    <!-- Chrome ausblenden (Login/Konfiguration) -->
-    <template v-else>
-      <v-main>
-        <router-view v-slot="{ Component }">
-          <component :is="Component" />
-        </router-view>
-      </v-main>
-    </template>
+    <!-- Kopf- und Fußzeile nur im Hauptfenster, nicht bei Anmeldung, Konfiguration und Assistent -->
+    <AppBar v-if="showChrome" />
+    <v-main>
+      <router-view />
+    </v-main>
+    <AppFooter v-if="showChrome" />
   </v-app>
 </template>
 

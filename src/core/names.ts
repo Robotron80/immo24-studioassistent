@@ -11,7 +11,7 @@ export function comparableName(name: string): string {
   return name.normalize('NFC').toLowerCase()
 }
 
-export interface NameError {
+interface NameError {
   code: 'forbidden_chars' | 'trailing_dot_or_space' | 'reserved_name' | 'moid_too_long' | 'moid_duplicate'
   message: string
   chars?: string[]
@@ -76,6 +76,18 @@ export function checkMoids(input: unknown): NameError[] {
 /** Ersetzt im Text alle Platzhalter wie {{moid}} durch ihre Werte. */
 export function fillTemplate(template: string, values: Record<string, string>): string {
   return template.replace(/{{(\w+)}}/g, (_match, key: string) => values[key] || '')
+}
+
+/**
+ * Setzt einen Sessionnamen zusammen. Die Anmerkung bekommt davor ein Leerzeichen, damit
+ * "{{version}}{{anmerkung}}" (passt zu Version 0.4) und "{{version}} {{anmerkung}}"
+ * dasselbe ergeben: "v3 Kurzversion". Ohne Anmerkung bleibt keine Lücke.
+ * Wird beim Anlegen benutzt und für die Vorschau in der Konfiguration.
+ */
+export function fillSessionName(schema: string, values: Record<string, string>): string {
+  const note = values.anmerkung ? ` ${values.anmerkung}` : ''
+  const name = fillTemplate(schema, { ...values, anmerkung: note })
+  return schema.includes('{{anmerkung}}') ? name.replace(/ {2,}/g, ' ') : name
 }
 
 /**

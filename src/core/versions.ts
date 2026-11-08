@@ -13,7 +13,7 @@
  */
 import { CoreError } from './errors.ts'
 
-export interface VersionTracker {
+interface VersionTracker {
   /** Liefert die aktuelle Version und legt beim ersten Aufruf eine an. */
   current(): string
   /** Wirft einen Fehler, wenn die mitgeschickte Version veraltet ist. */

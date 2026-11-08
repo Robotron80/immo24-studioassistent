@@ -75,6 +75,7 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 
 import { backend } from '@/lib/backend'
+import { fillSessionName, fillTemplate } from '../../core/names'
 
 const loading = ref(false)
 const error   = ref('')
@@ -113,12 +114,9 @@ const demoValues = {
   anmerkung: 'Kurzversion',
 }
 
-function renderPreview(schemaStr = '') {
-  return schemaStr.replace(/\{\{(\w+)\}\}/g, (_m, key) => demoValues[key] ?? '')
-}
-
-const previewProjektordner = computed(() => renderPreview(staged.projektordnerSchema))
-const previewSession       = computed(() => renderPreview(staged.sessionSchema))
+// Die Vorschau nutzt dieselben Regeln wie das echte Anlegen (src/core/names.ts)
+const previewProjektordner = computed(() => fillTemplate(staged.projektordnerSchema, demoValues))
+const previewSession       = computed(() => fillSessionName(staged.sessionSchema, demoValues))
 
 async function loadSnapshot() {
   loading.value = true; error.value = ''

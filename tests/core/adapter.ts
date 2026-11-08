@@ -71,10 +71,8 @@ export function createCoreRequest(userDataDir: string) {
     switch (key) {
       case 'GET /api/ping':
         return { status: 200, body: { ok: true } }
-      case 'GET /api/initialize': {
-        const status = await config.getInitializeStatus()
-        return { status: status.paths ? 200 : 503, body: status }
-      }
+      case 'GET /api/initialize':
+        return { status: 200, body: await config.getSetupStatus() }
       case 'GET /api/paths':
         return { status: 200, body: await config.getPaths() }
       case 'PUT /api/paths':

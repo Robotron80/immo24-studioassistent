@@ -11,12 +11,28 @@ import path from 'node:path'
 import { isPlainObject, readJsonOrNull } from './files.ts'
 import { comparableName, isPlaceholderMoid, moidList } from './names.ts'
 
-export interface ExistingProject {
+interface ExistingProject {
   kunde: string
   ordner: string
   projektname: string
   moid: string
   date: string
+}
+
+/**
+ * Liest die Projektdateien (immo24-proj.json) aller Projekte eines Kunden, alle gleichzeitig.
+ * Ordner ohne lesbare Projektdatei fallen weg. Nutzen die Projektliste und die MoID-Prüfung.
+ */
+export async function readCustomerProjects(produktionen: string, kunde: string): Promise<Array<{ ordner: string; meta: Record<string, unknown> }>> {
+  const customerDir = path.join(produktionen, kunde)
+  const entries = await fs.readdir(customerDir, { withFileTypes: true }).catch(() => [])
+  const projects = await Promise.all(entries
+    .filter((entry) => entry.isDirectory() && !entry.name.startsWith('.'))
+    .map(async (entry) => {
+      const meta = await readJsonOrNull(path.join(customerDir, entry.name, 'immo24-proj.json'))
+      return isPlainObject(meta) ? { ordner: entry.name, meta } : null
+    }))
+  return projects.filter((project) => project !== null)
 }
 
 /**
@@ -35,20 +51,13 @@ export async function findProjectByMoid(
 ): Promise<ExistingProject | null> {
   const wanted = new Set(moidList(moid).filter((item) => !isPlaceholderMoid(item)).map(comparableName))
   if (wanted.size === 0) return null
-  const customerDir = path.join(produktionen, kunde)
-  const entries = await fs.readdir(customerDir, { withFileTypes: true }).catch(() => [])
-  const folders = entries
-    .filter((entry) => entry.isDirectory() && !entry.name.startsWith('.') && entry.name !== ignoreOrdner)
-    .map((entry) => entry.name)
-
-  const metas = await Promise.all(folders.map((ordner) => readJsonOrNull(path.join(customerDir, ordner, 'immo24-proj.json'))))
-  for (const [index, meta] of metas.entries()) {
-    if (!isPlainObject(meta) || typeof meta.mo_id !== 'string') continue
+  for (const { ordner, meta } of await readCustomerProjects(produktionen, kunde)) {
+    if (ordner === ignoreOrdner || typeof meta.mo_id !== 'string') continue
     const match = moidList(meta.mo_id).find((item) => wanted.has(comparableName(item)))
     if (!match) continue
     return {
       kunde,
-      ordner: folders[index],
+      ordner,
       projektname: String(meta.projektname ?? ''),
       moid: match,
       date: String(meta.erstellt_am ?? ''),

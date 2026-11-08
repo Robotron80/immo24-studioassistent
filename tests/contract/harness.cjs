@@ -1,31 +1,21 @@
 /**
- * Test-Harness: die gemeinsame Werkbank aller Vergleichstests.
+ * Test-Harness: die gemeinsame Werkbank der Vergleichstests.
  *
  * Worum geht es?
- * Das alte Node-RED-Backend wird durch das neue Backend in src/core ersetzt.
- * Damit dabei nichts unbemerkt anders wird, spielen wir dieselben Abläufe
- * ("Szenarien") auf beiden Backends ab und vergleichen die Ergebnisse:
- *
- *   1. Node-RED spielt ein Szenario ab. Antworten und angelegte Dateien
- *      werden als Referenz in tests/contract/reference/ gespeichert.
- *   2. src/core spielt dasselbe Szenario ab und muss die Referenz treffen.
- *      Ausnahmen sind nur bewusste Fehlerkorrekturen (siehe tests/core/).
+ * Das alte Node-RED-Backend von Version 0.4 wurde durch das neue Backend in src/core
+ * ersetzt. Damit dabei nichts unbemerkt anders wurde, hat Node-RED dieselben Abläufe
+ * ("Szenarien") einmal abgespielt. Seine Antworten und die angelegten Dateien liegen als
+ * Referenz in tests/contract/reference/. Node-RED selbst ist inzwischen entfernt, die
+ * Referenz bleibt als fester Stand: Die Tests in tests/core spielen dieselben Szenarien
+ * auf src/core ab und müssen sie treffen. Ausnahmen sind nur bewusste Fehlerkorrekturen.
  *
  * Diese Datei stellt dafür bereit:
  *   - createEnvironment: legt einen leeren Test-Ordner mit Dummy-Daten an
- *   - startBackend:      startet zusätzlich das echte Node-RED
  *   - seedConfigured:    Dummy-Daten wie nach dem Einrichtungsassistenten
- *   - expectReference:   vergleicht ein Ergebnis mit der gespeicherten Referenz
- *
- * Jede Testdatei läuft in einem eigenen Prozess, weil Node-RED globalen
- * Zustand im Speicher hält, der sich sonst gegenseitig beeinflussen würde.
- *
- * Referenz neu schreiben (nur wenn sich das Node-RED-Verhalten ändern soll):
- *   UPDATE_REFERENCE=1 npm run test:contract
+ *   - loadReference:     liest die gespeicherte Referenz eines Szenarios
  */
 const assert = require('node:assert/strict')
 const fs = require('node:fs')
-const http = require('node:http')
 const os = require('node:os')
 const path = require('node:path')
 
@@ -86,7 +76,7 @@ function normalizeValue(value, normalizeText) {
  * Beide Backends nutzen dieselbe Umgebung, damit nur das Backend sich unterscheidet.
  *
  * request: die Funktion, die eine Anfrage an das jeweilige Backend stellt.
- *          Sie wird von startBackend (Node-RED) oder vom core-Test gesetzt.
+ *          Sie wird vom core-Test gesetzt (tests/core/adapter.ts).
  */
 function createEnvironment({ seed } = {}) {
   const base = fs.mkdtempSync(path.join(os.tmpdir(), 'immo24-contract-'))
@@ -123,7 +113,7 @@ function createEnvironment({ seed } = {}) {
       for (const name of fs.readdirSync(current).sort()) {
         const full = path.join(current, name)
         const rel = normalizeText(path.relative(base, full).replaceAll('\\', '/'))
-        if (rel.startsWith('userdata/node-red') || rel.startsWith('userdata/.') || rel.startsWith('userdata/flows')) continue
+        if (rel.startsWith('userdata/.')) continue
         if (fs.statSync(full).isDirectory()) {
           files[`${rel}/`] = null
           walk(full)
@@ -145,88 +135,6 @@ function createEnvironment({ seed } = {}) {
   /** Räumt den Test-Ordner wieder weg. */
   env.cleanup = () => fs.rmSync(base, { recursive: true, force: true })
 
-  return env
-}
-
-/**
- * Startet das echte Node-RED wie in der App und verbindet es mit einer Umgebung.
- * Node-RED wird erst hier geladen, damit die core-Tests auch ohne es laufen.
- */
-async function startBackend({ seed } = {}) {
-  const express = require('express')
-  const RED = require('node-red')
-  const env = createEnvironment({ seed })
-  const { dirs } = env
-
-  process.env.IMMO24_USERDATA = dirs.userData
-  process.env.NODE_RED_HOME = path.dirname(require.resolve('node-red/package.json'))
-
-  // Schritt 1: Webserver auf einem freien Port starten
-  const app = express()
-  const server = http.createServer(app)
-  await new Promise((resolve, reject) => {
-    server.once('error', reject)
-    server.listen(0, '127.0.0.1', resolve)
-  })
-  const { port } = server.address()
-
-  // Schritt 2: Die Flows rufen sich teils selbst über den festen Port 59593 auf.
-  // Wir ersetzen ihn, damit die Tests nicht mit einer laufenden App kollidieren.
-  const flowFile = path.join(dirs.userData, 'flows.json')
-  const flows = fs.readFileSync(path.join(__dirname, 'flows.json'), 'utf8')
-  fs.writeFileSync(flowFile, flows.replaceAll('59593', String(port)))
-
-  // Schritt 3: Node-RED mit denselben Einstellungen wie in der App starten
-  await RED.init(server, {
-    httpAdminRoot: false,
-    userDir: path.join(dirs.userData, 'node-red'),
-    flowFile,
-    coreNodesDir: path.dirname(require.resolve('@node-red/nodes/package.json')),
-    logging: { console: { level: 'off' } },
-    functionGlobalContext: {},
-    contextStorage: { default: { module: 'memory' } },
-    editorTheme: { disableEditor: true },
-    externalModules: { palette: { allowInstall: false } },
-  })
-  app.use(RED.httpNode)
-  await RED.start()
-
-  /** Echte HTTP-Anfrage. Kommt keine Antwort, wird { hang: true } festgehalten. */
-  env.request = async (method, url, body, timeout = REQUEST_TIMEOUT_MS) => {
-    try {
-      const res = await fetch(`http://127.0.0.1:${port}${url}`, {
-        method,
-        headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },
-        body: body === undefined ? undefined : JSON.stringify(body),
-        signal: AbortSignal.timeout(timeout),
-      })
-      const text = await res.text()
-      let parsed = text
-      try {
-        parsed = JSON.parse(text)
-      } catch {
-        // kein JSON: Rohtext behalten
-      }
-      return { status: res.status, body: parsed }
-    } catch (error) {
-      if (error.name === 'TimeoutError') return { hang: true }
-      throw error
-    }
-  }
-
-  // Schritt 4: Warten, bis die Flows geladen sind und antworten
-  for (let attempt = 0; ; attempt++) {
-    if ((await env.request('GET', '/api/ping')).status === 200) break
-    assert.ok(attempt < 100, 'Flows müssen starten')
-    await new Promise((resolve) => setTimeout(resolve, 100))
-  }
-
-  env.stop = async () => {
-    await RED.stop()
-    server.closeAllConnections()
-    await new Promise((resolve) => server.close(resolve))
-    env.cleanup()
-  }
   return env
 }
 
@@ -270,15 +178,4 @@ function loadReference(name) {
   return JSON.parse(fs.readFileSync(path.join(REFERENCE_DIR, `${name}.json`), 'utf8'))
 }
 
-/** Vergleicht Node-RED mit der Referenz, oder schreibt sie bei UPDATE_REFERENCE neu. */
-function expectReference(name, steps) {
-  const actual = JSON.parse(JSON.stringify(steps))
-  if (process.env.UPDATE_REFERENCE) {
-    fs.mkdirSync(REFERENCE_DIR, { recursive: true })
-    fs.writeFileSync(path.join(REFERENCE_DIR, `${name}.json`), `${JSON.stringify(actual, null, 2)}\n`)
-    return
-  }
-  assert.deepEqual(actual, loadReference(name))
-}
-
-module.exports = { createEnvironment, expectReference, loadReference, seedConfigured, startBackend, write }
+module.exports = { createEnvironment, loadReference, seedConfigured, write }

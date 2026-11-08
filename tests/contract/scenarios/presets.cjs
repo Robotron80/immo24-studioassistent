@@ -1,8 +1,8 @@
 /**
  * Szenario: Store und Recall für Pro Tools und Soundminer.
  *
- * Läuft gegen Node-RED (tests/contract/presets.test.cjs) und gegen das neue
- * Backend (tests/core/presets.test.ts).
+ * Die Referenz dazu stammt von Node-RED (Version 0.4), heute läuft das Szenario
+ * gegen das neue Backend (tests/core/presets.test.ts).
  *   Store:  von der lokalen Ablage ins zentrale Archiv des Mitarbeiters
  *   Recall: aus dem Archiv zurück in die lokale Ablage
  */

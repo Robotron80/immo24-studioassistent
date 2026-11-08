@@ -161,6 +161,19 @@ test('die Projektliste zeigt die neuesten Projekte zuerst', async (t) => {
   assert.deepEqual(rows.map((row) => row.projektname), ['Neu', 'Mittel', 'Alt'])
 })
 
+test('Stammdaten behalten zusätzliche Felder wie das EventPipe-Ziel', async (t) => {
+  const { dirs, stammdaten } = await setup(t)
+  const { customers, version } = await stammdaten.getSnapshot()
+  const [ersterOrdner] = customers[0].ordner ?? []
+  Object.assign(ersterOrdner, { ist_EventpipeZiel: true })
+
+  await stammdaten.saveSnapshot({ version, customers })
+
+  const saved = JSON.parse(fs.readFileSync(path.join(dirs.stammdaten, 'kunden_stammdaten.json'), 'utf8'))
+  assert.equal(saved[0].ordner[0].ist_EventpipeZiel, true)
+  assert.deepEqual((await stammdaten.listForSelection())[0].stufen.map((stufe) => stufe.value), ['02_Dialogschnitt', '10_Mischung'])
+})
+
 test('überschreibt keine Stammdaten, die ein anderer Rechner geändert hat', async (t) => {
   const { dirs, stammdaten } = await setup(t)
   const file = path.join(dirs.stammdaten, 'kunden_stammdaten.json')

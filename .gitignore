@@ -1,5 +1,4 @@
 node_modules/
-node-red-portable/
 dist/
 dist-electron/
 release/

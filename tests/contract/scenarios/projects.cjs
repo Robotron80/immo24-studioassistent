@@ -1,9 +1,9 @@
 /**
  * Szenario: Anmeldung, Stammdaten und Projektanlage.
  *
- * Läuft gegen Node-RED (tests/contract/projects.test.cjs) und gegen das neue
- * Backend (tests/core/projects.test.ts). Schritte mit "Hänger" im Namen sind
- * bekannte Fehler: Dort antwortet Node-RED nie, das neue Backend meldet sich.
+ * Die Referenz dazu stammt von Node-RED (Version 0.4), heute läuft das Szenario
+ * gegen das neue Backend (tests/core/projects.test.ts). Schritte mit "Hänger" im
+ * Namen sind bekannte Fehler: Dort antwortete Node-RED nie, das neue Backend meldet sich.
  */
 const fs = require('node:fs')
 const path = require('node:path')

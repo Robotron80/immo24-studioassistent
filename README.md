@@ -197,7 +197,7 @@ App verwendet die in Electron enthaltene Runtime.
 |---|---|
 | `npm run dev` | App mit Dev-Server starten |
 | `npm run typecheck` | Hauptprozess prüfen |
-| `npm test` | Node-RED-Flows prüfen |
+| `npm test` | Fachlogik in `src/core` prüfen |
 | `npm run dist:mac` | DMG für Apple Silicon bauen |
 | `npm run dist:win` | Windows-Installer bauen |
 
@@ -218,10 +218,9 @@ Get-Content "$env:APPDATA\immo24-studioassistent\logs\app.log" -Wait -Tail 50
 Versionen mit `-next` im Namen laufen als **immo24 Studioassistent Next** mit
 eigenen Einstellungen neben der installierten Version.
 
-Die Fachlogik liegt in `src/core`, unabhängig von Electron. Mit `npm run test:core`
-wird sie getestet. `npm run test:contract` hält das Verhalten des früheren
-Node-RED-Backends als Referenz fest, Node-RED ist dafür nur noch als
-Entwicklungsabhängigkeit vorhanden.
+Die Fachlogik liegt in `src/core`, unabhängig von Electron, und wird mit `npm test`
+geprüft. Das Verhalten des früheren Node-RED-Backends liegt als feste Referenz in
+`tests/contract/reference`, die Tests vergleichen das neue Backend damit.
 
 ---
 

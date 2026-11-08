@@ -3,8 +3,8 @@
  *
  * Spielt der Reihe nach ab, was der Einrichtungsassistent und das
  * Konfigurationsmenü tun: Pfade, Namensschema, Passwort, Module, Mitarbeiter.
- * Dasselbe Szenario läuft gegen Node-RED (tests/contract/config.test.cjs)
- * und gegen das neue Backend (tests/core/config.test.ts).
+ * Die Referenz dazu stammt von Node-RED (Version 0.4), heute läuft das Szenario
+ * gegen das neue Backend (tests/core/config.test.ts).
  */
 const path = require('node:path')
 

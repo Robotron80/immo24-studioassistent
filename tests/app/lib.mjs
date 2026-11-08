@@ -205,13 +205,15 @@ function uiHelpers(page) {
   // Ein sichtbares Vuetify-Feld mit genau dieser Beschriftung (als JavaScript-Ausdruck)
   const box = (label) =>
     `[...document.querySelectorAll('.v-input')].filter(e => e.offsetParent !== null).find(e => [...e.querySelectorAll('label')].some(l => l.innerText.trim() === ${JSON.stringify(label)}))`
-  // Mitte eines Elements auf dem Bildschirm. Wartet, bis es da ist (Listen laden z. B. erst nach).
+  // Mitte eines Elements auf dem Bildschirm. Wartet, bis es da ist (Listen laden z. B. erst nach),
+  // und scrollt es vorher ins Bild: Auf kleinen Bildschirmen (z. B. in der Pipeline) liegt sonst
+  // manches unterhalb des sichtbaren Bereichs, und der Klick ginge daneben.
   const center = (selector) =>
     waitFor(
       async () =>
         JSON.parse(
           await page.ev(
-            `(() => { const e = ${selector}; if (!e) return 'null'; const r = e.getBoundingClientRect(); return JSON.stringify({ x: r.left + r.width / 2, y: r.top + r.height / 2 }) })()`,
+            `(() => { const e = ${selector}; if (!e) return 'null'; e.scrollIntoView({ block: 'center', inline: 'center' }); const r = e.getBoundingClientRect(); return JSON.stringify({ x: r.left + r.width / 2, y: r.top + r.height / 2 }) })()`,
           ),
         ),
       5000,
@@ -277,6 +279,14 @@ export async function loginAsTester(app) {
   await sleep(900)
   await login.ev(`window.picker.choose('Tester'); 1`)
   const main = await app.open('projektanlage')
+  // Feste, kleine Fenstergröße wie auf dem Bildschirm des Pipeline-Rechners: So verhalten sich
+  // die Tests überall gleich, egal wie groß der Bildschirm des Rechners ist
+  await main.send('Emulation.setDeviceMetricsOverride', {
+    width: 1024,
+    height: 640,
+    deviceScaleFactor: 1,
+    mobile: false,
+  })
   await main.waitForText('Neues Projekt')
   await sleep(400)
   return main

@@ -70,14 +70,19 @@ export function createUserService(config: ConfigService) {
     return isPlainObject(data.soundminer) && !!data.soundminer.enabled
   }
 
+  /** Legt die fehlenden Ablageordner im immo24-Ordner an. Vorhandene bleiben, wie sie sind. */
+  async function addMissingFolders(metaDir: string): Promise<void> {
+    const folders = (await isSoundminerEnabled()) ? [...PRESET_FOLDERS, SOUNDMINER_FOLDER] : PRESET_FOLDERS
+    await Promise.all(folders.map((folder) => fs.mkdir(path.join(metaDir, folder), { recursive: true })))
+  }
+
   /**
    * Legt den immo24-Ordner samt Ablageordnern an.
    * Passiert nur beim ersten Mal, bestehende Mitarbeiter bleiben unverändert.
    */
   async function createMetaFolders(metaDir: string): Promise<void> {
     await fs.mkdir(metaDir)
-    const folders = (await isSoundminerEnabled()) ? [...PRESET_FOLDERS, SOUNDMINER_FOLDER] : PRESET_FOLDERS
-    await Promise.all(folders.map((folder) => fs.mkdir(path.join(metaDir, folder), { recursive: true })))
+    await addMissingFolders(metaDir)
   }
 
   /** Legt einen Mitarbeiter an oder aktualisiert dessen Kürzel. */
@@ -103,6 +108,17 @@ export function createUserService(config: ConfigService) {
   }
 
   return {
+    /**
+     * Bei der Anmeldung: ergänzt fehlende Ablageordner, etwa bei Mitarbeitern, die
+     * jemand von Hand angelegt hat. Ohne vorhandenen immo24-Ordner passiert nichts,
+     * damit auf einem nicht eingehängten Share keine Ordner an falscher Stelle entstehen.
+     */
+    async addMissingFolders(name: string): Promise<void> {
+      const base = await mitarbeiterPath()
+      const metaDir = path.join(base, name, 'immo24')
+      if (base && name && (await exists(metaDir))) await addMissingFolders(metaDir)
+    },
+
     /** Für Anmeldefenster und Konfiguration: alle Mitarbeiter, sortiert nach Namen. */
     async listUsers(): Promise<User[]> {
       const base = await mitarbeiterPath()

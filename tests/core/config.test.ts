@@ -150,3 +150,23 @@ test('legt ohne aktives Soundminer-Modul keinen Soundminer-Ordner an', async (t)
   assert.ok(folders.includes('templates'))
   assert.ok(!folders.includes('soundminer'))
 })
+
+test('ergänzt bei der Anmeldung fehlende Ablageordner, ohne Vorhandenes anzufassen', async (t) => {
+  const dir = tempDir(t)
+  const staff = path.join(dir, 'Mitarbeiter')
+  const meta = path.join(staff, 'Max', 'immo24')
+  fs.mkdirSync(path.join(meta, 'templates'), { recursive: true })
+  fs.writeFileSync(path.join(meta, 'templates', 'Vorlage.ptxt'), 'x')
+  fs.writeFileSync(path.join(meta, 'immo24-user.json'), 'MM')
+  fs.writeFileSync(path.join(dir, 'path.json'), JSON.stringify({ PathMitarbeiter: staff }))
+  const users = createUserService(createConfigService(dir))
+
+  await users.addMissingFolders('Max')
+  const folders = fs.readdirSync(meta)
+  assert.ok(folders.includes('trackpresets') && folders.includes('fadepresets'))
+  assert.equal(fs.readFileSync(path.join(meta, 'templates', 'Vorlage.ptxt'), 'utf8'), 'x')
+
+  // Ohne immo24-Ordner (etwa Share nicht eingehängt) entsteht nichts
+  await users.addMissingFolders('Niemand')
+  assert.equal(fs.existsSync(path.join(staff, 'Niemand')), false)
+})

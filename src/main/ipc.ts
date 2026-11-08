@@ -21,6 +21,8 @@ export function registerIpc(): void {
 
   ipcMain.on('user-picked', async (_event, user: string) => {
     await backend().session.login(user)
+    // Fehlende Ablageordner ergänzen. Klappt das nicht (Share weg), geht die Anmeldung trotzdem weiter.
+    await backend().users.addMissingFolders(user).catch(() => {})
     await showMainWindow()
   })
 

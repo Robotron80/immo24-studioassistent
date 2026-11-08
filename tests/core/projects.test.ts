@@ -315,6 +315,58 @@ test('prüft jede MoID: höchstens vier Stellen und keine doppelt', async (t) =>
   await assert.rejects(projects.createProject({ ...project, moid: 'AB12 ab12' }), failsWith('moid_duplicate'))
 })
 
+test('Sessions mit Anmerkung zählen bei der Version mit', async (t) => {
+  const { projects } = await setup(t)
+  const created = await projects.createProject(project)
+  const stageDir = created.templateDest
+  // So entstehen sie in Pro Tools über "Speichern unter" oder als Kopie im Finder
+  for (const suffix of ['v2_Kurzversion', 'v4 nach Absturz', 'v3 Kopie']) {
+    fs.copyFileSync(path.join(stageDir, created.filename), path.join(stageDir, created.filename.replace('v1', suffix)))
+  }
+
+  const next = await projects.addSession({ ...project, ordner: path.basename(created.zielPfad) })
+
+  assert.match(next.filename, / v5\.ptx$/)
+})
+
+test('ohne Platzhalter {{anmerkung}} gibt es keine Anmerkung', async (t) => {
+  const { projects } = await setup(t)
+  const created = await projects.createProject({ ...project, anmerkung: 'Erste Fassung' })
+  assert.match(created.filename, /TE v1\.ptx$/)
+})
+
+test('mit {{version}}{{anmerkung}} hängt die Anmerkung mit Leerzeichen an', async (t) => {
+  const { dirs, projects } = await setup(t)
+  const config = createConfigService(dirs.userData)
+  const { version } = await config.getSchema()
+  await config.saveSchema({
+    version: version as string,
+    data: { projektordnerSchema: '{{datum}} {{projektname}} {{moid}}', sessionSchema: '{{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}{{anmerkung}}' },
+  })
+  const created = await projects.createProject({ ...project, anmerkung: ' Erste Fassung ' })
+  assert.match(created.filename, /TE v1 Erste Fassung\.ptx$/)
+  const next = await projects.addSession({ ...project, ordner: path.basename(created.zielPfad) })
+  assert.match(next.filename, /TE v2\.ptx$/)
+  await assert.rejects(projects.addSession({ ...project, ordner: path.basename(created.zielPfad), anmerkung: 'a/b' }), hasCode('validation_failed'))
+})
+
+test('mit dem Platzhalter {{anmerkung}} steht sie an seiner Stelle, leer ohne Lücke', async (t) => {
+  const { dirs, projects } = await setup(t)
+  const config = createConfigService(dirs.userData)
+  const { version } = await config.getSchema()
+  await config.saveSchema({
+    version: version as string,
+    data: { projektordnerSchema: '{{datum}} {{projektname}} {{moid}}', sessionSchema: '{{projektname}} {{anmerkung}} - {{produktionsstufe}} {{version}}' },
+  })
+
+  const created = await projects.createProject(project)
+  assert.equal(created.filename, 'Testprojekt - Dialog v1.ptx')
+  const next = await projects.addSession({ ...project, ordner: path.basename(created.zielPfad), anmerkung: 'Kurz' })
+  assert.equal(next.filename, 'Testprojekt Kurz - Dialog v2.ptx')
+  const third = await projects.addSession({ ...project, ordner: path.basename(created.zielPfad) })
+  assert.equal(third.filename, 'Testprojekt - Dialog v3.ptx')
+})
+
 test('legt nichts an, wenn der Produktionen-Ordner fehlt', async (t) => {
   // So sieht es aus, wenn der Share nicht eingehängt ist
   const { dirs, projects, stammdaten } = await setup(t)

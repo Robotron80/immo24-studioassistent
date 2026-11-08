@@ -83,6 +83,16 @@
                 />
               </v-col>
 
+              <v-col v-if="store.noteEnabled" cols="12">
+                <v-text-field
+                  v-model="form.anmerkung"
+                  label="Anmerkung (optional)"
+                  placeholder="z. B. Kurzversion"
+                  clearable
+                  :rules="[store.windowsRule('anmerkung')]"
+                />
+              </v-col>
+
               <v-col cols="12" class="d-flex ga-3 mt-2">
                 <v-btn color="primary" :loading="loading.create" @click="onCreateClick">
                   Projekt anlegen

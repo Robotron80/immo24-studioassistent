@@ -35,6 +35,8 @@ export interface ProjectInput {
   template?: string
   /** Bei vorhandenen Projekten: der Projektordner aus der Projektliste */
   ordner?: string
+  /** Freier Zusatz für den Sessionnamen, etwa "Kurzversion". Darf leer sein. */
+  anmerkung?: string
 }
 
 const DEFAULT_SESSION_SCHEMA = '{{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}'
@@ -46,20 +48,21 @@ function trimNames(input: ProjectInput): ProjectInput {
     ...input,
     projektname: String(input?.projektname ?? '').trim(),
     moid: String(input?.moid ?? '').trim(),
+    anmerkung: String(input?.anmerkung ?? '').trim(),
   }
 }
 
 /** Prüft Pflichtfelder und alle Namen, die später zu Ordnern oder Dateien werden. */
-function validate(input: ProjectInput): Required<Pick<ProjectInput, (typeof REQUIRED_FIELDS)[number]>> {
+function validate(input: ProjectInput): Required<Pick<ProjectInput, (typeof REQUIRED_FIELDS)[number]>> & ProjectInput {
   const missing = REQUIRED_FIELDS.filter((field) => !input?.[field] && !(field === 'moid' && input?.ohneMoid))
   if (missing.length) throw new CoreError('project_fields_missing', { fields: missing })
 
-  const details = (['projektname', 'moid', 'kunde'] as const)
+  const details = (['projektname', 'moid', 'kunde', 'anmerkung'] as const)
     .map((field) => ({ field, errors: checkWindowsName(input[field]) }))
     .filter((report) => report.errors.length > 0)
   if (details.length) throw new CoreError('validation_failed', { details })
 
-  return input as Required<Pick<ProjectInput, (typeof REQUIRED_FIELDS)[number]>>
+  return input as Required<Pick<ProjectInput, (typeof REQUIRED_FIELDS)[number]>> & ProjectInput
 }
 
 /**
@@ -67,13 +70,24 @@ function validate(input: ProjectInput): Required<Pick<ProjectInput, (typeof REQU
  * Dafür suchen wir im Stufenordner die höchste vorhandene Version desselben Namens.
  * wildcards: Platzhalter, deren Wert beim Suchen egal ist. So zählt eine Session
  * von gestern oder von einem Kollegen bei der Nummerierung mit.
+ *
+ * Eine Anmerkung wie "Kurzversion" steht dort, wo im Schema {{anmerkung}} steht, und
+ * bekommt davor ein Leerzeichen. Fehlt der Platzhalter, gibt es keine Anmerkung.
+ * Beim Zählen ist Text hinter der Version immer egal, auch solcher, den jemand in
+ * Pro Tools beim "Speichern unter" ergänzt hat: Nach "v5 nach Absturz" kommt "v6".
+ *
+ * Empfohlen ist "{{version}}{{anmerkung}}" ohne Leerzeichen dazwischen: Dann zählt
+ * auch Version 0.4 die Sessions mit Anmerkung mit (sie setzt für unbekannte
+ * Platzhalter beim Suchen "beliebiger Text" ein und beim Anlegen nichts).
  */
 function nextSessionName(existingFiles: string[], schema: string, values: Record<string, string>, wildcards: string[]): string {
   const normalized = schema.normalize('NFC')
-  const pattern = looseSpaces(escapeRegExp(normalized)
+  // Fürs Suchen hängen wir hinten "beliebiger Text" an, falls das Schema dort keine Anmerkung vorsieht
+  const searchSchema = normalized.includes('{{anmerkung}}') ? normalized : `${normalized}{{anmerkung}}`
+  const pattern = looseSpaces(escapeRegExp(searchSchema)
     .replace(/\\{\\{version\\}\\}/g, 'v(\\d+)')
     .replace(/\\{\\{(\w+)\\}\\}/g, (_match, key: string) => (
-      wildcards.includes(key) || !values[key] ? '.*' : escapeRegExp(values[key])
+      key === 'anmerkung' || wildcards.includes(key) || !values[key] ? '.*' : escapeRegExp(values[key])
     )))
   const regex = new RegExp(`^${pattern}\\.ptx$`)
 
@@ -82,7 +96,11 @@ function nextSessionName(existingFiles: string[], schema: string, values: Record
     const match = regex.exec(file.normalize('NFC'))
     if (match?.[1]) highest = Math.max(highest, parseInt(match[1], 10))
   }
-  const name = fillTemplate(normalized, { ...values, version: `v${highest + 1}` })
+  const note = values.anmerkung ? ` ${values.anmerkung}` : ''
+  let name = fillTemplate(normalized, { ...values, version: `v${highest + 1}`, anmerkung: note })
+  // Steht im Schema ein Leerzeichen vor {{anmerkung}}, entsteht keine doppelte Lücke
+  if (normalized.includes('{{anmerkung}}')) name = name.replace(/ {2,}/g, ' ')
+  // Leere Platzhalter hinterlassen doppelte Leerzeichen oder Trenner am Rand, die kommen weg
   return `${values.moid ? name : tidyName(name)}.ptx`
 }
 
@@ -230,7 +248,7 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
         }, null, 2)}\n`)
         await Promise.all(unterordner.map((folder) => fs.mkdir(path.join(zielPfad, folder.name))))
 
-        const filename = nextSessionName([], sessionSchema, { ...values, produktionsstufe: stage.label }, [])
+        const filename = nextSessionName([], sessionSchema, { ...values, produktionsstufe: stage.label, anmerkung: data.anmerkung ?? '' }, [])
         await copySession(sources, stageDir, filename)
 
         return {
@@ -287,6 +305,7 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
         datum: localDate(),
         benutzer: user.kuerzel.normalize('NFC'),
         produktionsstufe: (stage?.label ?? data.stufe).normalize('NFC'),
+        anmerkung: String(data.anmerkung ?? '').normalize('NFC'),
         // Auch Name und MoID zählen nicht: Nach dem Umbenennen zählt die Version weiter
       }, ['datum', 'benutzer', 'projektname', 'moid'])
       await copySession(sources, stageDir, filename)

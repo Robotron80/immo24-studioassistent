@@ -13,11 +13,12 @@ function windowsNameReport(input) {
   const errors = checkWindowsName(input)
   return { valid: errors.length === 0, errors }
 }
-function windowsFieldReports({ projektname, moid, kunde }) {
+function windowsFieldReports({ projektname, moid, kunde, anmerkung }) {
   return {
     projektname: windowsNameReport(projektname),
     moid:        windowsNameReport(moid),
     kunde:       windowsNameReport(String(kunde)),
+    anmerkung:   windowsNameReport(anmerkung),
   }
 }
 function collectValidationDetails(reports) {
@@ -28,6 +29,7 @@ function collectValidationDetails(reports) {
 
 const FIELD_LABELS = {
   projektname: 'Projektname',
+  anmerkung: 'Anmerkung',
   moid: 'Mo-ID',
   kunde: 'Kunde',
 }
@@ -47,6 +49,8 @@ export const useProjektanlage = defineStore('Projektanlage', {
       datum: localDate(),
       stufe: '',
       template: '',
+      // Freier Zusatz für den Sessionnamen, etwa "Kurzversion"
+      anmerkung: '',
       // Bei vorhandenen Projekten: der in der Liste gewählte Projektordner
       ordner: '',
       // Projekt ohne Mo-ID, etwa weil es nicht in der Datenbank steht
@@ -55,6 +59,8 @@ export const useProjektanlage = defineStore('Projektanlage', {
     loading: { kunden:false, templates:false, rows:false, stufen:false, create:false },
     activeUser: null as string | null,
     renameEnabled: false,
+    // Das Feld Anmerkung gibt es nur, wenn das Session-Schema {{anmerkung}} enthält
+    noteEnabled: false,
   }),
 
   actions: {
@@ -67,7 +73,7 @@ export const useProjektanlage = defineStore('Projektanlage', {
     },
 
     async init() {
-      await Promise.allSettled([ this.loadKunden(), this.loadTemplates(), this.loadRenameEnabled() ])
+      await Promise.allSettled([ this.loadKunden(), this.loadTemplates(), this.loadRenameEnabled(), this.loadNoteEnabled() ])
     },
 
     // Ist das Umbenennen in der Konfiguration eingeschaltet?
@@ -75,10 +81,17 @@ export const useProjektanlage = defineStore('Projektanlage', {
       this.renameEnabled = await backend.isRenameEnabled()
     },
 
+    // Sieht das Session-Schema eine Anmerkung vor?
+    async loadNoteEnabled() {
+      const { data } = await backend.getSchema()
+      this.noteEnabled = String((data as Record<string, unknown>)?.sessionSchema ?? '').includes('{{anmerkung}}')
+      if (!this.noteEnabled) this.form.anmerkung = ''
+    },
+
     // Nach der Konfiguration: Listen neu laden. Ein gewählter Kunde bleibt gewählt,
     // seine Produktionsstufen können sich aber geändert haben.
     async refreshAfterConfig() {
-      await Promise.allSettled([ this.loadKunden(), this.loadTemplates(), this.loadRenameEnabled() ])
+      await Promise.allSettled([ this.loadKunden(), this.loadTemplates(), this.loadRenameEnabled(), this.loadNoteEnabled() ])
       if (this.form.kunde) await this.selectKunde(this.form.kunde)
     },
 
@@ -186,19 +199,22 @@ export const useProjektanlage = defineStore('Projektanlage', {
 
       if (!/^\d{4}-\d{2}-\d{2}$/.test(this.form.datum)) throw new Error('Das Datum muss das Format JJJJ-MM-TT haben.')
 
-      const { kunde, projektname, moid, datum, template, stufe, ordner, ohneMoid } = this.form
-      const payload = { kunde, projektname, moid, datum, template, stufe, ordner, ohneMoid }
+      const { kunde, projektname, moid, datum, template, stufe, ordner, ohneMoid, anmerkung } = this.form
+      const payload = { kunde, projektname, moid, datum, template, stufe, ordner, ohneMoid, anmerkung }
 
       this.loading.create = true
       try {
         if (this.form.vorhanden === 'neu') {
           const res = await backend.createProject(payload)
           await this.loadRows(this.form.kunde)
+          // Die Anmerkung gilt nur für diese eine Session
+          this.form.anmerkung = ''
           return res
         } else {
           const resolved = await backend.addSession(payload)
           if (!resolved?.templateDest) throw new Error('Kein passender Projektordner gefunden!')
           await this.loadRows(this.form.kunde)
+          this.form.anmerkung = ''
           return resolved
         }
       } finally {
@@ -213,7 +229,7 @@ export const useProjektanlage = defineStore('Projektanlage', {
     },
 
     resetForm() {
-      this.form = { kunde:'', vorhanden:'neu', projektname:'', moid:'', datum: localDate(), stufe:'', template:'', ordner:'', ohneMoid:false }
+      this.form = { kunde:'', vorhanden:'neu', projektname:'', moid:'', datum: localDate(), stufe:'', template:'', anmerkung:'', ordner:'', ohneMoid:false }
       this.rows = []
       this.stufen = []
     },

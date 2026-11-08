@@ -54,7 +54,7 @@
           label="Session‑Schema"
           clearable
           :disabled="loading"
-          hint="z.B. {{projektname}} {{moid}} {{benutzer}} {{kunde}} {{produktionsstufe}} {{version}}"
+          hint="z.B. {{projektname}} {{moid}} {{benutzer}} {{kunde}} {{produktionsstufe}} {{version}}{{anmerkung}}"
           persistent-hint
           class="mb-2"
         />
@@ -109,7 +109,8 @@ const demoValues = {
   benutzer: 'PL',
   kunde: 'SuperVision',
   produktionsstufe: 'Foleys',
-  version: 'v3'
+  version: 'v3',
+  anmerkung: 'Kurzversion',
 }
 
 function renderPreview(schemaStr = '') {
@@ -156,7 +157,7 @@ const projektordnerPlaceholders = [
 ]
 const sessionPlaceholders = [
   '{{benutzer}}', '{{datum}}', '{{projektname}}', '{{moid}}',
-  '{{kunde}}', '{{produktionsstufe}}', '{{version}}'
+  '{{kunde}}', '{{produktionsstufe}}', '{{version}}', '{{anmerkung}}'
 ]
 
 const sessionSchemaValid = computed(() =>

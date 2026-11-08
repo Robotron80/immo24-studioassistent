@@ -201,6 +201,7 @@ App verwendet die in Electron enthaltene Runtime.
 | `npm run format` | Code einheitlich formatieren (Prettier) |
 | `npm test` | Fachlogik in `src/core` prüfen |
 | `npm run test:app` | Die gebaute App mit Beispieldaten bedienen (vorher `npm run build`) |
+| `npm run check` | Alle Prüfungen samt App-Tests, vor jedem Push ausführen |
 | `npm run dist:mac` | DMG für Apple Silicon bauen |
 | `npm run dist:win` | Windows-Installer bauen |
 

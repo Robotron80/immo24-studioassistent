@@ -23,6 +23,7 @@
     "format:check": "prettier --check .",
     "test": "node --experimental-strip-types --no-warnings --test \"tests/core/*.test.ts\"",
     "test:app": "node --test --test-concurrency=1 \"tests/app/*.test.mjs\"",
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm test && npm run build && npm run test:app",
     "dist:dir": "npm run build && electron-builder --config electron-builder.config.cjs --dir",
     "dist:mac": "npm run build && electron-builder --config electron-builder.config.cjs --mac dmg --arm64 --publish never",
     "dist:win": "npm run build && electron-builder --config electron-builder.config.cjs --win nsis --x64 --publish never"

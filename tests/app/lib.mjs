@@ -107,6 +107,17 @@ export function createEnv(t, { setup = true } = {}) {
  * Liefert open(), um ein Fenster anhand seiner Adresse zu greifen, z. B. open('anmeldung').
  */
 export async function launch(t, env) {
+  // Läuft die App des vorherigen Tests noch, würden wir uns sonst mit deren Fenstern verbinden
+  const portBusy = async () => {
+    try {
+      await fetch(`http://127.0.0.1:${PORT}/json/version`)
+      return true
+    } catch {
+      return false
+    }
+  }
+  if (!(await waitFor(async () => !(await portBusy())))) throw new Error(`Port ${PORT} ist noch belegt`)
+
   const child = spawn(electronPath, ['.', `--remote-debugging-port=${PORT}`], {
     cwd: REPO,
     stdio: 'ignore',
@@ -279,14 +290,6 @@ export async function loginAsTester(app) {
   await sleep(900)
   await login.ev(`window.picker.choose('Tester'); 1`)
   const main = await app.open('projektanlage')
-  // Feste, kleine Fenstergröße wie auf dem Bildschirm des Pipeline-Rechners: So verhalten sich
-  // die Tests überall gleich, egal wie groß der Bildschirm des Rechners ist
-  await main.send('Emulation.setDeviceMetricsOverride', {
-    width: 1024,
-    height: 640,
-    deviceScaleFactor: 1,
-    mobile: false,
-  })
   await main.waitForText('Neues Projekt')
   await sleep(400)
   return main

@@ -53,19 +53,6 @@ jobs:
           path: ${{ matrix.files }}
           if-no-files-found: error
           retention-days: 14
-      # App-Tests: bedienen die gebaute App mit Beispieldaten. Sie laufen nach dem Hochladen,
-      # damit der Installer auch dann zum Testen bereitsteht, wenn hier etwas fehlschlägt.
-      - run: npm run test:app
-        env:
-          IMMO24_SHOTS: test-shots
-      # Bei einem Fehler die Bildschirmfotos der App-Tests zur Fehlersuche hochladen
-      - if: failure()
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: test-shots-${{ matrix.artifact }}
-          path: test-shots
-          if-no-files-found: ignore
-          retention-days: 7
 
   release:
     name: Release-Entwurf

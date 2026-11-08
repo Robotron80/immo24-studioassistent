@@ -92,8 +92,8 @@
       <v-card-text>
         <v-text-field v-model="folderForm.name"  label="Name" />
         <v-text-field v-model="folderForm.label" label="Label" />
-        <v-switch v-model="folderForm.ist_Produktionsstufe" label="Produktionsstufe" />
-        <v-switch v-model="folderForm.ist_EventpipeZiel" label="EventPipe-Ziel (hier entsteht der Export, pro Kunde nur einer)" />
+        <v-checkbox v-model="folderForm.ist_Produktionsstufe" label="Produktionsstufe" density="compact" hide-details />
+        <v-checkbox v-model="folderForm.ist_EventpipeZiel" label="EventPipe-Ziel" density="compact" hide-details />
         <v-alert v-if="dialogError" type="error" class="mt-2">{{ dialogError }}</v-alert>
       </v-card-text>
       <v-card-actions class="justify-end">

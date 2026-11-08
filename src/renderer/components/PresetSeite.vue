@@ -3,10 +3,7 @@
 
     <!-- Kopf: Titel und Statuspunkt -->
     <div class="d-flex align-center justify-space-between mb-4">
-      <div>
-        <div class="text-subtitle-1 font-weight-medium">{{ name }} Presets</div>
-        <div class="text-caption text-medium-emphasis">Auswahl unten, dann Store/Recall</div>
-      </div>
+      <div class="text-subtitle-1 font-weight-medium">{{ name }} Presets</div>
       <div class="d-flex align-center ga-2 text-body-2">
         <span class="status-dot" :class="isOnline ? 'bg-success' : 'bg-error'" />
         {{ isOnline ? `${name} läuft` : `${name} nicht geöffnet` }}

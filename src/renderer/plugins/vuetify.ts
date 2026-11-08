@@ -4,11 +4,12 @@
  * Hier steht das Design der App: Standardwerte der Bausteine, Farben und Sprache.
  * Was hier eingestellt ist, gilt überall und muss nicht auf jeder Seite wiederholt werden.
  */
-import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
 
 import { createVuetify } from 'vuetify'
 import { de } from 'vuetify/locale'
+
+import { icons } from './icons'
 
 const fieldDefaults = { variant: 'outlined', density: 'comfortable' }
 
@@ -22,6 +23,7 @@ export default createVuetify({
       light: { colors: { primary: '#14304A', success: '#2E7D32' } },
     },
   },
+  icons,
   // Deutsche Texte in den Bausteinen, z. B. "Einträge pro Seite"
   locale: {
     locale: 'de',

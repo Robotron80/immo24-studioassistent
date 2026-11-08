@@ -21,7 +21,7 @@
         <div class="path-text font-weight-medium mb-3">{{ preview.nach }}</div>
 
         <v-alert v-if="preview.proToolsLaeuft" type="error" density="compact" variant="tonal" class="mb-3">
-          Pro Tools läuft auf diesem Rechner. Bitte zuerst schließen und erneut prüfen.
+          Pro Tools läuft auf diesem Rechner. Bitte Pro Tools schließen und das Umbenennen neu starten.
         </v-alert>
         <v-alert v-if="preview.gesperrt.length" type="warning" density="compact" variant="tonal" class="mb-3">
           Im Projekt liegen Sperrdateien, vermutlich ist dort eine Session geöffnet:
@@ -57,7 +57,6 @@
         <v-btn variant="text" :disabled="busy" @click="close">Abbrechen</v-btn>
         <v-btn v-if="step === 'form'" color="primary" :loading="busy" @click="loadPreview">Prüfen</v-btn>
         <template v-else>
-          <v-btn variant="text" :disabled="busy" @click="loadPreview">Erneut prüfen</v-btn>
           <v-btn color="primary" :loading="busy" :disabled="!canRename" @click="doRename">Umbenennen</v-btn>
         </template>
       </v-card-actions>

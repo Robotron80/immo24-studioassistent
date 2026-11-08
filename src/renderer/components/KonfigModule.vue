@@ -43,9 +43,6 @@
       hide-details
       class="ma-0"
     />
-    <div class="text-caption text-medium-emphasis mt-1">
-      Erst einschalten, wenn das Umbenennen auf dem gemeinsamen Speicher getestet wurde.
-    </div>
   </v-card>
 
   <v-alert v-if="error" type="error">{{ error }}</v-alert>

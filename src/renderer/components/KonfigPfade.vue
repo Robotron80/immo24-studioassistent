@@ -3,7 +3,7 @@
     <v-card-text>
       <div class="d-flex flex-column ga-4">
         <div v-for="field in FIELDS" :key="field.key" class="d-flex align-center ga-2 w-100">
-          <v-text-field v-model="staged[field.key]" :label="field.label" class="flex-grow-1" />
+          <v-text-field v-model="staged[field.key]" :label="field.label" class="flex-grow-1" hide-details />
           <v-btn variant="outlined" @click="browseInto(field.key, `${field.label} auswählen`)">
             Durchsuchen
           </v-btn>

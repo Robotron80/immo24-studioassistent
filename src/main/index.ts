@@ -75,7 +75,7 @@ function denyPermissions(): void {
 /**
  * Der Programmstart, Schritt für Schritt:
  *   1. Grundlagen: Netzwerk- und Berechtigungssperre, Einstellungsdateien, IPC und Menü
- *   2. Einrichtung prüfen. Das liest vom Speicher: Dauert es länger, erscheint das Ladefenster.
+ *   2. Splash-Screen zeigen (min 2s) undEinrichtung prüfen. Das liest vom Speicher: Dauert es länger, erscheint das Ladefenster.
  *   3. Je nach Zustand den Einrichtungsassistenten oder die Anmeldung zeigen
  * Das Hauptfenster entsteht erst nach der Anmeldung.
  */
@@ -89,13 +89,15 @@ async function startup(): Promise<void> {
   registerIpc()
   installApplicationMenu()
 
-  const splashTimer = setTimeout(createSplashWindow, 250)
+  // Das Ladefenster erscheint immer und bleibt mindestens 2 Sekunden sichtbar
+  createSplashWindow()
+  const splashSince = Date.now()
   const { needsSetup } = await backend().config.getSetupStatus()
+  const remaining = 2000 - (Date.now() - splashSince)
+  if (remaining > 0) await new Promise((resolve) => setTimeout(resolve, remaining))
 
   if (needsSetup) createInitWindow()
   else createUserPickerWindow()
-
-  clearTimeout(splashTimer)
   closeSplashWindow()
   logLine('[startup] fertig nach', `${Date.now() - startedAt} ms`)
 }

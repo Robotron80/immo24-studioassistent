@@ -30,7 +30,7 @@ export interface Schema {
 }
 
 /** Mindestens diese Pfade müssen gesetzt sein, sonst startet der Einrichtungsassistent. */
-const REQUIRED_PATH_KEYS = ['PathProduktionen', 'PathMitarbeiter']
+const REQUIRED_PATH_KEYS = ['PathProduktionen', 'PathMitarbeiter', 'PathStammdaten', 'PathPTUser']
 
 /** Liest eine Eingabe als String, alles andere wird zu einem leeren Text. */
 function asString(value: unknown): string {
@@ -180,21 +180,15 @@ export function createConfigService(userDataDir: string) {
 
     /**
      * Beim Programmstart und am Ende des Einrichtungsassistenten: Fehlt noch etwas?
-     * Nötig sind die Pfade zu Produktionen und Mitarbeitern und ein Namensschema.
+     * Nötig sind die alle Pfade und ein Namensschema.
      */
     async getSetupStatus(): Promise<{ needsSetup: boolean }> {
       const paths = await readPaths()
       if (REQUIRED_PATH_KEYS.some((key) => asString(paths[key]).trim() === '')) return { needsSetup: true }
 
-      // Ohne Stammdaten-Pfad lässt sich das Schema nicht lesen. Der Assistent startet
-      // dann trotzdem nicht, wie bei Version 0.4.
-      try {
-        const schema = await readSchema()
-        return { needsSetup: !schema || !(asString(schema.sessionSchema) || asString(schema.projektordnerSchema)) }
-      } catch (error) {
-        if (error instanceof CoreError && error.code === 'no_stammdaten_path') return { needsSetup: false }
-        throw error
-      }
+      // Ohne Namensschema fehlt noch die Einrichtung
+      const schema = await readSchema()
+      return { needsSetup: !schema || !(asString(schema.sessionSchema) || asString(schema.projektordnerSchema)) }
     },
   }
 }

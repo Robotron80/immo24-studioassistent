@@ -1,4 +1,4 @@
-Diese Software wird als Quelltext unter der GNU Affero General Public License v3.0 (AGPL-3.0) veröffentlicht.
+﻿Diese Software wird als Quelltext unter der GNU Affero General Public License v3.0 (AGPL-3.0) veröffentlicht.
 Die vollständige Lizenz finden Sie in der Datei LICENSE sowie online unter https://www.gnu.org/licenses/agpl-3.0.html.
 
 Wesentliche Punkte (Zusammenfassung, nicht ersetzend):

@@ -21,10 +21,10 @@
         <div class="path-text font-weight-medium mb-3">{{ preview.nach }}</div>
 
         <v-alert v-if="preview.proToolsLaeuft" type="error" density="compact" variant="tonal" class="mb-3">
-          Pro Tools läuft auf diesem Rechner. Bitte Pro Tools schließen und das Umbenennen neu starten.
+          Pro Tools läuft auf diesem Rechner. Bitte schließen und erneut umbenennen.
         </v-alert>
         <v-alert v-if="preview.gesperrt.length" type="warning" density="compact" variant="tonal" class="mb-3">
-          Im Projekt liegen Sperrdateien, vermutlich ist dort eine Session geöffnet:
+          Das Projekt ist vermutlich gerade geöffnet und deshalb gesperrt.
           <div v-for="file in preview.gesperrt" :key="file" class="path-text">{{ file }}</div>
           <v-checkbox
             v-model="ignoreLocks"

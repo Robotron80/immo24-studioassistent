@@ -75,6 +75,7 @@ Restlicher Ordner bleibt frei für Backups & Testprojekte.
 - **Produktionen** → siehe *Produktionsbuch*  
 - **Stammdaten** → Namensschema & Kundendaten (z. B. auf Netzlaufwerk für gemeinsame Nutzung)  
 - **Pro Tools User** → typischerweise `/Users/<username>/Documents/Pro Tools` (macOS) oder `C:/Users/<username>/Documents/Pro Tools` (Windows)
+- **Standardvorlagen** (optional) → Ordner mit Session-Vorlagen, die alle Mitarbeiter*innen nutzen, z. B. auf dem gemeinsamen Speicher. Bleibt das Feld leer, gibt es nur die eigenen Vorlagen.
 
 ### Module
 Zusatzmodule können hier aktiviert werden.
@@ -112,7 +113,7 @@ Formularfelder:
   Eine Mo-ID soll es nur einmal geben. Ist sie bei diesem Kunden schon vergeben, führt das Programm zum vorhandenen Projekt. Andere Kunden werden dabei nicht durchsucht, weil das auf dem gemeinsamen Speicher zu lange dauert. Hat ein Projekt keine Mo-ID, wird neben dem Feld **keine** angehakt. Ältere Projekte mit `NOID` oder `xxxx` gelten ebenfalls als Projekte ohne Mo-ID.
 - **Projektname** → Arbeitstitel/Klarname  
 - **Produktionsstufe** → Unterordner, in dem die Pro Tools Session angelegt wird. Verfügbare Stufen werden im Konfigurations-Menü angelegt.  
-- **Template** → Vorlagen aus `Mitarbeiter/<Name>/immo24/templates/*.ptxt`  
+- **Template** → Vorlagen aus `Mitarbeiter/<Name>/immo24/templates/*.ptxt`, danach die Standardvorlagen mit dem Zusatz *Standard* (falls unter *Pfade* eingerichtet)  
 
 Aktionen:
 - **Projekt anlegen** → erstellt Ordner, Unterordner, Session + Metadatei `immo24-proj.json`. Bei Bedarf kann das Projekt direkt geöffnet werden.

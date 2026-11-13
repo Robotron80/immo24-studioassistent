@@ -119,6 +119,41 @@ function nextSessionName(
   return `${values.moid ? name : tidyName(name)}.ptx`
 }
 
+/** Vorsatz im Wert einer Standardvorlage. Ein Schrägstrich kommt in eigenen Vorlagen nie vor. */
+const STANDARD_PREFIX = 'standard/'
+
+/**
+ * Liest die Vorlagen eines Ordners, für die eigenen und die Standardvorlagen.
+ * Gibt es den Ordner nicht, ist die Liste leer.
+ *   - einzelne .ptxt-Datei: eine Vorlage ohne Audiodateien
+ *   - Ordner mit .ptxt-Datei und "Audio Files": ein Paket, die Clips kommen mit
+ */
+async function scanTemplates(dir: string) {
+  const entries = await fs.readdir(dir, { withFileTypes: true }).catch(() => [])
+
+  const options: Array<{ label: string; value: string; kind: string; relPtxt?: string }> = []
+  for (const entry of entries) {
+    if (entry.isFile() && /\.ptxt$/i.test(entry.name)) {
+      options.push({ label: entry.name.replace(/\.ptxt$/i, ''), value: entry.name, kind: 'file' })
+    } else if (entry.isDirectory() && !entry.name.startsWith('.')) {
+      // Ein Ordner ist nur dann ein Paket, wenn "Audio Files" und eine .ptxt-Datei da sind
+      const folder = path.join(dir, entry.name)
+      const ptxtFiles = (await fs.readdir(folder)).filter((name) => /\.ptxt$/i.test(name))
+      if (ptxtFiles.length === 0 || !(await exists(path.join(folder, 'Audio Files')))) continue
+      const preferred = ptxtFiles.find(
+        (name) => name.replace(/\.ptxt$/i, '').toLowerCase() === entry.name.toLowerCase(),
+      )
+      options.push({ label: entry.name, value: entry.name, kind: 'package', relPtxt: preferred ?? ptxtFiles[0] })
+    }
+  }
+  return options
+}
+
+/** Sortiert Vorlagen alphabetisch nach dem angezeigten Namen, "Vorlage 2" vor "Vorlage 10". */
+function sortByLabel<T extends { label: string }>(options: T[]): T[] {
+  return options.sort((a, b) => a.label.localeCompare(b.label, 'de', { sensitivity: 'base', numeric: true }))
+}
+
 export function createProjectService(config: ConfigService, stammdaten: StammdatenService, session: SessionService) {
   /** Liest alle Einstellungen, die Projekte brauchen, frisch aus den Dateien. */
   async function settings() {
@@ -127,19 +162,31 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
     return {
       produktionen: String(paths.PathProduktionen ?? ''),
       mitarbeiter: String(paths.PathMitarbeiter ?? ''),
+      standardvorlagen: String(paths.PathStandardvorlagen ?? ''),
       projektordnerSchema: String((schema as Record<string, unknown>).projektordnerSchema ?? ''),
       sessionSchema: String((schema as Record<string, unknown>).sessionSchema || DEFAULT_SESSION_SCHEMA),
     }
   }
 
-  /** Findet heraus, welche Dateien zu einer gewählten Vorlage gehören. */
-  function templateSources(mitarbeiter: string, userName: string, template: string) {
-    if (!isSimpleName(template)) throw new CoreError('template_missing', { template })
-    const base = path.join(mitarbeiter, userName, 'immo24', 'templates')
-    if (/\.ptxt$/i.test(template)) return { ptxt: path.join(base, template), audio: null }
+  /**
+   * Findet heraus, welche Dateien zu einer gewählten Vorlage gehören.
+   * Standardvorlagen erkennt man am Vorsatz "standard/" (siehe listTemplates).
+   */
+  function templateSources(
+    folders: { mitarbeiter: string; standardvorlagen: string },
+    userName: string,
+    template: string,
+  ) {
+    const standard = template.startsWith(STANDARD_PREFIX)
+    const name = standard ? template.slice(STANDARD_PREFIX.length) : template
+    if (!isSimpleName(name) || (standard && !folders.standardvorlagen)) {
+      throw new CoreError('template_missing', { template })
+    }
+    const base = standard ? folders.standardvorlagen : path.join(folders.mitarbeiter, userName, 'immo24', 'templates')
+    if (/\.ptxt$/i.test(name)) return { ptxt: path.join(base, name), audio: null }
     return {
-      ptxt: path.join(base, template, `${template}.ptxt`),
-      audio: path.join(base, template, 'Audio Files'),
+      ptxt: path.join(base, name, `${name}.ptxt`),
+      audio: path.join(base, name, 'Audio Files'),
     }
   }
 
@@ -155,33 +202,31 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
   }
 
   return {
-    /** Für die Auswahlliste: alle Vorlagen des angemeldeten Mitarbeiters. */
+    /**
+     * Für die Auswahlliste: erst die eigenen Vorlagen des angemeldeten Mitarbeiters,
+     * dann die Standardvorlagen, falls dafür ein Pfad gesetzt ist. Diese tragen im Wert
+     * den Vorsatz "standard/" und im Namen den Zusatz "Standard". So bleiben zwei
+     * Vorlagen gleichen Namens unterscheidbar.
+     */
     async listTemplates() {
-      const { mitarbeiter } = await settings()
-      const dir = path.join(mitarbeiter, session.requireUser().name, 'immo24', 'templates')
-      const entries = await fs.readdir(dir, { withFileTypes: true }).catch(() => [])
-
-      const options: Array<{ label: string; value: string; kind: string; relPtxt?: string }> = []
-      for (const entry of entries) {
-        if (entry.isFile() && /\.ptxt$/i.test(entry.name)) {
-          options.push({ label: entry.name.replace(/\.ptxt$/i, ''), value: entry.name, kind: 'file' })
-        } else if (entry.isDirectory() && !entry.name.startsWith('.')) {
-          // Ein Ordner ist nur dann ein Paket, wenn "Audio Files" und eine .ptxt-Datei da sind
-          const folder = path.join(dir, entry.name)
-          const ptxtFiles = (await fs.readdir(folder)).filter((name) => /\.ptxt$/i.test(name))
-          if (ptxtFiles.length === 0 || !(await exists(path.join(folder, 'Audio Files')))) continue
-          const preferred = ptxtFiles.find(
-            (name) => name.replace(/\.ptxt$/i, '').toLowerCase() === entry.name.toLowerCase(),
-          )
-          options.push({
-            label: `${entry.name} (mit Clips)`,
-            value: entry.name,
-            kind: 'package',
-            relPtxt: preferred ?? ptxtFiles[0],
-          })
-        }
-      }
-      return options.sort((a, b) => a.label.localeCompare(b.label, 'de', { sensitivity: 'base', numeric: true }))
+      const { mitarbeiter, standardvorlagen } = await settings()
+      const eigene = await scanTemplates(path.join(mitarbeiter, session.requireUser().name, 'immo24', 'templates'))
+      const standard = standardvorlagen ? await scanTemplates(standardvorlagen) : []
+      return [
+        ...sortByLabel(
+          eigene.map((option) => ({
+            ...option,
+            label: option.kind === 'package' ? `${option.label} (mit Clips)` : option.label,
+          })),
+        ),
+        ...sortByLabel(
+          standard.map((option) => ({
+            ...option,
+            label: option.kind === 'package' ? `${option.label} (Standard, mit Clips)` : `${option.label} (Standard)`,
+            value: `${STANDARD_PREFIX}${option.value}`,
+          })),
+        ),
+      ]
     },
 
     /** Für "vorhandenes Projekt": alle Projekte eines Kunden mit gültigen Metadaten, neueste zuerst. */
@@ -222,7 +267,7 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
       if (moidErrors.length)
         throw new CoreError('validation_failed', { details: [{ field: 'moid', errors: moidErrors }] })
       const user = session.requireUser()
-      const { produktionen, mitarbeiter, projektordnerSchema, sessionSchema } = await settings()
+      const { produktionen, mitarbeiter, standardvorlagen, projektordnerSchema, sessionSchema } = await settings()
 
       // Schritt 1: Kunde und Stufe in den Stammdaten nachschlagen
       const customers: Kunde[] = await stammdaten.readCustomers()
@@ -236,7 +281,7 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
       if (!produktionen || !(await exists(produktionen))) throw new CoreError('produktionen_path_missing')
 
       // Schritt 3: Vorlage und Zielordner prüfen
-      const sources = templateSources(mitarbeiter, user.name, data.template)
+      const sources = templateSources({ mitarbeiter, standardvorlagen }, user.name, data.template)
       if (!(await exists(sources.ptxt))) throw new CoreError('template_missing', { template: data.template })
 
       const customerDir = path.join(produktionen, data.kunde)
@@ -319,7 +364,7 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
       // Die MoID bleibt hier unverändert: Sie muss zum vorhandenen Projekt passen.
       const data = validate(trimNames(input))
       const user = session.requireUser()
-      const { produktionen, mitarbeiter, sessionSchema } = await settings()
+      const { produktionen, mitarbeiter, standardvorlagen, sessionSchema } = await settings()
 
       // Schritt 1: Projektordner prüfen. Er muss direkt unter dem Kunden liegen und ein
       // Projekt von uns sein, erkennbar an der Metadatei.
@@ -336,7 +381,7 @@ export function createProjectService(config: ConfigService, stammdaten: Stammdat
 
       // Schritt 2: Stufenordner sicherstellen und Vorlage prüfen
       const stageDir = path.join(zielPfad, data.stufe)
-      const sources = templateSources(mitarbeiter, user.name, data.template)
+      const sources = templateSources({ mitarbeiter, standardvorlagen }, user.name, data.template)
       if (!(await exists(sources.ptxt))) throw new CoreError('template_missing', { template: data.template })
       await fs.mkdir(stageDir, { recursive: true })
 

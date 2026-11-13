@@ -15,12 +15,14 @@ import { CoreError } from './errors.ts'
 import { fileVersion, isPlainObject, readJsonOrNull, writeJsonAtomic } from './files.ts'
 import { createVersionTracker } from './versions.ts'
 
-/** Die vier konfigurierbaren Ordner. */
+/** Die konfigurierbaren Ordner. */
 interface Paths {
   PathMitarbeiter: string
   PathProduktionen: string
   PathStammdaten: string
   PathPTUser: string
+  /** Optional: Vorlagen, die alle Mitarbeiter nutzen. Fehlt der Eintrag, gibt es nur die eigenen. */
+  PathStandardvorlagen?: string
 }
 
 /** Die beiden Vorlagen für Ordner- und Sessionnamen. */
@@ -101,18 +103,24 @@ export function createConfigService(userDataDir: string) {
       return { data: await readPaths(), version: pathsVersion.current() }
     },
 
-    /** Speichert die Pfade. Unbekannte Felder werden dabei verworfen. */
+    /**
+     * Speichert die Pfade. Unbekannte Felder werden dabei verworfen.
+     * Die Standardvorlagen stehen nur in der Datei, wenn sie gesetzt sind. So bleibt
+     * path.json ohne diese Funktion genau so, wie Version 0.4 sie kennt.
+     */
     async savePaths(input: { version?: unknown; data?: unknown }) {
       if (typeof input?.version !== 'string' || !isPlainObject(input.data)) {
         throw new CoreError('bad_payload')
       }
       pathsVersion.assertCurrent(input.version)
       const { data } = input
+      const standardvorlagen = asString(data.PathStandardvorlagen).trim()
       await writeJsonAtomic(pathsFile, {
         PathMitarbeiter: asString(data.PathMitarbeiter),
         PathProduktionen: asString(data.PathProduktionen),
         PathStammdaten: asString(data.PathStammdaten),
         PathPTUser: asString(data.PathPTUser),
+        ...(standardvorlagen ? { PathStandardvorlagen: standardvorlagen } : {}),
       } satisfies Paths)
       return { ok: true, version: pathsVersion.bump() }
     },

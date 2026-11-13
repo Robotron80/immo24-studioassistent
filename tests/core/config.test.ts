@@ -116,6 +116,24 @@ test('hinterlässt beim Speichern keine temporären Dateien', async (t) => {
   assert.deepEqual(fs.readdirSync(dir), ['path.json'])
 })
 
+test('der Pfad für Standardvorlagen steht nur in path.json, wenn er gesetzt ist', async (t) => {
+  // Ohne Standardvorlagen bleibt die Datei so, wie Version 0.4 sie kennt
+  const dir = tempDir(t)
+  const config = createConfigService(dir)
+  const file = path.join(dir, 'path.json')
+  const data = { PathMitarbeiter: 'a', PathProduktionen: 'b', PathStammdaten: 'c', PathPTUser: 'd' }
+
+  const first = await config.savePaths({
+    version: (await config.getPaths()).version,
+    data: { ...data, PathStandardvorlagen: ' ' },
+  })
+  assert.equal('PathStandardvorlagen' in JSON.parse(fs.readFileSync(file, 'utf8')), false)
+
+  await config.savePaths({ version: first.version, data: { ...data, PathStandardvorlagen: '/Vorlagen' } })
+  assert.equal(JSON.parse(fs.readFileSync(file, 'utf8')).PathStandardvorlagen, '/Vorlagen')
+  assert.equal((await config.getSetupStatus()).needsSetup, true, 'Schema fehlt noch, der Pfad ist aber kein Hindernis')
+})
+
 test('meldet einen fehlenden Mitarbeiter-Ordner, statt ihn anzulegen', async (t) => {
   // Ist der Share nicht eingehängt, dürfen keine Ordner an falscher Stelle entstehen
   const dir = tempDir(t)

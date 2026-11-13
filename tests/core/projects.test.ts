@@ -484,6 +484,68 @@ test('ein Projektordner, den ein anderer Rechner gerade angelegt hat, bleibt unb
   assert.equal(fs.readFileSync(path.join(folder, 'fremd.txt'), 'utf8'), 'gehört dem anderen Rechner')
 })
 
+/** Legt Standardvorlagen an (eine Datei und ein Paket) und trägt den Pfad in path.json ein. */
+function seedStandardvorlagen(dirs: { userData: string; mitarbeiter: string }) {
+  const standard = path.join(path.dirname(dirs.mitarbeiter), 'Standardvorlagen')
+  write(path.join(standard, 'Einzeln.ptxt'), 'standard-einzeln')
+  write(path.join(standard, 'Atmo', 'Atmo.ptxt'), 'standard-paket')
+  write(path.join(standard, 'Atmo', 'Audio Files', 'wind.wav'), 'wind')
+  const file = path.join(dirs.userData, 'path.json')
+  write(file, { ...JSON.parse(fs.readFileSync(file, 'utf8')), PathStandardvorlagen: standard })
+  return standard
+}
+
+test('ohne Pfad für Standardvorlagen gibt es nur die eigenen', async (t) => {
+  const { projects } = await setup(t)
+  const values = (await projects.listTemplates()).map((option) => option.value)
+  assert.deepEqual(values, ['Einzeln.ptxt', 'Paket'])
+  await assert.rejects(
+    projects.createProject({ ...project, template: 'standard/Einzeln.ptxt' }),
+    hasCode('template_missing'),
+  )
+})
+
+test('Standardvorlagen stehen nach den eigenen und bleiben bei gleichem Namen unterscheidbar', async (t) => {
+  const { dirs, projects } = await setup(t)
+  seedStandardvorlagen(dirs)
+
+  const options = await projects.listTemplates()
+  assert.deepEqual(
+    options.map(({ label, value }) => [label, value]),
+    [
+      ['Einzeln', 'Einzeln.ptxt'],
+      ['Paket (mit Clips)', 'Paket'],
+      ['Atmo (Standard, mit Clips)', 'standard/Atmo'],
+      ['Einzeln (Standard)', 'standard/Einzeln.ptxt'],
+    ],
+  )
+})
+
+test('neue Projekte und Folgeversionen entstehen auch aus Standardvorlagen', async (t) => {
+  const { dirs, projects } = await setup(t)
+  seedStandardvorlagen(dirs)
+
+  const created = await projects.createProject({ ...project, template: 'standard/Einzeln.ptxt' })
+  assert.equal(fs.readFileSync(path.join(created.templateDest, created.filename), 'utf8'), 'standard-einzeln')
+
+  // Das Paket bringt seine Clips mit
+  const next = await projects.addSession({ ...project, ordner: PROJECT_FOLDER, template: 'standard/Atmo' })
+  assert.equal(fs.readFileSync(path.join(next.templateDest, next.filename), 'utf8'), 'standard-paket')
+  assert.equal(fs.readFileSync(path.join(next.templateDest, 'Audio Files', 'wind.wav'), 'utf8'), 'wind')
+})
+
+test('Standardvorlagen mit Pfadanteilen werden abgewiesen', async (t) => {
+  const { dirs, projects } = await setup(t)
+  const standard = seedStandardvorlagen(dirs)
+  // Eine Datei neben dem Vorlagenordner, die wie eine Vorlage aussieht
+  write(path.join(path.dirname(standard), 'Fremd.ptxt'), 'x')
+
+  for (const template of ['standard/../Fremd.ptxt', 'standard/', 'standard/Atmo/Atmo.ptxt']) {
+    await assert.rejects(projects.createProject({ ...project, template }), hasCode('template_missing'), template)
+  }
+  assert.equal(fs.existsSync(path.join(dirs.produktionen, 'Kunde A', PROJECT_FOLDER)), false)
+})
+
 test('Vorlage, Kunde, Stufe und Ordner mit Pfadanteilen werden abgewiesen', async (t) => {
   const { dirs, projects } = await setup(t)
   const created = await projects.createProject(project)

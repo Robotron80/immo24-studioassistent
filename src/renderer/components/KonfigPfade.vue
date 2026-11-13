@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 /**
- * Die vier Ordner, mit denen das Programm arbeitet.
+ * Die Ordner, mit denen das Programm arbeitet. Nur die Standardvorlagen sind optional.
  * Wird in der Konfiguration und im Einrichtungsassistenten benutzt.
  */
 import { computed } from 'vue'
@@ -24,14 +24,22 @@ import { computed } from 'vue'
 import { useKonfigBereich } from '@/composables/useKonfigBereich'
 import { backend } from '@/lib/backend'
 
+// optional: Das Feld darf leer bleiben
 const FIELDS = [
   { key: 'PathMitarbeiter', label: 'Pfad Mitarbeiter' },
   { key: 'PathProduktionen', label: 'Pfad Produktionen' },
   { key: 'PathStammdaten', label: 'Pfad Stammdaten' },
   { key: 'PathPTUser', label: 'Pfad Pro Tools User' },
+  { key: 'PathStandardvorlagen', label: 'Pfad Standardvorlagen (optional)', optional: true },
 ]
 
-const emptyPaths = () => ({ PathMitarbeiter: '', PathProduktionen: '', PathStammdaten: '', PathPTUser: '' })
+const emptyPaths = () => ({
+  PathMitarbeiter: '',
+  PathProduktionen: '',
+  PathStammdaten: '',
+  PathPTUser: '',
+  PathStandardvorlagen: '',
+})
 
 const { original, staged, error, exposed } = useKonfigBereich({
   empty: emptyPaths,
@@ -44,7 +52,7 @@ const { original, staged, error, exposed } = useKonfigBereich({
   },
 })
 
-const isPfadeValid = computed(() => Object.values(staged.value).every((value) => value.length > 0))
+const isPfadeValid = computed(() => FIELDS.every((field) => field.optional || staged.value[field.key].length > 0))
 
 /** Öffnet die Ordnerauswahl des Systems und übernimmt den gewählten Ordner. */
 async function browseInto(key, title) {

@@ -124,6 +124,7 @@ import { ref, computed, watch } from 'vue'
 
 import { useKonfigBereich } from '@/composables/useKonfigBereich'
 import { backend, type Result } from '@/lib/backend'
+import { checkWindowsName } from '../../core/names'
 
 // Gespeichert wird erst in der Konfiguration
 const { original, staged, loading, error, exposed } = useKonfigBereich({
@@ -172,6 +173,12 @@ function createCustomer() {
   const name = (newCustomerName.value || '').trim()
   if (!name) {
     dialogError.value = 'Bitte Kundennamen eingeben.'
+    return
+  }
+  // Der Kundenname wird zum Ordnernamen, deshalb gelten dieselben Regeln wie für Projekte
+  const nameError = checkWindowsName(name)[0]
+  if (nameError) {
+    dialogError.value = nameError.message
     return
   }
   const exists = staged.value.some((c) => (c.kunde || '').toLowerCase() === name.toLowerCase())
@@ -249,6 +256,12 @@ function saveFolder() {
   const eventpipe = !!folderForm.value.ist_EventpipeZiel
   if (!name) {
     dialogError.value = 'Name darf nicht leer sein.'
+    return
+  }
+  // Der Name wird in jedem Projekt zum Ordnernamen, ein "/" würde dort Unterordner erzeugen
+  const nameError = checkWindowsName(name)[0]
+  if (nameError) {
+    dialogError.value = nameError.message
     return
   }
 

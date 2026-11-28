@@ -92,9 +92,21 @@ async function startup(): Promise<void> {
   // Das Ladefenster erscheint immer und bleibt mindestens 2 Sekunden sichtbar
   createSplashWindow()
   const splashSince = Date.now()
-  const { needsSetup } = await backend().config.getSetupStatus()
+  const { needsSetup, speicherFehlt } = await backend().config.getSetupStatus()
   const remaining = 2000 - (Date.now() - splashSince)
   if (remaining > 0) await new Promise((resolve) => setTimeout(resolve, remaining))
+
+  // Speicher nicht eingehängt: klare Meldung statt Einrichtungsassistent, dann beenden
+  if (speicherFehlt) {
+    logLine('[startup] Stammdaten-Ordner nicht erreichbar:', speicherFehlt)
+    closeSplashWindow()
+    showOnceErrorBox(
+      'Speicher nicht erreichbar',
+      `Der Stammdaten-Ordner ist nicht erreichbar:\n${speicherFehlt}\n\nBitte prüfen, ob das Laufwerk verbunden ist, und das Programm neu starten.`,
+    )
+    app.quit()
+    return
+  }
 
   if (needsSetup) createInitWindow()
   else createUserPickerWindow()

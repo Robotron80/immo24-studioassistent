@@ -121,7 +121,7 @@ test('der Pfad für Standardvorlagen steht nur in path.json, wenn er gesetzt ist
   const dir = tempDir(t)
   const config = createConfigService(dir)
   const file = path.join(dir, 'path.json')
-  const data = { PathMitarbeiter: 'a', PathProduktionen: 'b', PathStammdaten: 'c', PathPTUser: 'd' }
+  const data = { PathMitarbeiter: 'a', PathProduktionen: 'b', PathStammdaten: dir, PathPTUser: 'd' }
 
   const first = await config.savePaths({
     version: (await config.getPaths()).version,
@@ -132,6 +132,17 @@ test('der Pfad für Standardvorlagen steht nur in path.json, wenn er gesetzt ist
   await config.savePaths({ version: first.version, data: { ...data, PathStandardvorlagen: '/Vorlagen' } })
   assert.equal(JSON.parse(fs.readFileSync(file, 'utf8')).PathStandardvorlagen, '/Vorlagen')
   assert.equal((await config.getSetupStatus()).needsSetup, true, 'Schema fehlt noch, der Pfad ist aber kein Hindernis')
+})
+
+test('fehlt der Stammdaten-Ordner, startet nicht der Einrichtungsassistent', async (t) => {
+  // Typischer Fall: Das Laufwerk ist beim Start noch nicht verbunden
+  const dir = tempDir(t)
+  const missing = path.join(dir, 'Laufwerk', 'Stammdaten')
+  fs.writeFileSync(
+    path.join(dir, 'path.json'),
+    JSON.stringify({ PathMitarbeiter: 'a', PathProduktionen: 'b', PathStammdaten: missing, PathPTUser: 'd' }),
+  )
+  assert.deepEqual(await createConfigService(dir).getSetupStatus(), { needsSetup: false, speicherFehlt: missing })
 })
 
 test('meldet einen fehlenden Mitarbeiter-Ordner, statt ihn anzulegen', async (t) => {

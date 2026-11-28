@@ -12,7 +12,7 @@
 import path from 'node:path'
 
 import { CoreError } from './errors.ts'
-import { fileVersion, isPlainObject, readJsonOrNull, writeJsonAtomic } from './files.ts'
+import { exists, fileVersion, isPlainObject, readJsonOrNull, writeJsonAtomic } from './files.ts'
 import { createVersionTracker } from './versions.ts'
 
 /** Die konfigurierbaren Ordner. */
@@ -189,10 +189,14 @@ export function createConfigService(userDataDir: string) {
     /**
      * Beim Programmstart und am Ende des Einrichtungsassistenten: Fehlt noch etwas?
      * Nötig sind die alle Pfade und ein Namensschema.
+     * Fehlt der Stammdaten-Ordner, ist vermutlich der Speicher nicht eingehängt. Dann
+     * liefern wir seinen Pfad in speicherFehlt, statt den Assistenten zu verlangen.
      */
-    async getSetupStatus(): Promise<{ needsSetup: boolean }> {
+    async getSetupStatus(): Promise<{ needsSetup: boolean; speicherFehlt?: string }> {
       const paths = await readPaths()
       if (REQUIRED_PATH_KEYS.some((key) => asString(paths[key]).trim() === '')) return { needsSetup: true }
+      const stammdaten = asString(paths.PathStammdaten)
+      if (!(await exists(stammdaten))) return { needsSetup: false, speicherFehlt: stammdaten }
 
       // Ohne Namensschema fehlt noch die Einrichtung
       const schema = await readSchema()

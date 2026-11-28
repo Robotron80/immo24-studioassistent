@@ -133,6 +133,12 @@ function createMitarbeiter() {
     dialogError.value = 'Bitte Kürzel eingeben.'
     return
   }
+  // Das Kürzel steht in Sessionnamen, also dieselben Regeln wie für Dateinamen
+  const kuerzelError = checkWindowsName(kuerzel)[0]
+  if (kuerzelError) {
+    dialogError.value = `Kürzel: ${kuerzelError.message}`
+    return
+  }
   const existsName = staged.value.some((m) => (m.name || '').toLowerCase() === name.toLowerCase())
   if (existsName) {
     dialogError.value = 'Mitarbeiter existiert bereits.'
@@ -166,6 +172,11 @@ function saveEditKuerzel() {
   const kuerzel = (editKuerzel.value || '').trim()
   if (!kuerzel) {
     editDialogError.value = 'Bitte Kürzel eingeben.'
+    return
+  }
+  const kuerzelError = checkWindowsName(kuerzel)[0]
+  if (kuerzelError) {
+    editDialogError.value = `Kürzel: ${kuerzelError.message}`
     return
   }
   // Dasselbe Kürzel darf kein anderer Mitarbeiter haben

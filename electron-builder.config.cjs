@@ -8,6 +8,8 @@ module.exports = {
   appId: isNext ? 'de.immo24.studioassistent.next' : 'de.immo24.studioassistent',
   productName: isNext ? 'immo24 Studioassistent Next' : 'immo24 Studioassistent',
   files: ['dist/**', 'dist-electron/**', 'assets/**', 'package.json'],
+  // Lizenztexte sichtbar neben der App ablegen (Ordner resources), die Lizenzen der Fremdpakete verlangen das
+  extraResources: ['LICENSE', 'NOTICE', 'LICENSES/**'],
   win: {
     target: ['nsis'],
   },

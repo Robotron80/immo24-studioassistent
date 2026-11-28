@@ -1,0 +1,5 @@
+# Zeilenenden immer LF, auch unter Windows. Sonst meldet die Formatprüfung (Prettier) jede Datei.
+* text=auto eol=lf
+*.png binary
+*.ico binary
+*.icns binary

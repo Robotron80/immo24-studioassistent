@@ -1,14 +1,14 @@
 immo24 Studioassistent
-Copyright (c) 2025 Philipp Menzel
+Copyright (c) 2025-2026 Philipp Menzel
 
 Dieses Projekt enthält Open-Source-Komponenten, die unter MIT und Apache 2.0 lizenziert sind.
 Alle Drittanbieter-Komponenten bleiben unter ihren ursprünglichen Lizenzen.
 
-Hauptkomponenten:
-- Node.js (MIT License)
-- Electron (MIT License)
-- Vite (MIT License)
+Enthaltene Komponenten:
+- Electron mit Chromium und Node.js (MIT License; Chromium-Lizenzen in LICENSES.chromium.html neben der App)
+- Vue, Vue Router, Pinia (MIT License)
 - Vuetify (MIT License)
-- Node-RED (Apache License 2.0)
+- Vite (MIT License)
+- Material Design Icons, @mdi/js (Pictogrammers Free License, Icons unter Apache 2.0)
 
 Die vollständigen Lizenztexte finden Sie im Verzeichnis LICENSES/.

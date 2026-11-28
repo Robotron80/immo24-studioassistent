@@ -1,0 +1,294 @@
+<template>
+  <v-container fluid class="pa-0 ma-0 konfig-root">
+    <div class="d-flex flex-column h-100 w-100">
+      <!-- Tab-Leiste ganz oben, außerhalb des scrollbaren Inhalts -->
+      <div class="sticky-top-bar">
+        <v-tabs v-model="tab" class="mb-4">
+          <v-tab value="prod">Produktionsbuch</v-tab>
+          <v-tab value="mitarbeiter">Mitarbeiter</v-tab>
+          <v-tab value="schema">Namensschema</v-tab>
+          <v-tab value="paths">Pfade</v-tab>
+          <v-tab value="module">Module</v-tab>
+          <v-tab value="pwd">Passwort</v-tab>
+        </v-tabs>
+      </div>
+
+      <!-- scrollbarer Inhalt -->
+      <div class="content-scroll flex-grow-1 overflow-auto pa-4">
+        <v-window v-model="tab">
+          <v-window-item value="prod">
+            <KonfigProduktionsbuch ref="pbRef" />
+          </v-window-item>
+          <v-window-item value="mitarbeiter">
+            <KonfigMitarbeiter ref="mitarbeiterRef" />
+          </v-window-item>
+          <v-window-item value="schema">
+            <KonfigNamensschema ref="schemaRef" />
+          </v-window-item>
+          <v-window-item value="paths">
+            <KonfigPfade ref="pfadeRef" />
+          </v-window-item>
+          <v-window-item value="module">
+            <KonfigModule ref="moduleRef" />
+          </v-window-item>
+          <v-window-item value="pwd">
+            <KonfigPasswort ref="pwRef" />
+          </v-window-item>
+        </v-window>
+      </div>
+
+      <!-- sticky actions unten -->
+      <div class="sticky-bottom-bar d-flex justify-end ga-2">
+        <v-btn variant="outlined" @click="onCancel">Abbrechen</v-btn>
+        <v-btn color="primary" :loading="saving" :disabled="authOpen" @click="onSave">Speichern</v-btn>
+      </div>
+    </div>
+
+    <!-- Passwort-Dialog -->
+    <v-dialog v-model="authOpen" persistent max-width="420">
+      <v-card @keydown.esc="cancelAuth">
+        <v-card-title class="text-h6">Konfiguration entsperren</v-card-title>
+        <v-card-text>
+          <v-alert v-if="authError" type="error" class="mb-3">{{ authError }}</v-alert>
+          <v-text-field
+            ref="pwField"
+            v-model="authPassword"
+            :type="showPw ? 'text' : 'password'"
+            label="Passwort"
+            autofocus
+            :append-inner-icon="showPw ? 'mdi-eye-off' : 'mdi-eye'"
+            @keyup.enter="authenticate"
+            @keydown="onPwKey"
+            @keyup="onPwKey"
+            @click:append-inner="showPw = !showPw"
+          />
+          <div v-if="capsOn" class="text-warning text-caption mt-1">Achtung: Feststelltaste (Caps Lock) ist aktiv</div>
+        </v-card-text>
+        <v-card-actions class="justify-end">
+          <v-btn variant="text" @click="cancelAuth">Abbrechen</v-btn>
+          <v-btn color="primary" :loading="authLoading" :disabled="!canSubmit" @click="authenticate">
+            Entsperren
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-container>
+</template>
+
+<script setup lang="ts">
+/**
+ * Das Fenster Konfiguration: hält die sechs Bereiche als Tabs zusammen und speichert sie gemeinsam.
+ * Jeder Bereich verwaltet seine Daten selbst und meldet über isDirty(), ob sich etwas geändert hat.
+ */
+import { ref, computed, nextTick, onMounted } from 'vue'
+import KonfigProduktionsbuch from '@/components/KonfigProduktionsbuch.vue'
+import KonfigMitarbeiter from '@/components/KonfigMitarbeiter.vue'
+import KonfigPfade from '@/components/KonfigPfade.vue'
+import KonfigPasswort from '@/components/KonfigPasswort.vue'
+import KonfigNamensschema from '@/components/KonfigNamensschema.vue'
+import KonfigModule from '@/components/KonfigModule.vue'
+
+import { backend } from '@/lib/backend'
+
+/** Speichert einen Bereich. Hat jemand die Daten zwischenzeitlich geändert, wird neu geladen. */
+async function saveVersioned(save, reload, conflictText) {
+  try {
+    await save()
+  } catch (e) {
+    if (e.code !== 'version_conflict' && e.code !== 'version_required') throw e
+    await reload()
+    alert(conflictText)
+    return false
+  }
+  await reload()
+  return true
+}
+
+const pbRef = ref<InstanceType<typeof KonfigProduktionsbuch> | null>(null)
+const mitarbeiterRef = ref<InstanceType<typeof KonfigMitarbeiter> | null>(null)
+const pfadeRef = ref<InstanceType<typeof KonfigPfade> | null>(null)
+const pwRef = ref<InstanceType<typeof KonfigPasswort> | null>(null)
+const schemaRef = ref<InstanceType<typeof KonfigNamensschema> | null>(null)
+const moduleRef = ref<InstanceType<typeof KonfigModule> | null>(null)
+const tab = ref('prod')
+const saving = ref(false)
+
+/** Speichert alle Bereiche mit Änderungen und schließt danach das Fenster. */
+async function onSave() {
+  let dirtySomething = false
+
+  // Prüfen, ob Produktionsbuch Änderungen hat
+  if (pbRef.value?.isDirty()) dirtySomething = true
+
+  // Prüfen, ob Mitarbeiter Änderungen hat
+  if (mitarbeiterRef.value?.isDirty()) dirtySomething = true
+
+  // Prüfen, ob Pfade Änderungen hat und gültig ist
+  if (pfadeRef.value?.isDirty()) {
+    if (!pfadeRef.value.isPfadeValid()) {
+      alert('Bitte alle Pfade ausfüllen.')
+      return
+    }
+    dirtySomething = true
+  }
+  // Prüfen, ob Passwort Änderungen hat
+  if (pwRef.value?.isDirty()) dirtySomething = true
+
+  // Prüfen, ob Schema Änderungen hat und gültig ist
+  if (schemaRef.value?.isDirty()) {
+    if (!schemaRef.value.isSchemaValid()) {
+      alert('Bitte alle Felder im Schema ausfüllen.')
+      return
+    }
+    dirtySomething = true
+  }
+
+  // Prüfen, ob Module Änderungen hat und gültig ist
+  if (moduleRef.value?.isDirty()) {
+    if (!moduleRef.value.isSoundminerValid()) {
+      alert('Bitte Pfad und Version für Soundminer angeben.')
+      return
+    }
+    dirtySomething = true
+  }
+
+  // Falls nichts geändert: Fenster schließen
+  if (!dirtySomething) {
+    window.close?.()
+    return
+  }
+
+  saving.value = true
+  // Die Bereiche einmal festhalten: So sind sie auch in den Rückruffunktionen sicher vorhanden
+  const [pb, pfade, mitarbeiter, pw, schema, modules] = [
+    pbRef.value,
+    pfadeRef.value,
+    mitarbeiterRef.value,
+    pwRef.value,
+    schemaRef.value,
+    moduleRef.value,
+  ]
+  // Für die Fehlermeldung: Welcher Bereich wird gerade gespeichert?
+  let section = ''
+  try {
+    // Produktionsbuch speichern
+    if (pb?.isDirty()) {
+      section = 'Produktionsbuch'
+      const saved = await saveVersioned(
+        () => backend.saveSnapshot(pb.getSnapshotForSave()),
+        () => pb.resetToServer(),
+        'Das Produktionsbuch wurde zwischenzeitlich geändert, auch ein anderer Rechner kann das sein. Ansicht aktualisiert.',
+      )
+      if (!saved) return
+    }
+
+    // Pfade speichern
+    if (pfade?.isDirty()) {
+      section = 'Pfade'
+      const saved = await saveVersioned(
+        () => backend.savePaths(pfade.getSnapshotForSave()),
+        () => pfade.resetToServer(),
+        'Pfade wurden zwischenzeitlich geändert. Ansicht aktualisiert.',
+      )
+      if (!saved) return
+    }
+
+    // Mitarbeiter speichern
+    if (mitarbeiter?.isDirty()) {
+      section = 'Mitarbeiter'
+      await backend.saveUsers(mitarbeiter.getSnapshotForSave())
+      await mitarbeiter.resetToServer()
+    }
+    // Passwort
+    if (pw?.isDirty()) {
+      section = 'Passwort'
+      await pw.saveToServer()
+    }
+
+    // Schema
+    if (schema?.isDirty()) {
+      section = 'Namensschema'
+      const saved = await saveVersioned(
+        () => backend.saveSchema(schema.getSnapshotForSave()),
+        () => schema.resetToServer(),
+        'Das Namensschema wurde zwischenzeitlich geändert, auch ein anderer Rechner kann das sein. Ansicht aktualisiert.',
+      )
+      if (!saved) return
+    }
+
+    // Module
+    if (modules?.isDirty()) {
+      section = 'Module'
+      const saved = await saveVersioned(
+        () => backend.saveModules(modules.getSnapshotForSave()),
+        () => modules.resetToServer(),
+        'Module wurden zwischenzeitlich geändert. Ansicht aktualisiert.',
+      )
+      if (!saved) return
+    }
+
+    // Wenn alles erfolgreich war → Fenster schließen
+    window.close?.()
+  } catch (e) {
+    console.error(e)
+    alert(`Speichern fehlgeschlagen (${section}): ${e.message}`)
+  } finally {
+    saving.value = false
+  }
+}
+
+/** Abbrechen: lokale Änderungen verwerfen und das Fenster schließen. */
+async function onCancel() {
+  await pbRef.value?.resetToServer()
+  await pfadeRef.value?.resetToServer()
+  await pwRef.value?.resetToServer()
+  await schemaRef.value?.resetToServer()
+  await mitarbeiterRef.value?.resetToServer()
+  await moduleRef.value?.resetToServer()
+  window.close?.()
+}
+
+/* Passwort-Dialog */
+const authOpen = ref(true)
+const authPassword = ref('')
+const authError = ref('')
+const authLoading = ref(false)
+const showPw = ref(false)
+const capsOn = ref(false)
+const pwField = ref<{ focus: () => void } | null>(null)
+
+const canSubmit = computed(() => !!authPassword.value && !authLoading.value)
+function focusPw() {
+  nextTick(() => pwField.value?.focus())
+}
+onMounted(async () => {
+  document.title = 'Konfiguration'
+  // Ohne gesetztes Passwort ist die Konfiguration offen
+  if (!(await backend.isPasswordSet())) authOpen.value = false
+  if (authOpen.value) focusPw()
+})
+
+function onPwKey(ev) {
+  capsOn.value = !!ev.getModifierState?.('CapsLock')
+}
+
+/** Abbrechen oder Esc im Passwort-Dialog: Ohne Passwort gibt es hier nichts zu tun, das Fenster schließt. */
+function cancelAuth() {
+  window.close?.()
+}
+
+async function authenticate() {
+  authError.value = ''
+  authLoading.value = true
+  try {
+    if (!(await backend.checkPassword(authPassword.value))) throw new Error('Passwort falsch')
+    authOpen.value = false
+  } catch (e) {
+    authError.value = e.message || 'Passwort falsch'
+    authPassword.value = ''
+    focusPw()
+  } finally {
+    authLoading.value = false
+  }
+}
+</script>

@@ -1,0 +1,679 @@
+[
+  {
+    "step": "Start",
+    "request": "GET /api/initialize",
+    "response": {
+      "status": 200,
+      "body": {
+        "ready": true,
+        "initialize": {
+          "paths_json_present": true,
+          "required_keys_ok": true,
+          "schema_ok": true,
+          "dirs_exist": null,
+          "missingKeys": [],
+          "emptyKeys": [],
+          "notFoundDirs": null,
+          "needsUserAction": false
+        },
+        "paths": {
+          "PathMitarbeiter": "<BASE>/Mitarbeiter",
+          "PathProduktionen": "<BASE>/Produktionen",
+          "PathStammdaten": "<BASE>/Stammdaten",
+          "PathPTUser": "<BASE>/ProToolsUser"
+        },
+        "schema": {
+          "sessionSchema": "{{datum}} {{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}",
+          "projektordnerSchema": "{{datum}} {{projektname}} {{moid}}"
+        },
+        "modules": {
+          "soundminer": {
+            "enabled": true,
+            "version": "V6 Pro",
+            "supportPath": "<BASE>/SoundminerSupport"
+          }
+        }
+      }
+    }
+  },
+  {
+    "step": "Mitarbeiterliste",
+    "request": "GET /api/user",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "name": "Tester",
+          "kuerzel": "TE"
+        },
+        {
+          "name": "Zweite",
+          "kuerzel": "ZW"
+        }
+      ]
+    }
+  },
+  {
+    "step": "Nicht angemeldet",
+    "request": "GET /api/activeUser",
+    "response": {
+      "status": 200,
+      "body": ""
+    }
+  },
+  {
+    "step": "Anmelden",
+    "request": "POST /api/login",
+    "response": {
+      "status": 200,
+      "body": "TE"
+    }
+  },
+  {
+    "step": "Angemeldet",
+    "request": "GET /api/activeUser",
+    "response": {
+      "status": 200,
+      "body": "Tester"
+    }
+  },
+  {
+    "step": "Stammdaten lesen",
+    "request": "GET /api/pb/snapshot",
+    "response": {
+      "status": 200,
+      "body": {
+        "customers": [
+          {
+            "kunde": "Kunde A",
+            "ordner": [
+              {
+                "name": "01_Material",
+                "label": "Material",
+                "ist_Produktionsstufe": false
+              },
+              {
+                "name": "02_Dialogschnitt",
+                "label": "Dialog",
+                "ist_Produktionsstufe": true
+              },
+              {
+                "name": "10_Mischung",
+                "label": "Mischung",
+                "ist_Produktionsstufe": true
+              }
+            ]
+          },
+          {
+            "kunde": "Ohne Ordner",
+            "ordner": [
+              {
+                "name": "01_Material",
+                "label": "Material",
+                "ist_Produktionsstufe": false
+              },
+              {
+                "name": "02_Dialogschnitt",
+                "label": "Dialog",
+                "ist_Produktionsstufe": true
+              },
+              {
+                "name": "10_Mischung",
+                "label": "Mischung",
+                "ist_Produktionsstufe": true
+              }
+            ]
+          },
+          {
+            "kunde": "Ohne Unterordner",
+            "ordner": []
+          }
+        ],
+        "version": "<VERSION>"
+      }
+    }
+  },
+  {
+    "step": "Stammdaten: kaputter Body",
+    "request": "PUT /api/pb/snapshot",
+    "response": {
+      "status": 400,
+      "body": {
+        "error": "bad_payload"
+      }
+    }
+  },
+  {
+    "step": "Stammdaten: Versionskonflikt",
+    "request": "PUT /api/pb/snapshot",
+    "response": {
+      "status": 409,
+      "body": {
+        "error": "version_conflict",
+        "currentVersion": "<VERSION>"
+      }
+    }
+  },
+  {
+    "step": "Stammdaten speichern, neuer Kunde legt Ordner an",
+    "request": "PUT /api/pb/snapshot",
+    "response": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "version": "<VERSION>"
+      }
+    }
+  },
+  {
+    "step": "Stammdaten erneut lesen",
+    "request": "GET /api/pb/snapshot",
+    "response": {
+      "status": 200,
+      "body": {
+        "customers": [
+          {
+            "kunde": "Älter",
+            "ordner": []
+          },
+          {
+            "kunde": "Kunde A",
+            "ordner": [
+              {
+                "name": "01_Material",
+                "label": "Material",
+                "ist_Produktionsstufe": false
+              },
+              {
+                "name": "02_Dialogschnitt",
+                "label": "Dialog",
+                "ist_Produktionsstufe": true
+              },
+              {
+                "name": "10_Mischung",
+                "label": "Mischung",
+                "ist_Produktionsstufe": true
+              }
+            ]
+          },
+          {
+            "kunde": "kunde a",
+            "ordner": []
+          },
+          {
+            "kunde": "Neu: Kunde",
+            "ordner": []
+          },
+          {
+            "kunde": "Ohne Ordner",
+            "ordner": [
+              {
+                "name": "01_Material",
+                "label": "Material",
+                "ist_Produktionsstufe": false
+              },
+              {
+                "name": "02_Dialogschnitt",
+                "label": "Dialog",
+                "ist_Produktionsstufe": true
+              },
+              {
+                "name": "10_Mischung",
+                "label": "Mischung",
+                "ist_Produktionsstufe": true
+              }
+            ]
+          },
+          {
+            "kunde": "Ohne Unterordner",
+            "ordner": []
+          }
+        ],
+        "version": "<VERSION>"
+      }
+    }
+  },
+  {
+    "step": "Nach Stammdaten",
+    "files": {
+      "Stammdaten/kunden_stammdaten.json": "[\n  {\n    \"kunde\": \"Älter\",\n    \"ordner\": []\n  },\n  {\n    \"kunde\": \"Kunde A\",\n    \"ordner\": [\n      {\n        \"name\": \"01_Material\",\n        \"label\": \"Material\",\n        \"ist_Produktionsstufe\": false\n      },\n      {\n        \"name\": \"02_Dialogschnitt\",\n        \"label\": \"Dialog\",\n        \"ist_Produktionsstufe\": true\n      },\n      {\n        \"name\": \"10_Mischung\",\n        \"label\": \"Mischung\",\n        \"ist_Produktionsstufe\": true\n      }\n    ]\n  },\n  {\n    \"kunde\": \"kunde a\",\n    \"ordner\": []\n  },\n  {\n    \"kunde\": \"Neu: Kunde\",\n    \"ordner\": []\n  },\n  {\n    \"kunde\": \"Ohne Ordner\",\n    \"ordner\": [\n      {\n        \"name\": \"01_Material\",\n        \"label\": \"Material\",\n        \"ist_Produktionsstufe\": false\n      },\n      {\n        \"name\": \"02_Dialogschnitt\",\n        \"label\": \"Dialog\",\n        \"ist_Produktionsstufe\": true\n      },\n      {\n        \"name\": \"10_Mischung\",\n        \"label\": \"Mischung\",\n        \"ist_Produktionsstufe\": true\n      }\n    ]\n  },\n  {\n    \"kunde\": \"Ohne Unterordner\",\n    \"ordner\": []\n  }\n]",
+      "Stammdaten/schemes.json": "{\n  \"projektordnerSchema\": \"{{datum}} {{projektname}} {{moid}}\",\n  \"sessionSchema\": \"{{datum}} {{projektname}} {{moid}} - {{produktionsstufe}} {{benutzer}} {{version}}\"\n}",
+      "Produktionen/Kunde A/": null,
+      "Produktionen/Kunde A/Fremder Ordner/": null,
+      "Produktionen/Kunde A/Kaputt/": null,
+      "Produktionen/Kunde A/Kaputt/immo24-proj.json": "kein json",
+      "Produktionen/Kunde A/lose-datei.txt": "x",
+      "Produktionen/Neu_ Kunde/": null,
+      "Produktionen/Ohne Ordner/": null,
+      "Produktionen/Ohne Unterordner/": null,
+      "Produktionen/Älter/": null
+    }
+  },
+  {
+    "step": "Kunden und Stufen",
+    "request": "GET /api/projektanlage/kunden",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "label": "Kunde A",
+          "value": "Kunde A",
+          "stufen": [
+            {
+              "label": "Dialog",
+              "value": "02_Dialogschnitt"
+            },
+            {
+              "label": "Mischung",
+              "value": "10_Mischung"
+            }
+          ]
+        },
+        {
+          "label": "Ohne Ordner",
+          "value": "Ohne Ordner",
+          "stufen": [
+            {
+              "label": "Dialog",
+              "value": "02_Dialogschnitt"
+            },
+            {
+              "label": "Mischung",
+              "value": "10_Mischung"
+            }
+          ]
+        },
+        {
+          "label": "Ohne Unterordner",
+          "value": "Ohne Unterordner",
+          "stufen": []
+        }
+      ]
+    }
+  },
+  {
+    "step": "Vorlagen",
+    "request": "GET /api/projektanlage/templates",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "label": "Einzeln",
+          "value": "Einzeln.ptxt",
+          "kind": "file"
+        },
+        {
+          "label": "Paket (mit Clips)",
+          "value": "Paket",
+          "kind": "package",
+          "relPtxt": "Paket.ptxt"
+        }
+      ]
+    }
+  },
+  {
+    "step": "Neu: Felder fehlen",
+    "request": "POST /api/projektanlage/projekte",
+    "response": {
+      "status": 400,
+      "body": {
+        "error": "missing fields",
+        "fields": [
+          "datum",
+          "moid",
+          "projektname",
+          "stufe",
+          "template"
+        ]
+      }
+    }
+  },
+  {
+    "step": "Neu: Windows-Namen ungültig",
+    "request": "POST /api/projektanlage/projekte",
+    "response": {
+      "status": 422,
+      "body": {
+        "error": "validation_failed",
+        "details": [
+          {
+            "field": "projektname",
+            "errors": [
+              {
+                "code": "forbidden_chars",
+                "chars": [
+                  ":"
+                ],
+                "message": "Unzulässige Zeichen: :"
+              },
+              {
+                "code": "trailing_dot_or_space",
+                "message": "Darf nicht mit Punkt oder Leerzeichen enden"
+              }
+            ]
+          },
+          {
+            "field": "moid",
+            "errors": [
+              {
+                "code": "reserved_name",
+                "message": "Reservierter Windows-Name"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "step": "Neu: einzelne Vorlage",
+    "request": "POST /api/projektanlage/projekte",
+    "response": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "zielPfad": "<BASE>/Produktionen/Kunde A/2026-01-15 Testprojekt AB12",
+        "templateDest": "<BASE>/Produktionen/Kunde A/2026-01-15 Testprojekt AB12/02_Dialogschnitt",
+        "filename": "2026-01-15 Testprojekt AB12 - Dialog TE v1.ptx"
+      }
+    }
+  },
+  {
+    "step": "Neu: Duplikat",
+    "request": "POST /api/projektanlage/projekte",
+    "response": {
+      "status": 409,
+      "body": {
+        "error": "Das Projekt existiert bereits.",
+        "zielPfad": "<BASE>/Produktionen/Kunde A/2026-01-15 Testprojekt AB12"
+      }
+    }
+  },
+  {
+    "step": "Neu: Paket mit Audio",
+    "request": "POST /api/projektanlage/projekte",
+    "response": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "zielPfad": "<BASE>/Produktionen/Kunde A/2026-01-15 Mit Clips CD34",
+        "templateDest": "<BASE>/Produktionen/Kunde A/2026-01-15 Mit Clips CD34/10_Mischung",
+        "filename": "2026-01-15 Mit Clips CD34 - Mischung TE v1.ptx"
+      }
+    }
+  },
+  {
+    "step": "Neu: Umlaute",
+    "request": "POST /api/projektanlage/projekte",
+    "response": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "zielPfad": "<BASE>/Produktionen/Kunde A/2026-01-15 Größe äöü EF56",
+        "templateDest": "<BASE>/Produktionen/Kunde A/2026-01-15 Größe äöü EF56/02_Dialogschnitt",
+        "filename": "2026-01-15 Größe äöü EF56 - Dialog TE v1.ptx"
+      }
+    }
+  },
+  {
+    "step": "Hänger: Kundenordner fehlt",
+    "request": "POST /api/projektanlage/projekte",
+    "response": {
+      "hang": true
+    }
+  },
+  {
+    "step": "Hänger: Kunde ohne Unterordner",
+    "request": "POST /api/projektanlage/projekte",
+    "response": {
+      "hang": true
+    }
+  },
+  {
+    "step": "Nach Neuanlage",
+    "files": {
+      "Produktionen/Kunde A/": null,
+      "Produktionen/Kunde A/2026-01-15 Größe äöü EF56/": null,
+      "Produktionen/Kunde A/2026-01-15 Größe äöü EF56/01_Material/": null,
+      "Produktionen/Kunde A/2026-01-15 Größe äöü EF56/02_Dialogschnitt/": null,
+      "Produktionen/Kunde A/2026-01-15 Größe äöü EF56/02_Dialogschnitt/2026-01-15 Größe äöü EF56 - Dialog TE v1.ptx": "einzeln",
+      "Produktionen/Kunde A/2026-01-15 Größe äöü EF56/10_Mischung/": null,
+      "Produktionen/Kunde A/2026-01-15 Größe äöü EF56/immo24-proj.json": "{\n  \"erstellt_am\": \"2026-01-15\",\n  \"kunde\": \"Kunde A\",\n  \"projektname\": \"Größe äöü\",\n  \"mo_id\": \"EF56\",\n  \"user\": \"Tester\"\n}\n",
+      "Produktionen/Kunde A/2026-01-15 Mit Clips CD34/": null,
+      "Produktionen/Kunde A/2026-01-15 Mit Clips CD34/01_Material/": null,
+      "Produktionen/Kunde A/2026-01-15 Mit Clips CD34/02_Dialogschnitt/": null,
+      "Produktionen/Kunde A/2026-01-15 Mit Clips CD34/10_Mischung/": null,
+      "Produktionen/Kunde A/2026-01-15 Mit Clips CD34/10_Mischung/2026-01-15 Mit Clips CD34 - Mischung TE v1.ptx": "paket",
+      "Produktionen/Kunde A/2026-01-15 Mit Clips CD34/10_Mischung/Audio Files/": null,
+      "Produktionen/Kunde A/2026-01-15 Mit Clips CD34/10_Mischung/Audio Files/clip.wav": "audio",
+      "Produktionen/Kunde A/2026-01-15 Mit Clips CD34/immo24-proj.json": "{\n  \"erstellt_am\": \"2026-01-15\",\n  \"kunde\": \"Kunde A\",\n  \"projektname\": \"Mit Clips\",\n  \"mo_id\": \"CD34\",\n  \"user\": \"Tester\"\n}\n",
+      "Produktionen/Kunde A/2026-01-15 Testprojekt AB12/": null,
+      "Produktionen/Kunde A/2026-01-15 Testprojekt AB12/01_Material/": null,
+      "Produktionen/Kunde A/2026-01-15 Testprojekt AB12/02_Dialogschnitt/": null,
+      "Produktionen/Kunde A/2026-01-15 Testprojekt AB12/02_Dialogschnitt/2026-01-15 Testprojekt AB12 - Dialog TE v1.ptx": "einzeln",
+      "Produktionen/Kunde A/2026-01-15 Testprojekt AB12/10_Mischung/": null,
+      "Produktionen/Kunde A/2026-01-15 Testprojekt AB12/immo24-proj.json": "{\n  \"erstellt_am\": \"2026-01-15\",\n  \"kunde\": \"Kunde A\",\n  \"projektname\": \"Testprojekt\",\n  \"mo_id\": \"AB12\",\n  \"user\": \"Tester\"\n}\n",
+      "Produktionen/Kunde A/Fremder Ordner/": null,
+      "Produktionen/Kunde A/Kaputt/": null,
+      "Produktionen/Kunde A/Kaputt/immo24-proj.json": "kein json",
+      "Produktionen/Kunde A/lose-datei.txt": "x",
+      "Produktionen/Neu_ Kunde/": null,
+      "Produktionen/Ohne Unterordner/": null,
+      "Produktionen/Ohne Unterordner/2026-01-15 Testprojekt AB12/": null,
+      "Produktionen/Ohne Unterordner/2026-01-15 Testprojekt AB12/immo24-proj.json": "{\n  \"erstellt_am\": \"2026-01-15\",\n  \"kunde\": \"Ohne Unterordner\",\n  \"projektname\": \"Testprojekt\",\n  \"mo_id\": \"AB12\",\n  \"user\": \"Tester\"\n}\n",
+      "Produktionen/Älter/": null
+    }
+  },
+  {
+    "step": "Liste: Kunde fehlt",
+    "request": "GET /api/projektanlage/projekte",
+    "response": {
+      "status": 400,
+      "body": {
+        "error": "kunde required"
+      }
+    }
+  },
+  {
+    "step": "Liste",
+    "request": "GET /api/projektanlage/projekte?kunde=Kunde%20A",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "date": "2026-01-15",
+          "projektname": "Größe äöü",
+          "moid": "EF56",
+          "user": "Tester"
+        },
+        {
+          "date": "2026-01-15",
+          "projektname": "Mit Clips",
+          "moid": "CD34",
+          "user": "Tester"
+        },
+        {
+          "date": "2026-01-15",
+          "projektname": "Testprojekt",
+          "moid": "AB12",
+          "user": "Tester"
+        }
+      ]
+    }
+  },
+  {
+    "step": "Liste: leerer Kunde",
+    "request": "GET /api/projektanlage/projekte?kunde=Ohne%20Unterordner",
+    "response": {
+      "status": 200,
+      "body": [
+        {
+          "date": "2026-01-15",
+          "projektname": "Testprojekt",
+          "moid": "AB12",
+          "user": "Tester"
+        }
+      ]
+    }
+  },
+  {
+    "step": "Vorhanden: Felder fehlen",
+    "request": "POST /api/projektanlage/resolve-existing",
+    "response": {
+      "status": 400,
+      "body": {
+        "error": "missing",
+        "fields": [
+          "datum",
+          "projektname",
+          "moid",
+          "stufe",
+          "template"
+        ]
+      }
+    }
+  },
+  {
+    "step": "Vorhanden: ungültiger Name",
+    "request": "POST /api/projektanlage/resolve-existing",
+    "response": {
+      "status": 422,
+      "body": {
+        "error": "validation_failed",
+        "details": [
+          {
+            "field": "moid",
+            "errors": [
+              {
+                "code": "forbidden_chars",
+                "chars": [
+                  "?"
+                ],
+                "message": "Unzulässige Zeichen: ?"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "step": "Vorhanden: nicht gefunden",
+    "request": "POST /api/projektanlage/resolve-existing",
+    "response": {
+      "status": 404,
+      "body": {
+        "error": "not_found"
+      }
+    }
+  },
+  {
+    "step": "Vorhanden: nächste Version gleiche Stufe",
+    "request": "POST /api/projektanlage/resolve-existing",
+    "response": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "zielPfad": "<BASE>/Produktionen/Kunde A/2026-01-15 Testprojekt AB12",
+        "templateDest": "<BASE>/Produktionen/Kunde A/2026-01-15 Testprojekt AB12/02_Dialogschnitt",
+        "filename": "<TODAY> Testprojekt AB12 - Dialog TE v2.ptx"
+      }
+    }
+  },
+  {
+    "step": "Vorhanden: nächste Version erneut",
+    "request": "POST /api/projektanlage/resolve-existing",
+    "response": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "zielPfad": "<BASE>/Produktionen/Kunde A/2026-01-15 Testprojekt AB12",
+        "templateDest": "<BASE>/Produktionen/Kunde A/2026-01-15 Testprojekt AB12/02_Dialogschnitt",
+        "filename": "<TODAY> Testprojekt AB12 - Dialog TE v3.ptx"
+      }
+    }
+  },
+  {
+    "step": "Vorhanden: andere Stufe",
+    "request": "POST /api/projektanlage/resolve-existing",
+    "response": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "zielPfad": "<BASE>/Produktionen/Kunde A/2026-01-15 Testprojekt AB12",
+        "templateDest": "<BASE>/Produktionen/Kunde A/2026-01-15 Testprojekt AB12/10_Mischung",
+        "filename": "<TODAY> Testprojekt AB12 - Mischung TE v1.ptx"
+      }
+    }
+  },
+  {
+    "step": "Vorhanden: Paket",
+    "request": "POST /api/projektanlage/resolve-existing",
+    "response": {
+      "status": 200,
+      "body": {
+        "ok": true,
+        "zielPfad": "<BASE>/Produktionen/Kunde A/2026-01-15 Testprojekt AB12",
+        "templateDest": "<BASE>/Produktionen/Kunde A/2026-01-15 Testprojekt AB12/02_Dialogschnitt",
+        "filename": "<TODAY> Testprojekt AB12 - Dialog TE v4.ptx"
+      }
+    }
+  },
+  {
+    "step": "Nach Folgeversionen",
+    "files": {
+      "Produktionen/Kunde A/": null,
+      "Produktionen/Kunde A/2026-01-15 Größe äöü EF56/": null,
+      "Produktionen/Kunde A/2026-01-15 Größe äöü EF56/01_Material/": null,
+      "Produktionen/Kunde A/2026-01-15 Größe äöü EF56/02_Dialogschnitt/": null,
+      "Produktionen/Kunde A/2026-01-15 Größe äöü EF56/02_Dialogschnitt/2026-01-15 Größe äöü EF56 - Dialog TE v1.ptx": "einzeln",
+      "Produktionen/Kunde A/2026-01-15 Größe äöü EF56/10_Mischung/": null,
+      "Produktionen/Kunde A/2026-01-15 Größe äöü EF56/immo24-proj.json": "{\n  \"erstellt_am\": \"2026-01-15\",\n  \"kunde\": \"Kunde A\",\n  \"projektname\": \"Größe äöü\",\n  \"mo_id\": \"EF56\",\n  \"user\": \"Tester\"\n}\n",
+      "Produktionen/Kunde A/2026-01-15 Mit Clips CD34/": null,
+      "Produktionen/Kunde A/2026-01-15 Mit Clips CD34/01_Material/": null,
+      "Produktionen/Kunde A/2026-01-15 Mit Clips CD34/02_Dialogschnitt/": null,
+      "Produktionen/Kunde A/2026-01-15 Mit Clips CD34/10_Mischung/": null,
+      "Produktionen/Kunde A/2026-01-15 Mit Clips CD34/10_Mischung/2026-01-15 Mit Clips CD34 - Mischung TE v1.ptx": "paket",
+      "Produktionen/Kunde A/2026-01-15 Mit Clips CD34/10_Mischung/Audio Files/": null,
+      "Produktionen/Kunde A/2026-01-15 Mit Clips CD34/10_Mischung/Audio Files/clip.wav": "audio",
+      "Produktionen/Kunde A/2026-01-15 Mit Clips CD34/immo24-proj.json": "{\n  \"erstellt_am\": \"2026-01-15\",\n  \"kunde\": \"Kunde A\",\n  \"projektname\": \"Mit Clips\",\n  \"mo_id\": \"CD34\",\n  \"user\": \"Tester\"\n}\n",
+      "Produktionen/Kunde A/2026-01-15 Testprojekt AB12/": null,
+      "Produktionen/Kunde A/2026-01-15 Testprojekt AB12/01_Material/": null,
+      "Produktionen/Kunde A/2026-01-15 Testprojekt AB12/02_Dialogschnitt/": null,
+      "Produktionen/Kunde A/2026-01-15 Testprojekt AB12/02_Dialogschnitt/2026-01-15 Testprojekt AB12 - Dialog TE v1.ptx": "einzeln",
+      "Produktionen/Kunde A/2026-01-15 Testprojekt AB12/02_Dialogschnitt/<TODAY> Testprojekt AB12 - Dialog TE v2.ptx": "einzeln",
+      "Produktionen/Kunde A/2026-01-15 Testprojekt AB12/02_Dialogschnitt/<TODAY> Testprojekt AB12 - Dialog TE v3.ptx": "einzeln",
+      "Produktionen/Kunde A/2026-01-15 Testprojekt AB12/02_Dialogschnitt/<TODAY> Testprojekt AB12 - Dialog TE v4.ptx": "paket",
+      "Produktionen/Kunde A/2026-01-15 Testprojekt AB12/02_Dialogschnitt/Audio Files/": null,
+      "Produktionen/Kunde A/2026-01-15 Testprojekt AB12/02_Dialogschnitt/Audio Files/clip.wav": "audio",
+      "Produktionen/Kunde A/2026-01-15 Testprojekt AB12/10_Mischung/": null,
+      "Produktionen/Kunde A/2026-01-15 Testprojekt AB12/10_Mischung/<TODAY> Testprojekt AB12 - Mischung TE v1.ptx": "einzeln",
+      "Produktionen/Kunde A/2026-01-15 Testprojekt AB12/immo24-proj.json": "{\n  \"erstellt_am\": \"2026-01-15\",\n  \"kunde\": \"Kunde A\",\n  \"projektname\": \"Testprojekt\",\n  \"mo_id\": \"AB12\",\n  \"user\": \"Tester\"\n}\n",
+      "Produktionen/Kunde A/Fremder Ordner/": null,
+      "Produktionen/Kunde A/Kaputt/": null,
+      "Produktionen/Kunde A/Kaputt/immo24-proj.json": "kein json",
+      "Produktionen/Kunde A/lose-datei.txt": "x",
+      "Produktionen/Neu_ Kunde/": null,
+      "Produktionen/Ohne Unterordner/": null,
+      "Produktionen/Ohne Unterordner/2026-01-15 Testprojekt AB12/": null,
+      "Produktionen/Ohne Unterordner/2026-01-15 Testprojekt AB12/immo24-proj.json": "{\n  \"erstellt_am\": \"2026-01-15\",\n  \"kunde\": \"Ohne Unterordner\",\n  \"projektname\": \"Testprojekt\",\n  \"mo_id\": \"AB12\",\n  \"user\": \"Tester\"\n}\n",
+      "Produktionen/Älter/": null
+    }
+  },
+  {
+    "step": "Abmelden",
+    "request": "POST /api/logout",
+    "response": {
+      "status": 200,
+      "body": ""
+    }
+  },
+  {
+    "step": "Abgemeldet",
+    "request": "GET /api/activeUser",
+    "response": {
+      "status": 200,
+      "body": null
+    }
+  }
+]
